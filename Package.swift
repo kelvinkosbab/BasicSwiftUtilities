@@ -5,11 +5,17 @@ import PackageDescription
 
 let package = Package(
     name: "Core",
+    platforms: [
+        .iOS(.v10),
+        .macOS("10.14")
+    ],
     products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "Core",
             targets: ["Core"]),
+        .library(
+            name: "CoreUI",
+            targets: ["CoreUI"])
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -24,5 +30,11 @@ let package = Package(
         .testTarget(
             name: "CoreTests",
             dependencies: ["Core"]),
+        .target(
+            name: "CoreUI",
+            dependencies: ["Core"]),
+        .testTarget(
+            name: "CoreUITests",
+            dependencies: ["CoreUI"]),
     ]
 )

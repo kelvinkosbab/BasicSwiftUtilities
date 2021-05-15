@@ -1,13 +1,13 @@
 //
-//  CoreTests.swift
+//  CoreUITests.swift
 //
 //  Copyright © 2021 Kozinga. All rights reserved.
 //
 
 import XCTest
-@testable import Core
+@testable import CoreUI
 
-final class CoreTests: XCTestCase {
+final class CoreUITests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct

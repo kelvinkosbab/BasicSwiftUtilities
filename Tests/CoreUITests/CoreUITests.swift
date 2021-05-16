@@ -14,8 +14,4 @@ final class CoreUITests: XCTestCase {
         // results.
         XCTAssertEqual(true, true)
     }
-    
-    static var allTests = [
-        ("testExample", testExample),
-    ]
 }

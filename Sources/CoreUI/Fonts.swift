@@ -4,8 +4,11 @@
 //  Copyright © 2021 Kozinga. All rights reserved.
 //
 
-import UIKit
 import SwiftUI
+
+#if !os(macOS)
+import UIKit
+#endif
 
 // MARK: - AppFont
 

@@ -15,26 +15,37 @@ let package = Package(
             targets: ["Core"]),
         .library(
             name: "CoreUI",
-            targets: ["CoreUI"])
+            targets: ["CoreUI"]),
+        .library(
+            name: "CoreAuthentication",
+            targets: ["CoreAuthentication"])
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
+        .package(name: "Firebase", url: "https://github.com/firebase/firebase-ios-sdk.git", .branch("7.7.0"))
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "Core",
             dependencies: []),
         .testTarget(
             name: "CoreTests",
             dependencies: ["Core"]),
+        
         .target(
             name: "CoreUI",
             dependencies: ["Core"]),
         .testTarget(
             name: "CoreUITests",
             dependencies: ["CoreUI"]),
+        
+        .target(
+            name: "CoreAuthentication",
+            dependencies: [
+                "Core",
+                .product(name: "FirebaseAuth", package: "Firebase")
+            ]),
+        .testTarget(
+            name: "CoreAuthenticationTests",
+            dependencies: ["CoreAuthentication"]),
     ]
 )

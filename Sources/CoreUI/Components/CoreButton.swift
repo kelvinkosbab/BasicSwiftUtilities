@@ -11,22 +11,28 @@ import SwiftUI
 @available(iOS 13, *)
 public struct CoreButton : View {
     
-    public let title: String
-    public let isDestructive: Bool
-    public let action: () -> Void
+    private let title: String
+    private let isDestructive: Bool
+    private let tintColor: Color
+    private let destrutiveColor: Color
+    private let action: () -> Void
     
     public init(_ title: String,
                 isDestructive: Bool = false,
+                tintColor: Color = AppColors.appTintColor,
+                destrutiveColor: Color = AppColors.appDestructiveColor,
                 action: @escaping () -> Void) {
         self.title = title
         self.isDestructive = isDestructive
         self.action = action
+        self.tintColor = tintColor
+        self.destrutiveColor = destrutiveColor
     }
     
     public var body: some View {
         Button(action: self.action) {
             CoreButtonText(title: self.title,
-                           foregroundColor: self.isDestructive ? Color.darkRed : Color.tallyBokBlue)
+                           foregroundColor: self.isDestructive ? self.destrutiveColor : self.tintColor)
         }
         .buttonStyle(PlainButtonStyle())
     }
@@ -37,22 +43,24 @@ public struct CoreButton : View {
 @available(iOS 13, *)
 public struct CoreNavigationButton<Destination> : View where Destination : View {
     
-    public let title: String
-    public let isDestructive: Bool
+    private let title: String
+    private let foregroundColor: Color
     private let destination: Destination
     
     public init(_ title: String,
                 isDestructive: Bool = false,
+                tintColor: Color = AppColors.appTintColor,
+                destrutiveColor: Color = AppColors.appDestructiveColor,
                 destination: Destination) {
         self.title = title
-        self.isDestructive = isDestructive
+        self.foregroundColor = isDestructive ? destrutiveColor : tintColor
         self.destination = destination
     }
     
     public var body: some View {
         NavigationLink(destination: self.destination) {
             CoreButtonText(title: self.title,
-                           foregroundColor: self.isDestructive ? Color.darkRed : Color.tallyBokBlue)
+                           foregroundColor: self.foregroundColor)
         }
         .buttonStyle(PlainButtonStyle())
     }
@@ -63,17 +71,19 @@ public struct CoreNavigationButton<Destination> : View where Destination : View 
 @available(iOS 13, *)
 public struct CoreRoundButton : View {
     
-    public let title: String
-    public let isDestructive: Bool
-    public let fillParentWidth: Bool
-    public let action: () -> Void
+    private let title: String
+    private let backgroundColor: Color
+    private let fillParentWidth: Bool
+    private let action: () -> Void
     
     public init(_ title: String,
                 isDestructive: Bool = false,
+                tintColor: Color = AppColors.appTintColor,
+                destrutiveColor: Color = AppColors.appDestructiveColor,
                 fillParentWidth: Bool = false,
                 action: @escaping () -> Void) {
         self.title = title
-        self.isDestructive = isDestructive
+        self.backgroundColor = isDestructive ? destrutiveColor : tintColor
         self.fillParentWidth = fillParentWidth
         self.action = action
     }
@@ -95,7 +105,7 @@ public struct CoreRoundButton : View {
             }
         }
         .buttonStyle(PlainButtonStyle())
-        .background(self.isDestructive ? Color.darkRed : Color.tallyBokBlue)
+        .background(self.backgroundColor)
         .cornerRadius(Spacing.base * 2)
     }
 }
@@ -105,17 +115,19 @@ public struct CoreRoundButton : View {
 @available(iOS 13, *)
 public struct CoreNavigationRoundButton<Destination> : View where Destination : View {
     
-    public let title: String
-    public let isDestructive: Bool
-    public let fillParentWidth: Bool
+    private let title: String
+    private let backgroundColor: Color
+    private let fillParentWidth: Bool
     private let destination: Destination
     
     public init(_ title: String,
                 isDestructive: Bool = false,
+                tintColor: Color = AppColors.appTintColor,
+                destrutiveColor: Color = AppColors.appDestructiveColor,
                 fillParentWidth: Bool = false,
                 destination: Destination) {
         self.title = title
-        self.isDestructive = isDestructive
+        self.backgroundColor = isDestructive ? destrutiveColor : tintColor
         self.fillParentWidth = fillParentWidth
         self.destination = destination
     }
@@ -137,7 +149,7 @@ public struct CoreNavigationRoundButton<Destination> : View where Destination : 
             }
         }
         .buttonStyle(PlainButtonStyle())
-        .background(self.isDestructive ? Color.darkRed : Color.tallyBokBlue)
+        .background(self.backgroundColor)
         .cornerRadius(Spacing.base * 2)
     }
 }
@@ -192,16 +204,26 @@ private struct Previews: PreviewProvider {
         NavigationView {
             VStack {
                 CoreRoundButton("Hello World") {}
-                CoreNavigationRoundButton("Hello World", destination: Text("hi"))
+                CoreNavigationRoundButton("Hello World",
+                                          destination: Text("hi"))
                 
                 CoreRoundButton("Hello World", isDestructive: true) {}
-                CoreNavigationRoundButton("Hello World", isDestructive: true, destination: Text("hi"))
+                CoreNavigationRoundButton("Hello World",
+                                          isDestructive: true,
+                                          destination: Text("hi"))
                 
                 CoreRoundButton("Hello World", fillParentWidth: true) {}
-                CoreNavigationRoundButton("Hello World", fillParentWidth: true, destination: Text("hi"))
+                CoreNavigationRoundButton("Hello World",
+                                          fillParentWidth: true,
+                                          destination: Text("hi"))
                 
-                CoreRoundButton("Hello World", isDestructive: true, fillParentWidth: true) {}
-                CoreNavigationRoundButton("Hello World", isDestructive: true, fillParentWidth: true, destination: Text("hi"))
+                CoreRoundButton("Hello World",
+                                isDestructive: true,
+                                fillParentWidth: true) {}
+                CoreNavigationRoundButton("Hello World",
+                                          isDestructive: true,
+                                          fillParentWidth: true,
+                                          destination: Text("hi"))
             }
         }
     }

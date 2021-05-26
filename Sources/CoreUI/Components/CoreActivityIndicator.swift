@@ -10,10 +10,17 @@ import SwiftUI
 
 @available(iOS 14.0, *)
 private struct SwiftUIActivityIndicator : View {
+    
+    private let tintColor: Color
+    
+    init(tintColor: Color = AppColors.appTintColor) {
+        self.tintColor = tintColor
+    }
+    
     var body: some View {
         VStack {
             ProgressView()
-                .progressViewStyle(CircularProgressViewStyle(tint: .tallyBokBlue))
+                .progressViewStyle(CircularProgressViewStyle(tint: self.tintColor))
         }
     }
 }

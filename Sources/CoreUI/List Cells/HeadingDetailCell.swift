@@ -13,10 +13,14 @@ public struct HeadingDetailCell: View {
     
     public let heading: String
     public let detail: String
+    public let detailTextColor: Color
     
-    public init(heading: String, detail: String) {
+    public init(heading: String,
+                detail: String,
+                detailTextColor: Color = .gray) {
         self.heading = heading
         self.detail = detail
+        self.detailTextColor = detailTextColor
     }
     
     public var body: some View {
@@ -25,7 +29,7 @@ public struct HeadingDetailCell: View {
                 .headingBoldStyle()
             Text(self.detail)
                 .bodyStyle()
-                .foregroundColor(.kozGray)
+                .foregroundColor(self.detailTextColor)
         }
         .padding(.vertical, Spacing.small)
     }
@@ -39,8 +43,10 @@ public struct HeadingDetailCell: View {
 private struct Previews: PreviewProvider {
     static var previews: some View {
         List {
-            HeadingDetailCell(heading: "Heading one", detail: "Detail one")
-            HeadingDetailCell(heading: "Heading two", detail: "Detail two")
+            HeadingDetailCell(heading: "Heading one",
+                              detail: "Detail one")
+            HeadingDetailCell(heading: "Heading two",
+                              detail: "Detail two")
         }
     }
 }

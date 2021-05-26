@@ -11,15 +11,18 @@ import SwiftUI
 @available(iOS 13, *)
 public struct CircleTextButton : View {
     
-    @Binding public var title: String
-    let size: CGFloat
-    let action: () -> Void
+    private let title: String
+    private let size: CGFloat
+    private let tintColor: Color
+    private let action: () -> Void
     
-    public init(_ title: Binding<String>,
+    public init(_ title: String,
                 size: CGFloat = 100,
+                tintColor: Color = AppColors.appTintColor,
                 action: @escaping () -> Void) {
-        self._title = title
+        self.title = title
         self.size = size
+        self.tintColor = tintColor
         self.action = action
     }
 
@@ -29,7 +32,7 @@ public struct CircleTextButton : View {
                 .bodyBoldStyle()
                 .frame(width: self.size, height: self.size)
                 .foregroundColor(.white)
-                .background(Color.tallyBokBlue)
+                .background(self.tintColor)
                 .clipShape(Circle())
         }
     }
@@ -40,26 +43,31 @@ public struct CircleTextButton : View {
 @available(iOS 13, *)
 public struct CircleImageButton : View {
     
-    let image: Image
-    let isIcon: Bool
-    let action: () -> Void
-    let onPressDown: (() -> Void)?
+    private let image: Image
+    private let isIcon: Bool
+    private let tintColor: Color
+    private let action: () -> Void
+    private let onPressDown: (() -> Void)?
     
     public init(_ systemName: String,
                 size: CGFloat = 100,
+                tintColor: Color = AppColors.appTintColor,
                 action: @escaping () -> Void,
                 onPressDown: (() -> Void)? = nil) {
         self.image = Image(systemName: systemName)
         self.isIcon = true
+        self.tintColor = tintColor
         self.action = action
         self.onPressDown = onPressDown
     }
     
     public init(_ image: Image,
+                tintColor: Color = AppColors.appTintColor,
                 action: @escaping () -> Void,
                 onPressDown: (() -> Void)? = nil) {
         self.image = image
         self.isIcon = false
+        self.tintColor = tintColor
         self.action = action
         self.onPressDown = onPressDown
     }
@@ -68,7 +76,7 @@ public struct CircleImageButton : View {
         Button(action: {}) {
             if self.isIcon {
                 CircleImage(image: self.image)
-                    .foregroundColor(.tallyBokBlue)
+                    .foregroundColor(self.tintColor)
                     .onTapGesture {
                         self.onPressDown?()
                         self.action()
@@ -93,7 +101,7 @@ private struct Previews: PreviewProvider {
     
     static var previews: some View {
         List {
-            CircleTextButton(.constant("Hi")) {
+            CircleTextButton("Hi") {
                 // do nothing
             }
             CircleImageButton("plus.circle.fill") {

@@ -21,7 +21,9 @@ let package = Package(
             targets: ["CoreAuthentication"])
     ],
     dependencies: [
-        .package(name: "Firebase", url: "https://github.com/firebase/firebase-ios-sdk.git", .branch("7.7.0"))
+        .package(name: "Firebase",
+                 url: "https://github.com/firebase/firebase-ios-sdk.git",
+                 .branch("7.7.0"))
     ],
     targets: [
         .target(

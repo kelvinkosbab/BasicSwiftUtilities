@@ -11,13 +11,18 @@ import SwiftUI
 @available(iOS 13, *)
 public struct HeadingTrailingTextCell: View {
     
-    public var heading: String
-    public var trailing: String
-    public var isAction: Bool
+    private var heading: String
+    private var trailing: String
+    private let tintColor: Color
+    private var isAction: Bool
     
-    public init(heading: String, trailing: String, isAction: Bool = false) {
+    public init(heading: String,
+                trailing: String,
+                tintColor: Color = AppColors.appTintColor,
+                isAction: Bool = false) {
         self.heading = heading
         self.trailing = trailing
+        self.tintColor = tintColor
         self.isAction = isAction
     }
     
@@ -29,7 +34,7 @@ public struct HeadingTrailingTextCell: View {
             if self.isAction {
                 Text(self.trailing)
                     .bodyStyle()
-                    .foregroundColor(.tallyBokBlue)
+                    .foregroundColor(self.tintColor)
             } else {
                 Text(self.trailing)
                     .bodyStyle()

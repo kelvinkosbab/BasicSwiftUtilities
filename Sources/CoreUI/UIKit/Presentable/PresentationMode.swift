@@ -10,7 +10,7 @@ import UIKit
 
 public enum PresentationMode {
     
-    static let `default`: PresentationMode = .formSheet
+    public static let `default`: PresentationMode = .formSheet
     
     case modal(presentationStyle: UIModalPresentationStyle, transitionStyle: UIModalTransitionStyle)
     case crossDissolve

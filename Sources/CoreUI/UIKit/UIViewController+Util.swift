@@ -6,6 +6,45 @@
 
 import UIKit
 
+// MARK: - StoryboardViewController
+
+public protocol StoryboardViewController {
+    associatedtype ViewController
+    
+    static func newViewController(fromStoryboard storyboard: UIStoryboard) -> ViewController
+    static func newViewController(fromStoryboardWithName storyboardName: String,
+                                  bundle: Bundle) -> ViewController
+    static func newViewController(fromStoryboardWithName storyboardName: String) -> ViewController
+}
+
+public extension StoryboardViewController where ViewController : UIViewController {
+    
+    static func newViewController(fromStoryboard storyboard: UIStoryboard) -> ViewController {
+        
+        // Check the storyboard for a controller with an identifier matching the name of the
+        // view controller class.
+        let viewControllerIdentifier = String(describing: ViewController.self)
+        let viewController = storyboard.instantiateViewController(withIdentifier: viewControllerIdentifier)
+        
+        guard let viewController = viewController as? ViewController else {
+            fatalError("View controller with identifier=\(viewControllerIdentifier) is not of type \(viewControllerIdentifier)")
+        }
+        
+        return viewController
+    }
+    
+    static func newViewController(fromStoryboardWithName storyboardName: String,
+                                  bundle: Bundle) -> ViewController {
+        let storyboard = UIStoryboard(name: storyboardName, bundle: bundle)
+        return self.newViewController(fromStoryboard: storyboard)
+    }
+    
+    static func newViewController(fromStoryboardWithName storyboardName: String) -> ViewController {
+        let storyboard = UIStoryboard(name: storyboardName, bundle: .main)
+        return self.newViewController(fromStoryboard: storyboard)
+    }
+}
+
 // MARK: - UIViewController
 
 public extension UIViewController {

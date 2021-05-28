@@ -9,24 +9,23 @@ import UIKit
 // MARK: - StoryboardViewController
 
 public protocol StoryboardViewController {
-    associatedtype ViewController
     
-    static func newViewController(fromStoryboard storyboard: UIStoryboard) -> ViewController
+    static func newViewController(fromStoryboard storyboard: UIStoryboard) -> Self
     static func newViewController(fromStoryboardWithName storyboardName: String,
-                                  bundle: Bundle) -> ViewController
-    static func newViewController(fromStoryboardWithName storyboardName: String) -> ViewController
+                                  bundle: Bundle) -> Self
+    static func newViewController(fromStoryboardWithName storyboardName: String) -> Self
 }
 
-public extension StoryboardViewController where ViewController : UIViewController {
+public extension StoryboardViewController where Self : UIViewController {
     
-    static func newViewController(fromStoryboard storyboard: UIStoryboard) -> ViewController {
+    static func newViewController(fromStoryboard storyboard: UIStoryboard) -> Self {
         
         // Check the storyboard for a controller with an identifier matching the name of the
         // view controller class.
-        let viewControllerIdentifier = String(describing: ViewController.self)
+        let viewControllerIdentifier = String(describing: Self.self)
         let viewController = storyboard.instantiateViewController(withIdentifier: viewControllerIdentifier)
         
-        guard let viewController = viewController as? ViewController else {
+        guard let viewController = viewController as? Self else {
             fatalError("View controller with identifier=\(viewControllerIdentifier) is not of type \(viewControllerIdentifier)")
         }
         
@@ -34,12 +33,12 @@ public extension StoryboardViewController where ViewController : UIViewControlle
     }
     
     static func newViewController(fromStoryboardWithName storyboardName: String,
-                                  bundle: Bundle) -> ViewController {
+                                  bundle: Bundle) -> Self {
         let storyboard = UIStoryboard(name: storyboardName, bundle: bundle)
         return self.newViewController(fromStoryboard: storyboard)
     }
     
-    static func newViewController(fromStoryboardWithName storyboardName: String) -> ViewController {
+    static func newViewController(fromStoryboardWithName storyboardName: String) -> Self {
         let storyboard = UIStoryboard(name: storyboardName, bundle: .main)
         return self.newViewController(fromStoryboard: storyboard)
     }

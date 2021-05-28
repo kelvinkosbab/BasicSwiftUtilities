@@ -20,6 +20,12 @@ public class BaseHostingController<Content : View> : UIViewController, Presentab
         return viewController
     }
     
+    // MARK: - PresentableController
+    
+    public var presentedMode: PresentationMode = .default
+    public var presentationManager: UIViewControllerTransitioningDelegate?
+    public var currentFlowInitialController: PresentableController?
+    
     // MARK: - Properties
     
     private var contentView: Content!

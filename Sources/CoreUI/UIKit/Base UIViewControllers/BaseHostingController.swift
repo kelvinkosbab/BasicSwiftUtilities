@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - BaseHostingController
 
 @available(iOS 13.0, *)
-public class BaseHostingController<Content : View> : UIViewController {
+public class BaseHostingController<Content : View> : UIViewController, PresentableController {
     
     // MARK: - Static Accessors
     

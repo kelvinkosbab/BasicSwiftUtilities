@@ -9,39 +9,14 @@ import Firebase
 import FirebaseAuth
 import Core
 
-// MARK: - BaseAuthentication
-
-public protocol BaseAuthentication {
-    
-    /// Creates and, on success, signs in a user with the given email address and password.
-    ///
-    /// - Parameter email: The user's email address.
-    /// - Parameter password: The user's desired password.
-    /// - Parameter completion: A block which is invoked when the sign up flow finishes, or is
-    /// canceled. Invoked asynchronously on the main thread in the future.
-    func createUser(email: String, password: String, completion: @escaping (_ result: CustomResult<BaseUser>) -> Void)
-    
-    /// Signs in using an email address and password.
-    ///
-    /// - Parameter email: The user's email address.
-    /// - Parameter password: The user's password.
-    /// - Parameter completion: A block which is invoked when the sign in flow finishes, or is
-    /// canceled. Invoked asynchronously on the main thread in the future.
-    func signIn(email: String, password: String, completion: @escaping (_ result: CustomResult<BaseUser>) -> Void)
-    
-    /// Signs out the current user.
-    ///
-    /// - Throws if there is an error signing out.
-    func signOut() throws
-}
-
 // MARK: - Authentication
 
-public protocol AuthenticationStateChangeDelegate : AnyObject {
+public protocol AuthenticationDelegate : AnyObject {
+    func didSignIn(identifier: String)
     func didSignOut()
 }
 
-open class Authentication : BaseAuthentication {
+public class Authentication {
     
     public enum Error : Swift.Error, LocalizedError {
         
@@ -63,20 +38,41 @@ open class Authentication : BaseAuthentication {
     
     // MARK: - Init / Properties
     
-    public weak var delegate: AuthenticationStateChangeDelegate?
-    public let logger: Logger = Logger(category: "Authentication")
-    public let firebaseAuthentication: FirebaseAuth.Auth = Auth.auth()
+    public weak var delegate: AuthenticationDelegate?
+    private let logger: Logger = Logger(category: "Authentication")
+    private let firebaseAuthentication: FirebaseAuth.Auth = Auth.auth()
+    private var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
     
-    open var isSignedIn: Bool {
-        return self.firebaseAuthentication.currentUser != nil
+    private(set) public var currentUserIdentifier: String? {
+        didSet {
+            
+            guard self.currentUserIdentifier != oldValue else {
+                return
+            }
+            
+            if let currentUserIdentifier = self.currentUserIdentifier {
+                self.logger.info("User did sign in", privateMessage: currentUserIdentifier)
+                self.delegate?.didSignIn(identifier: currentUserIdentifier)
+            } else {
+                self.logger.info("User did sign out")
+                self.delegate?.didSignOut()
+            }
+        }
     }
     
-    public var firebaseCurrentUserUid: String? {
-        return self.firebaseAuthentication.currentUser?.uid
+    public var isSignedIn: Bool {
+        return self.currentUserIdentifier != nil
     }
     
     public init() {
-        self.firebaseAuthentication.addStateDidChangeListener(self.handleAuthStateChange)
+        self.currentUserIdentifier = self.firebaseAuthentication.currentUser?.uid
+        self.authStateDidChangeListenerHandle = self.firebaseAuthentication.addStateDidChangeListener(self.handleAuthStateChange)
+    }
+    
+    deinit {
+        if let authStateDidChangeListenerHandle = self.authStateDidChangeListenerHandle {
+            self.firebaseAuthentication.removeStateDidChangeListener(authStateDidChangeListenerHandle)
+        }
     }
     
     // MARK: - Auth State Change
@@ -85,19 +81,20 @@ open class Authentication : BaseAuthentication {
     /// Users should pay special attention to making sure the block does not inadvertently retain objects which should not be retained
     /// by the long-lived block. The block itself will be retained by `FIRAuth` until it is unregistered or until the `FIRAuth` instance
     /// is otherwise deallocated.
-    open func handleAuthStateChange(firebaseAuth: FirebaseAuth.Auth, firebaseUser: FirebaseAuth.User?) {
-        
-        guard firebaseUser == nil else {
-            self.logger.debug("Auth state change: Signed in. Do nothing.")
-            return
+    private func handleAuthStateChange(firebaseAuth: FirebaseAuth.Auth, firebaseUser: FirebaseAuth.User?) {
+        if self.currentUserIdentifier != firebaseUser?.uid {
+            self.currentUserIdentifier = firebaseUser?.uid
         }
-        
-        self.logger.info("Auth state change: Sign current user out.")
-        self.delegate?.didSignOut()
     }
     
     // MARK: - Sign In / Create Account
     
+    /// Creates and, on success, signs in a user with the given email address and password.
+    ///
+    /// - Parameter email: The user's email address.
+    /// - Parameter password: The user's desired password.
+    /// - Parameter completion: A block which is invoked when the sign up flow finishes, or is
+    /// canceled. Invoked asynchronously on the main thread in the future.
     public func createUser(email: String, password: String, completion: @escaping (CustomResult<BaseUser>) -> Void) {
         
         guard !self.isSignedIn else {
@@ -118,6 +115,12 @@ open class Authentication : BaseAuthentication {
         }
     }
     
+    /// Signs in using an email address and password.
+    ///
+    /// - Parameter email: The user's email address.
+    /// - Parameter password: The user's password.
+    /// - Parameter completion: A block which is invoked when the sign in flow finishes, or is
+    /// canceled. Invoked asynchronously on the main thread in the future.
     public func signIn(email: String, password: String, completion: @escaping (CustomResult<BaseUser>) -> Void) {
         
         if !self.isSignedIn {
@@ -138,24 +141,9 @@ open class Authentication : BaseAuthentication {
         }
     }
     
-    open func signOut() throws {
-        
-        guard !self.isSignedIn else {
-            self.logger.debug("Already signed out.")
-            return
-        }
-        
-        do {
-            try self.firebaseAuthentication.signOut()
-        } catch {
-            self.logger.error("Failed to log out: \(error.localizedDescription)")
-            throw error
-        }
-    }
-    
     // MARK: - Reload User
     
-    open func reloadCurrentUser(completion: @escaping (_ response: CustomResult<BaseUser>) -> Void) {
+    public func reloadCurrentUser(completion: @escaping (_ response: CustomResult<BaseUser>) -> Void) {
         
         guard let firebaseUser = self.firebaseAuthentication.currentUser else {
             let error = Authentication.Error.noCurrentUser
@@ -197,6 +185,24 @@ open class Authentication : BaseAuthentication {
                 
                 completion(.success(user))
             }
+        }
+    }
+    
+    /// Signs out the current user.
+    ///
+    /// - Throws if there is an error signing out.
+    public func signOut() throws {
+        
+        guard !self.isSignedIn else {
+            self.logger.debug("Already signed out.")
+            return
+        }
+        
+        do {
+            try self.firebaseAuthentication.signOut()
+        } catch {
+            self.logger.error("Failed to log out: \(error.localizedDescription)")
+            throw error
         }
     }
 }

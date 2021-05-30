@@ -1,5 +1,5 @@
 //
-//  AppStateTransitionSignaler.swift
+//  AppStateEmitter.swift
 //
 //  Copyright © 2021 Kozinga. All rights reserved.
 //
@@ -11,6 +11,7 @@ import Foundation
 /// - When app state listener hooks are called, they are done so asyncronously on different `utility`
 /// dispatch queues. This prevents one hook from blocking another hook.
 public protocol AppStateEmitter {
+    
     /// Provides app state listener contexts to signal.
     var appStateContextsProvider: AppStateListenerProvider { get }
 }

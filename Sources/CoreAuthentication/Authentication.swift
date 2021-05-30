@@ -193,7 +193,7 @@ public class Authentication {
     /// - Throws if there is an error signing out.
     public func signOut() throws {
         
-        guard !self.isSignedIn else {
+        guard self.isSignedIn else {
             self.logger.debug("Already signed out.")
             return
         }

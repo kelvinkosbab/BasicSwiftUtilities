@@ -11,7 +11,6 @@ import Foundation
 public struct BaseUser : Hashable {
     
     public let identifier: String
-    public let authenticationToken: String
     public let refreshToken: String?
     public let isAnonymous: Bool
     public let email: String?
@@ -21,7 +20,6 @@ public struct BaseUser : Hashable {
     
     public static func == (lhs: BaseUser, rhs: BaseUser) -> Bool {
         return lhs.identifier == rhs.identifier &&
-            lhs.authenticationToken == rhs.authenticationToken &&
             lhs.refreshToken == rhs.refreshToken &&
             lhs.isAnonymous == rhs.isAnonymous &&
             lhs.email == rhs.email &&
@@ -35,7 +33,6 @@ public struct BaseUser : Hashable {
     }
     
     public init(identifier: String,
-                authenticationToken: String,
                 refreshToken: String?,
                 isAnonymous: Bool,
                 email: String?,
@@ -43,7 +40,6 @@ public struct BaseUser : Hashable {
                 isEmailVerified: Bool,
                 photoURL: URL?) {
         self.identifier = identifier
-        self.authenticationToken = authenticationToken
         self.refreshToken = refreshToken
         self.isAnonymous = isAnonymous
         self.email = email

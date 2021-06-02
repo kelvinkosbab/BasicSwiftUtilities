@@ -9,43 +9,45 @@ import Firebase
 import FirebaseAuth
 import Core
 
-// MARK: - FirebaseAuth
-
+/// Manages the Firebase authentication client and conforms the API to
+/// CoreAuthentication's `AuthenticationProvider` protocol.
+///
+/// Relies on `FirebaseAuthWrapper` to register and deregister authntication state
+/// change delegates due to `Firebase.Auth.auth()`'s limitation of only allowing one
+/// state change handler at a time.
 public class FirebaseAuthentication : AuthenticationProvider {
     
-    public weak var delegate: AuthenticationDelegate?
-    private let firebaseAuth: Firebase.Auth
-    private var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
+    private let uuid: UUID
+    private let firebase: FirebaseAuthWrapper
     private let logger = Logger(category: "FirebaseAuthentication")
     
-    public init() {
-        self.firebaseAuth = Firebase.Auth.auth()
-        self.currentUserIdentifier = self.firebaseAuth.currentUser?.uid
+    private var firebaseAuth: Firebase.Auth {
+        return self.firebase.firebaseAuth
     }
     
-    deinit {
-        if let authStateDidChangeListenerHandle = self.authStateDidChangeListenerHandle {
-            self.firebaseAuth.removeStateDidChangeListener(authStateDidChangeListenerHandle)
-        }
+    public init() {
+        self.uuid = UUID()
+        self.firebase = FirebaseAuthWrapper.shared
     }
     
     // MARK: - AuthenticationProvider
     
-    private(set) public var currentUserIdentifier: String? {
-        didSet {
-            
-            guard self.currentUserIdentifier != oldValue else {
-                return
-            }
-            
-            if let currentUserIdentifier = self.currentUserIdentifier {
-                self.logger.info("User did sign in", privateMessage: currentUserIdentifier)
-                self.delegate?.didSignIn(identifier: currentUserIdentifier)
+    public weak var delegate: AuthenticationDelegate? {
+        get {
+            return self.firebase.weakDelegates[self.uuid]?.delegate
+        }
+        set {
+            if let newValue = newValue {
+                let weakDelegate = FirebaseAuthWrapper.WeakDelegate(uuid: self.uuid, delegate: newValue)
+                self.firebase.weakDelegates[self.uuid] = weakDelegate
             } else {
-                self.logger.info("User did sign out")
-                self.delegate?.didSignOut()
+                self.firebase.weakDelegates.removeValue(forKey: self.uuid)
             }
         }
+    }
+    
+    public var currentUserIdentifier: String? {
+        return self.firebaseAuth.currentUser?.uid
     }
     
     public func createUser(email: String,
@@ -137,12 +139,6 @@ public class FirebaseAuthentication : AuthenticationProvider {
             completion(.success)
         } catch {
             completion(.failure(error))
-        }
-    }
-    
-    private func handleAuthStateChange(firebaseAuth: FirebaseAuth.Auth, firebaseUser: FirebaseAuth.User?) {
-        if self.currentUserIdentifier != firebaseUser?.uid {
-            self.currentUserIdentifier = firebaseUser?.uid
         }
     }
 }

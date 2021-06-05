@@ -75,4 +75,8 @@ public class Authentication : AuthenticationProvider {
     public func signOut(completion: @escaping (Result) -> Void) {
         self.authenticationProvider.signOut(completion: completion)
     }
+    
+    public func sendPasswordReset(email: String, completion: @escaping (Result) -> Void) {
+        self.authenticationProvider.sendPasswordReset(email: email, completion: completion)
+    }
 }

@@ -45,6 +45,12 @@ public protocol AuthenticationProvider : AnyObject {
     ///
     /// - Throws if there is an error signing out.
     func signOut(completion: @escaping (Result) -> Void)
+    
+    /// Initiates a password reset for the given email address.
+    ///
+    /// - Parameter email: The email address of the user.
+    /// - Parameter compleetion: Optionally; a block which is invoked when the request finishes. Invoked asynchronously on the main thread in the future.
+    func sendPasswordReset(email: String, completion: @escaping (Result) -> Void)
 }
 
 public extension AuthenticationProvider {

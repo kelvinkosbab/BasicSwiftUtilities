@@ -141,4 +141,25 @@ public class FirebaseAuthentication : AuthenticationProvider {
             completion(.failure(error))
         }
     }
+    
+    /// Initiates a password reset for the given email address.
+    ///
+    /// Possible error codes:
+    /// - `FIRAuthErrorCodeInvalidRecipientEmail` - Indicates an invalid recipient email was sent in the request.
+    /// - `FIRAuthErrorCodeInvalidSender` - Indicates an invalid sender email is set in the console for this action.
+    /// - `FIRAuthErrorCodeInvalidMessagePayload` - Indicates an invalid email template for sending update email.
+    ///
+    /// - Parameter email: The email address of the user.
+    /// - Parameter compleetion: Optionally; a block which is invoked when the request finishes. Invoked asynchronously on the main thread in the future.
+    public func sendPasswordReset(email: String, completion: @escaping (Result) -> Void) {
+        self.firebaseAuth.sendPasswordReset(withEmail: email) { error in
+            
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            completion(.success)
+        }
+    }
 }

@@ -19,7 +19,7 @@ public class FirebaseAuthentication : AuthenticationProvider {
     
     private let uuid: UUID
     private let firebase: FirebaseAuthWrapper
-    private let logger = Logger(category: "FirebaseAuthentication")
+    private let logger = Logger(subsystem: "CoreAuthentication.FirebaseAuthentication", category: "FirebaseAuthentication")
     
     private var firebaseAuth: Firebase.Auth {
         return self.firebase.firebaseAuth

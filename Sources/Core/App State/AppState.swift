@@ -33,7 +33,7 @@ public class AppState: AppStateListenerRegistrar, AppStateListenerProvider {
     private let serialQueue = DispatchQueue(label: "AppStateQueue", target: .global())
     
     /// Logger.
-    private let logger = Logger(category: "AppState")
+    private let logger = Logger(subsystem: "Core.AppState", category: "AppState")
 
     /// Returns a set of weak listeners. Do not call this method outside a closure of the `serialQueue`.
     private var unserializedWeakListeners: Set<WeakListener> = Set()

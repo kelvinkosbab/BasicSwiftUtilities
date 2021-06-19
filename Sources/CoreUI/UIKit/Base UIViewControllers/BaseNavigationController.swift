@@ -66,7 +66,7 @@ open class BaseNavigationController : UINavigationController, PresentableControl
         var tintColor: UIColor {
             switch self {
             case .default:
-                return self.tintColor
+                return AppColors.appTintUIColor
             case .transparent:
                 return .white
             }

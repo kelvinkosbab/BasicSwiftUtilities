@@ -20,7 +20,7 @@ public protocol PresentableController : AnyObject {
 public extension PresentableController where Self : UIViewController {
     
     private var logger: Logger {
-        return Logger(category: "PresentableController")
+        return Logger(subsystem: "CoreUI.PresentableController", category: "PresentableController")
     }
     
     func presentIn(_ presentingViewController: UIViewController,

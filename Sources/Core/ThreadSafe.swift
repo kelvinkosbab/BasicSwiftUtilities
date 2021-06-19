@@ -76,7 +76,7 @@ public class ThreadSafeSet<T: Hashable> : ThreadSafe {
     
     public let concurrentQueue: DispatchQueue = DispatchQueue(label: UUID().uuidString, attributes: .concurrent)
     private var set: Set<T> = Set()
-    private let logger = Logger(category: "ThreadSafeSet.\(String(describing: T.self))")
+    private let logger = Logger(subsystem: "Core.ThreadSafeSet", category: "ThreadSafeSet.\(String(describing: T.self))")
     
     public init(_ set: Set<T> = Set()) {
         self.exclusivelyWrite {
@@ -147,7 +147,7 @@ public class ThreadSafeArray<T> : ThreadSafe {
     
     public let concurrentQueue: DispatchQueue = DispatchQueue(label: UUID().uuidString, attributes: .concurrent)
     private var array: [T] = []
-    private let logger = Logger(category: "ThreadSafeArray.\(String(describing: T.self))")
+    private let logger = Logger(subsystem: "Core.ThreadSafeArray", category: "ThreadSafeArray.\(String(describing: T.self))")
     
     public init() {}
     

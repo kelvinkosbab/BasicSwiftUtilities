@@ -38,7 +38,7 @@ open class ObjectRegistrar<T> : Registrar, RegisterProvider where T: RegisteredO
     private let serialQueue = DispatchQueue(label: "ObjectRegistrar.\(String(describing: T.self))", target: .global())
     
     /// Logger.
-    private let logger = Logger(category: "ObjectRegistrar.\(String(describing: T.self))")
+    private let logger = Logger(subsystem: "Core.ObjectRegistrar", category: "ObjectRegistrar.\(String(describing: T.self))")
     
     /// Returns a set of weak object. Do not call this method outside a closure of the `serialQueue`.
     private var unserializedWeakObjects: Set<WeakObject<T>> = Set()

@@ -11,98 +11,127 @@ import os.log
 
 public protocol CoreLogger {
     
-    /// Creates a custom logger for logging to a specific subsystem and category.
-    init(subsystem: String, category: String)
-    
-    /// Logs a string interpolation at the `debug` level.
-    ///
-    /// Values that can be interpolated include signed and unsigned Swift integers, Floats,
-    /// Doubles, Bools, Strings, NSObjects, UnsafeRaw(Buffer)Pointers, values conforming to
-    /// `CustomStringConvertible` like Arrays and Dictionaries, and metatypes like
-    /// `type(of: c)`, `Int.self`.
+    /// Logs a message at the `debug` level.
     ///
     /// Examples
     /// ========
     ///
     ///     let logger = Logger()
+    ///     logger.debug("A string")
     ///     logger.debug("A string interpolation \(x)")
     ///
-    /// Formatting Interpolated Expressions and Specifying Privacy
-    /// ==========================================================
-    ///
-    /// Formatting and privacy options for the interpolated values can be passed as arguments
-    /// to the interpolations. These are optional arguments. When not specified, they will be set to their
-    /// default values.
-    ///
-    ///     logger.debug("An unsigned integer \(x, format: .hex, align: .right(columns: 10))")
-    ///     logger.debug("An unsigned integer \(x, privacy: .private)")
-    ///
-    /// - Warning: Do not explicity create OSLogMessage. Instead pass a string interpolation.
-    ///
-    /// - Parameter message: A string interpolation.
+    /// - Parameter message: A string.
     func debug(_ message: String)
     
-    /// Logs a string interpolation at the `info` level.
-    ///
-    /// Values that can be interpolated include signed and unsigned Swift integers, Floats,
-    /// Doubles, Bools, Strings, NSObjects, UnsafeRaw(Buffer)Pointers, values conforming to
-    /// `CustomStringConvertible` like Arrays and Dictionaries, and metatypes like
-    /// `type(of: c)`, `Int.self`.
+    /// Logs a message at the `debug` level along with a private message.
     ///
     /// Examples
     /// ========
     ///
     ///     let logger = Logger()
-    ///     logger.info("A string interpolation \(x)")
+    ///     logger.debug("A string message", private: "A private message")
     ///
-    /// Formatting Interpolated Expressions and Specifying Privacy
-    /// ==========================================================
+    ///     When developing prints:
+    ///     "A string messsage: A private message"
     ///
-    /// Formatting and privacy options for the interpolated values can be passed as arguments
-    /// to the interpolations. These are optional arguments. When not specified, they will be set to their
-    /// default values.
+    ///     In prod prints:
+    ///     "A string messsage: <private>"
     ///
-    ///     logger.info("An unsigned integer \(x, format: .hex, align: .right(columns: 10))")
-    ///     logger.info("An unsigned integer \(x, privacy: .private)")
+    /// - Parameter message: A string.
+    /// - Parameter privateMessage: A string that will be hidden in prod builds.
+    func debug(_ message: String, private privateMessage: String)
+    
+    /// Logs a message at the `info` level.
     ///
-    /// - Warning: Do not explicity create OSLogMessage. Instead pass a string interpolation.
+    /// Examples
+    /// ========
     ///
-    /// - Parameter message: A string interpolation.
+    ///     let logger = Logger()
+    ///     logger.debug("A string")
+    ///     logger.debug("A string interpolation \(x)")
+    ///
+    /// - Parameter message: A string.
     func info(_ message: String)
     
-    /// Logs a string interpolation at the `error` level.
-    ///
-    /// Values that can be interpolated include signed and unsigned Swift integers, Floats,
-    /// Doubles, Bools, Strings, NSObjects, UnsafeRaw(Buffer)Pointers, values conforming to
-    /// `CustomStringConvertible` like Arrays and Dictionaries, and metatypes like
-    /// `type(of: c)`, `Int.self`.
+    /// Logs a message at the `info` level along with a private message.
     ///
     /// Examples
     /// ========
     ///
     ///     let logger = Logger()
-    ///     logger.error("A string interpolation \(x)")
+    ///     logger.info("A string message", private: "A private message")
     ///
-    /// Formatting Interpolated Expressions and Specifying Privacy
-    /// ==========================================================
+    ///     When developing prints:
+    ///     "A string messsage: A private message"
     ///
-    /// Formatting and privacy options for the interpolated values can be passed as arguments
-    /// to the interpolations. These are optional arguments. When not specified, they will be set to their
-    /// default values.
+    ///     In prod prints:
+    ///     "A string messsage: <private>"
     ///
-    ///     logger.error("An unsigned integer \(x, format: .hex, align: .right(columns: 10))")
-    ///     logger.error("An unsigned integer \(x, privacy: .private)")
+    /// - Parameter message: A string.
+    /// - Parameter privateMessage: A string that will be hidden in prod builds.
+    func info(_ message: String, private privateMessage: String)
+    
+    /// Logs a message at the `error` level.
     ///
-    /// - Warning: Do not explicity create OSLogMessage. Instead pass a string interpolation.
+    /// Examples
+    /// ========
     ///
-    /// - Parameter message: A string interpolation.
+    ///     let logger = Logger()
+    ///     logger.debug("A string")
+    ///     logger.debug("A string interpolation \(x)")
+    ///
+    /// - Parameter message: A string.
     func error(_ message: String)
+    
+    /// Logs a message at the `error` level along with a private message.
+    ///
+    /// Examples
+    /// ========
+    ///
+    ///     let logger = Logger()
+    ///     logger.error("A string message", private: "A private message")
+    ///
+    ///     When developing prints:
+    ///     "A string messsage: A private message"
+    ///
+    ///     In prod prints:
+    ///     "A string messsage: <private>"
+    ///
+    /// - Parameter message: A string.
+    /// - Parameter privateMessage: A string that will be hidden in prod builds.
+    func error(_ message: String, private privateMessage: String)
 }
 
 public extension CoreLogger {
     
-    init(category: String) {
-        self.init(subsystem: "com.kozinga.TallyBok", category: category)
+    /// Logs a message at the `debug` level.
+    ///
+    /// - Warning: By default do not log the `privateMessage`.
+    ///
+    /// - Parameter message: A string.
+    /// - Parameter privateMessage: A string that will not be logged.
+    func debug(_ message: String, private privateMessage: String) {
+        self.debug("\(message): <private>")
+    }
+    
+    /// Logs a message at the `info` level.
+    ///
+    /// - Warning: By default do not log the `privateMessage`.
+    ///
+    /// - Parameter message: A string.
+    /// - Parameter privateMessage: A string that will not be logged.
+    func info(_ message: String, private privateMessage: String) {
+        self.info("\(message): <private>")
+    }
+    
+    /// Logs a message at the `error` level.
+    ///
+    /// - Warning: By default do not log the `privateMessage`.
+    ///
+    /// - Parameter message: A string.
+    /// - Parameter privateMessage: A string that will not be logged.
+    func error(_ message: String, private privateMessage: String) {
+        self.error("\(message): <private>")
     }
 }
 
@@ -111,38 +140,17 @@ public extension CoreLogger {
 public struct Logger: CoreLogger {
     
     private let logger: CoreLogger
-    private let logPrivateMessages: Bool
     
-    /// Creates a custom logger for logging to a specific subsystem and category.
     public init(subsystem: String, category: String) {
-        
-        let logPrivateMessages: Bool
-        #if DEBUG
-        
-        // Determine if being debugged by Xcode
-        var info = kinfo_proc()
-        var mib : [Int32] = [CTL_KERN, KERN_PROC, KERN_PROC_PID, getpid()]
-        var size = MemoryLayout<kinfo_proc>.stride
-        let junk = sysctl(&mib, UInt32(mib.count), &info, &size, nil, 0)
-        assert(junk == 0, "sysctl failed")
-        logPrivateMessages = (info.kp_proc.p_flag & P_TRACED) != 0
-        
-        #else
-        
-        logPrivateMessages = false
-        
-        #endif
-        
-        self.init(subsystem: subsystem, category: category, logPrivateMessages: logPrivateMessages)
+        if #available(macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0, *) {
+            self.init(logger: SwiftLogger(subsystem: subsystem, category: category))
+        } else {
+            self.init(logger: ObjcLogger(subsystem: subsystem, category: category))
+        }
     }
     
-    internal init(subsystem: String, category: String, logPrivateMessages: Bool) {
-        if #available(iOS 14, OSX 11.0, *) {
-            self.logger = SwiftLogger(subsystem: subsystem, category: category)
-        } else {
-            self.logger = ObjcLogger(subsystem: subsystem, category: category)
-        }
-        self.logPrivateMessages = logPrivateMessages
+    internal init(logger: CoreLogger) {
+        self.logger = logger
     }
     
     public func debug(_ message: String) {
@@ -157,39 +165,35 @@ public struct Logger: CoreLogger {
         self.logger.error("[Error] \(message)")
     }
     
-    public func debug(_ message: String, privateMessage: String) {
-        if self.logPrivateMessages {
-            self.debug("\(message): \(privateMessage)")
-        } else {
-            self.debug(message)
-        }
+    public func debug(_ message: String, private privateMessage: String) {
+        self.logger.debug("[Debug] \(message)", private: privateMessage)
     }
     
-    public func info(_ message: String, privateMessage: String) {
-        if self.logPrivateMessages {
-            self.info("\(message): \(privateMessage)")
-        } else {
-            self.info(message)
-        }
+    public func info(_ message: String, private privateMessage: String) {
+        self.logger.info("[Info] \(message)", private: privateMessage)
     }
     
-    public func error(_ message: String, privateMessage: String) {
-        if self.logPrivateMessages {
-            self.error("\(message): \(privateMessage)")
-        } else {
-            self.error(message)
-        }
+    public func error(_ message: String, private privateMessage: String) {
+        self.logger.error("[Error] \(message)", private: privateMessage)
     }
 }
 
 // MARK: - Objective-C OSLog
 
-@available(iOS 10.0, OSX 10.14, *)
+/// A log object that can be passed to logging functions in order to send messages to the logging system.
+///
+/// - Note: In macOS 11 and later, use the Logger structure to generate log messages.
+///
+/// For more info see https://developer.apple.com/documentation/os/oslog.
+@available(macOS 10.12, iOS 10.0, watchOS 3.0, tvOS 10.0, *)
+@available(macOS, obsoleted: 11.0, message: "Use `SwiftLogger` instead.")
+@available(iOS, obsoleted: 14.0, message: "Use `SwiftLogger` instead.")
+@available(watchOS, obsoleted: 7.0, message: "Use `SwiftLogger` instead.")
+@available(tvOS, obsoleted: 14.0, message: "Use `SwiftLogger` instead.")
 private struct ObjcLogger : CoreLogger {
     
     private let osLog: OSLog
     
-    /// Creates a custom logger for logging to a specific subsystem and category.
     public init(subsystem: String, category: String) {
         self.osLog = OSLog(subsystem: subsystem, category: category)
     }
@@ -217,29 +221,67 @@ private struct ObjcLogger : CoreLogger {
             os_log("%{public}@", log: self.osLog, type: .error, message)
         }
     }
+    
+    func debug(_ message: String, private privateMessage: String) {
+        if #available(iOS 12.0, *) {
+            os_log(.debug, log: self.osLog, "%{public}@: %{private}@", message, privateMessage)
+        } else {
+            os_log("%{public}@: %{private}@", log: self.osLog, type: .debug, message, privateMessage)
+        }
+    }
+    
+    func info(_ message: String, private privateMessage: String) {
+        if #available(iOS 12.0, *) {
+            os_log(.info, log: self.osLog, "%{public}@: %{private}@", message, privateMessage)
+        } else {
+            os_log("%{public}@: %{private}@", log: self.osLog, type: .info, message, privateMessage)
+        }
+    }
+    
+    func error(_ message: String, private privateMessage: String) {
+        if #available(iOS 12.0, *) {
+            os_log(.error, log: self.osLog, "%{public}@: %{private}@", message, privateMessage)
+        } else {
+            os_log("%{public}@: %{private}@", log: self.osLog, type: .error, message, privateMessage)
+        }
+    }
 }
 
 // MARK: - Swift os.Logger
 
-@available(iOS 14.0, OSX 11.0, *)
+/// An object that adds interpolated strings to the data store of the unified logging system.
+///
+/// For more info see https://developer.apple.com/documentation/os/logger.
+@available(macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0, *)
 private struct SwiftLogger : CoreLogger {
     
     private let logger: os.Logger
     
-    /// Creates a custom logger for logging to a specific subsystem and category.
     public init(subsystem: String, category: String) {
         self.logger = os.Logger(subsystem: subsystem, category: category)
     }
     
     func debug(_ message: String) {
-        self.logger.debug("\(message)")
+        self.logger.debug("\(message, privacy: .public)")
     }
     
     func info(_ message: String) {
-        self.logger.info("\(message)")
+        self.logger.info("\(message, privacy: .public)")
     }
     
     func error(_ message: String) {
-        self.logger.error("\(message)")
+        self.logger.error("\(message, privacy: .public)")
+    }
+    
+    func debug(_ message: String, private privateMessage: String) {
+        self.logger.debug("\(message, privacy: .public): \(privateMessage, privacy: .private)")
+    }
+    
+    func info(_ message: String, private privateMessage: String) {
+        self.logger.info("\(message, privacy: .public): \(privateMessage, privacy: .private)")
+    }
+    
+    func error(_ message: String, private privateMessage: String) {
+        self.logger.error("\(message, privacy: .public): \(privateMessage, privacy: .private)")
     }
 }

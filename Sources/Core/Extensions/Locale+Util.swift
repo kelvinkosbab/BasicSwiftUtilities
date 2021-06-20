@@ -6,45 +6,64 @@
 
 import Foundation
 
-struct IsoCountry {
-    let code: String
-    let name: String
-}
+// MARK: - Country
 
-extension IsoCountry : Hashable {
+/// Struct with information about a Country including ISO country code and name.
+public struct Country : Hashable {
     
-    func hash(into hasher: inout Hasher) {
+    /// ISO country code.
+    let code: String
+    
+    /// Country name.
+    let name: String
+    
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(self.code)
     }
     
-    static func ==(lhs: IsoCountry, rhs: IsoCountry) -> Bool {
+    public static func ==(lhs: Country, rhs: Country) -> Bool {
         return lhs.code == rhs.code
     }
 }
 
-extension Locale {
-  
-    static var isoCountryCodes: [String] {
-        return NSLocale.isoCountryCodes as [String]
+// MARK: - Locale
+
+public extension Locale {
+    
+    /// The set of known country or region codes.
+    ///
+    /// Not all country or region codes have supporting locale data in the system.
+    static var isoCountryCodes: Set<String> {
+        return Set(NSLocale.isoCountryCodes)
     }
     
+    /// Returns a locale identifier from the components specified in a given dictionary.
+    ///
+    /// This reverses the actions of components(fromLocaleIdentifier:), so for example the dictionary
+    /// {NSLocaleLanguageCode="en", NSLocaleCountryCode="US", NSLocaleCalendar=NSJapaneseCalendar}
+    /// becomes "en_US@calendar=japanese".
+    ///
+    /// - Parameter dict: A dictionary containing components that specify a locale. For possible values,
+    /// see NSLocale Component Keys.
+    ///
+    /// - Returns A locale identifier created from the components specified in dict.
     static func localeIdentifier(fromComponents components: [String : String]) -> String {
         return NSLocale.localeIdentifier(fromComponents: components)
     }
     
-    static var countries: [IsoCountry] {
-        var countries: [IsoCountry] = []
+    /// The set of known countries or regions.
+    ///
+    /// Not all countries or regions have supporting locale data in the system.
+    static var countries: Set<Country> {
+        var countries: Set<Country> = Set()
         for code in NSLocale.isoCountryCodes {
             let id = NSLocale.localeIdentifier(fromComponents: [String(NSLocale.Key.countryCode.rawValue) : code])
             if let currentLanguage = self.preferredLanguages.first,
                let name = NSLocale(localeIdentifier: currentLanguage).displayName(forKey: .identifier, value: id) {
-                let country = IsoCountry(code: code, name: name)
-                countries.append(country)
+                let country = Country(code: code, name: name)
+                countries.insert(country)
             }
         }
-        let sortedCountries = countries.sorted { (country1, country2) -> Bool in
-            return country1.name < country2.name
-        }
-        return sortedCountries
+        return countries
     }
 }

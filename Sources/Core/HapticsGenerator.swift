@@ -14,44 +14,24 @@ import UIKit
 
 // MARK: - HapticsGenerator
 
+/// Generates haptics for `iOS` and `watchOS`.
 public final class HapticsGenerator {
     
     // MARK: - Init
     
+    /// Constructor.
     public init() {}
     
     // MARK: - watchOS
     
     #if os(watchOS)
     
-    public enum Haptic {
-        
-        case notification
-        case success
-        case failure
-        case retry
-        case start
-        case stop
-        case click
-        
-        internal var hapticType: WKHapticType {
-            switch self {
-            case .notification: return .notification
-            case .success: return .success
-            case .failure: return .failure
-            case .retry: return .retry
-            case .start: return .start
-            case .stop: return .stop
-            case .click: return .click
-            }
-        }
-    }
-    
-    private let watchKitInterfaceDevice = WKInterfaceDevice.current()
-    
-    public final func generate(_ haptic: Haptic) {
+    /// Generates a haptic on the device.
+    ///
+    /// - Parameter haptic: Haptic type to generate.
+    public final func generate(_ haptic: WKHapticType) {
         DispatchQueue.main.async {
-            self.watchKitInterfaceDevice.play(haptic.hapticType)
+            WKInterfaceDevice.current().play(haptic)
         }
     }
     
@@ -59,58 +39,41 @@ public final class HapticsGenerator {
     
     // MARK: - iOS
     
+    /// Wraps existing `UIKit` haptic feedback types.
+    ///
+    /// See `UIImpactFeedbackGenerator`, `UINotificationFeedbackGenerator`, and
+    /// `UISelectionFeedbackGenerator` for more information.
     public enum Haptic {
-        case notification(NotificationHaptic)
+        
+        /// Used to give user feedback when an impact between UI elements occurs.
+        case impact(UIImpactFeedbackGenerator.FeedbackStyle)
+        
+        /// Used to give user feedback when an notification is displayed.
+        case notification(UINotificationFeedbackGenerator.FeedbackType)
+        
+        /// Used to give user feedback when a selection changes.
         case selection
-        case impact(ImpactHaptic)
     }
     
-    public enum NotificationHaptic {
-        
-        case success
-        case warning
-        case error
-        
-        internal var feedbackType: UINotificationFeedbackGenerator.FeedbackType {
-            switch self {
-            case .success: return .success
-            case .warning: return .warning
-            case .error: return .error
-            }
-        }
-    }
-    
-    public enum ImpactHaptic {
-        
-        case light
-        case medium
-        case heavy
-        
-        internal var feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle {
-            switch self {
-            case .light: return .light
-            case .medium: return .medium
-            case .heavy: return .heavy
-            }
-        }
-    }
-    
+    /// Generates a haptic on the device.
+    ///
+    /// - Parameter haptic: Haptic type to generate.
     public final func generate(_ haptic: Haptic) {
         switch haptic {
         case .selection:
-            let selection = UISelectionFeedbackGenerator()
             DispatchQueue.main.async {
-                selection.selectionChanged()
+                let selectionHaptic = UISelectionFeedbackGenerator()
+                selectionHaptic.selectionChanged()
             }
         case .notification(let haptic):
-            let notification = UINotificationFeedbackGenerator()
             DispatchQueue.main.async {
-                notification.notificationOccurred(haptic.feedbackType)
+                let notificationHaptic = UINotificationFeedbackGenerator()
+                notificationHaptic.notificationOccurred(haptic)
             }
         case .impact(let haptic):
-            let impact = UIImpactFeedbackGenerator(style: haptic.feedbackStyle)
             DispatchQueue.main.async {
-                impact.impactOccurred()
+                let impactHaptic = UIImpactFeedbackGenerator(style: haptic)
+                impactHaptic.impactOccurred()
             }
         }
     }

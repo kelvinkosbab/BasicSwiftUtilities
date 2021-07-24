@@ -12,38 +12,60 @@ import SwiftUI
 public struct CoreRoundedView<Content : View> : View {
     
     private let content: Content
-    private let cornerRadius: CGFloat
-    @Environment(\.colorScheme) var colorScheme
+    private let cornerRadius: CGFloat?
     
-    public init(@ViewBuilder builder: () -> Content, cornerRadius: CGFloat = 33) {
+    /// Constructor.
+    ///
+    /// - Parameter builder: Content of the button.
+    /// - Parameter cornerRadius: Corner radius of the rounded view. If left as `default` or set
+    /// to `nil` a `Capsule` backghround shape will be applied.
+    public init(@ViewBuilder builder: () -> Content, cornerRadius: CGFloat? = nil) {
         self.content = builder()
         self.cornerRadius = cornerRadius
     }
     
     public var body: some View {
+        HStack {
+            HStack {
+                self.content
+            }
+            .padding(Spacing.base)
+            .background(Color(.tertiarySystemBackground))
+            .modifier(RoundedViewModifier(cornerRadius: self.cornerRadius))
+        }
+        .background(Color(.secondarySystemFill))
+        .modifier(RoundedViewModifier(cornerRadius: self.cornerRadius))
+        .modifier(ViewShadowModifier())
+    }
+}
+
+@available(iOS 13, *)
+private struct ViewShadowModifier : ViewModifier {
+    
+    @Environment(\.colorScheme) var colorScheme
+    
+    public func body(content: Content) -> some View {
         if self.colorScheme == .dark {
-            HStack {
-                HStack {
-                    self.content
-                }
-                .padding(Spacing.base)
-                .background(Color(.tertiarySystemBackground))
-                .cornerRadius(self.cornerRadius)
-            }
-            .background(Color(.secondarySystemFill))
-            .cornerRadius(self.cornerRadius)
+            content
         } else {
-            HStack {
-                HStack {
-                    self.content
-                }
-                .padding(Spacing.base)
-                .background(Color(.tertiarySystemBackground))
-                .cornerRadius(self.cornerRadius)
-            }
-            .background(Color(.secondarySystemFill))
-            .cornerRadius(self.cornerRadius)
-            .shadow(color: .gray, radius: 3, x: 0, y: 1)
+            content
+                .shadow(color: .gray, radius: 3, x: 0, y: 1)
+        }
+    }
+}
+
+@available(iOS 13, *)
+private struct RoundedViewModifier : ViewModifier {
+    
+    let cornerRadius: CGFloat?
+    
+    public func body(content: Content) -> some View {
+        if let cornerRadius = self.cornerRadius {
+            content
+                .cornerRadius(cornerRadius)
+        } else {
+            content
+                .background(Capsule())
         }
     }
 }

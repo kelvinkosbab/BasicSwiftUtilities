@@ -6,6 +6,30 @@
 
 import SwiftUI
 
+// MARK: - CoreButtonStyle
+
+@available(iOS 13, *)
+public struct CoreButtonStyle : ButtonStyle {
+    
+    private let fillParentWidth: Bool
+    private let foregroundColor: Color
+    
+    public init(fillParentWidth: Bool = false, foregroundColor: Color) {
+        self.fillParentWidth = fillParentWidth
+        self.foregroundColor = foregroundColor
+    }
+    
+    public func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .foregroundColor(self.foregroundColor)
+            .bodyBoldStyle()
+            .multilineTextAlignment(.center)
+            .padding()
+            .padding(.horizontal, Spacing.base)
+            .modifier(MaxWidthModifier(fillParentWidth: self.fillParentWidth))
+    }
+}
+
 // MARK: - CoreButton
 
 @available(iOS 13, *)
@@ -32,11 +56,8 @@ public struct CoreButton<S> : View where S : StringProtocol {
     }
     
     public var body: some View {
-        Button(action: self.action) {
-            CoreButtonText(title: self.title,
-                           foregroundColor: self.foregroundColor)
-        }
-        .buttonStyle(.automatic)
+        Button(self.title, action: self.action)
+            .buttonStyle(CoreButtonStyle(foregroundColor: self.foregroundColor))
     }
 }
 
@@ -66,11 +87,8 @@ public struct CoreNavigationButton<S, Destination> : View where S : StringProtoc
     }
     
     public var body: some View {
-        NavigationLink(destination: self.destination) {
-            CoreButtonText(title: self.title,
-                           foregroundColor: self.foregroundColor)
-        }
-        .buttonStyle(.automatic)
+        NavigationLink(self.title, destination: self.destination)
+            .buttonStyle(CoreButtonStyle(foregroundColor: self.foregroundColor))
     }
 }
 
@@ -110,15 +128,10 @@ public struct CoreRoundButton<S> : View where S : StringProtocol{
     }
     
     public var body: some View {
-        Button(action: self.action) {
-            CoreRoundButtonContent(title: self.title,
-                                   backgroundColor: self.backgroundColor,
-                                   foregroundColor: self.foregroundColor,
-                                   fillParentWidth: self.fillParentWidth)
-                .background(self.backgroundColor)
-        }
-        .buttonStyle(.automatic)
-        .clipShape(Capsule())
+        Button(self.title, action: self.action)
+            .buttonStyle(CoreButtonStyle(fillParentWidth: self.fillParentWidth, foregroundColor: self.foregroundColor))
+            .background(self.backgroundColor)
+            .clipShape(Capsule())
     }
 }
 
@@ -158,84 +171,31 @@ public struct CoreNavigationRoundButton<S, Destination> : View where S : StringP
     }
     
     public var body: some View {
-        NavigationLink(destination: self.destination) {
-            HStack {
-                CoreRoundButtonContent(title: self.title,
-                                       backgroundColor: self.backgroundColor,
-                                       foregroundColor: self.foregroundColor,
-                                       fillParentWidth: self.fillParentWidth)
-                    .background(self.backgroundColor)
-            }
-        }
-        .buttonStyle(.automatic)
-        .clipShape(Capsule())
+        NavigationLink(self.title, destination: self.destination)
+            .buttonStyle(CoreButtonStyle(fillParentWidth: self.fillParentWidth, foregroundColor: self.foregroundColor))
+            .background(self.backgroundColor)
+            .clipShape(Capsule())
     }
 }
 
-// MARK: - CoreRoundButtonContent
+// MARK: - MaxWidthModifier
 
 @available(iOS 13, *)
-private struct CoreRoundButtonContent<S> : View  where S : StringProtocol{
+private struct MaxWidthModifier : ViewModifier {
     
-    private let title: S
-    private let backgroundColor: Color
-    private let foregroundColor: Color
     private let fillParentWidth: Bool
     
-    init(title: S,
-         backgroundColor: Color,
-         foregroundColor: Color,
-         fillParentWidth: Bool) {
-        self.title = title
-        self.backgroundColor = backgroundColor
-        self.foregroundColor = foregroundColor
+    init(fillParentWidth: Bool) {
         self.fillParentWidth = fillParentWidth
     }
     
-    public var body: some View {
-        HStack {
-            if self.fillParentWidth {
-                Spacer()
-            }
-            
-            CoreButtonText(title: self.title,
-                           foregroundColor: self.foregroundColor,
-                           horizontalPadding: Spacing.xl)
-            
-            if self.fillParentWidth {
-                Spacer()
-            }
+    func body(content: Content) -> some View {
+        if self.fillParentWidth {
+            content
+                .frame(maxWidth: .infinity)
+        } else {
+            content
         }
-    }
-}
-
-// MARK: - CoreButtonText
-
-@available(iOS 13, *)
-private struct CoreButtonText<S> : View where S : StringProtocol {
-    
-    let title: S
-    let foregroundColor: Color
-    let verticalPadding: CGFloat
-    let horizontalPadding: CGFloat
-    
-    init(title: S,
-         foregroundColor: Color,
-         verticalPadding: CGFloat = Spacing.base,
-         horizontalPadding: CGFloat = Spacing.base) {
-        self.title = title
-        self.foregroundColor = foregroundColor
-        self.verticalPadding = verticalPadding
-        self.horizontalPadding = horizontalPadding
-    }
-    
-    public var body: some View {
-        Text(self.title)
-            .bodyBoldStyle()
-            .foregroundColor(self.foregroundColor)
-            .multilineTextAlignment(.center)
-            .padding(.vertical, self.verticalPadding)
-            .padding(.horizontal, self.horizontalPadding)
     }
 }
 
@@ -249,44 +209,70 @@ private struct Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             VStack {
-                CoreButton("Hello World") {}
-                
-                CoreNavigationButton("Hello World", destination: Text("hi"))
-                
-                CoreButton("Hello World", isDestructive: true) {}
-                
-                CoreNavigationButton("Hello World", isDestructive: true, destination: Text("hi"))
+                self.simpleButtons
             }
         }
+        
         NavigationView {
             VStack {
-                CoreRoundButton("Hello World") {}
-                
-                CoreNavigationRoundButton("Hello World",
-                                          destination: Text("hi"))
-                
-                CoreRoundButton("Hello World", isDestructive: true) {}
-                
-                CoreNavigationRoundButton("Hello World",
-                                          isDestructive: true,
-                                          destination: Text("hi"))
-                
-                CoreRoundButton("Hello World",
-                                fillParentWidth: true) {}
-                
-                CoreNavigationRoundButton("Hello World",
-                                          fillParentWidth: true,
-                                          destination: Text("hi"))
-                
-                CoreRoundButton("Hello World",
-                                isDestructive: true,
-                                fillParentWidth: true) {}
-                
-                CoreNavigationRoundButton("Hello World",
-                                          isDestructive: true,
-                                          fillParentWidth: true,
-                                          destination: Text("hi"))
+                self.roundedButtons
             }
+        }
+        
+        NavigationView {
+            VStack {
+                self.wideRoundButtons
+            }
+        }
+    }
+    
+    static var simpleButtons: some View {
+        VStack(spacing: 10) {
+            
+            CoreButton("Hello World") {}
+            
+            CoreNavigationButton("Hello World", destination: Text("hi"))
+            
+            CoreButton("Hello World", isDestructive: true) {}
+            
+            CoreNavigationButton("Hello World", isDestructive: true, destination: Text("hi"))
+        }
+    }
+    
+    static var roundedButtons: some View {
+        VStack(spacing: 10) {
+            
+            CoreRoundButton("Hello World") {}
+            
+            CoreNavigationRoundButton("Hello World",
+                                      destination: Text("hi"))
+            
+            CoreRoundButton("Hello World", isDestructive: true) {}
+            
+            CoreNavigationRoundButton("Hello World",
+                                      isDestructive: true,
+                                      destination: Text("hi"))
+        }
+    }
+    
+    static var wideRoundButtons: some View {
+        VStack(spacing: 10) {
+            
+            CoreRoundButton("Hello World",
+                            fillParentWidth: true) {}
+            
+            CoreNavigationRoundButton("Hello World",
+                                      fillParentWidth: true,
+                                      destination: Text("hi"))
+            
+            CoreRoundButton("Hello World",
+                            isDestructive: true,
+                            fillParentWidth: true) {}
+            
+            CoreNavigationRoundButton("Hello World",
+                                      isDestructive: true,
+                                      fillParentWidth: true,
+                                      destination: Text("hi"))
         }
     }
 }

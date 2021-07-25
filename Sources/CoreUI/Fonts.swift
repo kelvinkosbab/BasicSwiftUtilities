@@ -22,7 +22,7 @@ public struct AppFont {
         case systemItalic
         case custom(String)
         
-        @available(iOS 13, *)
+        @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
         case systemMonospace
     }
     
@@ -30,7 +30,7 @@ public struct AppFont {
     public static var bold: Style = .systemBold
     public static var italic: Style = .systemItalic
     
-    @available(iOS 13, *)
+    @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
     public static var monospace: Style = .systemMonospace
     
     
@@ -58,28 +58,28 @@ public extension UIFont {
     static let footnoteBold: UIFont = UIFont.getAppFont(AppFont.bold, size: AppFont.Size.footnote)
     static let footnoteItalic: UIFont = UIFont.getAppFont(AppFont.italic, size: AppFont.Size.footnote)
     
-    @available(iOS 13, *)
+    @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
     static let footnoteMonospace: UIFont = UIFont.getAppFont(AppFont.monospace, size: AppFont.Size.footnote)
     
     static let heading: UIFont = UIFont.getAppFont(AppFont.regular, size: AppFont.Size.heading)
     static let headingBold: UIFont = UIFont.getAppFont(AppFont.bold, size: AppFont.Size.heading)
     static let headingItalic: UIFont = UIFont.getAppFont(AppFont.italic, size: AppFont.Size.heading)
     
-    @available(iOS 13, *)
+    @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
     static let headingMonospace: UIFont = UIFont.getAppFont(AppFont.monospace, size: AppFont.Size.heading)
     
     static let title: UIFont = UIFont.getAppFont(AppFont.regular, size: AppFont.Size.title)
     static let titleBold: UIFont = UIFont.getAppFont(AppFont.bold, size: AppFont.Size.title)
     static let titleItalic: UIFont = UIFont.getAppFont(AppFont.regular, size: AppFont.Size.title)
     
-    @available(iOS 13, *)
+    @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
     static let titleMonospace: UIFont = UIFont.getAppFont(AppFont.monospace, size: AppFont.Size.title)
     
     static let xlTitle: UIFont = UIFont.getAppFont(AppFont.regular, size: AppFont.Size.xlTitle)
     static let xlTitleBold: UIFont = UIFont.getAppFont(AppFont.bold, size: AppFont.Size.xlTitle)
     static let xlTitleItalic: UIFont = UIFont.getAppFont(AppFont.italic, size: AppFont.Size.xlTitle)
     
-    @available(iOS 13, *)
+    @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
     static let xlTitleMonospace: UIFont = UIFont.getAppFont(AppFont.monospace, size: AppFont.Size.xlTitle)
     
     static func getAppFont(_ style: AppFont.Style, size: CGFloat) -> UIFont {
@@ -112,7 +112,7 @@ public extension UIFont {
 
 // MARK: - Font ViewModifiers
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct BodyModifier: ViewModifier {
     public func body(content: Content) -> some View {
         switch AppFont.regular {
@@ -126,7 +126,7 @@ private struct BodyModifier: ViewModifier {
     }
 }
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct BodyBoldModifier: ViewModifier {
     public func body(content: Content) -> some View {
         switch AppFont.regular {
@@ -140,7 +140,7 @@ private struct BodyBoldModifier: ViewModifier {
     }
 }
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct BodyMonospaceModifier: ViewModifier {
     public func body(content: Content) -> some View {
         switch AppFont.regular {
@@ -154,7 +154,7 @@ private struct BodyMonospaceModifier: ViewModifier {
     }
 }
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct FootnoteModifier: ViewModifier {
     public func body(content: Content) -> some View {
         switch AppFont.regular {
@@ -168,7 +168,7 @@ private struct FootnoteModifier: ViewModifier {
     }
 }
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct FootnoteBoldModifier: ViewModifier {
     public func body(content: Content) -> some View {
         switch AppFont.bold {
@@ -182,7 +182,7 @@ private struct FootnoteBoldModifier: ViewModifier {
     }
 }
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct FootnoteMonospaceModifier: ViewModifier {
     public func body(content: Content) -> some View {
         switch AppFont.bold {
@@ -196,7 +196,7 @@ private struct FootnoteMonospaceModifier: ViewModifier {
     }
 }
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct HeadingModifier: ViewModifier {
     public func body(content: Content) -> some View {
         switch AppFont.regular {
@@ -210,7 +210,7 @@ private struct HeadingModifier: ViewModifier {
     }
 }
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct HeadingBoldModifier: ViewModifier {
     public func body(content: Content) -> some View {
         switch AppFont.bold {
@@ -224,7 +224,7 @@ private struct HeadingBoldModifier: ViewModifier {
     }
 }
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct HeadingMonospaceModifier: ViewModifier {
     public func body(content: Content) -> some View {
         switch AppFont.bold {
@@ -238,7 +238,7 @@ private struct HeadingMonospaceModifier: ViewModifier {
     }
 }
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct TitleModifier: ViewModifier {
     public func body(content: Content) -> some View {
         switch AppFont.regular {
@@ -252,7 +252,7 @@ private struct TitleModifier: ViewModifier {
     }
 }
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct TitleBoldModifier: ViewModifier {
     public func body(content: Content) -> some View {
         switch AppFont.bold {
@@ -266,7 +266,7 @@ private struct TitleBoldModifier: ViewModifier {
     }
 }
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct TitleMonospaceModifier: ViewModifier {
     public func body(content: Content) -> some View {
         switch AppFont.bold {
@@ -280,7 +280,7 @@ private struct TitleMonospaceModifier: ViewModifier {
     }
 }
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct XlTitleModifier: ViewModifier {
     public func body(content: Content) -> some View {
         switch AppFont.regular {
@@ -294,7 +294,7 @@ private struct XlTitleModifier: ViewModifier {
     }
 }
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct XlTitleBoldModifier: ViewModifier {
     public func body(content: Content) -> some View {
         switch AppFont.bold {
@@ -308,7 +308,7 @@ private struct XlTitleBoldModifier: ViewModifier {
     }
 }
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct XlTitleMonospaceModifier: ViewModifier {
     public func body(content: Content) -> some View {
         switch AppFont.bold {
@@ -322,7 +322,7 @@ private struct XlTitleMonospaceModifier: ViewModifier {
     }
 }
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public extension View {
     
     func bodyStyle() -> some View {
@@ -390,7 +390,7 @@ public extension View {
 
 #if DEBUG
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 struct Font_Previews: PreviewProvider {
     
     private static let text = "Hello World!"

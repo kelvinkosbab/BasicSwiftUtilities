@@ -8,7 +8,7 @@ import SwiftUI
 
 // MARK: - HeadingDetailTrailingView
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct HeadingDetailTrailingView<Content : View> : View {
     
     public var heading: String
@@ -34,7 +34,7 @@ public struct HeadingDetailTrailingView<Content : View> : View {
 
 #if DEBUG
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct Previews: PreviewProvider {
     static var previews: some View {
         List {
@@ -46,9 +46,10 @@ private struct Previews: PreviewProvider {
             
             HeadingDetailTrailingView(heading: "Hello World one",
                                       detail: "Hello World one") {
-                CoreButton("Something") {
+                Button("Something") {
                     // do nothing
                 }
+                .buttonStyle(.plain)
             }
             HeadingDetailTrailingView(heading: "Hello World one",
                                       detail: "Hello World one") {

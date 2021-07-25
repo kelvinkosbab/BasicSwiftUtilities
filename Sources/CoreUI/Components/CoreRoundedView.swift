@@ -8,7 +8,7 @@ import SwiftUI
 
 // MARK: - CoreRoundedView
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct CoreRoundedView<Content : View> : View {
     
     private let content: Content
@@ -39,7 +39,7 @@ public struct CoreRoundedView<Content : View> : View {
     }
 }
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct ViewShadowModifier : ViewModifier {
     
     @Environment(\.colorScheme) var colorScheme
@@ -54,7 +54,7 @@ private struct ViewShadowModifier : ViewModifier {
     }
 }
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct RoundedViewModifier : ViewModifier {
     
     let cornerRadius: CGFloat?
@@ -74,7 +74,7 @@ private struct RoundedViewModifier : ViewModifier {
 
 #if DEBUG
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct Previews: PreviewProvider {
     
     static var previews: some View {

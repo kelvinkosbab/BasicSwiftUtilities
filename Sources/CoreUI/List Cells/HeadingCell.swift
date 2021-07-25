@@ -8,7 +8,7 @@ import SwiftUI
 
 // MARK: - HeadingCell
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct HeadingCell : View {
     
     public var heading: String
@@ -28,7 +28,7 @@ public struct HeadingCell : View {
 
 #if DEBUG
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct Previews: PreviewProvider {
     
     static let titles = [ "Hello World one",

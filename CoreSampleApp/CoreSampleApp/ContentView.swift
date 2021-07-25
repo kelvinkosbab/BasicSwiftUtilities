@@ -26,60 +26,63 @@ struct CoreButtonViews : View {
         ScrollView {
             VStack(spacing: 10) {
                 self.simpleButtons
-                self.roundedButtons
-                self.wideRoundButtons
+                self.filledButtons
             }
         }
         .navigationTitle("CoreButton")
+        .ignoresSafeArea(.all, edges: .bottom)
     }
     
     private var simpleButtons: some View {
         VStack(spacing: 10) {
             
-            CoreButton("Hello World") {}
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(.core)
             
-            CoreNavigationButton("Hello World", destination: Text("hi"))
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(.coreDestructive)
             
-            CoreButton("Hello World", isDestructive: true) {}
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(CoreButtonStyle(foregroundColor: .yellow))
             
-            CoreNavigationButton("Hello World", isDestructive: true, destination: Text("hi"))
+            NavigationLink("Hello World", destination: Text("Hi"))
+                .buttonStyle(.core)
+            
+            if #available(iOS 15.0, *) {
+                Button("Hello World iOS 15", role: .destructive) { print("Hello world") }
+                    .buttonStyle(.core)
+            }
         }
     }
     
-    private var roundedButtons: some View {
+    private var filledButtons: some View {
         VStack(spacing: 10) {
             
-            CoreRoundButton("Hello World") {}
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(.coreFilled)
             
-            CoreNavigationRoundButton("Hello World",
-                                      destination: Text("hi"))
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(.coreFilledWide)
             
-            CoreRoundButton("Hello World", isDestructive: true) {}
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(.coreFilledDestructive)
             
-            CoreNavigationRoundButton("Hello World",
-                                      isDestructive: true,
-                                      destination: Text("hi"))
-        }
-    }
-    
-    private var wideRoundButtons: some View {
-        VStack(spacing: 10) {
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(.coreFilledDestructiveWide)
             
-            CoreRoundButton("Hello World",
-                            fillParentWidth: true) {}
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(.coreDestructive)
             
-            CoreNavigationRoundButton("Hello World",
-                                      fillParentWidth: true,
-                                      destination: Text("hi"))
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(CoreFilledButtonStyle(foregroundColor: .yellow))
             
-            CoreRoundButton("Hello World",
-                            isDestructive: true,
-                            fillParentWidth: true) {}
+            NavigationLink("Hello World", destination: Text("Hi"))
+                .buttonStyle(.coreFilled)
             
-            CoreNavigationRoundButton("Hello World",
-                                      isDestructive: true,
-                                      fillParentWidth: true,
-                                      destination: Text("hi"))
+            if #available(iOS 15.0, *) {
+                Button("Hello World iOS 15", role: .destructive) { print("Hello world") }
+                    .buttonStyle(.coreFilled)
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ import SwiftUI
 
 // MARK: - CoreBlurView
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct Blur: UIViewRepresentable {
     
     public let style: UIBlurEffect.Style
@@ -30,7 +30,7 @@ public struct Blur: UIViewRepresentable {
 
 #if DEBUG
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct Previews: PreviewProvider {
     
     static var previews: some View {

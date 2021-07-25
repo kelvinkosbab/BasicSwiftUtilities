@@ -8,7 +8,7 @@ import SwiftUI
 
 // MARK: - ThreeColumnStack
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct ThreeColumnStack<Left, Center, Right>: View where Left: View, Center: View, Right: View {
     
     let left: () -> Left
@@ -42,7 +42,7 @@ public struct ThreeColumnStack<Left, Center, Right>: View where Left: View, Cent
 
 #if DEBUG
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct Previews: PreviewProvider {
     
     static var previews: some View {

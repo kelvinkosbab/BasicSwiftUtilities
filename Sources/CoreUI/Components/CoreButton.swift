@@ -6,20 +6,89 @@
 
 import SwiftUI
 
+// MARK: - ButtonRole
+
+public enum ButtonRole {
+    case destructive
+}
+
+// MARK: - CoreButton
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+private struct CoreButton {
+    
+    static func getColor(for role: ButtonRole?) -> Color {
+        return role == .destructive ? AppColors.appDestructiveColor : AppColors.appTintColor
+    }
+}
+
 // MARK: - CoreButtonStyle
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct CoreButtonStyle : ButtonStyle {
+    
+    private let foregroundColor: Color?
+    
+    public init(foregroundColor: Color? = nil) {
+        self.foregroundColor = foregroundColor
+    }
+    
+    public init(role: ButtonRole) {
+        self.foregroundColor = CoreButton.getColor(for: role)
+    }
+    
+    public func makeBody(configuration: Configuration) -> some View {
+        let role: ButtonRole? = configuration.role == .destructive ? .destructive : nil
+        let foregroundColor = self.foregroundColor ?? CoreButton.getColor(for: role)
+        configuration.label
+            .foregroundColor(foregroundColor)
+            .bodyBoldStyle()
+            .multilineTextAlignment(.center)
+            .padding()
+    }
+}
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+public extension ButtonStyle where Self == CoreButtonStyle {
+
+    static var core: CoreButtonStyle {
+        return CoreButtonStyle()
+    }
+    
+    static var coreDestructive: CoreButtonStyle {
+        return CoreButtonStyle(role: .destructive)
+    }
+}
+
+// MARK: - CoreFilledButtonStyle
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+public struct CoreFilledButtonStyle : ButtonStyle {
     
     private let fillParentWidth: Bool
     private let foregroundColor: Color
+    private let backgroundColor: Color?
     
-    public init(fillParentWidth: Bool = false, foregroundColor: Color) {
+    public init(backgroundColor: Color? = nil,
+                fillParentWidth: Bool = false,
+                foregroundColor: Color = .white) {
+        self.backgroundColor = backgroundColor
         self.fillParentWidth = fillParentWidth
         self.foregroundColor = foregroundColor
     }
     
+    public init(fillParentWidth: Bool = false,
+                foregroundColor: Color = .white,
+                role: ButtonRole?) {
+        self.backgroundColor = CoreButton.getColor(for: role)
+        self.fillParentWidth = fillParentWidth
+        self.foregroundColor = foregroundColor
+        
+    }
+    
     public func makeBody(configuration: Configuration) -> some View {
+        let role: ButtonRole? = configuration.role == .destructive ? .destructive : nil
+        let backgroundColor = self.backgroundColor ?? CoreButton.getColor(for: role)
         configuration.label
             .foregroundColor(self.foregroundColor)
             .bodyBoldStyle()
@@ -27,160 +96,34 @@ public struct CoreButtonStyle : ButtonStyle {
             .padding()
             .padding(.horizontal, Spacing.base)
             .modifier(MaxWidthModifier(fillParentWidth: self.fillParentWidth))
-    }
-}
-
-// MARK: - CoreButton
-
-@available(iOS 13, *)
-public struct CoreButton<S> : View where S : StringProtocol {
-    
-    private let title: S
-    private let foregroundColor: Color
-    private let action: () -> Void
-    
-    public init(_ title: S,
-                foregroundColor: Color,
-                action: @escaping () -> Void) {
-        self.title = title
-        self.foregroundColor = foregroundColor
-        self.action = action
-    }
-    
-    public init(_ title: S,
-                isDestructive: Bool = false,
-                action: @escaping () -> Void) {
-        self.title = title
-        self.foregroundColor = isDestructive ? AppColors.appDestructiveColor : AppColors.appTintColor
-        self.action = action
-    }
-    
-    public var body: some View {
-        Button(self.title, action: self.action)
-            .buttonStyle(CoreButtonStyle(foregroundColor: self.foregroundColor))
-    }
-}
-
-// MARK: - CoreNavigationButton
-
-@available(iOS 13, *)
-public struct CoreNavigationButton<S, Destination> : View where S : StringProtocol, Destination : View {
-    
-    private let title: S
-    private let foregroundColor: Color
-    private let destination: Destination
-    
-    public init(_ title: S,
-                foregroundColor: Color,
-                destination: Destination) {
-        self.title = title
-        self.foregroundColor = foregroundColor
-        self.destination = destination
-    }
-    
-    public init(_ title: S,
-                isDestructive: Bool = false,
-                destination: Destination) {
-        self.title = title
-        self.foregroundColor = isDestructive ? AppColors.appDestructiveColor : AppColors.appTintColor
-        self.destination = destination
-    }
-    
-    public var body: some View {
-        NavigationLink(self.title, destination: self.destination)
-            .buttonStyle(CoreButtonStyle(foregroundColor: self.foregroundColor))
-    }
-}
-
-// MARK: - CoreRoundButton
-
-@available(iOS 13, *)
-public struct CoreRoundButton<S> : View where S : StringProtocol{
-    
-    private let title: S
-    private let backgroundColor: Color
-    private let foregroundColor: Color
-    private let fillParentWidth: Bool
-    private let action: () -> Void
-    
-    public init(_ title: S,
-                backgroundColor: Color,
-                foregroundColor: Color,
-                fillParentWidth: Bool = false,
-                action: @escaping () -> Void) {
-        self.title = title
-        self.backgroundColor = backgroundColor
-        self.foregroundColor = foregroundColor
-        self.fillParentWidth = fillParentWidth
-        self.action = action
-    }
-    
-    public init(_ title: S,
-                isDestructive: Bool = false,
-                foregroundColor: Color = .white,
-                fillParentWidth: Bool = false,
-                action: @escaping () -> Void) {
-        self.title = title
-        self.backgroundColor = isDestructive ? AppColors.appDestructiveColor : AppColors.appTintColor
-        self.foregroundColor = foregroundColor
-        self.fillParentWidth = fillParentWidth
-        self.action = action
-    }
-    
-    public var body: some View {
-        Button(self.title, action: self.action)
-            .buttonStyle(CoreButtonStyle(fillParentWidth: self.fillParentWidth, foregroundColor: self.foregroundColor))
-            .background(self.backgroundColor)
+            .background(backgroundColor)
             .clipShape(Capsule())
     }
 }
 
-// MARK: - CoreNavigationRoundButton
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+public extension ButtonStyle where Self == CoreFilledButtonStyle {
 
-@available(iOS 13, *)
-public struct CoreNavigationRoundButton<S, Destination> : View where S : StringProtocol, Destination : View {
-    
-    private let title: S
-    private let backgroundColor: Color
-    private let foregroundColor: Color
-    private let fillParentWidth: Bool
-    private let destination: Destination
-    
-    public init(_ title: S,
-                backgroundColor: Color,
-                foregroundColor: Color,
-                fillParentWidth: Bool = false,
-                destination: Destination) {
-        self.title = title
-        self.backgroundColor = backgroundColor
-        self.foregroundColor = foregroundColor
-        self.fillParentWidth = fillParentWidth
-        self.destination = destination
+    static var coreFilled: CoreFilledButtonStyle {
+        return CoreFilledButtonStyle()
     }
     
-    public init(_ title: S,
-                isDestructive: Bool = false,
-                foregroundColor: Color = .white,
-                fillParentWidth: Bool = false,
-                destination: Destination) {
-        self.title = title
-        self.backgroundColor = isDestructive ? AppColors.appDestructiveColor : AppColors.appTintColor
-        self.foregroundColor = foregroundColor
-        self.fillParentWidth = fillParentWidth
-        self.destination = destination
+    static var coreFilledDestructive: CoreFilledButtonStyle {
+        return CoreFilledButtonStyle(role: .destructive)
     }
     
-    public var body: some View {
-        NavigationLink(self.title, destination: self.destination)
-            .buttonStyle(CoreButtonStyle(fillParentWidth: self.fillParentWidth, foregroundColor: self.foregroundColor))
-            .background(self.backgroundColor)
-            .clipShape(Capsule())
+    static var coreFilledWide: CoreFilledButtonStyle {
+        return CoreFilledButtonStyle(fillParentWidth: true)
+    }
+    
+    static var coreFilledDestructiveWide: CoreFilledButtonStyle {
+        return CoreFilledButtonStyle(fillParentWidth: true, role: .destructive)
     }
 }
 
 // MARK: - MaxWidthModifier
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct MaxWidthModifier : ViewModifier {
     
     private let fillParentWidth: Bool
@@ -203,7 +146,7 @@ private struct MaxWidthModifier : ViewModifier {
 
 #if DEBUG
 
-@available(iOS 13, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct Previews: PreviewProvider {
     
     static var previews: some View {
@@ -215,64 +158,61 @@ private struct Previews: PreviewProvider {
         
         NavigationView {
             VStack {
-                self.roundedButtons
-            }
-        }
-        
-        NavigationView {
-            VStack {
-                self.wideRoundButtons
+                self.filledButtons
             }
         }
     }
     
-    static var simpleButtons: some View {
+    private static var simpleButtons: some View {
         VStack(spacing: 10) {
             
-            CoreButton("Hello World") {}
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(.core)
             
-            CoreNavigationButton("Hello World", destination: Text("hi"))
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(.coreDestructive)
             
-            CoreButton("Hello World", isDestructive: true) {}
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(CoreButtonStyle(foregroundColor: .yellow))
             
-            CoreNavigationButton("Hello World", isDestructive: true, destination: Text("hi"))
+            NavigationLink("Hello World", destination: Text("Hi"))
+                .buttonStyle(.core)
+            
+            if #available(iOS 15.0, *) {
+                Button("Hello World iOS 15", role: .destructive) { print("Hello world") }
+                    .buttonStyle(.core)
+            }
         }
     }
     
-    static var roundedButtons: some View {
+    private static var filledButtons: some View {
         VStack(spacing: 10) {
             
-            CoreRoundButton("Hello World") {}
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(.coreFilled)
             
-            CoreNavigationRoundButton("Hello World",
-                                      destination: Text("hi"))
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(.coreFilledWide)
             
-            CoreRoundButton("Hello World", isDestructive: true) {}
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(.coreFilledDestructive)
             
-            CoreNavigationRoundButton("Hello World",
-                                      isDestructive: true,
-                                      destination: Text("hi"))
-        }
-    }
-    
-    static var wideRoundButtons: some View {
-        VStack(spacing: 10) {
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(.coreFilledDestructiveWide)
             
-            CoreRoundButton("Hello World",
-                            fillParentWidth: true) {}
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(.coreDestructive)
             
-            CoreNavigationRoundButton("Hello World",
-                                      fillParentWidth: true,
-                                      destination: Text("hi"))
+            Button("Hello World") { print("Hello world") }
+                .buttonStyle(CoreFilledButtonStyle(foregroundColor: .yellow))
             
-            CoreRoundButton("Hello World",
-                            isDestructive: true,
-                            fillParentWidth: true) {}
+            NavigationLink("Hello World", destination: Text("Hi"))
+                .buttonStyle(.coreFilled)
             
-            CoreNavigationRoundButton("Hello World",
-                                      isDestructive: true,
-                                      fillParentWidth: true,
-                                      destination: Text("hi"))
+            if #available(iOS 15.0, *) {
+                Button("Hello World iOS 15", role: .destructive) { print("Hello world") }
+                    .buttonStyle(.coreFilled)
+            }
         }
     }
 }

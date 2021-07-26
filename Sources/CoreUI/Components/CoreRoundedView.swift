@@ -6,22 +6,29 @@
 
 import SwiftUI
 
+// MARK: - RoundedViewStyle
+
+public enum RoundedViewStyle {
+    case capsule
+    case corenerRadius(CGFloat)
+}
+
 // MARK: - CoreRoundedView
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct CoreRoundedView<Content : View> : View {
     
     private let content: Content
-    private let cornerRadius: CGFloat?
+    private let style: RoundedViewStyle
     
     /// Constructor.
     ///
     /// - Parameter builder: Content of the button.
     /// - Parameter cornerRadius: Corner radius of the rounded view. If left as `default` or set
     /// to `nil` a `Capsule` backghround shape will be applied.
-    public init(@ViewBuilder builder: () -> Content, cornerRadius: CGFloat? = nil) {
+    public init(_ style: RoundedViewStyle, @ViewBuilder builder: () -> Content) {
         self.content = builder()
-        self.cornerRadius = cornerRadius
+        self.style = style
     }
     
     public var body: some View {
@@ -30,42 +37,26 @@ public struct CoreRoundedView<Content : View> : View {
                 self.content
             }
             .padding(Spacing.base)
-            .background(Color(.tertiarySystemBackground))
-            .modifier(RoundedViewModifier(cornerRadius: self.cornerRadius))
         }
         .background(Color(.secondarySystemFill))
-        .modifier(RoundedViewModifier(cornerRadius: self.cornerRadius))
-        .modifier(ViewShadowModifier())
-    }
-}
-
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct ViewShadowModifier : ViewModifier {
-    
-    @Environment(\.colorScheme) var colorScheme
-    
-    public func body(content: Content) -> some View {
-        if self.colorScheme == .dark {
-            content
-        } else {
-            content
-                .shadow(color: .gray, radius: 3, x: 0, y: 1)
-        }
+        .modifier(RoundedViewModifier(style: self.style))
+        .coreShadow()
     }
 }
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct RoundedViewModifier : ViewModifier {
     
-    let cornerRadius: CGFloat?
+    let style: RoundedViewStyle
     
     public func body(content: Content) -> some View {
-        if let cornerRadius = self.cornerRadius {
+        switch self.style {
+        case .capsule:
             content
-                .cornerRadius(cornerRadius)
-        } else {
+                .clipShape(Capsule())
+        case .corenerRadius(let corenerRadius):
             content
-                .background(Capsule())
+                .clipShape(RoundedRectangle(cornerRadius: corenerRadius))
         }
     }
 }
@@ -79,7 +70,17 @@ private struct Previews: PreviewProvider {
     
     static var previews: some View {
         List {
-            CoreRoundedView {
+            CoreRoundedView(.corenerRadius(20)) {
+                VStack(alignment: .leading, spacing: Spacing.small) {
+                    Text("Left Top")
+                    Text("Left Bottom")
+                }
+                Spacer()
+                VStack(alignment: .leading, spacing: Spacing.small) {
+                    Text("Trailing")
+                }
+            }
+            CoreRoundedView(.capsule) {
                 VStack(alignment: .leading, spacing: Spacing.small) {
                     Text("Left Top")
                     Text("Left Bottom")

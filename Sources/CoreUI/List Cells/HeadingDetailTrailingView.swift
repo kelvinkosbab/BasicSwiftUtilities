@@ -49,7 +49,6 @@ private struct Previews: PreviewProvider {
                 Button("Something") {
                     // do nothing
                 }
-                .buttonStyle(.plain)
             }
             HeadingDetailTrailingView(heading: "Hello World one",
                                       detail: "Hello World one") {

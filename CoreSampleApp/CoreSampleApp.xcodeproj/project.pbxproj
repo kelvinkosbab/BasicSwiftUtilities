@@ -12,10 +12,10 @@
 		F67F398C26AC8A7300F4854B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F67F398B26AC8A7300F4854B /* Assets.xcassets */; };
 		F67F398F26AC8A7300F4854B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F67F398E26AC8A7300F4854B /* Preview Assets.xcassets */; };
 		F67F399926AC8E2300F4854B /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = F67F399826AC8E2300F4854B /* Core */; };
-		F67F399B26AC8E2300F4854B /* CoreAuthentication in Frameworks */ = {isa = PBXBuildFile; productRef = F67F399A26AC8E2300F4854B /* CoreAuthentication */; };
 		F67F399D26AC8E2300F4854B /* CoreUI in Frameworks */ = {isa = PBXBuildFile; productRef = F67F399C26AC8E2300F4854B /* CoreUI */; };
 		F6957A5C26AE8970002C4D36 /* CoreButtonViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6957A5B26AE8970002C4D36 /* CoreButtonViews.swift */; };
 		F6957A5E26AE8A8E002C4D36 /* CoreRoundedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6957A5D26AE8A8E002C4D36 /* CoreRoundedView.swift */; };
+		F6A80AA426B5C8670045B268 /* Toasts.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A80AA326B5C8670045B268 /* Toasts.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +27,7 @@
 		F67F399626AC8B0700F4854B /* Core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Core; path = ..; sourceTree = "<group>"; };
 		F6957A5B26AE8970002C4D36 /* CoreButtonViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreButtonViews.swift; sourceTree = "<group>"; };
 		F6957A5D26AE8A8E002C4D36 /* CoreRoundedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreRoundedView.swift; sourceTree = "<group>"; };
+		F6A80AA326B5C8670045B268 /* Toasts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toasts.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,7 +36,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F67F399926AC8E2300F4854B /* Core in Frameworks */,
-				F67F399B26AC8E2300F4854B /* CoreAuthentication in Frameworks */,
 				F67F399D26AC8E2300F4854B /* CoreUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -68,6 +68,7 @@
 				F67F398926AC8A7300F4854B /* ContentView.swift */,
 				F6957A5B26AE8970002C4D36 /* CoreButtonViews.swift */,
 				F6957A5D26AE8A8E002C4D36 /* CoreRoundedView.swift */,
+				F6A80AA326B5C8670045B268 /* Toasts.swift */,
 				F67F398B26AC8A7300F4854B /* Assets.xcassets */,
 				F67F398D26AC8A7300F4854B /* Preview Content */,
 			);
@@ -115,7 +116,6 @@
 			name = CoreSampleApp;
 			packageProductDependencies = (
 				F67F399826AC8E2300F4854B /* Core */,
-				F67F399A26AC8E2300F4854B /* CoreAuthentication */,
 				F67F399C26AC8E2300F4854B /* CoreUI */,
 			);
 			productName = CoreSampleApp;
@@ -176,6 +176,7 @@
 				F6957A5E26AE8A8E002C4D36 /* CoreRoundedView.swift in Sources */,
 				F67F398A26AC8A7300F4854B /* ContentView.swift in Sources */,
 				F67F398826AC8A7300F4854B /* CoreSampleAppApp.swift in Sources */,
+				F6A80AA426B5C8670045B268 /* Toasts.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,10 +386,6 @@
 		F67F399826AC8E2300F4854B /* Core */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Core;
-		};
-		F67F399A26AC8E2300F4854B /* CoreAuthentication */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CoreAuthentication;
 		};
 		F67F399C26AC8E2300F4854B /* CoreUI */ = {
 			isa = XCSwiftPackageProductDependency;

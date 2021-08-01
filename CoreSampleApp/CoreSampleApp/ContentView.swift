@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreUI
 
 struct ContentView : View {
     
@@ -18,9 +19,13 @@ struct ContentView : View {
                 NavigationLink("CoreRoundedViews") {
                     CoreRoundedViews()
                 }
+                NavigationLink("Toasts") {
+                    ToastViews()
+                }
             }
             .navigationTitle("Hello World")
         }
+        .modifier(ToastableContainerModifier())
     }
 }
 

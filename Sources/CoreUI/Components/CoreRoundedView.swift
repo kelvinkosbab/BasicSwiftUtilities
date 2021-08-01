@@ -18,6 +18,8 @@ public enum RoundedViewStyle {
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct CoreRoundedView<Content : View> : View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     private let content: Content
     private let style: RoundedViewStyle
     
@@ -36,9 +38,9 @@ public struct CoreRoundedView<Content : View> : View {
             HStack {
                 self.content
             }
-            .padding(Spacing.base)
+            .background(Color(.secondarySystemFill))
         }
-        .background(Color(.secondarySystemFill))
+        .background(self.colorScheme == .dark ? Color.black : Color.white)
         .modifier(RoundedViewModifier(style: self.style))
         .coreShadow()
     }
@@ -66,7 +68,7 @@ private struct RoundedViewModifier : ViewModifier {
 #if DEBUG
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct Previews: PreviewProvider {
+struct CoreRoundedView_Previews: PreviewProvider {
     
     static var previews: some View {
         List {

@@ -14,24 +14,30 @@ struct CoreRoundedViews : View {
         ScrollView {
             VStack(spacing: 10) {
                 CoreRoundedView(.corenerRadius(20)) {
-                    VStack(alignment: .leading, spacing: Spacing.small) {
-                        Text("Left Top")
-                        Text("Left Bottom")
+                    HStack {
+                        VStack(alignment: .leading, spacing: Spacing.small) {
+                            Text("Left Top")
+                            Text("Left Bottom")
+                        }
+                        Spacer()
+                        VStack(alignment: .leading, spacing: Spacing.small) {
+                            Text("Trailing")
+                        }
                     }
-                    Spacer()
-                    VStack(alignment: .leading, spacing: Spacing.small) {
-                        Text("Trailing")
-                    }
+                    .padding()
                 }
                 CoreRoundedView(.capsule) {
-                    VStack(alignment: .leading, spacing: Spacing.small) {
-                        Text("Left Top")
-                        Text("Left Bottom")
+                    HStack {
+                        VStack(alignment: .leading, spacing: Spacing.small) {
+                            Text("Left Top")
+                            Text("Left Bottom")
+                        }
+                        Spacer()
+                        VStack(alignment: .leading, spacing: Spacing.small) {
+                            Text("Trailing")
+                        }
                     }
-                    Spacer()
-                    VStack(alignment: .leading, spacing: Spacing.small) {
-                        Text("Trailing")
-                    }
+                    .padding()
                 }
             }
         }

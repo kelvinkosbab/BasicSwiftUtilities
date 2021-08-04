@@ -1,47 +1,26 @@
 //
-//  Toasts.swift
+//  ToastView.swift
 //
 //  Created by Kelvin Kosbab on 7/30/21.
 //
 
 import SwiftUI
 
-// MARK: - ToastContent
-
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-public struct ToastContent {
-    
-    let title: String
-    let description: String?
-    let image: Image?
-    let tintColor: Color?
-    
-    public init(title: String,
-                description: String? = nil,
-                image: Image? = nil,
-                tintColor: Color? = nil) {
-        self.title = title
-        self.description = description
-        self.image = image
-        self.tintColor = tintColor
-    }
-}
-
 // MARK: - ToastView
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-public struct ToastView : View {
+struct ToastView : View {
     
     @Binding private var content: ToastContent
     
-    public init(_ content: Binding<ToastContent>) {
+    init(_ content: Binding<ToastContent>) {
         self._content = content
     }
     
-    public var body: some View {
-        CoreRoundedView(.capsule) {
+    var body: some View {
+        CoreRoundedView(.capsule, backgroundStyle: .blur) {
             HStack {
-                if let image = self.content.image, let tintColor = self.content.tintColor {
+                if let image = content.image, let tintColor = content.tintColor {
                     
                     image
                         .resizable()
@@ -52,7 +31,7 @@ public struct ToastView : View {
                     
                     Spacer()
                     
-                    self.textContent
+                    self.getTextContent(title: content.title, description: content.description)
                         .padding()
                     
                     Spacer()
@@ -65,7 +44,7 @@ public struct ToastView : View {
                     
                 } else {
                     
-                    self.textContent
+                    self.getTextContent(title: content.title, description: content.description)
                         .padding()
                 }
             }
@@ -74,13 +53,13 @@ public struct ToastView : View {
         }
     }
     
-    private var textContent: some View {
+    private func getTextContent(title: String, description: String?) -> some View {
         VStack(spacing: Spacing.tiny) {
-            Text(self.content.title)
+            Text(title)
                 .bodyBoldStyle()
                 .foregroundColor(Color.primary)
                 .lineLimit(1)
-            if let description = self.content.description {
+            if let description = description {
                 Text(description)
                     .footnoteBoldStyle()
                     .foregroundColor(Color.gray)

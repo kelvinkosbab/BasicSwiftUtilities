@@ -17,16 +17,31 @@ struct ToastViews : View {
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
-                ToastView(.constant(ToastContent(title: "One")))
-                ToastView(.constant(ToastContent(title: "Two",
-                                                 image: self.image,
-                                                 tintColor: .green)))
-                ToastView(.constant(ToastContent(title: "Two",
-                                                 description: "Hello")))
-                ToastView(.constant(ToastContent(title: "Two",
-                                                 description: "Hello",
-                                                 image: self.image,
-                                                 tintColor: .blue)))
+                Button("Show Title Toast") {
+                    Toast.show(title: "Simple Title")
+                }
+                .padding()
+                
+                Button("Show Title-Image Toast") {
+                    Toast.show(title: "Simple Title",
+                               image: self.image,
+                               imageTintColor: .green)
+                }
+                .padding()
+                
+                Button("Show Title-description Toast") {
+                    Toast.show(title: "Simple Title",
+                               description: "Some description")
+                }
+                .padding()
+                
+                Button("Show Title-description-image Toast") {
+                    Toast.show(title: "Simple Title",
+                               description: "Some description",
+                               image: self.image,
+                               imageTintColor: .blue)
+                }
+                .padding()
             }
         }
         .navigationTitle("Toasts")

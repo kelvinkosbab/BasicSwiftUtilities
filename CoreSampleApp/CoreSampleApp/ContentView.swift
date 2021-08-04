@@ -25,7 +25,7 @@ struct ContentView : View {
             }
             .navigationTitle("Hello World")
         }
-        .modifier(ToastableContainerModifier())
+        .modifier(ToastableModifier())
     }
 }
 

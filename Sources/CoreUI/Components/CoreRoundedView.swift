@@ -6,11 +6,18 @@
 
 import SwiftUI
 
-// MARK: - RoundedViewStyle
+// MARK: - RoundedViewCornerStyle
 
-public enum RoundedViewStyle {
+public enum RoundedViewCornerStyle {
     case capsule
     case corenerRadius(CGFloat)
+}
+
+// MARK: - RoundedViewBackgroundStyle
+
+public enum RoundedViewBackgroundStyle {
+    case secondarySystemFill
+    case blur
 }
 
 // MARK: - CoreRoundedView
@@ -18,19 +25,24 @@ public enum RoundedViewStyle {
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct CoreRoundedView<Content : View> : View {
     
-    @Environment(\.colorScheme) var colorScheme
+    // MARK: - Properties and Init
     
+    private let backgroundStyle: RoundedViewBackgroundStyle
     private let content: Content
-    private let style: RoundedViewStyle
+    private let cornerStyle: RoundedViewCornerStyle
     
     /// Constructor.
     ///
+    /// - Parameter cornerStyle: Style of the corners of the view..
+    /// - Parameter backgroundStyle: Style of the background container. Default is `secondarySystemFill`.``
     /// - Parameter builder: Content of the button.
-    /// - Parameter cornerRadius: Corner radius of the rounded view. If left as `default` or set
     /// to `nil` a `Capsule` backghround shape will be applied.
-    public init(_ style: RoundedViewStyle, @ViewBuilder builder: () -> Content) {
+    public init(_ cornerStyle: RoundedViewCornerStyle,
+                backgroundStyle: RoundedViewBackgroundStyle = .secondarySystemFill,
+                @ViewBuilder builder: () -> Content) {
+        self.backgroundStyle = backgroundStyle
         self.content = builder()
-        self.style = style
+        self.cornerStyle = cornerStyle
     }
     
     public var body: some View {
@@ -38,18 +50,20 @@ public struct CoreRoundedView<Content : View> : View {
             HStack {
                 self.content
             }
-            .background(Color(.secondarySystemFill))
+            .background(self.backgroundStyle == .secondarySystemFill ? Color(.secondarySystemFill) : .clear)
         }
-        .background(self.colorScheme == .dark ? Color.black : Color.white)
-        .modifier(RoundedViewModifier(style: self.style))
+        .modifier(RoundedViewBackgroundModifier(style: self.backgroundStyle))
+        .modifier(RoundedViewModifier(style: self.cornerStyle))
         .coreShadow()
     }
 }
 
+// MARK: - RoundedViewModifier
+
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct RoundedViewModifier : ViewModifier {
     
-    let style: RoundedViewStyle
+    let style: RoundedViewCornerStyle
     
     public func body(content: Content) -> some View {
         switch self.style {
@@ -59,6 +73,27 @@ private struct RoundedViewModifier : ViewModifier {
         case .corenerRadius(let corenerRadius):
             content
                 .clipShape(RoundedRectangle(cornerRadius: corenerRadius))
+        }
+    }
+}
+
+// MARK: - RoundedViewBackgroundModifier
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+private struct RoundedViewBackgroundModifier : ViewModifier {
+    
+    @Environment(\.colorScheme) var colorScheme
+    
+    let style: RoundedViewBackgroundStyle
+    
+    public func body(content: Content) -> some View {
+        switch self.style {
+        case .secondarySystemFill:
+            content
+                .background(self.colorScheme == .dark ? Color.black : Color.white)
+        case .blur:
+            content
+                .background(Blur())
         }
     }
 }
@@ -73,24 +108,30 @@ struct CoreRoundedView_Previews: PreviewProvider {
     static var previews: some View {
         List {
             CoreRoundedView(.corenerRadius(20)) {
-                VStack(alignment: .leading, spacing: Spacing.small) {
-                    Text("Left Top")
-                    Text("Left Bottom")
+                HStack {
+                    VStack(alignment: .leading, spacing: Spacing.small) {
+                        Text("Left Top")
+                        Text("Left Bottom")
+                    }
+                    Spacer()
+                    VStack(alignment: .leading, spacing: Spacing.small) {
+                        Text("Trailing")
+                    }
                 }
-                Spacer()
-                VStack(alignment: .leading, spacing: Spacing.small) {
-                    Text("Trailing")
-                }
+                .padding()
             }
             CoreRoundedView(.capsule) {
-                VStack(alignment: .leading, spacing: Spacing.small) {
-                    Text("Left Top")
-                    Text("Left Bottom")
+                HStack {
+                    VStack(alignment: .leading, spacing: Spacing.small) {
+                        Text("Left Top")
+                        Text("Left Bottom")
+                    }
+                    Spacer()
+                    VStack(alignment: .leading, spacing: Spacing.small) {
+                        Text("Trailing")
+                    }
                 }
-                Spacer()
-                VStack(alignment: .leading, spacing: Spacing.small) {
-                    Text("Trailing")
-                }
+                .padding()
             }
         }
     }

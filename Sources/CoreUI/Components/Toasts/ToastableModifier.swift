@@ -10,7 +10,7 @@ import Core
 // MARK: - ToastableModifier
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-public struct ToastableModifier : ViewModifier {
+struct ToastableModifier : ViewModifier {
     
     @State var paddingTop: CGFloat = 0
     
@@ -47,5 +47,16 @@ public struct ToastableModifier : ViewModifier {
                 .padding(.top, Spacing.base)
             }
         }
+    }
+}
+
+// MARK: - Toastable
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+public extension View {
+    
+    /// Enableds the attached container for ttoasts. The toasts will be bound to the container's safe area insets.
+    func enableToasts() -> some View {
+        self.modifier(ToastableModifier())
     }
 }

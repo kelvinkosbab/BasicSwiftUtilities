@@ -16,13 +16,24 @@ protocol ToastContainer {
 
 // MARK: - CurrentToastState
 
+/// Defines the lifecycle of a toast.
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 enum CurrentToastState {
+    
+    /// No toast shold be prepared or shown for rendering.
     case none
+    
+    /// Prepare a toast for display. A toast needs a short amount of time to define its bounds
+    /// before it is ready to be animated onto the screen.
     case prepare(ToastContent)
+    
+    /// The toast should be animated into view of the screen.
     case show(ToastContent)
+    
+    /// The toast should be animatted out of the view of the screen.
     case hiding(ToastContent)
     
+    /// Utility returing whether or not the toast should be rendered and vvisible.
     var shouldBeVisible: Bool {
         switch self {
         case .none, .hiding, .prepare:
@@ -35,6 +46,8 @@ enum CurrentToastState {
 
 // MARK: - ToastManager
 
+/// Responsible for managing any incoming `showToast` requests. Incoming toasts will be queued up
+/// until all toasts have beenshown to the user.
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 class ToastManager: ToastContainer, ObservableObject {
     

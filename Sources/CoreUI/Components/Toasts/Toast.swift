@@ -11,17 +11,46 @@ import SwiftUI
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public class Toast {
     
-    private static var container: ToastContainer?
-    private static let containerNotConfiguredError = "Toast container not configured"
-    
-    static func configure(container: ToastContainer) {
-        self.container = container
+    /// For apps that have multiple scenes/windows additional Toast Targets can be defined. When showing a toast
+    /// a particular scene can be selected for showing the toast.
+    public struct Target: OptionSet, Hashable {
+        public let rawValue: Int
+        
+        public init(rawValue: Int) {
+            self.rawValue = rawValue
+        }
+        
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(self.rawValue)
+        }
+        
+        public static func == (lhs: Target, rhs: Target) -> Bool {
+            return lhs.rawValue == rhs.rawValue
+        }
+
+        public static let primary = Toast.Target(rawValue: 1 << 0)
     }
     
-    public static func show(title: String) {
+    private static var registeredContainer: [Toast.Target : ToastContainer] = [:]
+    
+    static func register(container: ToastContainer, target: Toast.Target) {
         
-        guard let container = self.container else {
-            fatalError(self.containerNotConfiguredError)
+        guard self.registeredContainer[target] == nil else {
+            fatalError("Toast container has already been registred for target: \(target.rawValue)")
+        }
+        
+        self.registeredContainer[target] = container
+    }
+    
+    private static func containerNotConfiguredError(target: Toast.Target) -> String {
+        return "Toast container not configured for target: \(target.rawValue)"
+    }
+    
+    public static func show(title: String,
+                            target: Toast.Target = .primary) {
+        
+        guard let container = self.registeredContainer[target] else {
+            fatalError(self.containerNotConfiguredError(target: target))
         }
         
         let content = ToastContent(title: title,
@@ -33,10 +62,11 @@ public class Toast {
     
     public static func show(title: String,
                             image: Image,
-                            imageTintColor: Color) {
+                            imageTintColor: Color,
+                            target: Toast.Target = .primary) {
         
-        guard let container = self.container else {
-            fatalError(self.containerNotConfiguredError)
+        guard let container = self.registeredContainer[target] else {
+            fatalError(self.containerNotConfiguredError(target: target))
         }
         
         let content = ToastContent(title: title,
@@ -48,10 +78,11 @@ public class Toast {
     
     public static func show(title: String,
                             image: Image,
-                            isDestructive: Bool = false) {
+                            isDestructive: Bool = false,
+                            target: Toast.Target = .primary) {
         
-        guard let container = self.container else {
-            fatalError(self.containerNotConfiguredError)
+        guard let container = self.registeredContainer[target] else {
+            fatalError(self.containerNotConfiguredError(target: target))
         }
         
         let tintColor = isDestructive ? AppColors.appDestructiveColor : AppColors.appTintColor
@@ -63,10 +94,11 @@ public class Toast {
     }
     
     public static func show(title: String,
-                            description: String) {
+                            description: String,
+                            target: Toast.Target = .primary) {
         
-        guard let container = self.container else {
-            fatalError(self.containerNotConfiguredError)
+        guard let container = self.registeredContainer[target] else {
+            fatalError(self.containerNotConfiguredError(target: target))
         }
         
         let content = ToastContent(title: title,
@@ -79,10 +111,11 @@ public class Toast {
     public static func show(title: String,
                             description: String,
                             image: Image,
-                            imageTintColor: Color) {
+                            imageTintColor: Color,
+                            target: Toast.Target = .primary) {
         
-        guard let container = self.container else {
-            fatalError(self.containerNotConfiguredError)
+        guard let container = self.registeredContainer[target] else {
+            fatalError(self.containerNotConfiguredError(target: target))
         }
         
         let content = ToastContent(title: title,
@@ -95,10 +128,11 @@ public class Toast {
     public static func show(title: String,
                             description: String,
                             image: Image,
-                            isDestructive: Bool = false) {
+                            isDestructive: Bool = false,
+                            target: Toast.Target = .primary) {
         
-        guard let container = self.container else {
-            fatalError(self.containerNotConfiguredError)
+        guard let container = self.registeredContainer[target] else {
+            fatalError(self.containerNotConfiguredError(target: target))
         }
         
         let tintColor = isDestructive ? AppColors.appDestructiveColor : AppColors.appTintColor

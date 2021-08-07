@@ -19,39 +19,40 @@ struct ToastView : View {
     }
     
     var body: some View {
-        CoreRoundedView(.capsule, backgroundStyle: .blur) {
-            HStack {
-                if let image = content.image, let tintColor = content.tintColor {
-                    
-                    image
-                        .resizable()
-                        .frame(maxHeight: .infinity)
-                        .aspectRatio(1, contentMode: .fit)
-                        .foregroundColor(tintColor)
-                        .padding()
-                    
-                    Spacer()
-                    
-                    self.getTextContent(title: content.title, description: content.description)
-                        .padding()
-                    
-                    Spacer()
-                    
-                    Rectangle()
-                        .fill(Color.clear)
-                        .frame(maxHeight: .infinity)
-                        .aspectRatio(1, contentMode: .fit)
-                        .padding()
-                    
-                } else {
-                    
-                    self.getTextContent(title: content.title, description: content.description)
-                        .padding()
-                }
+        HStack {
+            if let image = content.image, let tintColor = content.tintColor {
+                
+                image
+                    .resizable()
+                    .frame(maxHeight: .infinity)
+                    .aspectRatio(1, contentMode: .fit)
+                    .foregroundColor(tintColor)
+                    .padding()
+                
+                Spacer()
+                
+                self.getTextContent(title: content.title, description: content.description)
+                    .padding()
+                
+                Spacer()
+                
+                Rectangle()
+                    .fill(Color.clear)
+                    .frame(maxHeight: .infinity)
+                    .aspectRatio(1, contentMode: .fit)
+                    .padding()
+                
+            } else {
+                
+                self.getTextContent(title: content.title, description: content.description)
+                    .padding()
             }
-            .frame(width: 300)
-            .frame(maxHeight: 60)
         }
+        .coreContainer(applyShadow: true,
+                       backgroundStyle: .secondaryFill,
+                       cornerStyle: .capsule)
+        .frame(width: 300)
+        .frame(maxHeight: 60)
     }
     
     private func getTextContent(title: String, description: String?) -> some View {

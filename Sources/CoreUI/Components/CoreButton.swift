@@ -206,7 +206,7 @@ struct CoreButton_Previews: PreviewProvider {
             Button("Hello World") { print("Hello world") }
                 .buttonStyle(CoreFilledButtonStyle(foregroundColor: .yellow))
             
-            NavigationLink("Hello World", destination: Text("Hi"))
+            NavigationLink("Hello World", destination: Text("Hi")) 
                 .buttonStyle(.coreFilled)
             
             if #available(iOS 15.0, *) {

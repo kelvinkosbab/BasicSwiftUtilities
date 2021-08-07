@@ -25,7 +25,7 @@ struct ContentView : View {
             }
             .navigationTitle("Hello World")
         }
-        .enableToasts()
+        .toastableContainer(target: .primary)
     }
 }
 

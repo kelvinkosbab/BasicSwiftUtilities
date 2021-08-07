@@ -7,25 +7,25 @@
 import SwiftUI
 import Core
 
-// MARK: - ToastableModifier
+// MARK: - ToastableContainerModifier
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-struct ToastableModifier : ViewModifier {
+struct ToastableContainerModifier : ViewModifier {
     
     @State var paddingTop: CGFloat = 0
     
     private let animationOptions: ToastAnimationOptions
     @ObservedObject private var toastManager: ToastManager
     
-    public init() {
+    init(target: Toast.Target) {
         let animationOptions = ToastAnimationOptions()
         self.animationOptions = animationOptions
         let toastManager = ToastManager(animationOptions: animationOptions)
         self.toastManager = toastManager
-        Toast.configure(container: toastManager)
+        Toast.register(container: toastManager, target: target)
     }
     
-    public func body(content: Content) -> some View {
+    func body(content: Content) -> some View {
         GeometryReader { geometry in
             ZStack {
                 content
@@ -55,8 +55,13 @@ struct ToastableModifier : ViewModifier {
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public extension View {
     
-    /// Enableds the attached container for ttoasts. The toasts will be bound to the container's safe area insets.
-    func enableToasts() -> some View {
-        self.modifier(ToastableModifier())
+    /// Enables the attached container for toasts. The toasts will be bound to the container's safe area insets.
+    ///
+    /// If an app has multiple windows/scenes a toast target can be defined by expanding the
+    /// `Toast.Target OptionalSet` type.
+    ///
+    /// - Parameter target: Target window/scene of the container. Default is `.primary`.
+    func toastableContainer(target: Toast.Target = .primary) -> some View {
+        self.modifier(ToastableContainerModifier(target: target))
     }
 }

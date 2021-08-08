@@ -1,6 +1,5 @@
 //
-//  Toasts.swift
-//  Toasts
+//  ToastViews.swift
 //
 //  Created by Kelvin Kosbab on 7/31/21.
 //
@@ -38,6 +37,22 @@ struct ToastViews : View {
                 Button("Show Title-description-image Toast") {
                     Toast.show(title: "Simple Title",
                                description: "Some description",
+                               image: self.image,
+                               imageTintColor: .blue)
+                }
+                .padding()
+                
+                Button("Show longer Title-description-image Toast") {
+                    Toast.show(title: "Simple Title that is a little longer",
+                               description: "Some description",
+                               image: self.image,
+                               imageTintColor: .blue)
+                }
+                .padding()
+                
+                Button("Show super long Title-description-image Toast") {
+                    Toast.show(title: "Simple Title that is a little longer Simple Title that is a little longer Simple Title that is a little longer",
+                               description: "Some description, Some description, Some description, Some description, Some description, Some description, Some descriptionSome description",
                                image: self.image,
                                imageTintColor: .blue)
                 }

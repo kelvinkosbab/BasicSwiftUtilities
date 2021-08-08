@@ -24,48 +24,50 @@ struct ToastView : View {
                 
                 image
                     .resizable()
-                    .frame(maxHeight: .infinity)
-                    .aspectRatio(1, contentMode: .fit)
+                    .frame(width: 30, height: 30)
                     .foregroundColor(tintColor)
-                    .padding()
-                
-                Spacer()
+                    .padding(.vertical, Spacing.base)
+                    .padding(.leading, Spacing.small)
                 
                 self.getTextContent(title: content.title, description: content.description)
-                    .padding()
-                
-                Spacer()
+                    .padding(.vertical, Spacing.tiny)
+                    .padding(.horizontal, Spacing.small)
                 
                 Rectangle()
                     .fill(Color.clear)
-                    .frame(maxHeight: .infinity)
-                    .aspectRatio(1, contentMode: .fit)
-                    .padding()
+                    .frame(width: 30, height: 30)
+                    .padding(.vertical, Spacing.base)
+                    .padding(.trailing, Spacing.small)
                 
             } else {
                 
                 self.getTextContent(title: content.title, description: content.description)
-                    .padding()
+                    .padding(.vertical, Spacing.base)
+                    .padding(.horizontal, Spacing.xxl)
             }
         }
+        .frame(minWidth: .zero,
+               maxWidth: 330,
+               minHeight: .zero,
+               maxHeight: 80)
+        .fixedSize(horizontal: true,
+                   vertical: true)
         .coreContainer(applyShadow: true,
                        backgroundStyle: .secondaryFill,
                        cornerStyle: .capsule)
-        .frame(width: 300)
-        .frame(maxHeight: 60)
     }
     
     private func getTextContent(title: String, description: String?) -> some View {
         VStack(spacing: Spacing.tiny) {
             Text(title)
-                .bodyBoldStyle()
-                .foregroundColor(Color.primary)
+                .footnoteBoldStyle()
                 .lineLimit(1)
+                .foregroundColor(Color.primary)
             if let description = description {
                 Text(description)
-                    .footnoteBoldStyle()
-                    .foregroundColor(Color.gray)
+                    .footnoteStyle()
                     .lineLimit(1)
+                    .foregroundColor(Color.gray)
             }
         }
     }

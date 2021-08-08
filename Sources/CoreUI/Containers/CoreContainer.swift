@@ -138,7 +138,7 @@ private struct RoundedViewBackgroundModifier : ViewModifier {
         switch self.style {
         case .blur:
             content
-                .background(Blur())
+                .blurred()
         case .none:
             content
         case .secondaryFill, .tertiaryFill, .quaternaryFill:

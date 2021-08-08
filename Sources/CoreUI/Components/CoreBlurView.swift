@@ -6,7 +6,28 @@
 
 import SwiftUI
 
-// MARK: - CoreBlurView
+// MARK: - BlurredModifier
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+private struct BlurredModifier : ViewModifier {
+    
+    let style: UIBlurEffect.Style
+    
+    func body(content: Content) -> some View {
+        content
+            .background(Blur(style: self.style))
+    }
+}
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+public extension View {
+    
+    func blurred(_ style: UIBlurEffect.Style = .systemUltraThinMaterial) -> some View {
+        return self.modifier(BlurredModifier(style: style))
+    }
+}
+
+// MARK: - Blur
 
 /// Usage:
 /// ```
@@ -14,19 +35,19 @@ import SwiftUI
 ///     .background(Blur())
 /// ```
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-public struct Blur: UIViewRepresentable {
+private struct Blur: UIViewRepresentable {
     
-    public let style: UIBlurEffect.Style
+    let style: UIBlurEffect.Style
     
-    public init(style: UIBlurEffect.Style = .systemUltraThinMaterial) {
+    init(style: UIBlurEffect.Style) {
         self.style = style
     }
     
-    public func makeUIView(context: Context) -> UIVisualEffectView {
+    func makeUIView(context: Context) -> UIVisualEffectView {
         return UIVisualEffectView(effect: UIBlurEffect(style: self.style))
     }
     
-    public func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
+    func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
         uiView.effect = UIBlurEffect(style: self.style)
     }
 }
@@ -48,7 +69,7 @@ struct Blur_Previews: PreviewProvider {
                 .foregroundColor(Color.white)
                 .padding()
                 .cornerRadius(15)
-                .background(Blur())
+                .blurred()
                 
         }
     }

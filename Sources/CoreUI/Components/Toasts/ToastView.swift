@@ -42,14 +42,14 @@ struct ToastView : View {
             } else {
                 
                 self.getTextContent(title: content.title, description: content.description)
-                    .padding(.vertical, Spacing.base)
+                    .padding(.vertical, Spacing.small)
                     .padding(.horizontal, Spacing.xxl)
             }
         }
         .frame(minWidth: .zero,
                maxWidth: 330,
-               minHeight: .zero,
-               maxHeight: 80)
+               minHeight: 54,
+               maxHeight: .infinity)
         .fixedSize(horizontal: true,
                    vertical: true)
         .coreContainer(applyShadow: true,
@@ -61,12 +61,16 @@ struct ToastView : View {
         VStack(spacing: Spacing.tiny) {
             Text(title)
                 .footnoteBoldStyle()
-                .lineLimit(1)
+                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(2)
+                .multilineTextAlignment(.center)
                 .foregroundColor(Color.primary)
             if let description = description {
                 Text(description)
                     .footnoteStyle()
+                    .fixedSize(horizontal: false, vertical: true)
                     .lineLimit(1)
+                    .multilineTextAlignment(.center)
                     .foregroundColor(Color.gray)
             }
         }

@@ -52,7 +52,7 @@ struct ToastViews : View {
                 
                 Button("Show super long Title-description-image Toast") {
                     Toast.show(title: "Simple Title that is a little longer Simple Title that is a little longer Simple Title that is a little longer",
-                               description: "Some description, Some description, Some description, Some description, Some description, Some description, Some descriptionSome description",
+                               description: "Some description",
                                image: self.image,
                                imageTintColor: .blue)
                 }

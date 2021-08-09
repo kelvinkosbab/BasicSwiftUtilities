@@ -14,6 +14,8 @@ struct ToastView : View {
     
     @Binding private var content: ToastContent
     
+    private let imageSize: CGFloat = 18
+    
     init(_ content: Binding<ToastContent>) {
         self._content = content
     }
@@ -24,20 +26,20 @@ struct ToastView : View {
                 
                 image
                     .resizable()
-                    .frame(width: 30, height: 30)
+                    .frame(width: self.imageSize, height: self.imageSize)
                     .foregroundColor(tintColor)
-                    .padding(.vertical, Spacing.base)
-                    .padding(.leading, Spacing.small)
+                    .padding(.vertical, Spacing.small)
+                    .padding(.leading, Spacing.base)
                 
                 self.getTextContent(title: content.title, description: content.description)
                     .padding(.vertical, Spacing.tiny)
-                    .padding(.horizontal, Spacing.small)
+                    .padding(.horizontal, Spacing.base)
                 
                 Rectangle()
                     .fill(Color.clear)
-                    .frame(width: 30, height: 30)
-                    .padding(.vertical, Spacing.base)
-                    .padding(.trailing, Spacing.small)
+                    .frame(width: self.imageSize, height: self.imageSize)
+                    .padding(.vertical, Spacing.small)
+                    .padding(.trailing, Spacing.base)
                 
             } else {
                 

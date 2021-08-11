@@ -19,6 +19,9 @@ struct ContentView : View {
                 NavigationLink("CoreRoundedViews") {
                     CoreRoundedViews()
                 }
+                NavigationLink("Fonts") {
+                    FontViews()
+                }
                 NavigationLink("Toasts") {
                     ToastViews()
                 }

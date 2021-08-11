@@ -14,25 +14,20 @@ import UIKit
 
 public struct AppFont {
     
-    // MARK: - StyleType
+    // MARK: - Style
     
     public enum Style {
         case systemRegular
         case systemBold
         case systemItalic
-        case custom(String)
-        
-        @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
         case systemMonospace
+        case custom(String)
     }
     
     public static var regular: Style = .systemRegular
     public static var bold: Style = .systemBold
     public static var italic: Style = .systemItalic
-    
-    @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
     public static var monospace: Style = .systemMonospace
-    
     
     // MARK: - Size
     
@@ -48,39 +43,6 @@ public struct AppFont {
 // MARK: - UIFont
 
 public extension UIFont {
-    
-    static let body: UIFont = UIFont.getAppFont(AppFont.regular, size: AppFont.Size.body)
-    static let bodyBold: UIFont = UIFont.getAppFont(AppFont.bold, size: AppFont.Size.body)
-    static let bodyItalic: UIFont = UIFont.getAppFont(AppFont.italic, size: AppFont.Size.body)
-    static let bodyMonospace: UIFont = UIFont.getAppFont(AppFont.italic, size: AppFont.Size.body)
-    
-    static let footnote: UIFont = UIFont.getAppFont(AppFont.regular, size: AppFont.Size.footnote)
-    static let footnoteBold: UIFont = UIFont.getAppFont(AppFont.bold, size: AppFont.Size.footnote)
-    static let footnoteItalic: UIFont = UIFont.getAppFont(AppFont.italic, size: AppFont.Size.footnote)
-    
-    @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-    static let footnoteMonospace: UIFont = UIFont.getAppFont(AppFont.monospace, size: AppFont.Size.footnote)
-    
-    static let heading: UIFont = UIFont.getAppFont(AppFont.regular, size: AppFont.Size.heading)
-    static let headingBold: UIFont = UIFont.getAppFont(AppFont.bold, size: AppFont.Size.heading)
-    static let headingItalic: UIFont = UIFont.getAppFont(AppFont.italic, size: AppFont.Size.heading)
-    
-    @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-    static let headingMonospace: UIFont = UIFont.getAppFont(AppFont.monospace, size: AppFont.Size.heading)
-    
-    static let title: UIFont = UIFont.getAppFont(AppFont.regular, size: AppFont.Size.title)
-    static let titleBold: UIFont = UIFont.getAppFont(AppFont.bold, size: AppFont.Size.title)
-    static let titleItalic: UIFont = UIFont.getAppFont(AppFont.regular, size: AppFont.Size.title)
-    
-    @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-    static let titleMonospace: UIFont = UIFont.getAppFont(AppFont.monospace, size: AppFont.Size.title)
-    
-    static let xlTitle: UIFont = UIFont.getAppFont(AppFont.regular, size: AppFont.Size.xlTitle)
-    static let xlTitleBold: UIFont = UIFont.getAppFont(AppFont.bold, size: AppFont.Size.xlTitle)
-    static let xlTitleItalic: UIFont = UIFont.getAppFont(AppFont.italic, size: AppFont.Size.xlTitle)
-    
-    @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-    static let xlTitleMonospace: UIFont = UIFont.getAppFont(AppFont.monospace, size: AppFont.Size.xlTitle)
     
     static func getAppFont(_ style: AppFont.Style, size: CGFloat) -> UIFont {
         switch style {
@@ -110,279 +72,494 @@ public extension UIFont {
     }
 }
 
-// MARK: - Font ViewModifiers
+// MARK: - Body ViewModifiers
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct BodyModifier: ViewModifier {
+private struct BodyModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
     public func body(content: Content) -> some View {
-        switch AppFont.regular {
+        switch self.appFont {
         case .custom(let customFont):
             return content
                 .font(Font.custom(customFont, size: AppFont.Size.body))
         default:
             return content
-                .font(.system(size: AppFont.Size.body, weight: .regular, design: .default))
+                .font(.system(size: AppFont.Size.body,
+                              weight: .regular,
+                              design: .default))
         }
     }
 }
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct BodyBoldModifier: ViewModifier {
+private struct BodyBoldModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
     public func body(content: Content) -> some View {
-        switch AppFont.regular {
+        switch self.appFont {
         case .custom(let customFont):
             return content
                 .font(Font.custom(customFont, size: AppFont.Size.body))
         default:
             return content
-                .font(.system(size: AppFont.Size.body, weight: .bold, design: .default))
+                .font(.system(size: AppFont.Size.body,
+                              weight: .bold,
+                              design: .default))
         }
     }
 }
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct BodyMonospaceModifier: ViewModifier {
+private struct BodyItalicModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
     public func body(content: Content) -> some View {
-        switch AppFont.regular {
+        switch self.appFont {
         case .custom(let customFont):
             return content
                 .font(Font.custom(customFont, size: AppFont.Size.body))
         default:
             return content
-                .font(.system(size: AppFont.Size.body, weight: .regular, design: .monospaced))
+                .font(.system(size: AppFont.Size.body,
+                              weight: .regular,
+                              design: .default)
+                        .italic())
         }
     }
 }
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct FootnoteModifier: ViewModifier {
+private struct BodyMonospaceModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
     public func body(content: Content) -> some View {
-        switch AppFont.regular {
+        switch self.appFont {
+        case .custom(let customFont):
+            return content
+                .font(Font.custom(customFont, size: AppFont.Size.body))
+        default:
+            return content
+                .font(.system(size: AppFont.Size.body,
+                              weight: .regular,
+                              design: .monospaced))
+        }
+    }
+}
+
+// MARK: - Footnote ViewModifiers
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+private struct FootnoteModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
+    public func body(content: Content) -> some View {
+        switch self.appFont {
         case .custom(let customFont):
             return content
                 .font(Font.custom(customFont, size: AppFont.Size.footnote))
         default:
             return content
-                .font(.system(size: AppFont.Size.footnote, weight: .regular, design: .default))
+                .font(.system(size: AppFont.Size.footnote,
+                              weight: .regular,
+                              design: .default))
         }
     }
 }
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct FootnoteBoldModifier: ViewModifier {
+private struct FootnoteBoldModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
     public func body(content: Content) -> some View {
-        switch AppFont.bold {
+        switch self.appFont {
         case .custom(let customFont):
             return content
                 .font(Font.custom(customFont, size: AppFont.Size.footnote))
         default:
             return content
-                .font(.system(size: AppFont.Size.footnote, weight: .bold, design: .default))
+                .font(.system(size: AppFont.Size.footnote,
+                              weight: .bold,
+                              design: .default))
         }
     }
 }
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct FootnoteMonospaceModifier: ViewModifier {
+private struct FootnoteItalicModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
     public func body(content: Content) -> some View {
-        switch AppFont.bold {
+        switch self.appFont {
         case .custom(let customFont):
             return content
                 .font(Font.custom(customFont, size: AppFont.Size.footnote))
         default:
             return content
-                .font(.system(size: AppFont.Size.footnote, weight: .regular, design: .monospaced))
+                .font(.system(size: AppFont.Size.footnote,
+                              weight: .regular,
+                              design: .default)
+                        .italic())
         }
     }
 }
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct HeadingModifier: ViewModifier {
+private struct FootnoteMonospaceModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
     public func body(content: Content) -> some View {
-        switch AppFont.regular {
+        switch self.appFont {
+        case .custom(let customFont):
+            return content
+                .font(Font.custom(customFont, size: AppFont.Size.footnote))
+        default:
+            return content
+                .font(.system(size: AppFont.Size.footnote,
+                              weight: .regular,
+                              design: .monospaced))
+        }
+    }
+}
+
+// MARK: - Heading ViewModifiers
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+private struct HeadingModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
+    public func body(content: Content) -> some View {
+        switch self.appFont {
         case .custom(let customFont):
             return content
                 .font(Font.custom(customFont, size: AppFont.Size.heading))
         default:
             return content
-                .font(.system(size: AppFont.Size.heading, weight: .regular, design: .default))
+                .font(.system(size: AppFont.Size.heading,
+                              weight: .regular,
+                              design: .default))
         }
     }
 }
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct HeadingBoldModifier: ViewModifier {
+private struct HeadingBoldModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
     public func body(content: Content) -> some View {
-        switch AppFont.bold {
+        switch self.appFont {
         case .custom(let customFont):
             return content
                 .font(Font.custom(customFont, size: AppFont.Size.heading))
         default:
             return content
-                .font(.system(size: AppFont.Size.heading, weight: .bold, design: .default))
+                .font(.system(size: AppFont.Size.heading,
+                              weight: .bold,
+                              design: .default))
         }
     }
 }
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct HeadingMonospaceModifier: ViewModifier {
+private struct HeadingItalicModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
     public func body(content: Content) -> some View {
-        switch AppFont.bold {
+        switch self.appFont {
         case .custom(let customFont):
             return content
                 .font(Font.custom(customFont, size: AppFont.Size.heading))
         default:
             return content
-                .font(.system(size: AppFont.Size.heading, weight: .regular, design: .monospaced))
+                .font(.system(size: AppFont.Size.heading,
+                              weight: .regular,
+                              design: .default)
+                        .italic())
         }
     }
 }
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct TitleModifier: ViewModifier {
+private struct HeadingMonospaceModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
     public func body(content: Content) -> some View {
-        switch AppFont.regular {
+        switch self.appFont {
+        case .custom(let customFont):
+            return content
+                .font(Font.custom(customFont, size: AppFont.Size.heading))
+        default:
+            return content
+                .font(.system(size: AppFont.Size.heading,
+                              weight: .regular,
+                              design: .monospaced))
+        }
+    }
+}
+
+// MARK: - Title ViewModifiers
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+private struct TitleModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
+    public func body(content: Content) -> some View {
+        switch self.appFont {
         case .custom(let customFont):
             return content
                 .font(Font.custom(customFont, size: AppFont.Size.title))
         default:
             return content
-                .font(.system(size: AppFont.Size.title, weight: .regular, design: .default))
+                .font(.system(size: AppFont.Size.title,
+                              weight: .regular,
+                              design: .default))
         }
     }
 }
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct TitleBoldModifier: ViewModifier {
+private struct TitleBoldModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
     public func body(content: Content) -> some View {
-        switch AppFont.bold {
+        switch self.appFont {
         case .custom(let customFont):
             return content
                 .font(Font.custom(customFont, size: AppFont.Size.title))
         default:
             return content
-                .font(.system(size: AppFont.Size.title, weight: .bold, design: .default))
+                .font(.system(size: AppFont.Size.title,
+                              weight: .bold,
+                              design: .default))
         }
     }
 }
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct TitleMonospaceModifier: ViewModifier {
+private struct TitleItalicModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
     public func body(content: Content) -> some View {
-        switch AppFont.bold {
+        switch self.appFont {
         case .custom(let customFont):
             return content
                 .font(Font.custom(customFont, size: AppFont.Size.title))
         default:
             return content
-                .font(.system(size: AppFont.Size.title, weight: .regular, design: .monospaced))
+                .font(.system(size: AppFont.Size.title,
+                              weight: .regular,
+                              design: .default)
+                        .italic())
         }
     }
 }
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct XlTitleModifier: ViewModifier {
+private struct TitleMonospaceModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
     public func body(content: Content) -> some View {
-        switch AppFont.regular {
+        switch self.appFont {
+        case .custom(let customFont):
+            return content
+                .font(Font.custom(customFont, size: AppFont.Size.title))
+        default:
+            return content
+                .font(.system(size: AppFont.Size.title,
+                              weight: .regular,
+                              design: .monospaced))
+        }
+    }
+}
+
+// MARK: - XL Title ViewModifiers
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+private struct XlTitleModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
+    public func body(content: Content) -> some View {
+        switch self.appFont {
         case .custom(let customFont):
             return content
                 .font(Font.custom(customFont, size: AppFont.Size.xlTitle))
         default:
             return content
-                .font(.system(size: AppFont.Size.xlTitle, weight: .regular, design: .default))
+                .font(.system(size: AppFont.Size.xlTitle,
+                              weight: .regular,
+                              design: .default))
         }
     }
 }
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct XlTitleBoldModifier: ViewModifier {
+private struct XlTitleBoldModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
     public func body(content: Content) -> some View {
-        switch AppFont.bold {
+        switch self.appFont {
         case .custom(let customFont):
             return content
                 .font(Font.custom(customFont, size: AppFont.Size.xlTitle))
         default:
             return content
-                .font(.system(size: AppFont.Size.xlTitle, weight: .bold, design: .default))
+                .font(.system(size: AppFont.Size.xlTitle,
+                              weight: .bold,
+                              design: .default))
         }
     }
 }
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct XlTitleMonospaceModifier: ViewModifier {
+private struct XlTitleItalicModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
     public func body(content: Content) -> some View {
-        switch AppFont.bold {
+        switch self.appFont {
         case .custom(let customFont):
             return content
                 .font(Font.custom(customFont, size: AppFont.Size.xlTitle))
         default:
             return content
-                .font(.system(size: AppFont.Size.xlTitle, weight: .regular, design: .monospaced))
+                .font(.system(size: AppFont.Size.xlTitle,
+                              weight: .regular,
+                              design: .default)
+                        .italic())
         }
     }
 }
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+private struct XlTitleMonospaceModifier : ViewModifier {
+    
+    let appFont: AppFont.Style
+    
+    public func body(content: Content) -> some View {
+        switch self.appFont {
+        case .custom(let customFont):
+            return content
+                .font(Font.custom(customFont, size: AppFont.Size.xlTitle))
+        default:
+            return content
+                .font(.system(size: AppFont.Size.xlTitle,
+                              weight: .regular,
+                              design: .monospaced))
+        }
+    }
+}
+
+// MARK: - View Modifier
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public extension View {
     
-    func bodyStyle() -> some View {
-        self.modifier(BodyModifier())
+    // MARK: - Body
+    
+    func bodyStyle(appFont: AppFont.Style = AppFont.regular) -> some View {
+        self.modifier(BodyModifier(appFont: appFont))
     }
     
-    func bodyBoldStyle() -> some View {
-        self.modifier(BodyBoldModifier())
+    func bodyBoldStyle(appFont: AppFont.Style = AppFont.bold) -> some View {
+        self.modifier(BodyBoldModifier(appFont: appFont))
     }
     
-    func bodyMonospaceStyle() -> some View {
-        self.modifier(BodyMonospaceModifier())
+    func bodyItalicStyle(appFont: AppFont.Style = AppFont.italic) -> some View {
+        self.modifier(BodyItalicModifier(appFont: appFont))
     }
     
-    func footnoteStyle() -> some View {
-        self.modifier(FootnoteModifier())
+    func bodyMonospaceStyle(appFont: AppFont.Style = AppFont.monospace) -> some View {
+        self.modifier(BodyMonospaceModifier(appFont: appFont))
     }
     
-    func footnoteBoldStyle() -> some View {
-        self.modifier(FootnoteBoldModifier())
+    // MARK: - Footnote
+    
+    func footnoteStyle(appFont: AppFont.Style = AppFont.regular) -> some View {
+        self.modifier(FootnoteModifier(appFont: appFont))
     }
     
-    func footnoteMonospaceStyle() -> some View {
-        self.modifier(FootnoteMonospaceModifier())
+    func footnoteBoldStyle(appFont: AppFont.Style = AppFont.bold) -> some View {
+        self.modifier(FootnoteBoldModifier(appFont: appFont))
     }
     
-    func headingStyle() -> some View {
-        self.modifier(HeadingModifier())
+    func footnoteItalicStyle(appFont: AppFont.Style = AppFont.italic) -> some View {
+        self.modifier(FootnoteBoldModifier(appFont: appFont))
     }
     
-    func headingBoldStyle() -> some View {
-        self.modifier(HeadingBoldModifier())
+    func footnoteMonospaceStyle(appFont: AppFont.Style = AppFont.monospace) -> some View {
+        self.modifier(FootnoteMonospaceModifier(appFont: appFont))
     }
     
-    func headingMonospaceStyle() -> some View {
-        self.modifier(HeadingMonospaceModifier())
+    // MARK: - Heading
+    
+    func headingStyle(appFont: AppFont.Style = AppFont.regular) -> some View {
+        self.modifier(HeadingModifier(appFont: appFont))
     }
     
-    func titleStyle() -> some View {
-        self.modifier(TitleModifier())
+    func headingBoldStyle(appFont: AppFont.Style = AppFont.bold) -> some View {
+        self.modifier(HeadingBoldModifier(appFont: appFont))
     }
     
-    func titleBoldStyle() -> some View {
-        self.modifier(TitleBoldModifier())
+    func headingItalicStyle(appFont: AppFont.Style = AppFont.italic) -> some View {
+        self.modifier(HeadingItalicModifier(appFont: appFont))
     }
     
-    func titleMonospaceStyle() -> some View {
-        self.modifier(TitleMonospaceModifier())
+    func headingMonospaceStyle(appFont: AppFont.Style = AppFont.monospace) -> some View {
+        self.modifier(HeadingMonospaceModifier(appFont: appFont))
     }
     
-    func xlTitleStyle() -> some View {
-        self.modifier(XlTitleModifier())
+    // MARK: - Title
+    
+    func titleStyle(appFont: AppFont.Style = AppFont.regular) -> some View {
+        self.modifier(TitleModifier(appFont: appFont))
     }
     
-    func xlTitleBoldStyle() -> some View {
-        self.modifier(XlTitleBoldModifier())
+    func titleBoldStyle(appFont: AppFont.Style = AppFont.bold) -> some View {
+        self.modifier(TitleBoldModifier(appFont: appFont))
     }
     
-    func xlTitleMonospaceStyle() -> some View {
-        self.modifier(XlTitleMonospaceModifier())
+    func titleItalicStyle(appFont: AppFont.Style = AppFont.italic) -> some View {
+        self.modifier(TitleItalicModifier(appFont: appFont))
+    }
+    
+    func titleMonospaceStyle(appFont: AppFont.Style = AppFont.monospace) -> some View {
+        self.modifier(TitleMonospaceModifier(appFont: appFont))
+    }
+    
+    // MARK: - XL Title
+    
+    func xlTitleStyle(appFont: AppFont.Style = AppFont.regular) -> some View {
+        self.modifier(XlTitleModifier(appFont: appFont))
+    }
+    
+    func xlTitleBoldStyle(appFont: AppFont.Style = AppFont.bold) -> some View {
+        self.modifier(XlTitleBoldModifier(appFont: appFont))
+    }
+    
+    func xlTitleItalicStyle(appFont: AppFont.Style = AppFont.italic) -> some View {
+        self.modifier(XlTitleItalicModifier(appFont: appFont))
+    }
+    
+    func xlTitleMonospaceStyle(appFont: AppFont.Style = AppFont.monospace) -> some View {
+        self.modifier(XlTitleMonospaceModifier(appFont: appFont))
     }
 }
 
@@ -419,6 +596,18 @@ struct Font_Previews: PreviewProvider {
                 .titleBoldStyle()
             Text(self.text)
                 .xlTitleBoldStyle()
+        }
+        List {
+            Text(self.text)
+                .bodyItalicStyle()
+            Text(self.text)
+                .footnoteItalicStyle()
+            Text(self.text)
+                .headingItalicStyle()
+            Text(self.text)
+                .titleItalicStyle()
+            Text(self.text)
+                .xlTitleItalicStyle()
         }
         List {
             Text(self.text)

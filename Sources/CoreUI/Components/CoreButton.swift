@@ -38,7 +38,13 @@ public struct CoreButtonStyle : ButtonStyle {
     }
     
     public func makeBody(configuration: Configuration) -> some View {
-        let role: ButtonRole? = configuration.role == .destructive ? .destructive : nil
+        let role: ButtonRole? = {
+            if #available(iOSApplicationExtension 15.0, *) {
+                return configuration.role == .destructive ? .destructive : nil
+            } else {
+                return nil
+            }
+        }()
         let foregroundColor = self.foregroundColor ?? CoreButton.getColor(for: role)
         configuration.label
             .foregroundColor(foregroundColor)
@@ -87,7 +93,13 @@ public struct CoreFilledButtonStyle : ButtonStyle {
     }
     
     public func makeBody(configuration: Configuration) -> some View {
-        let role: ButtonRole? = configuration.role == .destructive ? .destructive : nil
+        let role: ButtonRole? = {
+            if #available(iOSApplicationExtension 15.0, *) {
+                return configuration.role == .destructive ? .destructive : nil
+            } else {
+                return nil
+            }
+        }()
         let backgroundColor = self.backgroundColor ?? CoreButton.getColor(for: role)
         configuration.label
             .foregroundColor(self.foregroundColor)

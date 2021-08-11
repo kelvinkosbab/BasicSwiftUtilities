@@ -39,7 +39,7 @@ struct ToastableContainerModifier : ViewModifier {
                             ToastView(.constant(toast))
                         }
                     }
-                    .padding(.top, self.toastManager.currentToast.shouldBeVisible ? Spacing.small : -150)
+                    .padding(.top, self.toastManager.currentToast.shouldBeVisible ? 0 : -150)
                     .animation(.easeInOut(duration: self.animationOptions.animationDuration))
                     
                     Spacer()

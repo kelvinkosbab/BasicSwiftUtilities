@@ -72,14 +72,6 @@ open class BaseNavigationController : UINavigationController, PresentableControl
             }
         }
         
-        var titleTextAttributes: [NSAttributedString.Key : Any]? {
-            return [ .font: UIFont.bodyBold ]
-        }
-        
-        var largeTitleTextAttributes: [NSAttributedString.Key : Any]? {
-            return [ .font: UIFont.titleBold]
-        }
-        
         var backIndicator: UIImage? {
             switch self {
             default:
@@ -111,10 +103,6 @@ open class BaseNavigationController : UINavigationController, PresentableControl
         self.navigationBar.barTintColor = navigationBarStyle.barTintColor
         self.navigationBar.tintColor = navigationBarStyle.tintColor
         self.navigationBar.isTranslucent = navigationBarStyle.isTranslucent
-        self.navigationBar.titleTextAttributes = navigationBarStyle.titleTextAttributes
-        if #available(iOS 11.0, *) {
-            self.navigationBar.largeTitleTextAttributes = navigationBarStyle.largeTitleTextAttributes
-        }
         
         switch navigationBarStyle {
         case .transparent:

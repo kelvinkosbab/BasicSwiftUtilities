@@ -39,7 +39,7 @@ public struct CoreButtonStyle : ButtonStyle {
     
     public func makeBody(configuration: Configuration) -> some View {
         let role: ButtonRole? = {
-            if #available(iOSApplicationExtension 15.0, *) {
+            if #available(iOS 15.0, *) {
                 return configuration.role == .destructive ? .destructive : nil
             } else {
                 return nil
@@ -94,7 +94,7 @@ public struct CoreFilledButtonStyle : ButtonStyle {
     
     public func makeBody(configuration: Configuration) -> some View {
         let role: ButtonRole? = {
-            if #available(iOSApplicationExtension 15.0, *) {
+            if #available(iOS 15.0, *) {
                 return configuration.role == .destructive ? .destructive : nil
             } else {
                 return nil

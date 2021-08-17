@@ -62,14 +62,14 @@ struct ToastView : View {
     private func getTextContent(title: String, description: String?) -> some View {
         VStack(spacing: Spacing.tiny) {
             Text(title)
-                .footnoteBoldStyle()
+                .footnoteBoldStyle(appFont: .systemBold)
                 .fixedSize(horizontal: false, vertical: true)
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
                 .foregroundColor(Color.primary)
             if let description = description {
                 Text(description)
-                    .footnoteStyle()
+                    .footnoteStyle(appFont: .systemRegular)
                     .fixedSize(horizontal: false, vertical: true)
                     .lineLimit(1)
                     .multilineTextAlignment(.center)

@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  FontViewModifiers.swift
 //
 //  Copyright © 2021 Kozinga. All rights reserved.
 //
@@ -9,68 +9,6 @@ import SwiftUI
 #if !os(macOS)
 import UIKit
 #endif
-
-// MARK: - AppFont
-
-public struct AppFont {
-    
-    // MARK: - Style
-    
-    public enum Style {
-        case systemRegular
-        case systemBold
-        case systemItalic
-        case systemMonospace
-        case custom(String)
-    }
-    
-    public static var regular: Style = .systemRegular
-    public static var bold: Style = .systemBold
-    public static var italic: Style = .systemItalic
-    public static var monospace: Style = .systemMonospace
-    
-    // MARK: - Size
-    
-    public struct Size {
-        static let body: CGFloat = 16
-        static let footnote: CGFloat = 13
-        static let heading: CGFloat = 20
-        static let title: CGFloat = 28
-        static let xlTitle: CGFloat = 70
-    }
-}
-
-// MARK: - UIFont
-
-public extension UIFont {
-    
-    static func getAppFont(_ style: AppFont.Style, size: CGFloat) -> UIFont {
-        switch style {
-        case .systemRegular:
-            return UIFont.systemFont(ofSize: size)
-            
-        case .systemBold:
-            return UIFont.boldSystemFont(ofSize: size)
-            
-        case .systemItalic:
-            return UIFont.italicSystemFont(ofSize: size)
-            
-        case .custom(fontName: let fontName):
-            if let font = UIFont(name: fontName, size: size) {
-                return font
-            } else {
-                return self.getAppFont(.systemRegular, size: AppFont.Size.body)
-            }
-            
-        case .systemMonospace:
-            if #available(iOS 13.0, *) {
-                return UIFont.monospacedSystemFont(ofSize: size, weight: .regular)
-            } else {
-                fatalError("Monospace not supported")
-            }
-        }
-    }
-}
 
 // MARK: - Body ViewModifiers
 
@@ -83,7 +21,8 @@ private struct BodyModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.body))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.body))
         default:
             return content
                 .font(.system(size: AppFont.Size.body,
@@ -102,7 +41,8 @@ private struct BodyBoldModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.body))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.body))
         default:
             return content
                 .font(.system(size: AppFont.Size.body,
@@ -121,7 +61,8 @@ private struct BodyItalicModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.body))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.body))
         default:
             return content
                 .font(.system(size: AppFont.Size.body,
@@ -141,7 +82,8 @@ private struct BodyMonospaceModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.body))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.body))
         default:
             return content
                 .font(.system(size: AppFont.Size.body,
@@ -162,7 +104,8 @@ private struct FootnoteModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.footnote))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.footnote))
         default:
             return content
                 .font(.system(size: AppFont.Size.footnote,
@@ -181,7 +124,8 @@ private struct FootnoteBoldModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.footnote))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.footnote))
         default:
             return content
                 .font(.system(size: AppFont.Size.footnote,
@@ -200,7 +144,8 @@ private struct FootnoteItalicModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.footnote))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.footnote))
         default:
             return content
                 .font(.system(size: AppFont.Size.footnote,
@@ -220,7 +165,8 @@ private struct FootnoteMonospaceModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.footnote))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.footnote))
         default:
             return content
                 .font(.system(size: AppFont.Size.footnote,
@@ -241,7 +187,8 @@ private struct HeadingModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.heading))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.heading))
         default:
             return content
                 .font(.system(size: AppFont.Size.heading,
@@ -260,7 +207,8 @@ private struct HeadingBoldModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.heading))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.heading))
         default:
             return content
                 .font(.system(size: AppFont.Size.heading,
@@ -279,7 +227,8 @@ private struct HeadingItalicModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.heading))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.heading))
         default:
             return content
                 .font(.system(size: AppFont.Size.heading,
@@ -299,7 +248,8 @@ private struct HeadingMonospaceModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.heading))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.heading))
         default:
             return content
                 .font(.system(size: AppFont.Size.heading,
@@ -320,7 +270,8 @@ private struct TitleModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.title))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.title))
         default:
             return content
                 .font(.system(size: AppFont.Size.title,
@@ -339,7 +290,8 @@ private struct TitleBoldModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.title))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.title))
         default:
             return content
                 .font(.system(size: AppFont.Size.title,
@@ -358,7 +310,8 @@ private struct TitleItalicModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.title))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.title))
         default:
             return content
                 .font(.system(size: AppFont.Size.title,
@@ -378,7 +331,8 @@ private struct TitleMonospaceModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.title))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.title))
         default:
             return content
                 .font(.system(size: AppFont.Size.title,
@@ -399,7 +353,8 @@ private struct XlTitleModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.xlTitle))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.xlTitle))
         default:
             return content
                 .font(.system(size: AppFont.Size.xlTitle,
@@ -418,7 +373,8 @@ private struct XlTitleBoldModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.xlTitle))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.xlTitle))
         default:
             return content
                 .font(.system(size: AppFont.Size.xlTitle,
@@ -437,7 +393,8 @@ private struct XlTitleItalicModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.xlTitle))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.xlTitle))
         default:
             return content
                 .font(.system(size: AppFont.Size.xlTitle,
@@ -457,7 +414,8 @@ private struct XlTitleMonospaceModifier : ViewModifier {
         switch self.appFont {
         case .custom(let customFont):
             return content
-                .font(Font.custom(customFont, size: AppFont.Size.xlTitle))
+                .font(Font.custom(customFont,
+                                  size: AppFont.Size.xlTitle))
         default:
             return content
                 .font(.system(size: AppFont.Size.xlTitle,
@@ -467,7 +425,7 @@ private struct XlTitleMonospaceModifier : ViewModifier {
     }
 }
 
-// MARK: - View Modifier
+// MARK: - View Extension
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public extension View {
@@ -562,66 +520,3 @@ public extension View {
         self.modifier(XlTitleMonospaceModifier(appFont: appFont))
     }
 }
-
-// MARK: - Previews
-
-#if DEBUG
-
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-struct Font_Previews: PreviewProvider {
-    
-    private static let text = "Hello World!"
-    
-    static var previews: some View {
-        List {
-            /*@START_MENU_TOKEN@*/Text(self.text)/*@END_MENU_TOKEN@*/
-                .bodyStyle()
-            /*@START_MENU_TOKEN@*/Text(self.text)/*@END_MENU_TOKEN@*/
-                .footnoteStyle()
-            Text(self.text)
-                .headingStyle()
-            Text(self.text)
-                .titleStyle()
-            Text(self.text)
-                .xlTitleStyle()
-        }
-        List {
-            Text(self.text)
-                .bodyBoldStyle()
-            Text(self.text)
-                .footnoteBoldStyle()
-            Text(self.text)
-                .headingBoldStyle()
-            Text(self.text)
-                .titleBoldStyle()
-            Text(self.text)
-                .xlTitleBoldStyle()
-        }
-        List {
-            Text(self.text)
-                .bodyItalicStyle()
-            Text(self.text)
-                .footnoteItalicStyle()
-            Text(self.text)
-                .headingItalicStyle()
-            Text(self.text)
-                .titleItalicStyle()
-            Text(self.text)
-                .xlTitleItalicStyle()
-        }
-        List {
-            Text(self.text)
-                .bodyMonospaceStyle()
-            Text(self.text)
-                .footnoteMonospaceStyle()
-            Text(self.text)
-                .headingMonospaceStyle()
-            Text(self.text)
-                .titleMonospaceStyle()
-            Text(self.text)
-                .xlTitleMonospaceStyle()
-        }
-    }
-}
-
-#endif

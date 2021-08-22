@@ -47,7 +47,7 @@ enum CurrentToastState {
 // MARK: - ToastManager
 
 /// Responsible for managing any incoming `showToast` requests. Incoming toasts will be queued up
-/// until all toasts have beenshown to the user.
+/// until all toasts have been shown to the user.
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 class ToastManager: ToastContainer, ObservableObject {
     
@@ -55,7 +55,7 @@ class ToastManager: ToastContainer, ObservableObject {
     
     private let animationOptions: ToastAnimationOptions
     private var toasts: [ToastContent] = []
-    private var isProcessingToasts: Bool = false
+    private var isProcessingCurrentToast: Bool = false
     
     init(animationOptions: ToastAnimationOptions) {
         self.animationOptions = animationOptions
@@ -68,24 +68,23 @@ class ToastManager: ToastContainer, ObservableObject {
     
     private func processNextToast() {
         
-        guard !self.isProcessingToasts else {
+        guard !self.isProcessingCurrentToast else {
             return
         }
         
-        self.isProcessingToasts = true
-        
         guard self.toasts.count > 0 else {
-            self.isProcessingToasts = false
+            self.isProcessingCurrentToast = false
             self.currentToast = .none
             return
         }
+        
+        self.isProcessingCurrentToast = true
+        let nextToast = self.toasts.removeFirst()
         
         // Gather animation options
         let animationDuration = self.animationOptions.animationDuration
         let prepareDuration = self.animationOptions.prepareDuration
         let showDelay = animationDuration + self.animationOptions.showDuration
-        
-        let nextToast = self.toasts.removeFirst()
         
         withAnimation {
             self.currentToast = .prepare(nextToast)
@@ -112,7 +111,7 @@ class ToastManager: ToastContainer, ObservableObject {
                         self?.currentToast = .none
                     }
                     
-                    self?.isProcessingToasts = false
+                    self?.isProcessingCurrentToast = false
                     self?.processNextToast()
                 }
             }

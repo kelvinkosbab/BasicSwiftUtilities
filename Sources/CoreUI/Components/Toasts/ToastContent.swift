@@ -1,5 +1,5 @@
 //
-//  ToastContent.
+//  ToastContent.swift
 //
 //  Created by Kelvin Kosbab on 8/1/21.
 //

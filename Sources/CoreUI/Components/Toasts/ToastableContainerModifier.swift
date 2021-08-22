@@ -17,7 +17,7 @@ struct ToastableContainerModifier : ViewModifier {
     private let animationOptions: ToastAnimationOptions
     @ObservedObject private var toastManager: ToastManager
     
-    init(target: Toast.Target) {
+    init(target: AppSessionTarget) {
         let animationOptions = ToastAnimationOptions()
         self.animationOptions = animationOptions
         let toastManager = ToastManager(animationOptions: animationOptions)
@@ -61,7 +61,7 @@ public extension View {
     /// `Toast.Target OptionalSet` type.
     ///
     /// - Parameter target: Target window/scene of the container. Default is `.primary`.
-    func toastableContainer(target: Toast.Target = .primary) -> some View {
+    func toastableContainer(target: AppSessionTarget = .primary) -> some View {
         self.modifier(ToastableContainerModifier(target: target))
     }
 }

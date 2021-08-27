@@ -1,6 +1,5 @@
 //
 //  ContentView.swift
-//  CoreSampleApp
 //
 //  Created by Kelvin Kosbab on 7/24/21.
 //
@@ -28,7 +27,6 @@ struct ContentView : View {
             }
             .navigationTitle("Hello World")
         }
-        .toastableContainer(target: .primary)
     }
 }
 

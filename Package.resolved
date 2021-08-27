@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/firebase/firebase-ios-sdk.git",
         "state": {
           "branch": null,
-          "revision": "7e08e6e2948461493261049cefb6e77728cb3743",
-          "version": "8.4.0"
+          "revision": "d28849cb12de765d013b7222123bd3b8ae8c4f0a",
+          "version": "8.6.0"
         }
       },
       {
@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/google/GoogleUtilities.git",
         "state": {
           "branch": null,
-          "revision": "beb713a16b50a4df3162b3f3ecdeffa16b74b773",
-          "version": "7.5.0"
+          "revision": "2e364ff22e952c3bcb202263a9a0d26e46c1b172",
+          "version": "7.5.1"
         }
       },
       {
@@ -96,8 +96,8 @@
         "repositoryURL": "https://github.com/google/promises.git",
         "state": {
           "branch": null,
-          "revision": "afa9a1ace74e116848d4f743599ab83e584ff8cb",
-          "version": "1.2.12"
+          "revision": "611337c330350c9c1823ad6d671e7f936af5ee13",
+          "version": "2.0.0"
         }
       },
       {

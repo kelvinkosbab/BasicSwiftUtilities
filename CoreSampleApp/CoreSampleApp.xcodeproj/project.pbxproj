@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F65C39DE26E3E99C00926298 /* SFSymbolTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65C39DD26E3E99C00926298 /* SFSymbolTester.swift */; };
 		F662BF7A26C0E4EC001AC23C /* FontViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F662BF7926C0E4EC001AC23C /* FontViews.swift */; };
 		F67F398826AC8A7300F4854B /* CoreSampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F67F398726AC8A7300F4854B /* CoreSampleApp.swift */; };
 		F67F398A26AC8A7300F4854B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F67F398926AC8A7300F4854B /* ContentView.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F65C39DD26E3E99C00926298 /* SFSymbolTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSymbolTester.swift; sourceTree = "<group>"; };
 		F662BF7926C0E4EC001AC23C /* FontViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontViews.swift; sourceTree = "<group>"; };
 		F67F398426AC8A7300F4854B /* CoreSampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoreSampleApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F67F398726AC8A7300F4854B /* CoreSampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreSampleApp.swift; sourceTree = "<group>"; };
@@ -71,6 +73,7 @@
 				F6957A5B26AE8970002C4D36 /* CoreButtonViews.swift */,
 				F6957A5D26AE8A8E002C4D36 /* CoreRoundedView.swift */,
 				F662BF7926C0E4EC001AC23C /* FontViews.swift */,
+				F65C39DD26E3E99C00926298 /* SFSymbolTester.swift */,
 				F6A80AA326B5C8670045B268 /* ToastViews.swift */,
 				F67F398B26AC8A7300F4854B /* Assets.xcassets */,
 				F67F398D26AC8A7300F4854B /* Preview Content */,
@@ -177,6 +180,7 @@
 			files = (
 				F6957A5C26AE8970002C4D36 /* CoreButtonViews.swift in Sources */,
 				F6957A5E26AE8A8E002C4D36 /* CoreRoundedView.swift in Sources */,
+				F65C39DE26E3E99C00926298 /* SFSymbolTester.swift in Sources */,
 				F67F398A26AC8A7300F4854B /* ContentView.swift in Sources */,
 				F67F398826AC8A7300F4854B /* CoreSampleApp.swift in Sources */,
 				F6A80AA426B5C8670045B268 /* ToastViews.swift in Sources */,

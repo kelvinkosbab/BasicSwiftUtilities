@@ -21,6 +21,9 @@ struct ContentView : View {
                 NavigationLink("Fonts") {
                     FontViews()
                 }
+                NavigationLink("SF Symbols") {
+                    SFSymbolTester(imageType: .system("books.vertical"))
+                }
                 NavigationLink("Toasts") {
                     ToastViews()
                 }

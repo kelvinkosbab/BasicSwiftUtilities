@@ -28,6 +28,8 @@ public final class HapticsGenerator {
     
     /// Generates a haptic on the device.
     ///
+    /// This method dispatches asyncronously to the main thread to generate the desired haptic.
+    ///
     /// - Parameter haptic: Haptic type to generate.
     public final func generate(_ haptic: WKHapticType) {
         DispatchQueue.main.async {
@@ -57,21 +59,19 @@ public final class HapticsGenerator {
     
     /// Generates a haptic on the device.
     ///
+    /// This method dispatches asyncronously to the main thread to generate the desired haptic.
+    ///
     /// - Parameter haptic: Haptic type to generate.
     public final func generate(_ haptic: Haptic) {
-        switch haptic {
-        case .selection:
-            DispatchQueue.main.async {
+        DispatchQueue.main.async {
+            switch haptic {
+            case .selection:
                 let selectionHaptic = UISelectionFeedbackGenerator()
                 selectionHaptic.selectionChanged()
-            }
-        case .notification(let haptic):
-            DispatchQueue.main.async {
+            case .notification(let haptic):
                 let notificationHaptic = UINotificationFeedbackGenerator()
                 notificationHaptic.notificationOccurred(haptic)
-            }
-        case .impact(let haptic):
-            DispatchQueue.main.async {
+            case .impact(let haptic):
                 let impactHaptic = UIImpactFeedbackGenerator(style: haptic)
                 impactHaptic.impactOccurred()
             }

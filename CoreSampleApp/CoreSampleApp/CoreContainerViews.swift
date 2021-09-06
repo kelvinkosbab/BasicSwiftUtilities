@@ -1,6 +1,5 @@
 //
-//  CoreRoundedView.swift
-//  CoreRoundedView
+//  CoreContainerViews.swift
 //
 //  Created by Kelvin Kosbab on 7/25/21.
 //
@@ -8,7 +7,7 @@
 import SwiftUI
 import CoreUI
 
-struct CoreRoundedViews : View {
+struct CoreContainerViews : View {
     
     var body: some View {
         ScrollView {
@@ -40,7 +39,7 @@ struct CoreRoundedViews : View {
                 .coreContainer(backgroundStyle: .secondaryFill, cornerStyle: .capsule)
                 
                 Text("Content").padding().coreContainer(backgroundStyle: .none, cornerStyle: .capsule)
-                Text("Content").padding().coreContainer(backgroundStyle: .blur, cornerStyle: .capsule)
+                Text("Content").padding().coreContainer(backgroundStyle: .blur(.prominent), cornerStyle: .capsule)
                 Text("Content").padding().coreContainer(backgroundStyle: .secondaryFill, cornerStyle: .capsule)
                 Text("Content").padding().coreContainer(backgroundStyle: .tertiaryFill, cornerStyle: .capsule)
                 Text("Content").padding().coreContainer(backgroundStyle: .quaternaryFill, cornerStyle: .capsule)
@@ -49,6 +48,6 @@ struct CoreRoundedViews : View {
                 Text("Content").padding().coreContainer(applyShadow: false, backgroundStyle: .quaternaryFill, cornerStyle: .capsule)
             }
         }
-        .navigationTitle("CoreRoundedView")
+        .navigationTitle("CoreContainerViews")
     }
 }

@@ -55,12 +55,13 @@ public extension Locale {
     ///
     /// Not all countries or regions have supporting locale data in the system.
     static var countries: Set<Country> {
-        let countries = NSLocale.isoCountryCodes.map { code in
+        let countries: [Country] = NSLocale.isoCountryCodes.compactMap { code in
             let id = NSLocale.localeIdentifier(fromComponents: [String(NSLocale.Key.countryCode.rawValue) : code])
             if let currentLanguage = self.preferredLanguages.first,
                let name = NSLocale(localeIdentifier: currentLanguage).displayName(forKey: .identifier, value: id) {
                 return Country(code: code, name: name)
             }
+            return nil
         }
         return Set(countries)
     }

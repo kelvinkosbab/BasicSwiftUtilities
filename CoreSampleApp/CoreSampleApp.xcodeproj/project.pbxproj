@@ -16,8 +16,9 @@
 		F67F399926AC8E2300F4854B /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = F67F399826AC8E2300F4854B /* Core */; };
 		F67F399D26AC8E2300F4854B /* CoreUI in Frameworks */ = {isa = PBXBuildFile; productRef = F67F399C26AC8E2300F4854B /* CoreUI */; };
 		F6957A5C26AE8970002C4D36 /* CoreButtonViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6957A5B26AE8970002C4D36 /* CoreButtonViews.swift */; };
-		F6957A5E26AE8A8E002C4D36 /* CoreRoundedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6957A5D26AE8A8E002C4D36 /* CoreRoundedView.swift */; };
+		F6957A5E26AE8A8E002C4D36 /* CoreContainerViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6957A5D26AE8A8E002C4D36 /* CoreContainerViews.swift */; };
 		F6A80AA426B5C8670045B268 /* ToastViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A80AA326B5C8670045B268 /* ToastViews.swift */; };
+		F6B9F56A26E6CF33007B9E81 /* BlurViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6B9F56926E6CF33007B9E81 /* BlurViews.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,8 +31,9 @@
 		F67F398E26AC8A7300F4854B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F67F399626AC8B0700F4854B /* Core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Core; path = ..; sourceTree = "<group>"; };
 		F6957A5B26AE8970002C4D36 /* CoreButtonViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreButtonViews.swift; sourceTree = "<group>"; };
-		F6957A5D26AE8A8E002C4D36 /* CoreRoundedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreRoundedView.swift; sourceTree = "<group>"; };
+		F6957A5D26AE8A8E002C4D36 /* CoreContainerViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreContainerViews.swift; sourceTree = "<group>"; };
 		F6A80AA326B5C8670045B268 /* ToastViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastViews.swift; sourceTree = "<group>"; };
+		F6B9F56926E6CF33007B9E81 /* BlurViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurViews.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,9 +71,10 @@
 			isa = PBXGroup;
 			children = (
 				F67F398726AC8A7300F4854B /* CoreSampleApp.swift */,
+				F6B9F56926E6CF33007B9E81 /* BlurViews.swift */,
 				F67F398926AC8A7300F4854B /* ContentView.swift */,
 				F6957A5B26AE8970002C4D36 /* CoreButtonViews.swift */,
-				F6957A5D26AE8A8E002C4D36 /* CoreRoundedView.swift */,
+				F6957A5D26AE8A8E002C4D36 /* CoreContainerViews.swift */,
 				F662BF7926C0E4EC001AC23C /* FontViews.swift */,
 				F65C39DD26E3E99C00926298 /* SFSymbolTester.swift */,
 				F6A80AA326B5C8670045B268 /* ToastViews.swift */,
@@ -179,10 +182,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				F6957A5C26AE8970002C4D36 /* CoreButtonViews.swift in Sources */,
-				F6957A5E26AE8A8E002C4D36 /* CoreRoundedView.swift in Sources */,
+				F6957A5E26AE8A8E002C4D36 /* CoreContainerViews.swift in Sources */,
 				F65C39DE26E3E99C00926298 /* SFSymbolTester.swift in Sources */,
 				F67F398A26AC8A7300F4854B /* ContentView.swift in Sources */,
 				F67F398826AC8A7300F4854B /* CoreSampleApp.swift in Sources */,
+				F6B9F56A26E6CF33007B9E81 /* BlurViews.swift in Sources */,
 				F6A80AA426B5C8670045B268 /* ToastViews.swift in Sources */,
 				F662BF7A26C0E4EC001AC23C /* FontViews.swift in Sources */,
 			);

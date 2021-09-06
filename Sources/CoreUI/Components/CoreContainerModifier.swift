@@ -1,5 +1,5 @@
 //
-//  CoreRoundedView.swift
+//  CoreContainerModifier.swift
 //  
 //  Copyright © 2021 Kozinga. All rights reserved.
 //
@@ -17,11 +17,20 @@ public enum RoundedViewCornerStyle {
 // MARK: - RoundedViewBackgroundStyle
 
 public enum RoundedViewBackgroundStyle {
-    case blur
+    case blur(UIBlurEffect.Style)
     case none
     case secondaryFill
     case tertiaryFill
     case quaternaryFill
+    
+    fileprivate var shouldApplyShadow: Bool {
+        switch self {
+        case .none:
+            return false
+        default:
+            return true
+        }
+    }
 }
 
 // MARK: - CoreRoundedView
@@ -54,11 +63,11 @@ struct CoreContainerModifier : ViewModifier {
             HStack {
                 content
             }
-            .modifier(RoundedViewBackgroundColorModifier(style: self.backgroundStyle))
+            .modifier(InnerBackgroundModifier(style: self.backgroundStyle))
         }
-        .modifier(RoundedViewBackgroundModifier(style: self.backgroundStyle))
+        .modifier(OuterBackgroundModifier(style: self.backgroundStyle))
         .modifier(RoundedViewModifier(style: self.cornerStyle))
-        .modifier(ShadowModifier(applyShadow: self.backgroundStyle != .none ? self.applyShadow : false))
+        .modifier(ShadowModifier(applyShadow: self.backgroundStyle.shouldApplyShadow))
     }
 }
 
@@ -101,10 +110,10 @@ private struct RoundedViewModifier : ViewModifier {
     }
 }
 
-// MARK: - RoundedViewBackgroundColorModifier
+// MARK: - InnerBackgroundModifier
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct RoundedViewBackgroundColorModifier : ViewModifier {
+private struct InnerBackgroundModifier : ViewModifier {
     
     let style: RoundedViewBackgroundStyle
     
@@ -125,10 +134,10 @@ private struct RoundedViewBackgroundColorModifier : ViewModifier {
     }
 }
 
-// MARK: - RoundedViewBackgroundModifier
+// MARK: - OuterBackgroundModifier
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct RoundedViewBackgroundModifier : ViewModifier {
+private struct OuterBackgroundModifier : ViewModifier {
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -136,9 +145,9 @@ private struct RoundedViewBackgroundModifier : ViewModifier {
     
     public func body(content: Content) -> some View {
         switch self.style {
-        case .blur:
+        case .blur(let style):
             content
-                .blurred()
+                .blurred(style)
         case .none:
             content
         case .secondaryFill, .tertiaryFill, .quaternaryFill:
@@ -153,10 +162,12 @@ private struct RoundedViewBackgroundModifier : ViewModifier {
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private struct ShadowModifier : ViewModifier {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     let applyShadow: Bool
     
     public func body(content: Content) -> some View {
-        if self.applyShadow {
+        if self.colorScheme == .light && self.applyShadow {
             content
                 .coreShadow()
         } else {
@@ -202,7 +213,7 @@ struct CoreRoundedView_Previews: PreviewProvider {
                 .coreContainer(backgroundStyle: .secondaryFill, cornerStyle: .capsule)
                 
                 Text("Content").padding().coreContainer(backgroundStyle: .none, cornerStyle: .capsule)
-                Text("Content").padding().coreContainer(backgroundStyle: .blur, cornerStyle: .capsule)
+                Text("Content").padding().coreContainer(backgroundStyle: .blur(.prominent), cornerStyle: .capsule)
                 Text("Content").padding().coreContainer(backgroundStyle: .secondaryFill, cornerStyle: .capsule)
                 Text("Content").padding().coreContainer(backgroundStyle: .tertiaryFill, cornerStyle: .capsule)
                 Text("Content").padding().coreContainer(backgroundStyle: .quaternaryFill, cornerStyle: .capsule)

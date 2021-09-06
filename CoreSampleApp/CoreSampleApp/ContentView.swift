@@ -12,23 +12,26 @@ struct ContentView : View {
     var body: some View {
         NavigationView {
             List {
-                NavigationLink("CoreButton") {
+                NavigationLink("Blur Views") {
+                    BlurViews()
+                }
+                NavigationLink("Core Buttons") {
                     CoreButtonViews()
                 }
-                NavigationLink("CoreRoundedViews") {
-                    CoreRoundedViews()
+                NavigationLink("CoreContainerViews") {
+                    CoreContainerViews()
                 }
                 NavigationLink("Fonts") {
                     FontViews()
                 }
                 NavigationLink("SF Symbols") {
-                    SFSymbolTester(imageType: .system("books.vertical"))
+                    SFSymbolTester()
                 }
                 NavigationLink("Toasts") {
                     ToastViews()
                 }
             }
-            .navigationTitle("Hello World")
+            .navigationBarTitle("Hello World", displayMode: .inline)
         }
     }
 }

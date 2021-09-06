@@ -26,16 +26,17 @@ public struct SFSymbolTester : View {
         }
     }
     
-    @State var imageType: SFImage
+    @State var searchText = "circles.hexagongrid"
     
     public var body: some View {
         VStack(spacing: 16) {
             HStack {
-                self.createColumn(image: self.imageType.image, font: .system(size: 16))
-                self.createColumn(image: self.imageType.image, font: .system(size: 20))
-                self.createColumn(image: self.imageType.image, font: .system(size: 28))
+                self.createColumn(image: SFImage.system(self.searchText).image, font: .system(size: 16))
+                self.createColumn(image: SFImage.system(self.searchText).image, font: .system(size: 20))
+                self.createColumn(image: SFImage.system(self.searchText).image, font: .system(size: 28))
             }
         }
+        .coreSearchable(text: self.$searchText, placeholderText: "SF System Image Name...")
     }
     
     private func createColumn(image: Image, font: Font) -> some View {
@@ -83,7 +84,7 @@ struct SFSymbolTester_Previews: PreviewProvider {
     
     static var previews: some View {
         NavigationView {
-            SFSymbolTester(imageType: .system("books.vertical"))
+            SFSymbolTester()
         }
     }
 }

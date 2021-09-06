@@ -1,83 +1,25 @@
 //
-//  CoreBlurView.swift
-//  
-//  Copyright © 2021 Kozinga. All rights reserved.
+//  BlurViews.swift
+//
+//  Created by Kelvin Kosbab on 9/6/21.
 //
 
 import SwiftUI
+import CoreUI
 
-// MARK: - BlurredModifier
-
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct BlurredModifier : ViewModifier {
+struct BlurViews : View {
     
-    let style: UIBlurEffect.Style
-    
-    func body(content: Content) -> some View {
-        content
-            .background(Blur(style: self.style))
-    }
-}
-
-/// Blurs the background of a view.
-///
-/// Usage:
-/// ```
-/// yourView
-///     .blurred()
-/// ```
-///
-/// - Parameter style: Blur effect style of the blurred view. See `UIBlurEffect.Style`
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-public extension View {
-    
-    func blurred(_ style: UIBlurEffect.Style) -> some View {
-        return self.modifier(BlurredModifier(style: style))
-    }
-}
-
-// MARK: - Blur
-
-/// Usage:
-/// ```
-/// yourView
-///     .background(Blur())
-/// ```
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct Blur: UIViewRepresentable {
-    
-    let style: UIBlurEffect.Style
-    
-    init(style: UIBlurEffect.Style) {
-        self.style = style
-    }
-    
-    func makeUIView(context: Context) -> UIVisualEffectView {
-        return UIVisualEffectView(effect: UIBlurEffect(style: self.style))
-    }
-    
-    func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
-        uiView.effect = UIBlurEffect(style: self.style)
-    }
-}
-
-// MARK: - Preview
-
-#if DEBUG
-
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-struct Blur_Previews: PreviewProvider {
-    
-    static var previews: some View {
+    var body: some View {
         ScrollView {
             self.renderBasic()
             self.renderSystemMaterial()
             self.renderSystemMaterialLight()
             self.renderSystemMaterialDark()
         }
+        .navigationTitle("Blur View Styles")
     }
     
-    private static func renderBasic() -> some View {
+    private func renderBasic() -> some View {
         VStack(spacing: 10) {
             self.renderItem(.extraLight, text: "extraLight")
             self.renderItem(.light, text: "light")
@@ -87,7 +29,7 @@ struct Blur_Previews: PreviewProvider {
         }
     }
     
-    private static func renderSystemMaterial() -> some View {
+    private func renderSystemMaterial() -> some View {
         VStack(spacing: 10) {
             self.renderItem(.systemUltraThinMaterial, text: "systemUltraThinMaterial")
             self.renderItem(.systemThinMaterial, text: "systemThinMaterial")
@@ -97,7 +39,7 @@ struct Blur_Previews: PreviewProvider {
         }
     }
     
-    private static func renderSystemMaterialLight() -> some View {
+    private func renderSystemMaterialLight() -> some View {
         VStack(spacing: 10) {
             self.renderItem(.systemUltraThinMaterialLight, text: "systemUltraThinMaterialLight")
             self.renderItem(.systemThinMaterialLight, text: "systemThinMaterialLight")
@@ -106,7 +48,7 @@ struct Blur_Previews: PreviewProvider {
             self.renderItem(.systemChromeMaterialLight, text: "systemChromeMaterialLight")
         }
     }
-    private static func renderSystemMaterialDark() -> some View {
+    private func renderSystemMaterialDark() -> some View {
         VStack(spacing: 10) {
             self.renderItem(.systemUltraThinMaterialDark, text: "systemUltraThinMaterialDark")
             self.renderItem(.systemThinMaterialDark, text: "systemThinMaterialDark")
@@ -116,7 +58,7 @@ struct Blur_Previews: PreviewProvider {
         }
     }
     
-    private static func renderItem(_ style: UIBlurEffect.Style, text: String) -> some View {
+    private func renderItem(_ style: UIBlurEffect.Style, text: String) -> some View {
         HStack {
             ZStack {
                 Image(systemName: "tray.and.arrow.up")
@@ -133,5 +75,3 @@ struct Blur_Previews: PreviewProvider {
         }
     }
 }
-
-#endif

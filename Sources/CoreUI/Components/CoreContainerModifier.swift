@@ -18,19 +18,9 @@ public enum RoundedViewCornerStyle {
 
 public enum RoundedViewBackgroundStyle {
     case blur(UIBlurEffect.Style)
-    case none
     case secondaryFill
     case tertiaryFill
     case quaternaryFill
-    
-    fileprivate var shouldApplyShadow: Bool {
-        switch self {
-        case .none:
-            return false
-        default:
-            return true
-        }
-    }
 }
 
 // MARK: - CoreRoundedView
@@ -39,6 +29,8 @@ public enum RoundedViewBackgroundStyle {
 struct CoreContainerModifier : ViewModifier {
     
     // MARK: - Properties and Init
+    
+    @Environment(\.colorScheme) var colorScheme
     
     private let applyShadow: Bool
     private let backgroundStyle: RoundedViewBackgroundStyle
@@ -67,7 +59,7 @@ struct CoreContainerModifier : ViewModifier {
         }
         .modifier(OuterBackgroundModifier(style: self.backgroundStyle))
         .modifier(RoundedViewModifier(style: self.cornerStyle))
-        .modifier(ShadowModifier(applyShadow: self.backgroundStyle.shouldApplyShadow))
+        .modifier(ShadowModifier(applyShadow: self.colorScheme == .light))
     }
 }
 
@@ -81,7 +73,7 @@ public extension View {
     /// - Parameter cornerStyle: Style of the corners of the view..
     /// - Parameter backgroundStyle: Style of the background container. Default is `none`.``
     func coreContainer(applyShadow: Bool = true,
-                       backgroundStyle: RoundedViewBackgroundStyle = .none,
+                       backgroundStyle: RoundedViewBackgroundStyle,
                        cornerStyle: RoundedViewCornerStyle = .none) -> some View {
         self.modifier(CoreContainerModifier(applyShadow: applyShadow,
                                             backgroundStyle:  backgroundStyle,
@@ -119,7 +111,7 @@ private struct InnerBackgroundModifier : ViewModifier {
     
     public func body(content: Content) -> some View {
         switch self.style {
-        case .blur, .none:
+        case .blur:
             content
         case .secondaryFill:
             content
@@ -148,8 +140,6 @@ private struct OuterBackgroundModifier : ViewModifier {
         case .blur(let style):
             content
                 .blurred(style)
-        case .none:
-            content
         case .secondaryFill, .tertiaryFill, .quaternaryFill:
             content
                 .background(self.colorScheme == .dark ? Color.black : Color.white)
@@ -212,7 +202,6 @@ struct CoreRoundedView_Previews: PreviewProvider {
                 .padding()
                 .coreContainer(backgroundStyle: .secondaryFill, cornerStyle: .capsule)
                 
-                Text("Content").padding().coreContainer(backgroundStyle: .none, cornerStyle: .capsule)
                 Text("Content").padding().coreContainer(backgroundStyle: .blur(.prominent), cornerStyle: .capsule)
                 Text("Content").padding().coreContainer(backgroundStyle: .secondaryFill, cornerStyle: .capsule)
                 Text("Content").padding().coreContainer(backgroundStyle: .tertiaryFill, cornerStyle: .capsule)

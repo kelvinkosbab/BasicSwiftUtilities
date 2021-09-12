@@ -38,7 +38,6 @@ struct CoreContainerViews : View {
                 .padding()
                 .coreContainer(backgroundStyle: .secondaryFill, cornerStyle: .capsule)
                 
-                Text("Content").padding().coreContainer(backgroundStyle: .none, cornerStyle: .capsule)
                 Text("Content").padding().coreContainer(backgroundStyle: .blur(.prominent), cornerStyle: .capsule)
                 Text("Content").padding().coreContainer(backgroundStyle: .secondaryFill, cornerStyle: .capsule)
                 Text("Content").padding().coreContainer(backgroundStyle: .tertiaryFill, cornerStyle: .capsule)

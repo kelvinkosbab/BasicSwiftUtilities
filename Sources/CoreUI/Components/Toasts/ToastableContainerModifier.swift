@@ -60,6 +60,19 @@ public extension View {
     /// If an app has multiple windows/scenes a toast target can be defined by expanding the
     /// `Toast.Target OptionalSet` type.
     ///
+    /// SwiftUI usage:
+    /// ```
+    /// @main
+    /// struct CoreSampleApp: App {
+    ///     var body: some Scene {
+    ///         WindowGroup {
+    ///             ContentView()
+    ///                 .toastableContainer(target: .primary)
+    ///         }
+    ///     }
+    ///}
+    /// ```
+    ///
     /// - Parameter target: Target window/scene of the container. Default is `.primary`.
     func toastableContainer(target: AppSessionTarget = .primary) -> some View {
         self.modifier(ToastableContainerModifier(target: target))

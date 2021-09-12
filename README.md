@@ -4,7 +4,7 @@ This package provides basic utilities and APIs for an application.
 
 Developed by Kelvin Kosbab
 kelvin.kosbab@kozinga.net
-github.com/kelvinkosbab/core
+https://kelvinkosbab.github.io/CoreSwiftUtilities
 
 ## Core
 

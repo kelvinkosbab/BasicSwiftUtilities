@@ -18,23 +18,25 @@ public struct ToastContent {
     /// Optional description. This text will be displayed directly below the title.
     let description: String?
     
-    /// Optional image displayed on tthe left side of the toast.
-    ///
-    /// - Warning: If either `image` or `tintColor` are `nil` no image will be rrendered.
-    let image: Image?
+    /// Optional image and optional tint color displayed on tthe leading edge of the toast.
+    let leadingImage: (image: Image, tintColor: Color?)?
+
+    /// Optional image and optional tint color displayed on tthe trailing edge of the toast.
+    let trailingImage: (image: Image, tintColor: Color?)?
     
-    /// Optional tint color displayed on tthe left side of the toast.
+    /// Constructor.
     ///
-    /// - Warning: If either `image` or `tintColor` are `nil` no image will be rrendered.
-    let tintColor: Color?
-    
+    /// - Parameter title: Primary title message.
+    /// - Parameter description: Optional description. This text will be displayed directly below the title.
+    /// - Parameter leadingImage: Optional image and optional tint color displayed on tthe leading edge of the toast.
+    /// - Parameter trailingImage: Optional image and optional tint color displayed on tthe trailing edge of the toast.
     public init(title: String,
                 description: String? = nil,
-                image: Image? = nil,
-                tintColor: Color? = nil) {
+                leadingImage: (image: Image, tintColor: Color?)? = nil,
+                trailingImage: (image: Image, tintColor: Color?)? = nil) {
         self.title = title
         self.description = description
-        self.image = image
-        self.tintColor = tintColor
+        self.leadingImage = leadingImage
+        self.trailingImage = trailingImage
     }
 }

@@ -23,8 +23,7 @@ struct ToastViews : View {
                 
                 Button("Show Title-Image Toast") {
                     Toast.show(title: "Simple Title",
-                               image: self.image,
-                               imageTintColor: .green)
+                               leadingImage: (image: self.image, tintColor: .green))
                 }
                 .padding()
                 
@@ -34,27 +33,39 @@ struct ToastViews : View {
                 }
                 .padding()
                 
-                Button("Show Title-description-image Toast") {
+                Button("Show Title-description leading image Toast") {
                     Toast.show(title: "Simple Title",
                                description: "Some description",
-                               image: self.image,
-                               imageTintColor: .blue)
+                               leadingImage: (image: self.image, tintColor: .blue))
+                }
+                .padding()
+                
+                Button("Show Title-description trailing image Toast") {
+                    Toast.show(title: "Simple Title",
+                               description: "Some description",
+                               trailingImage: (image: self.image, tintColor: .blue))
+                }
+                .padding()
+                
+                Button("Show Title-description leading and trailing image Toast") {
+                    Toast.show(title: "Simple Title",
+                               description: "Some description",
+                               leadingImage: (image: self.image, tintColor: .red),
+                               trailingImage: (image: self.image, tintColor: .blue))
                 }
                 .padding()
                 
                 Button("Show longer Title-description-image Toast") {
                     Toast.show(title: "Simple Title that is a little longer",
                                description: "Some description",
-                               image: self.image,
-                               imageTintColor: .blue)
+                               leadingImage: (image: self.image, tintColor: .blue))
                 }
                 .padding()
                 
                 Button("Show super long Title-description-image Toast") {
                     Toast.show(title: "Simple Title that is a little longer Simple Title that is a little longer Simple Title that is a little longer",
                                description: "Some description",
-                               image: self.image,
-                               imageTintColor: .blue)
+                               leadingImage: (image: self.image, tintColor: .blue))
                 }
                 .padding()
             }

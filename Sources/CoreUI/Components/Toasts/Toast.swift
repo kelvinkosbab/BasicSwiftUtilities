@@ -11,116 +11,43 @@ import SwiftUI
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public class Toast {
     
-    private static var registeredContainer: [AppSessionTarget : ToastContainer] = [:]
+    private static var registeredManagers: [AppSessionTarget : ToastStateManager] = [:]
     
-    static func register(container: ToastContainer,
+    static func register(manager: ToastStateManager,
                          target: AppSessionTarget) {
         
-        guard self.registeredContainer[target] == nil else {
-            fatalError("Toast container has already been registred for target: \(target.rawValue)")
+        guard self.registeredManagers[target] == nil else {
+            fatalError("Toast manager has already been registred for target: \(target.rawValue)")
         }
         
-        self.registeredContainer[target] = container
+        self.registeredManagers[target] = manager
     }
     
-    private static func containerNotConfiguredError(target: AppSessionTarget) -> String {
-        return "Toast container not configured for target: \(target.rawValue)"
+    private static func managerNotConfiguredError(target: AppSessionTarget) -> String {
+        return "Toast manager not configured for target: \(target.rawValue)"
     }
     
+    /// Shows a toast.
+    ///
+    /// - Parameter title: Primary title message.
+    /// - Parameter description: Optional description. This text will be displayed directly below the title.
+    /// - Parameter leadingImage: Optional image and optional tint color displayed on tthe leading edge of the toast.
+    /// - Parameter trailingImage: Optional image and optional tint color displayed on tthe trailing edge of the toast.
+    /// - Parameter target: Target window to show the toast from.
     public static func show(title: String,
+                            description: String? = nil,
+                            leadingImage: (image: Image, tintColor: Color?)? = nil,
+                            trailingImage: (image: Image, tintColor: Color?)? = nil,
                             target: AppSessionTarget = .primary) {
         
-        guard let container = self.registeredContainer[target] else {
-            fatalError(self.containerNotConfiguredError(target: target))
-        }
-        
-        let content = ToastContent(title: title,
-                                   description: nil,
-                                   image: nil,
-                                   tintColor: nil)
-        container.show(content)
-    }
-    
-    public static func show(title: String,
-                            image: Image,
-                            imageTintColor: Color,
-                            target: AppSessionTarget = .primary) {
-        
-        guard let container = self.registeredContainer[target] else {
-            fatalError(self.containerNotConfiguredError(target: target))
-        }
-        
-        let content = ToastContent(title: title,
-                                   description: nil,
-                                   image: image,
-                                   tintColor: imageTintColor)
-        container.show(content)
-    }
-    
-    public static func show(title: String,
-                            image: Image,
-                            isDestructive: Bool = false,
-                            target: AppSessionTarget = .primary) {
-        
-        guard let container = self.registeredContainer[target] else {
-            fatalError(self.containerNotConfiguredError(target: target))
-        }
-        
-        let tintColor = isDestructive ? AppColors.appDestructiveColor : AppColors.appTintColor
-        let content = ToastContent(title: title,
-                                   description: nil,
-                                   image: image,
-                                   tintColor: tintColor)
-        container.show(content)
-    }
-    
-    public static func show(title: String,
-                            description: String,
-                            target: AppSessionTarget = .primary) {
-        
-        guard let container = self.registeredContainer[target] else {
-            fatalError(self.containerNotConfiguredError(target: target))
+        guard let manager = self.registeredManagers[target] else {
+            fatalError(self.managerNotConfiguredError(target: target))
         }
         
         let content = ToastContent(title: title,
                                    description: description,
-                                   image: nil,
-                                   tintColor: nil)
-        container.show(content)
-    }
-    
-    public static func show(title: String,
-                            description: String,
-                            image: Image,
-                            imageTintColor: Color,
-                            target: AppSessionTarget = .primary) {
-        
-        guard let container = self.registeredContainer[target] else {
-            fatalError(self.containerNotConfiguredError(target: target))
-        }
-        
-        let content = ToastContent(title: title,
-                                   description: description,
-                                   image: image,
-                                   tintColor: imageTintColor)
-        container.show(content)
-    }
-    
-    public static func show(title: String,
-                            description: String,
-                            image: Image,
-                            isDestructive: Bool = false,
-                            target: AppSessionTarget = .primary) {
-        
-        guard let container = self.registeredContainer[target] else {
-            fatalError(self.containerNotConfiguredError(target: target))
-        }
-        
-        let tintColor = isDestructive ? AppColors.appDestructiveColor : AppColors.appTintColor
-        let content = ToastContent(title: title,
-                                   description: description,
-                                   image: image,
-                                   tintColor: tintColor)
-        container.show(content)
+                                   leadingImage: leadingImage,
+                                   trailingImage: trailingImage)
+        manager.show(content)
     }
 }

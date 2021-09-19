@@ -1,5 +1,5 @@
 //
-//  ToastContainer.swift
+//  ToastStateManager.swift
 //
 //  Created by Kelvin Kosbab on 7/31/21.
 //
@@ -7,18 +7,11 @@
 import SwiftUI
 import Core
 
-// MARK: - ToastContainer
-
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-protocol ToastContainer {
-    func show(_ content: ToastContent)
-}
-
-// MARK: - CurrentToastState
+// MARK: - ToastState
 
 /// Defines the lifecycle of a toast.
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-enum CurrentToastState {
+enum ToastState {
     
     /// No toast shold be prepared or shown for rendering.
     case none
@@ -44,15 +37,19 @@ enum CurrentToastState {
     }
 }
 
-// MARK: - ToastManager
+// MARK: - ToastStateManager
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+protocol ToastStateDelegate : AnyObject {
+    func didUpdate(toastState: ToastState)
+}
 
 /// Responsible for managing any incoming `showToast` requests. Incoming toasts will be queued up
 /// until all toasts have been shown to the user.
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-class ToastManager: ToastContainer, ObservableObject {
+class ToastStateManager  {
     
-    @Published var currentToast: CurrentToastState = .none
-    
+    weak var delegate: ToastStateDelegate?
     private let animationOptions: ToastAnimationOptions
     private var toasts: [ToastContent] = []
     private var isProcessingCurrentToast: Bool = false
@@ -74,7 +71,7 @@ class ToastManager: ToastContainer, ObservableObject {
         
         guard self.toasts.count > 0 else {
             self.isProcessingCurrentToast = false
-            self.currentToast = .none
+            self.delegate?.didUpdate(toastState: .none)
             return
         }
         
@@ -87,7 +84,7 @@ class ToastManager: ToastContainer, ObservableObject {
         let showDelay = animationDuration + self.animationOptions.showDuration
         
         withAnimation {
-            self.currentToast = .prepare(nextToast)
+            self.delegate?.didUpdate(toastState: .prepare(nextToast))
         }
         
         // Prepare the toast for rendering
@@ -95,20 +92,20 @@ class ToastManager: ToastContainer, ObservableObject {
             
             // Show the toast
             withAnimation {
-                self?.currentToast = .show(nextToast)
+                self?.delegate?.didUpdate(toastState: .show(nextToast))
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + showDelay) { [weak self] in
                 
                 withAnimation {
-                    self?.currentToast = .hiding(nextToast)
+                    self?.delegate?.didUpdate(toastState: .hiding(nextToast))
                 }
                 
                 // Wiat for toast to hide
                 DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) { [weak self] in
                     
                     withAnimation {
-                        self?.currentToast = .none
+                        self?.delegate?.didUpdate(toastState: .none)
                     }
                     
                     self?.isProcessingCurrentToast = false

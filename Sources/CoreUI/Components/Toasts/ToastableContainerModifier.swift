@@ -13,16 +13,10 @@ import Core
 struct ToastableContainerModifier : ViewModifier {
     
     @State var paddingTop: CGFloat = 0
+    @ObservedObject private var dataSource: DataSource
     
-    private let animationOptions: ToastAnimationOptions
-    @ObservedObject private var toastManager: ToastManager
-    
-    init(target: AppSessionTarget) {
-        let animationOptions = ToastAnimationOptions()
-        self.animationOptions = animationOptions
-        let toastManager = ToastManager(animationOptions: animationOptions)
-        self.toastManager = toastManager
-        Toast.register(container: toastManager, target: target)
+    init(target: AppSessionTarget, animationOptions: ToastAnimationOptions = ToastAnimationOptions()) {
+        self.dataSource = DataSource(target: target, animationOptions: animationOptions)
     }
     
     func body(content: Content) -> some View {
@@ -32,20 +26,44 @@ struct ToastableContainerModifier : ViewModifier {
                 
                 VStack {
                     VStack {
-                        switch self.toastManager.currentToast {
+                        switch self.dataSource.currentToastState {
                         case .none:
                             EmptyView()
                         case .show(let toast), .hiding(let toast), .prepare(let toast):
                             ToastView(.constant(toast))
                         }
                     }
-                    .padding(.top, self.toastManager.currentToast.shouldBeVisible ? 0 : -150)
-                    .animation(.easeInOut(duration: self.animationOptions.animationDuration))
+                    .padding(.top, self.dataSource.currentToastState.shouldBeVisible ? 0 : -150)
+                    .animation(.easeInOut(duration: self.dataSource.animationOptions.animationDuration))
                     
                     Spacer()
                 }
                 .padding(.top, Spacing.base)
             }
+        }
+    }
+    
+    // MARK: - ToastContainer
+
+    @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+    private class DataSource : ObservableObject, ToastStateDelegate {
+        
+        @Published var currentToastState: ToastState = .none
+        
+        let animationOptions: ToastAnimationOptions
+        private let toastStateManager: ToastStateManager
+        
+        init(target: AppSessionTarget,
+             animationOptions: ToastAnimationOptions) {
+            self.animationOptions = animationOptions
+            self.toastStateManager = ToastStateManager(animationOptions: animationOptions)
+            
+            self.toastStateManager.delegate = self
+            Toast.register(manager: self.toastStateManager, target: target)
+        }
+        
+        func didUpdate(toastState: ToastState) {
+            self.currentToastState = toastState
         }
     }
 }

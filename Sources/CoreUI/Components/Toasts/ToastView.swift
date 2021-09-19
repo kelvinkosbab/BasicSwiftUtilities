@@ -22,24 +22,15 @@ struct ToastView : View {
     
     var body: some View {
         HStack {
-            if let image = content.image, let tintColor = content.tintColor {
+            if self.content.leadingImage != nil || self.content.trailingImage != nil {
                 
-                image
-                    .resizable()
-                    .frame(width: self.imageSize, height: self.imageSize)
-                    .foregroundColor(tintColor)
-                    .padding(.vertical, Spacing.tiny)
-                    .padding(.leading, Spacing.base)
+                self.renderImageContent(self.content.leadingImage, isLeading: true)
                 
                 self.getTextContent(title: content.title, description: content.description)
                     .padding(.vertical, Spacing.tiny)
                     .padding(.horizontal, Spacing.base)
                 
-                Rectangle()
-                    .fill(Color.clear)
-                    .frame(width: self.imageSize, height: self.imageSize)
-                    .padding(.vertical, Spacing.tiny)
-                    .padding(.trailing, Spacing.base)
+                self.renderImageContent(self.content.trailingImage, isLeading: false)
                 
             } else {
                 
@@ -77,6 +68,40 @@ struct ToastView : View {
             }
         }
     }
+    
+    @ViewBuilder
+    private func renderImageContent(_ imageContent: (image: Image, tintColor: Color?)?, isLeading: Bool) -> some View {
+        if let imageContent = imageContent {
+            imageContent.image
+                .resizable()
+                .frame(width: self.imageSize, height: self.imageSize)
+                .modifier(OptionalForegroundColorModifier(foregroundColor: imageContent.tintColor))
+                .padding(.vertical, Spacing.tiny)
+                .padding(isLeading ? .leading : .trailing, Spacing.base)
+        } else {
+            Rectangle()
+                .fill(Color.clear)
+                .frame(width: self.imageSize, height: self.imageSize)
+                .padding(.vertical, Spacing.tiny)
+                .padding(isLeading ? .leading : .trailing, Spacing.base)
+        }
+    }
+}
+
+// MARK: - Helpers
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+private struct OptionalForegroundColorModifier : ViewModifier {
+    
+    let foregroundColor: Color?
+    
+    func body(content: Content) -> some View {
+        if let color = self.foregroundColor {
+            content.foregroundColor(color)
+        } else {
+            content
+        }
+    }
 }
 
 // MARK: - Preview
@@ -92,14 +117,13 @@ struct ToastView_Previews: PreviewProvider {
         VStack(spacing: Spacing.base) {
             ToastView(.constant(ToastContent(title: "One")))
             ToastView(.constant(ToastContent(title: "Two",
-                                             image: self.image,
-                                             tintColor: .green)))
+                                             leadingImage: (image: self.image, tintColor: .green))))
             ToastView(.constant(ToastContent(title: "Two",
                                              description: "Hello")))
             ToastView(.constant(ToastContent(title: "Two",
                                              description: "Hello",
-                                             image: self.image,
-                                             tintColor: .blue)))
+                                             leadingImage: (image: self.image, tintColor: .blue),
+                                             trailingImage: (image: self.image, tintColor: .blue))))
         }
     }
 }

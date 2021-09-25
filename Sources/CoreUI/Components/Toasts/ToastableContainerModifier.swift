@@ -7,43 +7,46 @@
 import SwiftUI
 import Core
 
-// MARK: - ToastableContainerModifier
+// MARK: - ToastableContainer
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-struct ToastableContainerModifier : ViewModifier {
+public struct ToastableContainer<Content> : View where Content: View{
     
-    @State var paddingTop: CGFloat = 0
+    var content: () -> Content
+    
+    @Environment(\.safeAreaInsets) private var safeAreaInsets
+    
     @ObservedObject private var dataSource: DataSource
-    
-    init(target: AppSessionTarget, animationOptions: ToastAnimationOptions = ToastAnimationOptions()) {
-        self.dataSource = DataSource(target: target, animationOptions: animationOptions)
+
+    public init(target: AppSessionTarget,
+                @ViewBuilder content: @escaping () -> Content) {
+        self.dataSource = DataSource(target: target)
+        self.content = content
     }
     
-    func body(content: Content) -> some View {
-        GeometryReader { geometry in
-            ZStack {
-                content
-                
+    public var body: some View {
+        ZStack {
+            self.content()
+            
+            VStack {
                 VStack {
-                    VStack {
-                        switch self.dataSource.currentToastState {
-                        case .none:
-                            EmptyView()
-                        case .show(let toast), .hiding(let toast), .prepare(let toast):
-                            ToastView(.constant(toast))
-                        }
+                    switch self.dataSource.currentToastState {
+                    case .none:
+                        EmptyView()
+                    case .show(let toast), .hiding(let toast), .prepare(let toast):
+                        ToastView(.constant(toast))
                     }
-                    .padding(.top, self.dataSource.currentToastState.shouldBeVisible ? 0 : -150)
-                    .animation(.easeInOut(duration: self.dataSource.animationOptions.animationDuration))
-                    
-                    Spacer()
                 }
-                .padding(.top, Spacing.base)
+                .padding(.top, self.dataSource.currentToastState.shouldBeVisible ? self.safeAreaInsets.top + Spacing.small : -(self.safeAreaInsets.top + (self.safeAreaInsets.top / 2)))
+                .animation(.easeInOut(duration: self.dataSource.animationOptions.animationDuration))
+                
+                Spacer()
             }
+            .ignoreSafeAreaEdges(.all)
         }
     }
     
-    // MARK: - ToastContainer
+    // MARK: - ToastDataSource
 
     @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
     private class DataSource : ObservableObject, ToastStateDelegate {
@@ -53,9 +56,8 @@ struct ToastableContainerModifier : ViewModifier {
         let animationOptions: ToastAnimationOptions
         private let toastStateManager: ToastStateManager
         
-        init(target: AppSessionTarget,
-             animationOptions: ToastAnimationOptions) {
-            self.animationOptions = animationOptions
+        init(target: AppSessionTarget) {
+            self.animationOptions = ToastAnimationOptions()
             self.toastStateManager = ToastStateManager(animationOptions: animationOptions)
             
             self.toastStateManager.delegate = self
@@ -65,6 +67,27 @@ struct ToastableContainerModifier : ViewModifier {
         func didUpdate(toastState: ToastState) {
             self.currentToastState = toastState
         }
+    }
+}
+
+// MARK: - ToastableContainerModifier
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+struct ToastableContainerModifier : ViewModifier {
+    
+    @State var paddingTop: CGFloat = 0
+    let target: AppSessionTarget
+    let animationOptions: ToastAnimationOptions
+    
+    init(target: AppSessionTarget,
+         animationOptions: ToastAnimationOptions = ToastAnimationOptions()) {
+        self.target = target
+        self.animationOptions = animationOptions
+    }
+    
+    func body(content: Content) -> some View {
+        ToastableContainer(target: self.target,
+                           content: { content })
     }
 }
 

@@ -9,7 +9,7 @@ import Foundation
 // MARK: - ToastAnimationOptions
 
 /// Defines how a toast animates before, during, and after rendering.
-struct ToastAnimationOptions {
+public struct ToastAnimationOptions {
     
     /// The amount of time the tost takes to move between shown or hidden.
     let animationDuration: TimeInterval

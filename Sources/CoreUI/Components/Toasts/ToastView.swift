@@ -12,25 +12,25 @@ import SwiftUI
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 struct ToastView : View {
     
-    @Binding private var content: ToastContent
+    @Binding private var content: Toast.Content
     
     private let imageSize: CGFloat = Spacing.large
     
-    init(_ content: Binding<ToastContent>) {
+    init(_ content: Binding<Toast.Content>) {
         self._content = content
     }
     
     var body: some View {
         HStack {
-            if self.content.leadingImage != nil || self.content.trailingImage != nil {
+            if self.content.leading != .none || self.content.trailing != .none {
                 
-                self.renderImageContent(self.content.leadingImage, isLeading: true)
+                self.renderSubContent(self.content.leading.body(), isLeading: true)
                 
                 self.getTextContent(title: content.title, description: content.description)
                     .padding(.vertical, Spacing.tiny)
                     .padding(.horizontal, Spacing.base)
                 
-                self.renderImageContent(self.content.trailingImage, isLeading: false)
+                self.renderSubContent(self.content.trailing.body(), isLeading: false)
                 
             } else {
                 
@@ -70,37 +70,11 @@ struct ToastView : View {
     }
     
     @ViewBuilder
-    private func renderImageContent(_ imageContent: (image: Image, tintColor: Color?)?, isLeading: Bool) -> some View {
-        if let imageContent = imageContent {
-            imageContent.image
-                .resizable()
-                .frame(width: self.imageSize, height: self.imageSize)
-                .modifier(OptionalForegroundColorModifier(foregroundColor: imageContent.tintColor))
-                .padding(.vertical, Spacing.tiny)
-                .padding(isLeading ? .leading : .trailing, Spacing.base)
-        } else {
-            Rectangle()
-                .fill(Color.clear)
-                .frame(width: self.imageSize, height: self.imageSize)
-                .padding(.vertical, Spacing.tiny)
-                .padding(isLeading ? .leading : .trailing, Spacing.base)
-        }
-    }
-}
-
-// MARK: - Helpers
-
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-private struct OptionalForegroundColorModifier : ViewModifier {
-    
-    let foregroundColor: Color?
-    
-    func body(content: Content) -> some View {
-        if let color = self.foregroundColor {
-            content.foregroundColor(color)
-        } else {
-            content
-        }
+    private func renderSubContent<Content>(_ content: Content, isLeading: Bool) -> some View where Content: View {
+        content
+            .frame(width: self.imageSize, height: self.imageSize)
+            .padding(.vertical, Spacing.tiny)
+            .padding(isLeading ? .leading : .trailing, Spacing.base)
     }
 }
 
@@ -115,15 +89,15 @@ struct ToastView_Previews: PreviewProvider {
     
     static var previews: some View {
         VStack(spacing: Spacing.base) {
-            ToastView(.constant(ToastContent(title: "One")))
-            ToastView(.constant(ToastContent(title: "Two",
-                                             leadingImage: (image: self.image, tintColor: .green))))
-            ToastView(.constant(ToastContent(title: "Two",
-                                             description: "Hello")))
-            ToastView(.constant(ToastContent(title: "Two",
-                                             description: "Hello",
-                                             leadingImage: (image: self.image, tintColor: .blue),
-                                             trailingImage: (image: self.image, tintColor: .blue))))
+            ToastView(.constant(Toast.Content(title: "One")))
+            ToastView(.constant(Toast.Content(title: "Two",
+                                              leading: .tintedImage(self.image, .green))))
+            ToastView(.constant(Toast.Content(title: "Two",
+                                              description: "Hello")))
+            ToastView(.constant(Toast.Content(title: "Two",
+                                              description: "Hello",
+                                              leading: .tintedImage(self.image, .blue),
+                                              trailing: .tintedImage(self.image, .blue))))
         }
     }
 }

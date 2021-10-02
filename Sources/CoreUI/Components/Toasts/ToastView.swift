@@ -45,8 +45,8 @@ struct ToastView : View {
                maxHeight: .infinity)
         .fixedSize(horizontal: true,
                    vertical: true)
-        .coreContainer(applyShadow: true,
-                       backgroundStyle: .secondaryFill,
+        .coreContainer(shadowStyle: .none,
+                       backgroundStyle: .blur(.systemThickMaterial),
                        cornerStyle: .capsule)
     }
     

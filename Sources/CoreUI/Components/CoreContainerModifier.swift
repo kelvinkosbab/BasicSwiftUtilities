@@ -23,6 +23,14 @@ public enum RoundedViewBackgroundStyle {
     case quaternaryFill
 }
 
+// MARK: - ShadowStyle
+
+public enum ShadowStyle {
+    case none
+    case lightColorScheme
+    case shadow
+}
+
 // MARK: - CoreRoundedView
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
@@ -32,20 +40,19 @@ struct CoreContainerModifier : ViewModifier {
     
     @Environment(\.colorScheme) var colorScheme
     
-    private let applyShadow: Bool
+    private let shadowStyle: ShadowStyle
     private let backgroundStyle: RoundedViewBackgroundStyle
     private let cornerStyle: RoundedViewCornerStyle
     
     /// Constructor.
     ///
-    /// - Parameter applyShadow: Flag of whether or not to apply a shadow. Shadow will only be applied when
-    /// the `colorScheme` is `light`.
+    /// - Parameter shadowStyle: Shadow style to apply to the container.
     /// - Parameter cornerStyle: Style of the corners of the view..
     /// - Parameter backgroundStyle: Style of the background container. Default is `none`.``
-    init(applyShadow: Bool,
+    init(shadowStyle: ShadowStyle,
          backgroundStyle: RoundedViewBackgroundStyle,
          cornerStyle: RoundedViewCornerStyle) {
-        self.applyShadow = applyShadow
+        self.shadowStyle = shadowStyle
         self.backgroundStyle = backgroundStyle
         self.cornerStyle = cornerStyle
     }
@@ -59,7 +66,7 @@ struct CoreContainerModifier : ViewModifier {
         }
         .modifier(OuterBackgroundModifier(style: self.backgroundStyle))
         .modifier(RoundedViewModifier(style: self.cornerStyle))
-        .modifier(ShadowModifier(applyShadow: self.colorScheme == .light))
+        .modifier(ShadowModifier(shadowStyle: self.shadowStyle))
     }
 }
 
@@ -68,14 +75,13 @@ public extension View {
     
     /// View container utility for shadows, corner radius and rounded styles as well as background color styles.
     ///
-    /// - Parameter applyShadow: Flag of whether or not to apply a shadow. Shadow will only be applied when
-    /// the `colorScheme` is `light`.
+    /// - Parameter shadowStyle: Shadow style to apply to the container.
     /// - Parameter cornerStyle: Style of the corners of the view..
     /// - Parameter backgroundStyle: Style of the background container. Default is `none`.``
-    func coreContainer(applyShadow: Bool = true,
+    func coreContainer(shadowStyle: ShadowStyle = .lightColorScheme,
                        backgroundStyle: RoundedViewBackgroundStyle,
                        cornerStyle: RoundedViewCornerStyle = .none) -> some View {
-        self.modifier(CoreContainerModifier(applyShadow: applyShadow,
+        self.modifier(CoreContainerModifier(shadowStyle: shadowStyle,
                                             backgroundStyle:  backgroundStyle,
                                             cornerStyle: cornerStyle))
     }
@@ -154,14 +160,22 @@ private struct ShadowModifier : ViewModifier {
     
     @Environment(\.colorScheme) var colorScheme
     
-    let applyShadow: Bool
+    let shadowStyle: ShadowStyle
     
     public func body(content: Content) -> some View {
-        if self.colorScheme == .light && self.applyShadow {
+        switch self.shadowStyle {
+        case .none:
+            content
+        case .lightColorScheme:
+            if self.colorScheme == .light {
+                content
+                    .coreShadow()
+            } else {
+                content
+            }
+        case .shadow:
             content
                 .coreShadow()
-        } else {
-            content
         }
     }
 }
@@ -207,8 +221,8 @@ struct CoreRoundedView_Previews: PreviewProvider {
                 Text("Content").padding().coreContainer(backgroundStyle: .tertiaryFill, cornerStyle: .capsule)
                 Text("Content").padding().coreContainer(backgroundStyle: .quaternaryFill, cornerStyle: .capsule)
                 
-                Text("Content").padding().coreContainer(applyShadow: true, backgroundStyle: .quaternaryFill, cornerStyle: .capsule)
-                Text("Content").padding().coreContainer(applyShadow: false, backgroundStyle: .quaternaryFill, cornerStyle: .capsule)
+                Text("Content").padding().coreContainer(shadowStyle: .shadow, backgroundStyle: .quaternaryFill, cornerStyle: .capsule)
+                Text("Content").padding().coreContainer(shadowStyle: .none, backgroundStyle: .quaternaryFill, cornerStyle: .capsule)
             }
         }
     }

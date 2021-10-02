@@ -43,8 +43,8 @@ struct CoreContainerViews : View {
                 Text("Content").padding().coreContainer(backgroundStyle: .tertiaryFill, cornerStyle: .capsule)
                 Text("Content").padding().coreContainer(backgroundStyle: .quaternaryFill, cornerStyle: .capsule)
                 
-                Text("Content").padding().coreContainer(applyShadow: true, backgroundStyle: .quaternaryFill, cornerStyle: .capsule)
-                Text("Content").padding().coreContainer(applyShadow: false, backgroundStyle: .quaternaryFill, cornerStyle: .capsule)
+                Text("Content").padding().coreContainer(shadowStyle: .shadow, backgroundStyle: .quaternaryFill, cornerStyle: .capsule)
+                Text("Content").padding().coreContainer(shadowStyle: .none, backgroundStyle: .quaternaryFill, cornerStyle: .capsule)
             }
         }
         .navigationTitle("CoreContainerViews")

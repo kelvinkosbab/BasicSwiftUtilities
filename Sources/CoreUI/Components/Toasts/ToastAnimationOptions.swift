@@ -24,8 +24,8 @@ public struct ToastAnimationOptions {
     let showDuration: TimeInterval
     
     /// Constructor.
-    public init(animationDuration: TimeInterval = 0.2,
-                prepareDuration: TimeInterval = 0.25,
+    public init(animationDuration: TimeInterval = 0.5,
+                prepareDuration: TimeInterval = 0.2,
                 showDuration: TimeInterval = 1.0) {
         self.animationDuration = animationDuration
         self.prepareDuration = prepareDuration

@@ -14,7 +14,7 @@ struct FontViews : View {
     let text = "Hello World!"
     
     var body: some View {
-        ScrollView {
+        List {
             self.reguarFontStyles
             self.boldFontStyles
             self.italicFontStyles

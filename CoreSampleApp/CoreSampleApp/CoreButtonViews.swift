@@ -11,7 +11,7 @@ import CoreUI
 struct CoreButtonViews : View {
     
     var body: some View {
-        ScrollView {
+        List {
             VStack(spacing: 10) {
                 self.simpleButtons
                 self.filledButtons

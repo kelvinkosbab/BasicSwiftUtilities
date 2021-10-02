@@ -10,7 +10,7 @@ import CoreUI
 struct BlurViews : View {
     
     var body: some View {
-        ScrollView {
+        List {
             self.renderBasic()
             self.renderSystemMaterial()
             self.renderSystemMaterialLight()

@@ -10,7 +10,7 @@ import CoreUI
 struct CoreContainerViews : View {
     
     var body: some View {
-        ScrollView {
+        List {
             VStack(spacing: 10) {
                 HStack {
                     VStack(alignment: .leading, spacing: Spacing.small) {

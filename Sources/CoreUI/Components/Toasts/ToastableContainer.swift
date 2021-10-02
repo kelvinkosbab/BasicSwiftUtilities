@@ -23,6 +23,14 @@ struct ToastableContainer<Content> : View where Content: View{
         self.content = content
     }
     
+    private func getToastTopOffset(toastSize: CGSize) -> CGFloat {
+        if self.dataSource.currentToastState.shouldBeVisible {
+            return max(self.safeAreaInsets.top, Spacing.base) + Spacing.small
+        } else {
+            return -toastSize.height
+        }
+    }
+    
     public var body: some View {
         ZStack {
             self.content()
@@ -39,7 +47,7 @@ struct ToastableContainer<Content> : View where Content: View{
                                 ToastView(.constant(toast))
                             }
                         }
-                        .padding(.top, self.dataSource.currentToastState.shouldBeVisible ? (max(self.safeAreaInsets.top, Spacing.base) + Spacing.small) : -geometry.size.height)
+                        .padding(.top, self.getToastTopOffset(toastSize: geometry.size))
                         .animation(.easeInOut(duration: self.dataSource.animationOptions.animationDuration))
                         Spacer()
                     }

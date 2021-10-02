@@ -12,6 +12,8 @@ import SwiftUI
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 struct ToastView : View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     @Binding private var content: Toast.Content
     
     private let imageSize: CGFloat = Spacing.large
@@ -46,7 +48,7 @@ struct ToastView : View {
         .fixedSize(horizontal: true,
                    vertical: true)
         .coreContainer(shadowStyle: .none,
-                       backgroundStyle: .blur(.systemThickMaterial),
+                       backgroundStyle: self.colorScheme == .light ? .blur(.systemChromeMaterial) : .blur(.systemThinMaterial),
                        cornerStyle: .capsule)
     }
     

@@ -13,17 +13,18 @@ import Core
 private struct ToastableContainerModifier : ViewModifier {
     
     @State var paddingTop: CGFloat = 0
-    let target: AppSessionTarget
+    
+    let sessionId: UUID
     let animationOptions: ToastAnimationOptions
     
-    init(target: AppSessionTarget,
+    init(sessionId: UUID,
          animationOptions: ToastAnimationOptions = ToastAnimationOptions()) {
-        self.target = target
+        self.sessionId = sessionId
         self.animationOptions = animationOptions
     }
     
     func body(content: Content) -> some View {
-        ToastableContainer(target: self.target,
+        ToastableContainer(sessionId: self.sessionId,
                            content: { content })
     }
 }
@@ -42,17 +43,20 @@ public extension View {
     /// ```
     /// @main
     /// struct CoreSampleApp: App {
+    ///
+    ///     let sessionId = UUID()
+    ///
     ///     var body: some Scene {
     ///         WindowGroup {
-    ///             ContentView()
-    ///                 .toastableContainer(target: .primary)
+    ///             ContentView(currentSessionId: currentSessionId) // Pass into ContentView so can be referenced when registering Toast.
+    ///                 .toastableContainer(sessionID: sessionId)
     ///         }
     ///     }
     ///}
     /// ```
     ///
     /// - Parameter target: Target window/scene of the container. Default is `.primary`.
-    func toastableContainer(target: AppSessionTarget = .primary) -> some View {
-        self.modifier(ToastableContainerModifier(target: target))
+    func toastableContainer(sessionId: UUID) -> some View {
+        self.modifier(ToastableContainerModifier(sessionId: sessionId))
     }
 }

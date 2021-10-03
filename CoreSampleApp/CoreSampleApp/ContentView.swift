@@ -9,6 +9,8 @@ import CoreUI
 
 struct ContentView : View {
     
+    let sessionId: UUID
+    
     var body: some View {
         NavigationView {
             List {
@@ -28,7 +30,7 @@ struct ContentView : View {
                     SFSymbolTester()
                 }
                 NavigationLink("Toasts") {
-                    ToastViews()
+                    ToastViews(sessionId: self.sessionId)
                 }
             }
             .navigationBarTitle("Hello World", displayMode: .inline)
@@ -37,7 +39,8 @@ struct ContentView : View {
 }
 
 struct ContentView_Previews: PreviewProvider {
+    
     static var previews: some View {
-        ContentView()
+        ContentView(sessionId: UUID())
     }
 }

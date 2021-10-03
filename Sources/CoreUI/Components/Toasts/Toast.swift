@@ -13,20 +13,20 @@ public class Toast {
     
     // MARK: - Registering Toast Managers
     
-    private static var registeredManagers: [AppSessionTarget : ToastStateManager] = [:]
+    private static var registeredManagers: [UUID : ToastStateManager] = [:]
     
     static func register(manager: ToastStateManager,
-                         target: AppSessionTarget) {
+                         sessionId: UUID) {
         
-        guard self.registeredManagers[target] == nil else {
-            fatalError("Toast manager has already been registred for target: \(target.rawValue)")
+        guard self.registeredManagers[sessionId] == nil else {
+            fatalError("Toast manager has already been registred for target: \(sessionId)")
         }
         
-        self.registeredManagers[target] = manager
+        self.registeredManagers[sessionId] = manager
     }
     
-    private static func managerNotConfiguredError(target: AppSessionTarget) -> String {
-        return "Toast manager not configured for target: \(target.rawValue)"
+    private static func managerNotConfiguredError(sessionId: UUID) -> String {
+        return "Toast manager not configured for target: \(sessionId)"
     }
     
     // MARK: - ToastContent
@@ -109,19 +109,18 @@ public class Toast {
     
     /// Shows a toast.
     ///
+    /// - Parameter sessionId: Session identifier of the registered toast container.
     /// - Parameter title: Primary title message.
     /// - Parameter description: Optional description. This text will be displayed directly below the title.
     /// - Parameter leading: Content to be displayed on the leading edge of the toast.
     /// - Parameter trailing: Content to be displayed on the trailing edge of the toast.
-    /// - Parameter target: Target window to show the toast from.
-    public static func show(title: String,
+    public static func show(in sessionId: UUID, title: String,
                             description: String? = nil,
                             leading: Toast.Content.SubContent = .none,
-                            trailing: Toast.Content.SubContent = .none,
-                            target: AppSessionTarget = .primary) {
+                            trailing: Toast.Content.SubContent = .none) {
         
-        guard let manager = self.registeredManagers[target] else {
-            fatalError(self.managerNotConfiguredError(target: target))
+        guard let manager = self.registeredManagers[sessionId] else {
+            fatalError(self.managerNotConfiguredError(sessionId: sessionId))
         }
         
         let content = Toast.Content(title: title,

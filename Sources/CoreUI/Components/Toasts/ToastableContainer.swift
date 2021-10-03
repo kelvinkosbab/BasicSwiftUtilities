@@ -17,9 +17,9 @@ struct ToastableContainer<Content> : View where Content: View{
     
     @ObservedObject private var dataSource: DataSource
 
-    public init(target: AppSessionTarget,
+    public init(sessionId: UUID,
                 @ViewBuilder content: @escaping () -> Content) {
-        self.dataSource = DataSource(target: target)
+        self.dataSource = DataSource(sessionId: sessionId)
         self.content = content
     }
     
@@ -69,12 +69,13 @@ struct ToastableContainer<Content> : View where Content: View{
         let animationOptions: ToastAnimationOptions
         private let toastStateManager: ToastStateManager
         
-        init(target: AppSessionTarget) {
-            self.animationOptions = ToastAnimationOptions()
+        init(sessionId: UUID) {
+            let animationOptions = ToastAnimationOptions()
+            self.animationOptions = animationOptions
             self.toastStateManager = ToastStateManager(animationOptions: animationOptions)
             
             self.toastStateManager.delegate = self
-            Toast.register(manager: self.toastStateManager, target: target)
+            Toast.register(manager: self.toastStateManager, sessionId: sessionId)
         }
         
         func didUpdate(toastState: ToastState) {

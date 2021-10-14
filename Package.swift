@@ -19,6 +19,9 @@ let package = Package(
             name: "CoreUI",
             targets: ["CoreUI"]),
         .library(
+            name: "CoreDataStore",
+            targets: ["CoreDataStore"]),
+        .library(
             name: "CoreAuthentication",
             targets: ["CoreAuthentication"])
     ],
@@ -41,6 +44,10 @@ let package = Package(
         .testTarget(
             name: "CoreUITests",
             dependencies: ["CoreUI"]),
+        
+        .target(
+            name: "CoreDataStore",
+            dependencies: ["Core"]),
         
         .target(
             name: "CoreAuthentication",

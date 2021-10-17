@@ -15,16 +15,16 @@ struct ToastableContainer<Content> : View where Content: View{
     
     @Environment(\.safeAreaInsets) private var safeAreaInsets
     
-    @ObservedObject private var dataSource: DataSource
+    @ObservedObject private var toastApi: ToastApi
 
-    public init(sessionId: UUID,
+    public init(toastApi: ToastApi,
                 @ViewBuilder content: @escaping () -> Content) {
-        self.dataSource = DataSource(sessionId: sessionId)
+        self.toastApi = toastApi
         self.content = content
     }
     
     private func getToastTopOffset(toastSize: CGSize) -> CGFloat {
-        if self.dataSource.currentToastState.shouldBeVisible {
+        if self.toastApi.currentToastState.shouldBeVisible {
             return max(self.safeAreaInsets.top, Spacing.base) + Spacing.small
         } else {
             return -toastSize.height
@@ -40,7 +40,7 @@ struct ToastableContainer<Content> : View where Content: View{
                     HStack {
                         Spacer()
                         VStack {
-                            switch self.dataSource.currentToastState {
+                            switch self.toastApi.currentToastState {
                             case .none:
                                 EmptyView()
                             case .show(let toast), .hiding(let toast), .prepare(let toast):
@@ -48,7 +48,7 @@ struct ToastableContainer<Content> : View where Content: View{
                             }
                         }
                         .padding(.top, self.getToastTopOffset(toastSize: geometry.size))
-                        .animation(.easeInOut(duration: self.dataSource.animationOptions.animationDuration))
+                        .animation(.easeInOut(duration: self.toastApi.animationOptions.animationDuration))
                         Spacer()
                     }
                 }
@@ -58,28 +58,56 @@ struct ToastableContainer<Content> : View where Content: View{
             .ignoreSafeAreaEdges(.all)
         }
     }
-    
-    // MARK: - ToastDataSource
+}
 
-    @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
-    private class DataSource : ObservableObject, ToastStateDelegate {
-        
-        @Published var currentToastState: ToastState = .none
-        
-        let animationOptions: ToastAnimationOptions
-        private let toastStateManager: ToastStateManager
-        
-        init(sessionId: UUID) {
-            let animationOptions = ToastAnimationOptions()
-            self.animationOptions = animationOptions
-            self.toastStateManager = ToastStateManager(animationOptions: animationOptions)
-            
-            self.toastStateManager.delegate = self
-            Toast.register(manager: self.toastStateManager, sessionId: sessionId)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+struct ToastableWindow<Content> : View where Content: View{
+    
+    var content: () -> Content
+    
+    @Environment(\.safeAreaInsets) private var safeAreaInsets
+    
+    @ObservedObject private var toastApi: ToastApi
+
+    public init(toastApi: ToastApi,
+                @ViewBuilder content: @escaping () -> Content) {
+        self.toastApi = toastApi
+        self.content = content
+    }
+    
+    private func getToastTopOffset(toastSize: CGSize) -> CGFloat {
+        if self.toastApi.currentToastState.shouldBeVisible {
+            return max(self.safeAreaInsets.top, Spacing.base) + Spacing.small
+        } else {
+            return -toastSize.height
         }
-        
-        func didUpdate(toastState: ToastState) {
-            self.currentToastState = toastState
+    }
+    
+    public var body: some View {
+        ZStack {
+            self.content()
+            
+            VStack {
+                GeometryReader { geometry in
+                    HStack {
+                        Spacer()
+                        VStack {
+                            switch self.toastApi.currentToastState {
+                            case .none:
+                                EmptyView()
+                            case .show(let toast), .hiding(let toast), .prepare(let toast):
+                                ToastView(.constant(toast))
+                            }
+                        }
+                        .padding(.top, self.getToastTopOffset(toastSize: geometry.size))
+                        .animation(.easeInOut(duration: self.toastApi.animationOptions.animationDuration))
+                        Spacer()
+                    }
+                }
+                
+                Spacer()
+            }
+            .ignoreSafeAreaEdges(.all)
         }
     }
 }

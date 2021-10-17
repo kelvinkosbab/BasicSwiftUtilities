@@ -14,11 +14,11 @@ struct ToastView : View {
     
     @Environment(\.colorScheme) var colorScheme
     
-    @Binding private var content: Toast.Content
+    @Binding private var content: ToastContent
     
     private let imageSize: CGFloat = Spacing.large
     
-    init(_ content: Binding<Toast.Content>) {
+    init(_ content: Binding<ToastContent>) {
         self._content = content
     }
     
@@ -91,15 +91,15 @@ struct ToastView_Previews: PreviewProvider {
     
     static var previews: some View {
         VStack(spacing: Spacing.base) {
-            ToastView(.constant(Toast.Content(title: "One")))
-            ToastView(.constant(Toast.Content(title: "Two",
-                                              leading: .tintedImage(self.image, .green))))
-            ToastView(.constant(Toast.Content(title: "Two",
-                                              description: "Hello")))
-            ToastView(.constant(Toast.Content(title: "Two",
-                                              description: "Hello",
-                                              leading: .tintedImage(self.image, .blue),
-                                              trailing: .tintedImage(self.image, .blue))))
+            ToastView(.constant(ToastContent(title: "One")))
+            ToastView(.constant(ToastContent(title: "Two",
+                                             leading: .tintedImage(self.image, .green))))
+            ToastView(.constant(ToastContent(title: "Two",
+                                             description: "Hello")))
+            ToastView(.constant(ToastContent(title: "Two",
+                                             description: "Hello",
+                                             leading: .tintedImage(self.image, .blue),
+                                             trailing: .tintedImage(self.image, .blue))))
         }
     }
 }

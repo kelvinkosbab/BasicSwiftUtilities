@@ -14,18 +14,17 @@ private struct ToastableContainerModifier : ViewModifier {
     
     @State var paddingTop: CGFloat = 0
     
-    let sessionId: UUID
+    let toastApi: ToastApi
     let animationOptions: ToastAnimationOptions
     
-    init(sessionId: UUID,
+    init(toastApi: ToastApi,
          animationOptions: ToastAnimationOptions = ToastAnimationOptions()) {
-        self.sessionId = sessionId
+        self.toastApi = toastApi
         self.animationOptions = animationOptions
     }
     
     func body(content: Content) -> some View {
-        ToastableContainer(sessionId: self.sessionId,
-                           content: { content })
+        ToastableContainer(toastApi: toastApi) { content }
     }
 }
 
@@ -56,7 +55,7 @@ public extension View {
     /// ```
     ///
     /// - Parameter target: Target window/scene of the container. Default is `.primary`.
-    func toastableContainer(sessionId: UUID) -> some View {
-        self.modifier(ToastableContainerModifier(sessionId: sessionId))
+    func toastableContainer(toastApi: ToastApi) -> some View {
+        self.modifier(ToastableContainerModifier(toastApi: toastApi))
     }
 }

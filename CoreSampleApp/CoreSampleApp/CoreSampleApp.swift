@@ -10,12 +10,12 @@ import CoreUI
 @main
 struct CoreSampleApp: App {
     
-    let sessionId = UUID()
+    let toastApi = ToastApi()
     
     var body: some Scene {
         WindowGroup {
-            ContentView(sessionId: self.sessionId)
-                .toastableContainer(sessionId: self.sessionId)
+            ContentView(toastApi: self.toastApi)
+                .toastableContainer(toastApi: self.toastApi)
         }
     }
 }

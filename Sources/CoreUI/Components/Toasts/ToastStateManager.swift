@@ -18,13 +18,13 @@ enum ToastState {
     
     /// Prepare a toast for display. A toast needs a short amount of time to define its bounds
     /// before it is ready to be animated onto the screen.
-    case prepare(Toast.Content)
+    case prepare(ToastContent)
     
     /// The toast should be animated into view of the screen.
-    case show(Toast.Content)
+    case show(ToastContent)
     
     /// The toast should be animatted out of the view of the screen.
-    case hiding(Toast.Content)
+    case hiding(ToastContent)
     
     /// Utility returing whether or not the toast should be rendered and vvisible.
     var shouldBeVisible: Bool {
@@ -51,14 +51,14 @@ class ToastStateManager  {
     
     weak var delegate: ToastStateDelegate?
     private let animationOptions: ToastAnimationOptions
-    private var toasts: [Toast.Content] = []
+    private var toasts: [ToastContent] = []
     private var isProcessingCurrentToast: Bool = false
     
     init(animationOptions: ToastAnimationOptions) {
         self.animationOptions = animationOptions
     }
     
-    func show(_ content: Toast.Content) {
+    func show(_ content: ToastContent) {
         self.toasts.append(content)
         self.processNextToast()
     }

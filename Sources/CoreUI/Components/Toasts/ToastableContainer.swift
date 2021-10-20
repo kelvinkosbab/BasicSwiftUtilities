@@ -77,9 +77,9 @@ struct ToastableWindow<Content> : View where Content: View{
     
     private func getToastTopOffset(toastSize: CGSize) -> CGFloat {
         if self.toastApi.currentToastState.shouldBeVisible {
-            return max(self.safeAreaInsets.top, Spacing.base) + Spacing.small
+            return -max(self.safeAreaInsets.top, Spacing.base) - Spacing.small
         } else {
-            return -toastSize.height
+            return toastSize.height
         }
     }
     
@@ -99,7 +99,7 @@ struct ToastableWindow<Content> : View where Content: View{
                                 ToastView(.constant(toast))
                             }
                         }
-                        .padding(.top, self.getToastTopOffset(toastSize: geometry.size))
+                        .padding(.bottom, self.getToastTopOffset(toastSize: geometry.size))
                         .animation(.easeInOut(duration: self.toastApi.animationOptions.animationDuration))
                         Spacer()
                     }

@@ -13,12 +13,12 @@ public class ToastApi : ObservableObject, ToastStateDelegate {
     
     @Published var currentToastState: ToastState = .none
     
-    let animationOptions: ToastAnimationOptions
+    let options: ToastOptions
     private let toastStateManager: ToastStateManager
     
-    public init(animationOptions: ToastAnimationOptions = ToastAnimationOptions()) {
-        self.animationOptions = animationOptions
-        self.toastStateManager = ToastStateManager(animationOptions: animationOptions)
+    public init(options: ToastOptions = ToastOptions()) {
+        self.options = options
+        self.toastStateManager = ToastStateManager(options: options)
         self.toastStateManager.delegate = self
     }
     

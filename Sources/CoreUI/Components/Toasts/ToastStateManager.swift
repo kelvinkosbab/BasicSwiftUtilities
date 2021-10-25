@@ -50,12 +50,12 @@ protocol ToastStateDelegate : AnyObject {
 class ToastStateManager  {
     
     weak var delegate: ToastStateDelegate?
-    private let animationOptions: ToastAnimationOptions
+    private let options: ToastOptions
     private var toasts: [ToastContent] = []
     private var isProcessingCurrentToast: Bool = false
     
-    init(animationOptions: ToastAnimationOptions) {
-        self.animationOptions = animationOptions
+    init(options: ToastOptions) {
+        self.options = options
     }
     
     func show(_ content: ToastContent) {
@@ -79,9 +79,9 @@ class ToastStateManager  {
         let nextToast = self.toasts.removeFirst()
         
         // Gather animation options
-        let animationDuration = self.animationOptions.animationDuration
-        let prepareDuration = self.animationOptions.prepareDuration
-        let showDelay = animationDuration + self.animationOptions.showDuration
+        let animationDuration = self.options.animationDuration
+        let prepareDuration = self.options.prepareDuration
+        let showDelay = animationDuration + self.options.showDuration
         
         withAnimation {
             self.delegate?.didUpdate(toastState: .prepare(nextToast))

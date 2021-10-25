@@ -75,7 +75,7 @@ struct ToastViews : View {
             self.isShowingDetails = true
         })
         .sheet(isPresented: self.$isShowingDetails) {
-            ModalToastViews()
+            ModalToastViews(toastApi: ToastApi(options: ToastOptions(position: .bottom)))
                 .navigationTitle("ModalToasts")
         }
     }
@@ -85,7 +85,7 @@ struct ModalToastViews : View {
     
     @Environment(\.presentationMode) var presentationMode
     
-    let toastApi = ToastApi()
+    let toastApi: ToastApi
     let image: Image = Image(systemName: "heart.circle")
     
     var body: some View {

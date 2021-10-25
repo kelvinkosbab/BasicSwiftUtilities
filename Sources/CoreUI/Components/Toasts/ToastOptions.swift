@@ -1,15 +1,27 @@
 //
-//  ToastAnimationOptions.swift
+//  ToastOptions.swift
 //
 //  Created by Kelvin Kosbab on 8/1/21.
 //
 
 import Foundation
 
-// MARK: - ToastAnimationOptions
+// MARK: - ToastOptions
 
-/// Defines how a toast animates before, during, and after rendering.
-public struct ToastAnimationOptions {
+/// Defines toast options.
+public struct ToastOptions {
+    
+    // MARK - Position
+    
+    public enum Position {
+        case top
+        case bottom
+    }
+    
+    /// Where on the screen the toast will be displayed.
+    let position: Position
+    
+    // MARK - Animations
     
     /// The amount of time the tost takes to move between shown or hidden.
     let animationDuration: TimeInterval
@@ -24,9 +36,11 @@ public struct ToastAnimationOptions {
     let showDuration: TimeInterval
     
     /// Constructor.
-    public init(animationDuration: TimeInterval = 0.5,
+    public init(position: Position = .top,
+                animationDuration: TimeInterval = 0.5,
                 prepareDuration: TimeInterval = 0.2,
                 showDuration: TimeInterval = 1.0) {
+        self.position = position
         self.animationDuration = animationDuration
         self.prepareDuration = prepareDuration
         self.showDuration = showDuration

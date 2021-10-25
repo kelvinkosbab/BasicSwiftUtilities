@@ -15,12 +15,12 @@ private struct ToastableContainerModifier : ViewModifier {
     @State var paddingTop: CGFloat = 0
     
     let toastApi: ToastApi
-    let animationOptions: ToastAnimationOptions
+    let options: ToastOptions
     
     init(toastApi: ToastApi,
-         animationOptions: ToastAnimationOptions = ToastAnimationOptions()) {
+         options: ToastOptions = ToastOptions()) {
         self.toastApi = toastApi
-        self.animationOptions = animationOptions
+        self.options = options
     }
     
     func body(content: Content) -> some View {

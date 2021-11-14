@@ -50,6 +50,8 @@ public class FirebaseAuthentication : AuthenticationProvider {
         return self.firebaseAuth.currentUser?.uid
     }
     
+    // MARK: - Create User
+    
     public func createUser(email: String,
                            password: String,
                            completion: @escaping (CustomResult<BaseUser>) -> Void) {
@@ -74,6 +76,18 @@ public class FirebaseAuthentication : AuthenticationProvider {
         }
     }
     
+    @available(iOS 13.0.0, *)
+    public func createUser(email: String,
+                           password: String) async -> CustomResult<BaseUser> {
+        await withCheckedContinuation { continuation in
+            self.createUser(email: email, password: password) { result in
+                continuation.resume(returning: result)
+            }
+        }
+    }
+    
+    // MARK: - Sign In
+    
     public func signIn(email: String,
                        password: String,
                        completion: @escaping (CustomResult<BaseUser>) -> Void) {
@@ -97,6 +111,18 @@ public class FirebaseAuthentication : AuthenticationProvider {
             completion(.success(user))
         }
     }
+    
+    @available(iOS 13.0.0, *)
+    public func signIn(email: String,
+                       password: String) async -> CustomResult<BaseUser> {
+        await withCheckedContinuation { continuation in
+            self.signIn(email: email, password: password) { result in
+                continuation.resume(returning: result)
+            }
+        }
+    }
+    
+    // MARK: - Reload Current User
     
     public func reloadCurrentUser(completion: @escaping (CustomResult<BaseUser>) -> Void) {
         
@@ -133,6 +159,8 @@ public class FirebaseAuthentication : AuthenticationProvider {
         }
     }
     
+    // MARK: - Sign Oout
+    
     public func signOut(completion: @escaping (Result) -> Void) {
         do {
             try self.firebaseAuth.signOut()
@@ -141,6 +169,17 @@ public class FirebaseAuthentication : AuthenticationProvider {
             completion(.failure(error))
         }
     }
+    
+    @available(iOS 13.0.0, *)
+    public func signOut() async -> Result {
+        await withCheckedContinuation { continuation in
+            self.signOut { result in
+                continuation.resume(returning: result)
+            }
+        }
+    }
+    
+    // MARK: - Password Reset
     
     /// Initiates a password reset for the given email address.
     ///
@@ -160,6 +199,15 @@ public class FirebaseAuthentication : AuthenticationProvider {
             }
             
             completion(.success)
+        }
+    }
+    
+    @available(iOS 13.0.0, *)
+    public func sendPasswordReset(email: String) async -> Result {
+        await withCheckedContinuation { continuation in
+            self.sendPasswordReset(email: email) { result in
+                continuation.resume(returning: result)
+            }
         }
     }
 }

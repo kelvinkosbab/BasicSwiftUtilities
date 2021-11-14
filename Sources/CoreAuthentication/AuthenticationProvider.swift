@@ -61,4 +61,62 @@ public extension AuthenticationProvider {
     var isSignedIn: Bool {
         return self.currentUserIdentifier != nil
     }
+    
+    /// Creates and, on success, signs in a user with the given email address and password.
+    ///
+    /// - Parameter email: The user's email address.
+    /// - Parameter password: The user's desired password.
+    @available(iOS 13.0.0, *)
+    func createUser(email: String, password: String) async -> CustomResult<BaseUser> {
+        await withCheckedContinuation { continuation in
+            self.createUser(email: email, password: password) { result in
+                continuation.resume(returning: result)
+            }
+        }
+    }
+    
+    /// Signs in using an email address and password.
+    ///
+    /// - Parameter email: The user's email address.
+    /// - Parameter password: The user's password.
+    @available(iOS 13.0.0, *)
+    func signIn(email: String, password: String) async -> CustomResult<BaseUser> {
+        await withCheckedContinuation { continuation in
+            self.signIn(email: email, password: password) { result in
+                continuation.resume(returning: result)
+            }
+        }
+    }
+    
+    /// Reloads the currently signed in user's profile.
+    @available(iOS 13.0.0, *)
+    func reloadCurrentUser() async -> CustomResult<BaseUser> {
+        await withCheckedContinuation { continuation in
+            self.reloadCurrentUser() { result in
+                continuation.resume(returning: result)
+            }
+        }
+    }
+    
+    /// Signs out the current user.
+    @available(iOS 13.0.0, *)
+    func signOut() async -> Result {
+        await withCheckedContinuation { continuation in
+            self.signOut { result in
+                continuation.resume(returning: result)
+            }
+        }
+    }
+    
+    /// Initiates a password reset for the given email address.
+    ///
+    /// - Parameter email: The email address of the user.
+    @available(iOS 13.0.0, *)
+    func sendPasswordReset(email: String) async -> Result {
+        await withCheckedContinuation { continuation in
+            self.sendPasswordReset(email: email) { result in
+                continuation.resume(returning: result)
+            }
+        }
+    }
 }

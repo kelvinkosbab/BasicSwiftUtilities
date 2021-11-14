@@ -19,6 +19,16 @@ public extension UINavigationController {
         coordinator.animate(alongsideTransition: nil) { _ in completion() }
     }
     
+    @available(iOS 13.0.0, *)
+    func push(viewController: UIViewController, animated: Bool) async {
+        await withCheckedContinuation { continuation in
+            self.pushViewController(viewController,
+                                    animated: animated) {
+                continuation.resume()
+            }
+        }
+    }
+    
     func popToRootViewController(animated: Bool, completion: @escaping () -> Void) {
         self.popToRootViewController(animated: animated)
         
@@ -28,5 +38,14 @@ public extension UINavigationController {
         }
         
         coordinator.animate(alongsideTransition: nil) { _ in completion() }
+    }
+    
+    @available(iOS 13.0.0, *)
+    func popToRootViewController(animated: Bool) async {
+        await withCheckedContinuation { continuation in
+            self.popToRootViewController(animated: animated) {
+                continuation.resume()
+            }
+        }
     }
 }

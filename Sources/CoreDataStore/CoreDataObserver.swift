@@ -27,20 +27,27 @@ public class CoreDataObserver<Delegate: CoreDataObserverDelegate> : NSObject, NS
     private let fetchedResultsController: NSFetchedResultsController<ManagedObject>
     private let logger: Logger
     
-    public private(set) var object: Delegate.ManagedObject.ValueType?
+    public private(set) var objects: Set<Delegate.ManagedObject.ValueType> = Set()
     
     public init(fetchedResultsController: NSFetchedResultsController<ManagedObject>) {
+        
         self.fetchedResultsController = fetchedResultsController
         self.logger = Logger(subsystem: "CoreDataStore", category: "DatabaseObserver.\(String(describing: ManagedObject.self))")
-        super.init()
         
-        self.object = self.fetchedResultsController.fetchedObjects?.first?.valueObject
-        self.fetchedResultsController.delegate = self
+        super.init()
         
         do {
             try self.fetchedResultsController.performFetch()
         } catch {
-            self.logger.error("Failed to performFetch from fetchedResultsController: \(error)")
+            self.logger.error("Failed to performFetch: \(error.localizedDescription)")
+        }
+        
+        self.fetchedResultsController.delegate = self
+        
+        for cdObject in self.fetchedResultsController.fetchedObjects ?? [] {
+            if let valueObject = cdObject.valueObject {
+                self.objects.insert(valueObject)
+            }
         }
     }
     
@@ -63,16 +70,28 @@ public class CoreDataObserver<Delegate: CoreDataObserverDelegate> : NSObject, NS
         
         switch type {
         case .insert:
-            self.object = object
+            
+            guard !self.objects.contains(object) else {
+                return
+            }
+            
+            self.objects.insert(object)
             self.delegate?.didAdd(object: object)
             
-        case .delete:
-            self.object = nil
-            self.delegate?.didRemove(object: object)
-            
         case .update:
-            self.object = object
-            self.delegate?.didUpdate(object: object)
+            if self.objects.contains(object) {
+                self.objects.update(with: object)
+                self.delegate?.didUpdate(object: object)
+            } else {
+                self.objects.insert(object)
+                self.delegate?.didAdd(object: object)
+            }
+            
+        case .delete:
+            if self.objects.contains(object) {
+                self.objects.remove(object)
+                self.delegate?.didRemove(object: object)
+            }
             
         case .move:
             self.logger.debug("Unsupported operation 'move'.")

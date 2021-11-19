@@ -1,6 +1,5 @@
 //
 //  CoreDataObserver.swift
-//  
 //
 //  Created by Kelvin Kosbab on 10/14/21.
 //
@@ -9,7 +8,7 @@ import Foundation
 import CoreData
 import Core
 
-// MARK: - CDDatabaseObserver
+// MARK: - CoreDataObserver
 
 public protocol CoreDataObserverDelegate : AnyObject {
     

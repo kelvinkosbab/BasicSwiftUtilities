@@ -9,7 +9,7 @@ import Foundation
 // MARK: - ValueCodable
 
 public protocol ValueCodable {
-    associatedtype ValueType : Hashable
+    associatedtype ValueType : Hashable, Codable
     
     var valueObject: ValueType? { get set }
 }

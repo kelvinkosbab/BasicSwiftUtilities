@@ -12,22 +12,46 @@ import Core
 
 public protocol CoreDataObserverDelegate : AnyObject {
     
-    associatedtype ManagedObject : NSManagedObject & ValueCodable
+    associatedtype StructType : CoreDataAssociated
     
-    func didAdd(object: ManagedObject.ValueType) -> Void
-    func didUpdate(object: ManagedObject.ValueType) -> Void
-    func didRemove(object: ManagedObject.ValueType) -> Void
+    func didAdd(object: StructType.ManagedObject.StructType) -> Void
+    func didUpdate(object: StructType.ManagedObject.StructType) -> Void
+    func didRemove(object: StructType.ManagedObject.StructType) -> Void
 }
 
 public class CoreDataObserver<Delegate: CoreDataObserverDelegate> : NSObject, NSFetchedResultsControllerDelegate {
     
-    public typealias ManagedObject = Delegate.ManagedObject
+    public typealias ManagedObject = Delegate.StructType.ManagedObject
+    public typealias StructType = ManagedObject.StructType
     
     public weak var delegate: Delegate?
     private let fetchedResultsController: NSFetchedResultsController<ManagedObject>
     private let logger: Logger
     
-    public private(set) var objects: Set<Delegate.ManagedObject.ValueType> = Set()
+    public private(set) var objects: Set<StructType> = Set()
+    
+    public convenience init(id: String, context: NSManagedObjectContext) {
+        let fetchedResultsController = ManagedObject.newFetchedResultsController(id: id, context: context)
+        self.init(fetchedResultsController: fetchedResultsController)
+    }
+    
+    public convenience init(id: String, parentId: String, context: NSManagedObjectContext) {
+        let sortDescriptors = [ NSSortDescriptor(key: "identifier", ascending: true) ]
+        let predicate = NSPredicate(format: "identifier == %@ AND parentIdentifier == %@", id, parentId)
+        let fetchedResultsController = ManagedObject.newFetchedResultsController(predicate: predicate,
+                                                                                 sortDescriptors: sortDescriptors,
+                                                                                 context: context)
+        self.init(fetchedResultsController: fetchedResultsController)
+    }
+    
+    public convenience init(childrenOfParentId parentId: String, context: NSManagedObjectContext) {
+        let sortDescriptors = [ NSSortDescriptor(key: "identifier", ascending: true) ]
+        let predicate = NSPredicate(format: "parentIdentifier == %@", parentId)
+        let fetchedResultsController = ManagedObject.newFetchedResultsController(predicate: predicate,
+                                                                                 sortDescriptors: sortDescriptors,
+                                                                                 context: context)
+        self.init(fetchedResultsController: fetchedResultsController)
+    }
     
     public init(fetchedResultsController: NSFetchedResultsController<ManagedObject>) {
         
@@ -45,8 +69,8 @@ public class CoreDataObserver<Delegate: CoreDataObserverDelegate> : NSObject, NS
         self.fetchedResultsController.delegate = self
         
         for cdObject in self.fetchedResultsController.fetchedObjects ?? [] {
-            if let valueObject = cdObject.valueObject {
-                self.objects.insert(valueObject)
+            if let object = cdObject.toStruct() {
+                self.objects.insert(object)
             }
         }
     }
@@ -64,7 +88,7 @@ public class CoreDataObserver<Delegate: CoreDataObserverDelegate> : NSObject, NS
             return
         }
         
-        guard let object = cdObject.valueObject else {
+        guard let object = cdObject.toStruct() else {
             return
         }
         

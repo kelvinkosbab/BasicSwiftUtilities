@@ -69,7 +69,7 @@ public class CoreDataObserver<Delegate: CoreDataObserverDelegate> : NSObject, NS
         self.fetchedResultsController.delegate = self
         
         for cdObject in self.fetchedResultsController.fetchedObjects ?? [] {
-            if let object = cdObject.toStruct() {
+            if let object = cdObject.structValue {
                 self.objects.insert(object)
             }
         }
@@ -88,7 +88,7 @@ public class CoreDataObserver<Delegate: CoreDataObserverDelegate> : NSObject, NS
             return
         }
         
-        guard let object = cdObject.toStruct() else {
+        guard let object = cdObject.structValue else {
             return
         }
         

@@ -12,13 +12,13 @@ import CoreData
 public protocol StructConvertable : NSManagedObject, CoreDataIdentifiable & CoreDataObject {
     associatedtype StructType : CoreDataAssociated
     
-    func toStruct() -> StructType?
+    var structValue: StructType? { get set }
 }
 
 public extension Array where Element : StructConvertable {
     
     var valueObjects: [Element.StructType] {
-        return self.compactMap { $0.toStruct() }
+        return self.compactMap { $0.structValue }
     }
 }
 
@@ -26,7 +26,7 @@ public extension Set where Element : StructConvertable {
     
     var valueObjects: Set<Element.StructType> {
         var set = Set<Element.StructType>()
-        let array = self.compactMap { $0.toStruct() }
+        let array = self.compactMap { $0.structValue }
         for element in array {
             set.insert(element)
         }

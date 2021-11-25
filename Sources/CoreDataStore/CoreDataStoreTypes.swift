@@ -7,9 +7,23 @@
 import Foundation
 import CoreData
 
+// MARK: - CoreDataIdentifiable
+
+public protocol CoreDataIdentifiable {
+    var identifier: String? { get set }
+}
+
+public protocol ObjectIdentifiable {
+    var identifier: String { get }
+}
+
+public protocol CoreDataParentIdentifiable {
+    var parentIdentifier: String? { get set }
+}
+
 // MARK: - StructConvertable
 
-public protocol StructConvertable : NSManagedObject, CoreDataIdentifiable & CoreDataObject {
+public protocol StructConvertable : NSManagedObject, CoreDataIdentifiable {
     associatedtype StructType : CoreDataAssociated
     
     var structValue: StructType? { get set }
@@ -17,14 +31,14 @@ public protocol StructConvertable : NSManagedObject, CoreDataIdentifiable & Core
 
 public extension Array where Element : StructConvertable {
     
-    var valueObjects: [Element.StructType] {
+    var structValues: [Element.StructType] {
         return self.compactMap { $0.structValue }
     }
 }
 
 public extension Set where Element : StructConvertable {
     
-    var valueObjects: Set<Element.StructType> {
+    var structValues: Set<Element.StructType> {
         var set = Set<Element.StructType>()
         let array = self.compactMap { $0.structValue }
         for element in array {
@@ -36,6 +50,6 @@ public extension Set where Element : StructConvertable {
 
 // MARK: - CoreDataAssociated
 
-public protocol CoreDataAssociated : Hashable {
+public protocol CoreDataAssociated : Hashable, ObjectIdentifiable {
     associatedtype ManagedObject : StructConvertable
 }

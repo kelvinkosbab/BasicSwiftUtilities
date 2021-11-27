@@ -1,7 +1,7 @@
 //
 //  ContentView.swift
 //
-//  Created by Kelvin Kosbab on 7/24/21.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import SwiftUI

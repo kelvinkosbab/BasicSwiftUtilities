@@ -1,7 +1,7 @@
 //
 //  QueryPredicate.swift
 //  
-//  Created by Kelvin Kosbab on 11/25/21.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation

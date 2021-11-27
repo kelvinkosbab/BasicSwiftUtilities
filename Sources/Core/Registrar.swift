@@ -1,7 +1,7 @@
 //
 //  Registrar.swift
 //
-//  Created by Kelvin Kosbab on 5/5/21.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation

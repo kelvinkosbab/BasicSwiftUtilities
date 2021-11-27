@@ -1,7 +1,7 @@
 //
 //  FirebaseAuthentication.swift
 //  
-//  Copyright © 2020 Kozinga. All rights reserved.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation

@@ -1,7 +1,7 @@
 //
 //  ToastableContainer.swift
 //
-//  Created by Kelvin Kosbab on 10/1/21.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import SwiftUI

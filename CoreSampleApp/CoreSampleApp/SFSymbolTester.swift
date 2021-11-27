@@ -1,7 +1,7 @@
 //
 //  SFSymbolTester.swift
 //
-//  Created by Kelvin Kosbab on 9/4/21.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import SwiftUI

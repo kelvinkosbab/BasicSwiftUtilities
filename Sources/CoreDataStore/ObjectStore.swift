@@ -1,7 +1,7 @@
 //
-//  DataManager.swift
+//  ObjectStore.swift
 //
-//  Created by Kelvin Kosbab on 11/20/21.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import CoreData
@@ -9,13 +9,14 @@ import Core
 
 // MARK: - DataManager
 
-public protocol DataManager {
+public protocol ObjectStore {
+    
     associatedtype ObjectType : CoreDataAssociated
     
     var context: NSManagedObjectContext { get }
 }
 
-private extension DataManager {
+private extension ObjectStore {
     
     /// Saves any changes on the context.
     ///
@@ -27,13 +28,11 @@ private extension DataManager {
             return
         }
         
-        do {
-            try self.context.save()
-        } catch {}
+        try? self.context.save()
     }
 }
 
-public extension DataManager {
+public extension ObjectStore {
     
     // MARK: - Create or Update
     
@@ -178,7 +177,7 @@ public extension DataManager {
 
 // MARK: - Parent and Child
 
-extension DataManager where ObjectType.ManagedObject : CoreDataParentIdentifiable {
+extension ObjectStore where ObjectType.ManagedObject : CoreDataParentIdentifiable {
     
     // MARK: - Fetching
     

@@ -1,7 +1,7 @@
 //
 //  BlurViews.swift
 //
-//  Created by Kelvin Kosbab on 9/6/21.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import SwiftUI

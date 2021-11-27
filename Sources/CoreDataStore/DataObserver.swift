@@ -1,7 +1,7 @@
 //
 //  CoreDataObserver.swift
 //
-//  Created by Kelvin Kosbab on 10/14/21.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation
@@ -11,6 +11,7 @@ import Core
 // MARK: - DataObserver
 
 public protocol DataObserverDelegate : AnyObject {
+    
     associatedtype ObjectType : CoreDataAssociated
     
     func didAdd(object: ObjectType.ManagedObject.StructType) -> Void

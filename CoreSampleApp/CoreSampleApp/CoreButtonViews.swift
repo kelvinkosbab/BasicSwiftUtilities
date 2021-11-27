@@ -1,8 +1,7 @@
 //
 //  CoreButtonViews.swift
-//  CoreButtonViews
 //
-//  Created by Kelvin Kosbab on 7/25/21.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import SwiftUI

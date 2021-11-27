@@ -1,7 +1,7 @@
 //
 //  ToastViews.swift
 //
-//  Created by Kelvin Kosbab on 7/31/21.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import SwiftUI

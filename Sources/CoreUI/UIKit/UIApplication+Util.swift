@@ -1,8 +1,7 @@
 //
 //  UIApplication+Util.swift
 //  
-//
-//  Created by Kelvin Kosbab on 5/23/21.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import UIKit

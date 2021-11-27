@@ -1,7 +1,7 @@
 //
 //  FontRegistrar.swift
 //
-//  Created by Kelvin Kosbab on 9/5/21.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import UIKit

@@ -1,26 +1,36 @@
 //
 //  CoreDataStore.swift
 //
-//  Created by Kelvin Kosbab on 10/11/21.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import CoreData
 import Core
 
-// MARK: - CoreDataStore
+// MARK: - CoreDataContainer
 
-public class CoreDataStore {
+public class CoreDataContainer : StoreContainer {
     
     // MARK: - Properties
     
     /// The name of the core data model store. Should match the name of the *.xcdatamodeld file.
-    let storeName: String
+    public let storeName: String
+    
+    /// The url of the data container.
+    public let storeUrl: URL
     
     /// An instance of NSPersistentContainer includes all objects needed to represent a functioning Core Data stack, and provides
     /// convenience methods and properties for common patterns.
     let persistentContainer: NSPersistentContainer
     
-    private let logger: Logger
+    /// The main queue’s managed object context.
+    ///
+    /// This property contains a reference to the `NSManagedObjectContext` that is created and owned by the persistent container
+    /// which is associated with the main queue of the application. This context is created automatically as part of the initialization
+    /// of the persistent container.
+    ///
+    /// This context is associated directly with the `NSPersistentStoreCoordinator` and is non-generational by default
+    public let mainContext: NSManagedObjectContext
     
     // MARK: - Init
     
@@ -43,13 +53,15 @@ public class CoreDataStore {
         }
         
         self.storeName = storeName
-        self.logger = Logger(subsystem: "CoreDataStore", category: "DataStore.\(storeName)")
-        self.persistentContainer = NSPersistentContainer(name: storeName, managedObjectModel: managedObjectModel)
+        self.storeUrl = modelUrl
+        let persistentContainer = NSPersistentContainer(name: storeName, managedObjectModel: managedObjectModel)
+        self.persistentContainer = persistentContainer
+        self.mainContext = persistentContainer.viewContext
     }
     
     // MARK: - Persistent Container
     
-    /// The persistent container for the application.
+    /// Loads the persistent container for the application.
     ///
     /// This implementation creates and returns a container, having loaded the store for the
     /// application to it. This property is optional since there are legitimate error conditions that
@@ -71,7 +83,6 @@ public class CoreDataStore {
     public func load(completion: @escaping (_ result: Result) -> Void) {
         self.persistentContainer.loadPersistentStores { _, error in
             if let error = error {
-                self.logger.error("Failed to load persistent container: \(error.localizedDescription)")
                 completion(.failure(error))
             } else {
                 completion(.success)
@@ -79,7 +90,7 @@ public class CoreDataStore {
         }
     }
     
-    /// The persistent container for the application.
+    /// Loads the persistent container for the application.
     ///
     /// This implementation creates and returns a container, having loaded the store for the
     /// application to it. This property is optional since there are legitimate error conditions that
@@ -109,9 +120,6 @@ public class CoreDataStore {
     
     // MARK: - Managed Object Context
     
-    /// The managed object context associated with the main queue of the persistent container.
-    public lazy var mainContext: NSManagedObjectContext = self.persistentContainer.viewContext
-    
     /// Saves any changes on the main data store context.
     ///
     /// If this function throws you should handle the error appropriately. You should NOT use `fatalError()` in a shipping
@@ -122,11 +130,6 @@ public class CoreDataStore {
             return
         }
         
-        do {
-            try self.mainContext.save()
-        } catch {
-            self.logger.error("Failed to save main context: \(error.localizedDescription)")
-            throw error
-        }
+        try self.mainContext.save()
     }
 }

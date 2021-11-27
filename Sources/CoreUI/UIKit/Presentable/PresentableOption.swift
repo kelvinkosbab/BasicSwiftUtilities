@@ -1,8 +1,7 @@
 //
 //  PresentableOption.swift
 //  
-//
-//  Created by Kelvin Kosbab on 5/22/21.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import UIKit

@@ -1,7 +1,7 @@
 //
 //  ToastApi.swift
 //
-//  Created by Kelvin Kosbab on 8/1/21.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import SwiftUI

@@ -1,7 +1,7 @@
 //
 //  ToastContent.swift
 //  
-//  Created by Kelvin Kosbab on 10/14/21.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation

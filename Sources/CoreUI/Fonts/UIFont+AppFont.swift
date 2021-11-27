@@ -1,8 +1,7 @@
 //
-//  UIFont+AppFont  .swift
-//  File
+//  UIFont+AppFont.swift
 //
-//  Created by Kelvin Kosbab on 8/16/21.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import SwiftUI

@@ -10,20 +10,19 @@ import Core
 
 // MARK: - DataObserver
 
-public protocol DataObserverDelegate : AnyObject {
+public protocol DataObserverDelegate : AnyObject where ObjectType == ObjectType.ManagedObject.StructType {
     
-    associatedtype ObjectType : CoreDataAssociated
+    associatedtype ObjectType : ManagedObjectAssociated
     
-    func didAdd(object: ObjectType.ManagedObject.StructType) -> Void
-    func didUpdate(object: ObjectType.ManagedObject.StructType) -> Void
-    func didRemove(object: ObjectType.ManagedObject.StructType) -> Void
+    func didAdd(object: ObjectType) -> Void
+    func didUpdate(object: ObjectType) -> Void
+    func didRemove(object: ObjectType) -> Void
 }
 
 public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedResultsControllerDelegate {
     
-    
     public typealias ManagedObject = Delegate.ObjectType.ManagedObject
-    public typealias ObjectType = ManagedObject.StructType
+    public typealias ObjectType = Delegate.ObjectType
     
     public weak var delegate: Delegate?
     private let fetchedResultsController: NSFetchedResultsController<ManagedObject>
@@ -127,7 +126,7 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
     }
 }
 
-public extension DataObserver where Delegate.ObjectType.ManagedObject : CoreDataParentIdentifiable {
+public extension DataObserver where Delegate.ObjectType.ManagedObject : ManagedObjectParentIdentifiable {
     
     convenience init(id: String, parentId: String, context: NSManagedObjectContext) {
         let entityName = String(describing: ManagedObject.self)

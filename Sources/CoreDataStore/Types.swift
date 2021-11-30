@@ -1,5 +1,5 @@
 //
-//  CoreDataStoreTypes.swift
+//  Types.swift
 //
 //  Copyright © Kozinga. All rights reserved.
 //
@@ -7,24 +7,34 @@
 import Foundation
 import CoreData
 
-// MARK: - CoreDataIdentifiable
+// MARK: - Managed Object Types
 
-public protocol CoreDataIdentifiable {
+public protocol ManagedObjectIdentifiable {
     var identifier: String? { get set }
 }
+
+public protocol ManagedObjectParentIdentifiable {
+    var parentIdentifier: String? { get set }
+}
+
+public protocol ManagedObjectAssociated : Hashable, ObjectIdentifiable {
+    associatedtype ManagedObject : NSManagedObject, StructConvertable, ManagedObjectIdentifiable
+}
+
+// MARK: - Struct Types
 
 public protocol ObjectIdentifiable {
     var identifier: String { get }
 }
 
-public protocol CoreDataParentIdentifiable {
-    var parentIdentifier: String? { get set }
+public protocol ObjectParentIdentifiable {
+    var parentIdentifier: String { get }
 }
 
 // MARK: - StructConvertable
 
-public protocol StructConvertable : NSManagedObject, CoreDataIdentifiable {
-    associatedtype StructType : CoreDataAssociated
+public protocol StructConvertable {
+    associatedtype StructType : Hashable
     
     var structValue: StructType? { get set }
 }
@@ -46,10 +56,4 @@ public extension Set where Element : StructConvertable {
         }
         return set
     }
-}
-
-// MARK: - CoreDataAssociated
-
-public protocol CoreDataAssociated : Hashable, ObjectIdentifiable {
-    associatedtype ManagedObject : StructConvertable
 }

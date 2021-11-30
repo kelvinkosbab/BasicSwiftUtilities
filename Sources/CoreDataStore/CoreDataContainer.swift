@@ -1,5 +1,5 @@
 //
-//  CoreDataStore.swift
+//  CoreDataContainer.swift
 //
 //  Copyright © Kozinga. All rights reserved.
 //

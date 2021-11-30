@@ -1,5 +1,5 @@
 //
-//  StoreContainer.swift
+//  DataStoreContainer.swift
 //
 //  Copyright © Kozinga. All rights reserved.
 //

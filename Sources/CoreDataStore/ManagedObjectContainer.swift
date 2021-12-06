@@ -9,7 +9,7 @@ import Core
 
 // MARK: - CoreDataContainer
 
-public class CoreDataContainer : StoreContainer {
+public class ManagedObjectContainer : StoreContainer {
     
     // MARK: - Properties
     

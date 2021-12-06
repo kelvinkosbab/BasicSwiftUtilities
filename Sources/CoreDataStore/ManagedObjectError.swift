@@ -1,18 +1,18 @@
 //
-//  CoreDataError.swift
+//  ManagedObjectError.swift
 //  
 //  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation
 
-// MARK: - CoreDataError
+// MARK: - ManagedObjectError
 
-public enum CoreDataError : Error {
+public enum ManagedObjectError : Error {
     case invalidEntity(String)
 }
 
-extension CoreDataError : LocalizedError {
+extension ManagedObjectError : LocalizedError {
     
     /// A localized message describing what error occurred.
      public var errorDescription: String? {

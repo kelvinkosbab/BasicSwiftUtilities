@@ -30,17 +30,9 @@ public extension ManagedObjectStore {
     // MARK: - Create or Update
     
     func createOrUpdate(_ object: ObjectType) {
-        var cdObject = self.cdFetchOne(id: object.identifier) ?? self.create()
+        var cdObject = self.cdFetchOne(id: object.identifier) ?? ObjectType.ManagedObject.create(context: self.context)
         cdObject.structValue = object
         self.saveContext()
-    }
-    
-    private var entityName: String {
-        return String(describing: ObjectType.ManagedObject.self)
-    }
-    
-    private func create() -> ObjectType.ManagedObject {
-        return NSEntityDescription.insertNewObject(forEntityName: self.entityName, into: self.context) as! ObjectType.ManagedObject
     }
     
     // MARK: - Fetching
@@ -97,7 +89,7 @@ public extension ManagedObjectStore {
     
     private func newFetchRequest(predicate: NSPredicate? = nil,
                                  sortDescriptors: [NSSortDescriptor]? = nil) -> NSFetchRequest<ObjectType.ManagedObject> {
-        let fetchRequest = NSFetchRequest<ObjectType.ManagedObject>(entityName: self.entityName)
+        let fetchRequest = NSFetchRequest<ObjectType.ManagedObject>(entityName: ObjectType.ManagedObject.entityName)
         if let predicate = predicate {
             fetchRequest.predicate = predicate
         }

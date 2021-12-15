@@ -57,3 +57,14 @@ public extension Set where Element : StructConvertable {
         return set
     }
 }
+
+extension StructConvertable where Self : NSManagedObject {
+    
+    static var entityName: String {
+        return String(describing: Self.self)
+    }
+    
+    static func create(context: NSManagedObjectContext) -> Self {
+        return NSEntityDescription.insertNewObject(forEntityName: self.entityName, into: context) as! Self
+    }
+}

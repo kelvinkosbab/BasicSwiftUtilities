@@ -58,7 +58,7 @@ public extension Set where Element : StructConvertable {
     }
 }
 
-extension StructConvertable where Self : NSManagedObject {
+public extension StructConvertable where Self : NSManagedObject {
     
     static var entityName: String {
         return String(describing: Self.self)

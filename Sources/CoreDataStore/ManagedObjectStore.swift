@@ -14,6 +14,8 @@ public protocol ManagedObjectStore : ObjectStore where ObjectType : ManagedObjec
 
 public extension ManagedObjectStore {
     
+    typealias ManagedObject = ObjectType.ManagedObject
+    
     /// Saves any changes on the context.
     ///
     /// If this function throws you should handle the error appropriately. You should NOT use `fatalError()` in a shipping
@@ -30,7 +32,7 @@ public extension ManagedObjectStore {
     // MARK: - Create or Update
     
     func createOrUpdate(_ object: ObjectType) {
-        var cdObject = self.cdFetchOne(id: object.identifier) ?? ObjectType.ManagedObject.create(context: self.context)
+        var cdObject = ManagedObject.fetchOne(id: object.identifier, context: self.context) ?? ManagedObject.create(context: self.context)
         cdObject.structValue = object
         self.saveContext()
     }
@@ -39,64 +41,25 @@ public extension ManagedObjectStore {
     
     func fetchOne(id: String) -> ObjectType.ManagedObject.StructType? {
         let predicate = QueryPredicate.getPredicate(id: id)
-        return self.cdFetchOne(predicate: predicate)?.structValue
+        return ManagedObject.fetchOne(predicate: predicate, context: self.context)?.structValue
     }
     
-    func fetchMany(in ids: [String]) -> [ObjectType.ManagedObject.StructType] {
+    func fetchMany(in ids: [String]) -> [ManagedObject.StructType] {
         let predicate = QueryPredicate.getPredicate(ids: ids)
-        let cdObjects = self.cdFetchMany(predicate: predicate)
+        let cdObjects = ManagedObject.fetchMany(predicate: predicate, context: self.context)
         return cdObjects.structValues
     }
     
-    func fetchMany(notIn ids: [String]) -> [ObjectType.ManagedObject.StructType] {
+    func fetchMany(notIn ids: [String]) -> [ManagedObject.StructType] {
         let predicate = QueryPredicate.getPredicate(notIn: ids)
-        let cdObjects = self.cdFetchMany(predicate: predicate)
+        let cdObjects = ManagedObject.fetchMany(predicate: predicate, context: self.context)
         return cdObjects.structValues
     }
     
-    func fetchAll(sortDescriptors: [NSSortDescriptor]?) -> [ObjectType.ManagedObject.StructType] {
-        let request = self.newFetchRequest(sortDescriptors: sortDescriptors)
+    func fetchAll(sortDescriptors: [NSSortDescriptor]?) -> [ManagedObject.StructType] {
+        let request = ManagedObject.newFetchRequest(sortDescriptors: sortDescriptors)
         request.returnsObjectsAsFaults = false
-        return self.cdFetch(predicate: nil, sortDescriptors: sortDescriptors).structValues
-    }
-    
-    private func cdFetchOne(id: String) -> ObjectType.ManagedObject? {
-        let predicate = QueryPredicate.getPredicate(id: id)
-        return self.cdFetchOne(predicate: predicate)
-    }
-    
-    private func cdFetchOne(predicate: NSPredicate) -> ObjectType.ManagedObject? {
-        return self.cdFetch(predicate: predicate, sortDescriptors: nil).first
-    }
-    
-    private func cdFetchMany(predicate: NSPredicate,
-                             sortDescriptors: [NSSortDescriptor]? = nil) -> [ObjectType.ManagedObject] {
-        return self.cdFetch(predicate: predicate, sortDescriptors: sortDescriptors)
-    }
-    
-    private func cdFetch(predicate: NSPredicate?,
-                         sortDescriptors: [NSSortDescriptor]?) -> [ObjectType.ManagedObject] {
-        do {
-            let request = self.newFetchRequest(predicate: predicate, sortDescriptors: sortDescriptors)
-            request.predicate = predicate
-            request.sortDescriptors = sortDescriptors
-            request.returnsObjectsAsFaults = false
-            return try self.context.fetch(request)
-        } catch {
-            return []
-        }
-    }
-    
-    private func newFetchRequest(predicate: NSPredicate? = nil,
-                                 sortDescriptors: [NSSortDescriptor]? = nil) -> NSFetchRequest<ObjectType.ManagedObject> {
-        let fetchRequest = NSFetchRequest<ObjectType.ManagedObject>(entityName: ObjectType.ManagedObject.entityName)
-        if let predicate = predicate {
-            fetchRequest.predicate = predicate
-        }
-        if let sortDescriptors = sortDescriptors {
-            fetchRequest.sortDescriptors = sortDescriptors
-        }
-        return fetchRequest
+        return ManagedObject.fetch(predicate: nil, sortDescriptors: sortDescriptors, context: self.context).structValues
     }
     
     // MARK: - Delete
@@ -108,45 +71,33 @@ public extension ManagedObjectStore {
     
     func deleteOne(id: String) {
         let predicate = QueryPredicate.getPredicate(id: id)
-        self.cdDelete(predicate: predicate)
+        ManagedObject.delete(predicate: predicate, context: self.context)
         self.saveContext()
     }
     
     func deleteMany(in ids: [String]) {
         let predicate = QueryPredicate.getPredicate(ids: ids)
-        let objects = self.cdFetchMany(predicate: predicate)
-        for object in objects {
-            self.cdDelete(object: object)
+        for object in ManagedObject.fetchMany(predicate: predicate, context: self.context) {
+            object.delete(context: self.context)
         }
         self.saveContext()
     }
     
     func deleteMany(notIn ids: [String]) {
         let predicate = QueryPredicate.getPredicate(notIn: ids)
-        let objects = self.cdFetchMany(predicate: predicate)
-        for object in objects {
-            self.cdDelete(object: object)
+        for object in ManagedObject.fetchMany(predicate: predicate, context: self.context) {
+            object.delete(context: self.context)
         }
         self.saveContext()
     }
     
     func deleteAll() {
-        let request = self.newFetchRequest(sortDescriptors: nil)
+        let request = ManagedObject.newFetchRequest(sortDescriptors: nil)
         request.returnsObjectsAsFaults = false
-        for object in  self.cdFetch(predicate: nil, sortDescriptors: nil) {
-            self.cdDelete(object: object)
+        for object in  ManagedObject.fetch(predicate: nil, sortDescriptors: nil, context: self.context) {
+            object.delete(context: self.context)
         }
         self.saveContext()
-    }
-    
-    private func cdDelete(predicate: NSPredicate) {
-        for object in self.cdFetchMany(predicate: predicate) {
-            self.cdDelete(object: object)
-        }
-    }
-    
-    private func cdDelete(object: ObjectType.ManagedObject) {
-        object.managedObjectContext?.delete(object)
     }
     
     // MARK: - Data Observers
@@ -168,47 +119,47 @@ extension ManagedObjectStore where ObjectType.ManagedObject : ManagedObjectParen
     
     func fetchOne(id: String, parentId: String) -> ObjectType.ManagedObject.StructType? {
         let predicate = QueryPredicate.getPredicate(id: id, parentId: parentId)
-        return self.cdFetchOne(predicate: predicate)?.structValue
+        return ManagedObject.fetchOne(predicate: predicate, context: self.context)?.structValue
     }
 
     func fetchMany(in ids: [String], parentId: String) -> [ObjectType.ManagedObject.StructType] {
         let predicate = QueryPredicate.getPredicate(ids: ids, parentId: parentId)
-        return self.cdFetchMany(predicate: predicate).structValues
+        return ManagedObject.fetchMany(predicate: predicate, context: self.context).structValues
     }
 
     func fetchMany(notIn ids: [String], parentId: String) -> [ObjectType.ManagedObject.StructType] {
         let predicate = QueryPredicate.getPredicate(notIn: ids, parentId: parentId)
-        return self.cdFetchMany(predicate: predicate).structValues
+        return ManagedObject.fetchMany(predicate: predicate, context: self.context).structValues
     }
     
     // MARK: - Delete
     
     func deleteOne(id: String, parentId: String) {
         let predicate = QueryPredicate.getPredicate(id: id, parentId: parentId)
-        self.cdDelete(predicate: predicate)
+        ManagedObject.delete(predicate: predicate, context: self.context)
         self.saveContext()
     }
     
     func deleteMany(in ids: [String], parentId: String) {
         let predicate = QueryPredicate.getPredicate(ids: ids, parentId: parentId)
-        for object in self.cdFetchMany(predicate: predicate) {
-            self.cdDelete(object: object)
+        for object in ManagedObject.fetchMany(predicate: predicate, context: self.context) {
+            object.delete(context: self.context)
         }
         self.saveContext()
     }
     
     func deleteMany(notIn ids: [String], parentId: String) {
         let predicate = QueryPredicate.getPredicate(notIn: ids, parentId: parentId)
-        for object in self.cdFetchMany(predicate: predicate) {
-            self.cdDelete(object: object)
+        for object in ManagedObject.fetchMany(predicate: predicate, context: self.context) {
+            object.delete(context: self.context)
         }
         self.saveContext()
     }
     
     func deleteMany(parentId: String) {
         let predicate = QueryPredicate.getPredicate(parentId: parentId)
-        for object in self.cdFetchMany(predicate: predicate) {
-            self.cdDelete(object: object)
+        for object in ManagedObject.fetchMany(predicate: predicate, context: self.context) {
+            object.delete(context: self.context)
         }
         self.saveContext()
     }

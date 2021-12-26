@@ -142,11 +142,15 @@ public struct Logger: CoreLogger {
     private let logger: CoreLogger
     
     public init(subsystem: String, category: String) {
-        if #available(macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0, *) {
+        #if !os(macOS)
+        if #available(iOS 14.0, watchOS 7.0, tvOS 14.0, *) {
             self.init(logger: SwiftLogger(subsystem: subsystem, category: category))
         } else {
             self.init(logger: ObjcLogger(subsystem: subsystem, category: category))
         }
+        #else
+        self.init(logger: SwiftLogger(subsystem: subsystem, category: category))
+        #endif
     }
     
     internal init(logger: CoreLogger) {
@@ -177,6 +181,8 @@ public struct Logger: CoreLogger {
         self.logger.error("[Error] \(message)", private: privateMessage)
     }
 }
+
+#if !os(macOS)
 
 // MARK: - Objective-C OSLog
 
@@ -246,6 +252,8 @@ private struct ObjcLogger : CoreLogger {
         }
     }
 }
+
+#endif
 
 // MARK: - Swift os.Logger
 

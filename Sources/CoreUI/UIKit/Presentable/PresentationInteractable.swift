@@ -4,6 +4,8 @@
 //  Copyright © 2021 Kozinga. All rights reserved.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 // MARK: - PresentationInteractable
@@ -17,3 +19,5 @@ public protocol PresentationInteractable : AnyObject {
 public protocol DismissInteractable : AnyObject {
     var dismissInteractiveViews: [UIView] { get }
 }
+
+#endif

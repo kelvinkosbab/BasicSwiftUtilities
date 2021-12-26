@@ -8,7 +8,7 @@ import SwiftUI
 
 // MARK: - HeadingDetailTrailingView
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 public struct HeadingDetailTrailingView<Content : View> : View {
     
     public var heading: String
@@ -34,7 +34,7 @@ public struct HeadingDetailTrailingView<Content : View> : View {
 
 #if DEBUG
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 struct HeadingDetailTrailingView_Previews: PreviewProvider {
     static var previews: some View {
         List {

@@ -4,6 +4,8 @@
 //  Copyright © 2021 Kozinga. All rights reserved.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 // MARK: - InteractiveTransition
@@ -263,3 +265,5 @@ public extension Sequence where Iterator.Element == InteractiveTransition.Option
         return nil
     }
 }
+
+#endif

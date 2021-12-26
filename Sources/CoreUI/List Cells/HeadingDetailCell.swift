@@ -8,7 +8,7 @@ import SwiftUI
 
 // MARK: - HeadingDetailCell
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 public struct HeadingDetailCell: View {
     
     public let heading: String
@@ -39,7 +39,7 @@ public struct HeadingDetailCell: View {
     
 #if DEBUG
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 struct HeadingDetailCell_Previews: PreviewProvider {
     static var previews: some View {
         List {

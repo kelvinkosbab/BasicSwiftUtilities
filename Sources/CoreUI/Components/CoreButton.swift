@@ -14,7 +14,7 @@ public enum ButtonRole {
 
 // MARK: - CoreButton
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 private struct CoreButton {
     
     static func getColor(for role: ButtonRole?) -> Color {
@@ -24,7 +24,7 @@ private struct CoreButton {
 
 // MARK: - CoreButtonStyle
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 public struct CoreButtonStyle : ButtonStyle {
     
     private let foregroundColor: Color?
@@ -54,7 +54,7 @@ public struct CoreButtonStyle : ButtonStyle {
     }
 }
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 public extension ButtonStyle where Self == CoreButtonStyle {
 
     static var core: CoreButtonStyle {
@@ -68,7 +68,7 @@ public extension ButtonStyle where Self == CoreButtonStyle {
 
 // MARK: - CoreFilledButtonStyle
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 public struct CoreFilledButtonStyle : ButtonStyle {
     
     private let fillParentWidth: Bool
@@ -113,7 +113,7 @@ public struct CoreFilledButtonStyle : ButtonStyle {
     }
 }
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 public extension ButtonStyle where Self == CoreFilledButtonStyle {
 
     static var coreFilled: CoreFilledButtonStyle {
@@ -135,7 +135,7 @@ public extension ButtonStyle where Self == CoreFilledButtonStyle {
 
 // MARK: - MaxWidthModifier
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 private struct MaxWidthModifier : ViewModifier {
     
     private let fillParentWidth: Bool
@@ -158,7 +158,7 @@ private struct MaxWidthModifier : ViewModifier {
 
 #if DEBUG
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 struct CoreButton_Previews: PreviewProvider {
     
     static var previews: some View {

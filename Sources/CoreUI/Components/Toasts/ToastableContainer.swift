@@ -6,9 +6,11 @@
 
 import SwiftUI
 
+#if !os(macOS)
+
 // MARK: - ToastableContainer
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 struct ToastableContainer<Content> : View where Content: View{
     
     var content: () -> Content
@@ -67,3 +69,5 @@ struct ToastableContainer<Content> : View where Content: View{
         }
     }
 }
+
+#endif

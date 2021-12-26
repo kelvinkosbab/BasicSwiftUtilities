@@ -14,7 +14,7 @@ import UIKit
 
 #if DEBUG
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 struct Font_Previews: PreviewProvider {
     
     private static let text = "Hello World!"

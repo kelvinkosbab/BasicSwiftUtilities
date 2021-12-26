@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(macOS)
+
 import Foundation
 
 // MARK: - ToastOptions
@@ -46,3 +48,5 @@ public struct ToastOptions {
         self.showDuration = showDuration
     }
 }
+
+#endif

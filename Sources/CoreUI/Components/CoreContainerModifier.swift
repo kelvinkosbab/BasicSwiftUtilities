@@ -6,6 +6,8 @@
 
 import SwiftUI
 
+#if !os(macOS)
+
 // MARK: - RoundedViewCornerStyle
 
 public enum RoundedViewCornerStyle {
@@ -33,7 +35,7 @@ public enum ShadowStyle {
 
 // MARK: - CoreRoundedView
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 struct CoreContainerModifier : ViewModifier {
     
     // MARK: - Properties and Init
@@ -70,7 +72,7 @@ struct CoreContainerModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 public extension View {
     
     /// View container utility for shadows, corner radius and rounded styles as well as background color styles.
@@ -89,7 +91,7 @@ public extension View {
 
 // MARK: - RoundedViewModifier
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 private struct RoundedViewModifier : ViewModifier {
     
     let style: RoundedViewCornerStyle
@@ -110,7 +112,7 @@ private struct RoundedViewModifier : ViewModifier {
 
 // MARK: - InnerBackgroundModifier
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 private struct InnerBackgroundModifier : ViewModifier {
     
     let style: RoundedViewBackgroundStyle
@@ -134,7 +136,7 @@ private struct InnerBackgroundModifier : ViewModifier {
 
 // MARK: - OuterBackgroundModifier
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 private struct OuterBackgroundModifier : ViewModifier {
     
     @Environment(\.colorScheme) var colorScheme
@@ -155,7 +157,7 @@ private struct OuterBackgroundModifier : ViewModifier {
 
 // MARK: - ShadowModifier
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 private struct ShadowModifier : ViewModifier {
     
     @Environment(\.colorScheme) var colorScheme
@@ -184,7 +186,7 @@ private struct ShadowModifier : ViewModifier {
 
 #if DEBUG
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 struct CoreRoundedView_Previews: PreviewProvider {
     
     static var previews: some View {
@@ -228,4 +230,5 @@ struct CoreRoundedView_Previews: PreviewProvider {
     }
 }
 
+#endif
 #endif

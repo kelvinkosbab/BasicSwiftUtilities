@@ -4,6 +4,8 @@
 //  Copyright © 2021 Kozinga. All rights reserved.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 // MARK: - UIColor
@@ -192,3 +194,5 @@ public extension UIColor {
                   alpha: alpha)
     }
 }
+
+#endif

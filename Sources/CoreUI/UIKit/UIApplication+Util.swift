@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 public extension UIApplication {
@@ -40,3 +42,5 @@ public extension UIApplication {
         return Bundle.main.infoDictionary?["CFBundleVersion"] as? String
     }
 }
+
+#endif

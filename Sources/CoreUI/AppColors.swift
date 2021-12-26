@@ -10,9 +10,10 @@ import SwiftUI
 
 public struct AppColors {
     
+    #if !os(macOS)
     public static var appTintUIColor: UIColor = .blue
-    
     public static var appDestructiveUIColor: UIColor = .red
+    #endif
     
     @available(iOS 13.0, *)
     public static var appTintColor: Color = .blue

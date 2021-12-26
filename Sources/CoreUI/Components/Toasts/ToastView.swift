@@ -6,10 +6,12 @@
 
 import SwiftUI
 
+#if !os(macOS)
+
 // MARK: - ToastView
 
 /// Displayable content for a toast.
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 struct ToastView : View {
     
     @Environment(\.colorScheme) var colorScheme
@@ -84,7 +86,7 @@ struct ToastView : View {
 
 #if DEBUG
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 11, tvOS 13.0, watchOS 6.0, *)
 struct ToastView_Previews: PreviewProvider {
     
     static let image: Image = Image(systemName: "heart.circle.fill")
@@ -104,4 +106,5 @@ struct ToastView_Previews: PreviewProvider {
     }
 }
 
+#endif
 #endif

@@ -4,6 +4,8 @@
 //  Copyright © 2021 Kozinga. All rights reserved.
 //
 
+#if !os(macOS)
+
 import UIKit
 import Core
 
@@ -119,3 +121,5 @@ public extension PresentableController where Self : UIViewController {
         }
     }
 }
+
+#endif

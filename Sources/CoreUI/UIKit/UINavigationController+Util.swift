@@ -4,6 +4,8 @@
 //  Copyright © 2021 Kozinga. All rights reserved.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 public extension UINavigationController {
@@ -49,3 +51,5 @@ public extension UINavigationController {
         }
     }
 }
+
+#endif

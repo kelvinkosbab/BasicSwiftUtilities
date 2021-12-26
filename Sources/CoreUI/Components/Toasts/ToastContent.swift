@@ -4,13 +4,15 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(macOS)
+
 import Foundation
 import SwiftUI
 
 // MARK: - ToastContent
 
 /// Defines content supported content for a toast.
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 public struct ToastContent {
     
     public enum SubContent : Equatable {
@@ -83,3 +85,5 @@ public struct ToastContent {
         self.trailing = trailing
     }
 }
+
+#endif

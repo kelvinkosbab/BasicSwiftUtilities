@@ -8,7 +8,7 @@ import SwiftUI
 
 // MARK: - CircleImage
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 public struct CircleImage : View {
     
     let image: Image

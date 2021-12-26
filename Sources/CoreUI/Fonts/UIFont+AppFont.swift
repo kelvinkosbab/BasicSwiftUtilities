@@ -4,11 +4,10 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import SwiftUI
-
 #if !os(macOS)
+
+import SwiftUI
 import UIKit
-#endif
 
 // MARK: - UIFont
 
@@ -44,3 +43,5 @@ public extension UIFont {
         }
     }
 }
+
+#endif

@@ -8,7 +8,7 @@ import SwiftUI
 
 // MARK: - CoreActivityIndicator
 
-@available(iOS 14.0, *)
+@available(iOS 14.0, macOS 12, *)
 private struct SwiftUIActivityIndicator : View {
     
     private let tintColor: Color
@@ -25,7 +25,8 @@ private struct SwiftUIActivityIndicator : View {
     }
 }
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+#if !os(macOS)
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 private struct UIKitActivityIndicator: UIViewRepresentable {
     
     var isAnimating: Bool
@@ -39,18 +40,23 @@ private struct UIKitActivityIndicator: UIViewRepresentable {
         self.isAnimating ? uiView.startAnimating() : uiView.stopAnimating()
     }
 }
+#endif
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 public struct CoreActivityIndicator : View {
     
     public init() {}
     
     public var body: some View {
+        #if !os(macOS)
         if #available(iOS 14.0, *) {
             SwiftUIActivityIndicator()
         } else {
             UIKitActivityIndicator(isAnimating: true, style: .large)
         }
+        #else
+        SwiftUIActivityIndicator()
+        #endif
     }
 }
 
@@ -58,7 +64,7 @@ public struct CoreActivityIndicator : View {
 
 #if DEBUG
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 struct Activity_Previews: PreviewProvider {
     
     static var previews: some View {

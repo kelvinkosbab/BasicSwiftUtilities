@@ -4,11 +4,13 @@
 //  Copyright © 2021 Kozinga. All rights reserved.
 //
 
+#if !os(macOS)
+
 import SwiftUI
 
 // MARK: - BlurredModifier
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 private struct BlurredModifier : ViewModifier {
     
     let style: UIBlurEffect.Style
@@ -28,7 +30,7 @@ private struct BlurredModifier : ViewModifier {
 /// ```
 ///
 /// - Parameter style: Blur effect style of the blurred view. See `UIBlurEffect.Style`
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 public extension View {
     
     func blurred(_ style: UIBlurEffect.Style) -> some View {
@@ -43,7 +45,7 @@ public extension View {
 /// yourView
 ///     .background(Blur())
 /// ```
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 private struct Blur: UIViewRepresentable {
     
     let style: UIBlurEffect.Style
@@ -65,7 +67,7 @@ private struct Blur: UIViewRepresentable {
 
 #if DEBUG
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 struct Blur_Previews: PreviewProvider {
     
     static var previews: some View {
@@ -134,4 +136,5 @@ struct Blur_Previews: PreviewProvider {
     }
 }
 
+#endif
 #endif

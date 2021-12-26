@@ -9,7 +9,7 @@ import CoreUI
 
 // MARK: - SFSymbolTester
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 public struct SFSymbolTester : View {
     
     public enum SFImage {
@@ -79,7 +79,7 @@ public struct SFSymbolTester : View {
 
 #if DEBUG
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 struct SFSymbolTester_Previews: PreviewProvider {
     
     static var previews: some View {

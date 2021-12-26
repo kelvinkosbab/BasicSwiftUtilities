@@ -4,6 +4,8 @@
 //  Copyright © 2021 Kozinga. All rights reserved.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 // MARK: - PresentationController
@@ -55,3 +57,5 @@ extension PresentationController {
         return interactiveViews
     }
 }
+
+#endif

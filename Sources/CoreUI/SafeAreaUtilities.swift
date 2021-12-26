@@ -6,9 +6,11 @@
 
 import SwiftUI
 
+#if !os(macOS)
+
 // MARK: - Getting SafeAreaInsets
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 11, tvOS 13.0, watchOS 6.0, *)
 public extension EnvironmentValues {
     
     /// Provides the safe area insets of the application window.
@@ -30,7 +32,7 @@ public extension EnvironmentValues {
     }
 }
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 11, tvOS 13.0, watchOS 6.0, *)
 private struct SafeAreaInsetsKey: EnvironmentKey {
     
     static var defaultValue: EdgeInsets {
@@ -38,7 +40,7 @@ private struct SafeAreaInsetsKey: EnvironmentKey {
     }
 }
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 11, tvOS 13.0, watchOS 6.0, *)
 private extension UIEdgeInsets {
     
     var insets: EdgeInsets {
@@ -48,7 +50,7 @@ private extension UIEdgeInsets {
 
 // MARK: - Ignore Safe Area Edges
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 11, tvOS 13.0, watchOS 6.0, *)
 private struct IgnoresSafeAreaModifier : ViewModifier {
     
     let edges: Edge.Set
@@ -64,10 +66,12 @@ private struct IgnoresSafeAreaModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 11, tvOS 13.0, watchOS 6.0, *)
 internal extension View {
     
     func ignoreSafeAreaEdges(_ edges: Edge.Set) -> some View {
         self.modifier(IgnoresSafeAreaModifier(edges: edges))
     }
 }
+
+#endif

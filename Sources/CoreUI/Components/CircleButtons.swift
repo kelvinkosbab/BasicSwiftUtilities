@@ -8,7 +8,7 @@ import SwiftUI
 
 // MARK: - CircleTextButton
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 public struct CircleTextButton : View {
     
     private let title: String
@@ -40,7 +40,7 @@ public struct CircleTextButton : View {
 
 // MARK: - CircleImageButton
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 public struct CircleImageButton : View {
     
     private let image: Image
@@ -96,7 +96,7 @@ public struct CircleImageButton : View {
 
 #if DEBUG
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 struct Circle_Previews: PreviewProvider {
     
     static var previews: some View {

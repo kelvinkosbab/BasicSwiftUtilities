@@ -4,6 +4,8 @@
 //  Copyright © 2021 Kozinga. All rights reserved.
 //
 
+#if !os(macOS)
+
 import UIKit
 import SwiftUI
 
@@ -55,3 +57,5 @@ public class BaseHostingController<Content : View> : UIViewController, Presentab
         view.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
     }
 }
+
+#endif

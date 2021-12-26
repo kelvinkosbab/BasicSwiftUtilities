@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 // MARK: - PresentableOption
@@ -24,3 +26,4 @@ extension Sequence where Iterator.Element == PresentableOption {
     }
 }
 
+#endif

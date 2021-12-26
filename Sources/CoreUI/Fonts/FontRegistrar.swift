@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(macOS)
+
 import UIKit
 
 /// Programmatically registers fonts for an application.
@@ -71,3 +73,5 @@ public class FontRegistrar {
         FontRegistrar.registeredFonts.insert(fontToRegistere)
     }
 }
+
+#endif

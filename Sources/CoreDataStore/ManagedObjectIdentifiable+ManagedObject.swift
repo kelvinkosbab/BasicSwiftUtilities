@@ -6,6 +6,8 @@
 
 import CoreData
 
+// MARK: - ManagedObjectIdentifiable
+
 public extension ManagedObjectIdentifiable where Self : NSManagedObject {
     
     static var entityName: String {
@@ -83,5 +85,48 @@ public extension ManagedObjectIdentifiable where Self : NSManagedObject {
     
     func delete(context: NSManagedObjectContext) {
         context.delete(self)
+    }
+    
+    // MARK: - Fetched Results Controller
+    
+    static func newFetchedResultsController(id: String, context: NSManagedObjectContext) -> NSFetchedResultsController<Self>{
+        let predicate = QueryPredicate.getPredicate(id: id)
+        return self.newFetchedResultsController(predicate: predicate, context: context)
+    }
+    
+    static func newFetchedResultsController(ids: [String], context: NSManagedObjectContext) -> NSFetchedResultsController<Self>{
+        let predicate = QueryPredicate.getPredicate(ids: ids)
+        return self.newFetchedResultsController(predicate: predicate, context: context)
+    }
+    
+    static func newFetchedResultsController(notIn ids: [String], context: NSManagedObjectContext) -> NSFetchedResultsController<Self>{
+        let predicate = QueryPredicate.getPredicate(notIn: ids)
+        return self.newFetchedResultsController(predicate: predicate, context: context)
+    }
+    
+    static func newFetchedResultsController(predicate: NSPredicate? = nil,
+                                            context: NSManagedObjectContext,
+                                            sortDescriptors: [NSSortDescriptor]? = nil) -> NSFetchedResultsController<Self> {
+        let sortDescriptors = sortDescriptors ?? [ NSSortDescriptor(key: "identifier", ascending: true) ]
+        let fetchRequest = self.newFetchRequest(predicate: predicate, sortDescriptors: sortDescriptors)
+        return NSFetchedResultsController(fetchRequest: fetchRequest,
+                                          managedObjectContext: context,
+                                          sectionNameKeyPath: nil,
+                                          cacheName: nil)
+    }
+}
+
+// MARK: - ManagedObjectParentIdentifiable
+
+public extension ManagedObjectIdentifiable where Self : NSManagedObject, Self : ManagedObjectParentIdentifiable {
+    
+    static func newFetchedResultsController(id: String, parentId: String, context: NSManagedObjectContext) -> NSFetchedResultsController<Self>{
+        let predicate = QueryPredicate.getPredicate(id: id, parentId: parentId)
+        return self.newFetchedResultsController(predicate: predicate, context: context)
+    }
+    
+    static func newFetchedResultsController(parentId: String, context: NSManagedObjectContext) -> NSFetchedResultsController<Self>{
+        let predicate = QueryPredicate.getPredicate(parentId: parentId)
+        return self.newFetchedResultsController(predicate: predicate, context: context)
     }
 }

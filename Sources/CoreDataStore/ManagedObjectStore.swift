@@ -153,14 +153,4 @@ extension ManagedObjectStore where ObjectType.ManagedObject : ManagedObjectParen
         }
         self.saveContext()
     }
-    
-    // MARK: - Data Observers
-    
-    func createObserver<Delegate: DataObserverDelegate>(id: String, parentId: String) -> DataObserver<Delegate> where Delegate.ObjectType.ManagedObject: ManagedObjectParentIdentifiable {
-        return DataObserver(id: id, parentId: parentId, context: self.context)
-    }
-    
-    func createObserver<Delegate: DataObserverDelegate>(parentId: String) -> DataObserver<Delegate> where Delegate.ObjectType.ManagedObject: ManagedObjectParentIdentifiable {
-        return DataObserver(parentId: parentId, context: self.context)
-    }
 }

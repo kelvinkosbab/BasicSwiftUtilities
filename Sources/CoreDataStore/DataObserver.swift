@@ -31,37 +31,17 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
     public private(set) var objects: Set<ObjectType> = Set()
     
     public convenience init(context: NSManagedObjectContext) {
-        let entityName = String(describing: ManagedObject.self)
-        let fetchRequest = NSFetchRequest<ManagedObject>(entityName: entityName)
-        fetchRequest.sortDescriptors = [ NSSortDescriptor(key: "identifier", ascending: true) ]
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                                                  managedObjectContext: context,
-                                                                  sectionNameKeyPath: nil,
-                                                                  cacheName: nil)
+        let fetchedResultsController = ManagedObject.newFetchedResultsController(context: context)
         self.init(fetchedResultsController: fetchedResultsController)
     }
     
     public convenience init(id: String, context: NSManagedObjectContext) {
-        let entityName = String(describing: ManagedObject.self)
-        let fetchRequest = NSFetchRequest<ManagedObject>(entityName: entityName)
-        fetchRequest.predicate = QueryPredicate.getPredicate(id: id)
-        fetchRequest.sortDescriptors = [ NSSortDescriptor(key: "identifier", ascending: true) ]
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                                                  managedObjectContext: context,
-                                                                  sectionNameKeyPath: nil,
-                                                                  cacheName: nil)
+        let fetchedResultsController = ManagedObject.newFetchedResultsController(id: id, context: context)
         self.init(fetchedResultsController: fetchedResultsController)
     }
     
     public convenience init(ids: [String], context: NSManagedObjectContext) {
-        let entityName = String(describing: ManagedObject.self)
-        let fetchRequest = NSFetchRequest<ManagedObject>(entityName: entityName)
-        fetchRequest.predicate = QueryPredicate.getPredicate(ids: ids)
-        fetchRequest.sortDescriptors = [ NSSortDescriptor(key: "identifier", ascending: true) ]
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                                                  managedObjectContext: context,
-                                                                  sectionNameKeyPath: nil,
-                                                                  cacheName: nil)
+        let fetchedResultsController = ManagedObject.newFetchedResultsController(ids: ids, context: context)
         self.init(fetchedResultsController: fetchedResultsController)
     }
     
@@ -142,26 +122,12 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
 public extension DataObserver where Delegate.ObjectType.ManagedObject : ManagedObjectParentIdentifiable {
     
     convenience init(id: String, parentId: String, context: NSManagedObjectContext) {
-        let entityName = String(describing: ManagedObject.self)
-        let fetchRequest = NSFetchRequest<ManagedObject>(entityName: entityName)
-        fetchRequest.predicate = QueryPredicate.getPredicate(id: id, parentId: parentId)
-        fetchRequest.sortDescriptors = [ NSSortDescriptor(key: "identifier", ascending: true) ]
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                                                  managedObjectContext: context,
-                                                                  sectionNameKeyPath: nil,
-                                                                  cacheName: nil)
+        let fetchedResultsController = ManagedObject.newFetchedResultsController(id: id, parentId: parentId, context: context)
         self.init(fetchedResultsController: fetchedResultsController)
     }
     
     convenience init(parentId: String, context: NSManagedObjectContext) {
-        let entityName = String(describing: ManagedObject.self)
-        let fetchRequest = NSFetchRequest<ManagedObject>(entityName: entityName)
-        fetchRequest.predicate = QueryPredicate.getPredicate(parentId: parentId)
-        fetchRequest.sortDescriptors = [ NSSortDescriptor(key: "identifier", ascending: true) ]
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                                                  managedObjectContext: context,
-                                                                  sectionNameKeyPath: nil,
-                                                                  cacheName: nil)
+        let fetchedResultsController = ManagedObject.newFetchedResultsController(parentId: parentId, context: context)
         self.init(fetchedResultsController: fetchedResultsController)
     }
 }

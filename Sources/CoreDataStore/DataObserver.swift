@@ -30,6 +30,17 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
     
     public private(set) var objects: Set<ObjectType> = Set()
     
+    public convenience init(context: NSManagedObjectContext) {
+        let entityName = String(describing: ManagedObject.self)
+        let fetchRequest = NSFetchRequest<ManagedObject>(entityName: entityName)
+        fetchRequest.sortDescriptors = [ NSSortDescriptor(key: "identifier", ascending: true) ]
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                                  managedObjectContext: context,
+                                                                  sectionNameKeyPath: nil,
+                                                                  cacheName: nil)
+        self.init(fetchedResultsController: fetchedResultsController)
+    }
+    
     public convenience init(id: String, context: NSManagedObjectContext) {
         let entityName = String(describing: ManagedObject.self)
         let fetchRequest = NSFetchRequest<ManagedObject>(entityName: entityName)
@@ -125,6 +136,8 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
         }
     }
 }
+
+// MARK: - ManagedObjectParentIdentifiable
 
 public extension DataObserver where Delegate.ObjectType.ManagedObject : ManagedObjectParentIdentifiable {
     

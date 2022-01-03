@@ -13,7 +13,4 @@ public protocol StoreContainer {
     
     /// The name of the core data model store. Should match the name of the *.xcdatamodeld file.
     var storeName: String { get }
-    
-    /// The url of the data container.
-    var storeUrl: URL { get }
 }

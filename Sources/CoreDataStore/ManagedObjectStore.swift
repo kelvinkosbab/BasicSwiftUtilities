@@ -99,16 +99,6 @@ public extension ManagedObjectStore {
         }
         self.saveContext()
     }
-    
-    // MARK: - Data Observers
-    
-    func createObserver<Delegate: DataObserverDelegate>(id: String) -> DataObserver<Delegate> {
-        return DataObserver(id: id, context: self.context)
-    }
-    
-    func createObserver<Delegate: DataObserverDelegate>(ids: [String]) -> DataObserver<Delegate> {
-        return DataObserver(ids: ids, context: self.context)
-    }
 }
 
 // MARK: - Parent and Child

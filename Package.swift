@@ -48,6 +48,9 @@ let package = Package(
         .target(
             name: "CoreDataStore",
             dependencies: ["Core"]),
+        .testTarget(
+            name: "CoreDataStoreTests",
+            dependencies: ["CoreDataStore"]),
         
         .target(
             name: "CoreAuthentication",

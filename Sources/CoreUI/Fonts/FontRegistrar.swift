@@ -11,6 +11,8 @@ import UIKit
 /// Programmatically registers fonts for an application.
 public class FontRegistrar {
     
+    public init() {}
+    
     /// Object to hold the information about a registered font.
     private struct RegisteredFont: Hashable {
         let fontName: String

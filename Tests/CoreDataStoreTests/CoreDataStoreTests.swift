@@ -5,6 +5,7 @@
 //
 
 import XCTest
+import CoreData
 @testable import CoreDataStore
 
 final class MockObject: NSManagedObject {
@@ -15,21 +16,21 @@ final class MockObject: NSManagedObject {
 // https://dmytro-anokhin.medium.com/core-data-and-swift-package-manager-6ed9ff70921a
 final class CoreDataStoreTests: XCTestCase {
     
-    func setUp() {
-        let modelDescription = CoreDataModelDescription(
-            entities: [
-                .entity(
-                    name: "MockObject",
-                    managedObjectClass: MockObject.self,
-                    attributes: [
-                        .attribute(name: "name", type: .stringAttributeType)
-                        .attribute(name: "identifier", type: .stringAttributeType)
-                    ],
-                    relationships: []),
-            ]
-        )
-
-        let model = modelDescription.makeMode()
+    override func setUp() {
+//        let modelDescription = CoreDataModelDescription(
+//            entities: [
+//                .entity(
+//                    name: "MockObject",
+//                    managedObjectClass: MockObject.self,
+//                    attributes: [
+//                        .attribute(name: "name", type: .stringAttributeType)
+//                        .attribute(name: "identifier", type: .stringAttributeType)
+//                    ],
+//                    relationships: []),
+//            ]
+//        )
+//
+//        let model = modelDescription.makeMode()
     }
     
     func testExample() {

@@ -48,6 +48,7 @@ public class Authentication : AuthenticationProvider {
         }
     }
     
+    /// Identifier of the current signed in user.
     public var currentUserIdentifier: String? {
         return self.authenticationProvider.currentUserIdentifier
     }
@@ -60,16 +61,6 @@ public class Authentication : AuthenticationProvider {
                                                completion: completion)
     }
     
-    @available(iOS 13.0.0, *)
-    public func createUser(email: String,
-                           password: String) async -> CustomResult<BaseUser> {
-        await withCheckedContinuation { continuation in
-            self.createUser(email: email, password: password) { result in
-                continuation.resume(returning: result)
-            }
-        }
-    }
-    
     public func signIn(email: String,
                        password: String,
                        completion: @escaping (CustomResult<BaseUser>) -> Void) {
@@ -78,52 +69,15 @@ public class Authentication : AuthenticationProvider {
                                            completion: completion)
     }
     
-    @available(iOS 13.0.0, *)
-    public func signIn(email: String,
-                       password: String) async -> CustomResult<BaseUser> {
-        await withCheckedContinuation { continuation in
-            self.signIn(email: email, password: password) { result in
-                continuation.resume(returning: result)
-            }
-        }
-    }
-    
     public func reloadCurrentUser(completion: @escaping (CustomResult<BaseUser>) -> Void) {
         self.authenticationProvider.reloadCurrentUser(completion: completion)
-    }
-    
-    @available(iOS 13.0.0, *)
-    public func reloadCurrentUser() async -> CustomResult<BaseUser> {
-        await withCheckedContinuation { continuation in
-            self.reloadCurrentUser { result in
-                continuation.resume(returning: result)
-            }
-        }
     }
     
     public func signOut(completion: @escaping (Result) -> Void) {
         self.authenticationProvider.signOut(completion: completion)
     }
     
-    @available(iOS 13.0.0, *)
-    public func signOut() async -> Result {
-        await withCheckedContinuation { continuation in
-            self.signOut { result in
-                continuation.resume(returning: result)
-            }
-        }
-    }
-    
     public func sendPasswordReset(email: String, completion: @escaping (Result) -> Void) {
         self.authenticationProvider.sendPasswordReset(email: email, completion: completion)
-    }
-    
-    @available(iOS 13.0.0, *)
-    public func sendPasswordReset(email: String) async -> Result {
-        await withCheckedContinuation { continuation in
-            self.sendPasswordReset(email: email) { result in
-                continuation.resume(returning: result)
-            }
-        }
     }
 }

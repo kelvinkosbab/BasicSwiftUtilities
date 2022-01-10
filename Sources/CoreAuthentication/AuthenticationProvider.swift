@@ -66,11 +66,18 @@ public extension AuthenticationProvider {
     ///
     /// - Parameter email: The user's email address.
     /// - Parameter password: The user's desired password.
-    @available(iOS 13.0.0, *)
-    func createUser(email: String, password: String) async -> CustomResult<BaseUser> {
-        await withCheckedContinuation { continuation in
+    ///
+    /// - Throws if there is an error when creating a user.
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    func createUser(email: String, password: String) async throws -> BaseUser {
+        try await withCheckedThrowingContinuation { continuation in
             self.createUser(email: email, password: password) { result in
-                continuation.resume(returning: result)
+                switch result {
+                case .success(let user):
+                    continuation.resume(returning: user)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
             }
         }
     }
@@ -79,31 +86,52 @@ public extension AuthenticationProvider {
     ///
     /// - Parameter email: The user's email address.
     /// - Parameter password: The user's password.
-    @available(iOS 13.0.0, *)
-    func signIn(email: String, password: String) async -> CustomResult<BaseUser> {
-        await withCheckedContinuation { continuation in
+    ///
+    /// - Throws if there is an error when signing in.
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    func signIn(email: String, password: String) async throws -> BaseUser {
+        try await withCheckedThrowingContinuation { continuation in
             self.signIn(email: email, password: password) { result in
-                continuation.resume(returning: result)
+                switch result {
+                case .success(let user):
+                    continuation.resume(returning: user)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
             }
         }
     }
     
     /// Reloads the currently signed in user's profile.
-    @available(iOS 13.0.0, *)
-    func reloadCurrentUser() async -> CustomResult<BaseUser> {
-        await withCheckedContinuation { continuation in
+    ///
+    /// - Throws if there is an error when reloading the current user.
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    func reloadCurrentUser() async throws -> BaseUser {
+        try await withCheckedThrowingContinuation { continuation in
             self.reloadCurrentUser() { result in
-                continuation.resume(returning: result)
+                switch result {
+                case .success(let user):
+                    continuation.resume(returning: user)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
             }
         }
     }
     
     /// Signs out the current user.
-    @available(iOS 13.0.0, *)
-    func signOut() async -> Result {
-        await withCheckedContinuation { continuation in
+    ///
+    /// - Throws if there is an error when signing out.
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    func signOut() async throws {
+        try await withContinuation { continuation in
             self.signOut { result in
-                continuation.resume(returning: result)
+                switch result {
+                case .success:
+                    continuation.resume()
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
             }
         }
     }
@@ -111,11 +139,18 @@ public extension AuthenticationProvider {
     /// Initiates a password reset for the given email address.
     ///
     /// - Parameter email: The email address of the user.
-    @available(iOS 13.0.0, *)
-    func sendPasswordReset(email: String) async -> Result {
-        await withCheckedContinuation { continuation in
+    ///
+    /// - Throws if there is an error when sending the password reset email..
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    func sendPasswordReset(email: String) async throws {
+        try await withContinuation { continuation in
             self.sendPasswordReset(email: email) { result in
-                continuation.resume(returning: result)
+                switch result {
+                case .success:
+                    continuation.resume()
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
             }
         }
     }

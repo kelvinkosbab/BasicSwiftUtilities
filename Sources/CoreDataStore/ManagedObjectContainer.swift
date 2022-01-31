@@ -159,12 +159,32 @@ public class ManagedObjectContainer : StoreContainer {
     /// * The store could not be migrated to the current model version.
     /// Check the error message to determine what the actual problem was.
     @available(iOS 13.0.0, *)
-    public func load() async throws -> Result {
-        await withCheckedContinuation { continuation in
+    public func load() async throws {
+        try await withContinuation { continuation in
             self.load() { result in
-                continuation.resume(returning: result)
+                switch result {
+                case .success:
+                    continuation.resume()
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
             }
         }
+    }
+    
+    @available(iOS 15.0, *)
+    public func reset() throws {
+        
+        guard let currentStore = self.persistentContainer.persistentStoreCoordinator.persistentStores.last else {
+            return
+        }
+        
+        guard let currentStoreURL = currentStore.url else {
+            return
+        }
+        
+        try self.persistentContainer.persistentStoreCoordinator.destroyPersistentStore(at: currentStoreURL, type: .sqlite)
+        try self.persistentContainer.persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: currentStoreURL)
     }
     
     // MARK: - Managed Object Context

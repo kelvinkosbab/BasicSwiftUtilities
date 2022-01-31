@@ -10,17 +10,21 @@ import CoreData
 
 public protocol ManagedObjectStore : ObjectStore where ObjectType : ManagedObjectAssociated, ObjectType.ManagedObject.StructType == ObjectType {
     var context: NSManagedObjectContext { get }
+    
+    /// Saves any changes on the context.
+    ///
+    /// If this function throws you should handle the error appropriately. You should NOT use `fatalError()` in a shipping
+    /// application, although it may be useful during development.
+    ///
+    /// - Throws if there is an error during the operation.
+    func saveChanges() throws
 }
 
 public extension ManagedObjectStore {
     
     typealias ManagedObject = ObjectType.ManagedObject
     
-    /// Saves any changes on the context.
-    ///
-    /// If this function throws you should handle the error appropriately. You should NOT use `fatalError()` in a shipping
-    /// application, although it may be useful during development.
-    func saveContext() {
+    func saveChanges() throws {
         
         guard self.context.hasChanges else {
             return
@@ -31,10 +35,10 @@ public extension ManagedObjectStore {
     
     // MARK: - Create or Update
     
-    func createOrUpdate(_ object: ObjectType) {
+    func createOrUpdate(_ object: ObjectType) throws {
         var cdObject = ManagedObject.fetchOne(id: object.identifier, context: self.context) ?? ManagedObject.create(context: self.context)
         cdObject.structValue = object
-        self.saveContext()
+        try self.saveChanges()
     }
     
     // MARK: - Fetching
@@ -64,40 +68,40 @@ public extension ManagedObjectStore {
     
     // MARK: - Delete
     
-    func delete(_ object: ObjectType) {
+    func delete(_ object: ObjectType) throws {
         self.deleteOne(id: object.identifier)
-        self.saveContext()
+        try self.saveChanges()
     }
     
-    func deleteOne(id: String) {
+    func deleteOne(id: String) throws{
         let predicate = QueryPredicate.getPredicate(id: id)
         ManagedObject.delete(predicate: predicate, context: self.context)
-        self.saveContext()
+        try self.saveChanges()
     }
     
-    func deleteMany(in ids: [String]) {
+    func deleteMany(in ids: [String]) throws {
         let predicate = QueryPredicate.getPredicate(ids: ids)
         for object in ManagedObject.fetchMany(predicate: predicate, context: self.context) {
             object.delete(context: self.context)
         }
-        self.saveContext()
+        try self.saveChanges()
     }
     
-    func deleteMany(notIn ids: [String]) {
+    func deleteMany(notIn ids: [String]) throws {
         let predicate = QueryPredicate.getPredicate(notIn: ids)
         for object in ManagedObject.fetchMany(predicate: predicate, context: self.context) {
             object.delete(context: self.context)
         }
-        self.saveContext()
+        try self.saveChanges()
     }
     
-    func deleteAll() {
+    func deleteAll() throws {
         let request = ManagedObject.newFetchRequest(sortDescriptors: nil)
         request.returnsObjectsAsFaults = false
         for object in  ManagedObject.fetch(predicate: nil, sortDescriptors: nil, context: self.context) {
             object.delete(context: self.context)
         }
-        self.saveContext()
+        try self.saveChanges()
     }
 }
 
@@ -124,33 +128,33 @@ extension ManagedObjectStore where ObjectType.ManagedObject : ManagedObjectParen
     
     // MARK: - Delete
     
-    func deleteOne(id: String, parentId: String) {
+    func deleteOne(id: String, parentId: String) throws {
         let predicate = QueryPredicate.getPredicate(id: id, parentId: parentId)
         ManagedObject.delete(predicate: predicate, context: self.context)
-        self.saveContext()
+        try self.saveChanges()
     }
     
-    func deleteMany(in ids: [String], parentId: String) {
+    func deleteMany(in ids: [String], parentId: String) throws {
         let predicate = QueryPredicate.getPredicate(ids: ids, parentId: parentId)
         for object in ManagedObject.fetchMany(predicate: predicate, context: self.context) {
             object.delete(context: self.context)
         }
-        self.saveContext()
+        try self.saveChanges()
     }
     
-    func deleteMany(notIn ids: [String], parentId: String) {
+    func deleteMany(notIn ids: [String], parentId: String) throws {
         let predicate = QueryPredicate.getPredicate(notIn: ids, parentId: parentId)
         for object in ManagedObject.fetchMany(predicate: predicate, context: self.context) {
             object.delete(context: self.context)
         }
-        self.saveContext()
+        try self.saveChanges()
     }
     
-    func deleteMany(parentId: String) {
+    func deleteMany(parentId: String) throws {
         let predicate = QueryPredicate.getPredicate(parentId: parentId)
         for object in ManagedObject.fetchMany(predicate: predicate, context: self.context) {
             object.delete(context: self.context)
         }
-        self.saveContext()
+        try self.saveChanges()
     }
 }

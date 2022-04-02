@@ -124,7 +124,7 @@ public extension AuthenticationProvider {
     /// - Throws if there is an error when signing out.
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func signOut() async throws {
-        try await withContinuation { continuation in
+        try await withCheckedThrowingVoidContinuation { continuation in
             self.signOut { result in
                 switch result {
                 case .success:
@@ -143,7 +143,7 @@ public extension AuthenticationProvider {
     /// - Throws if there is an error when sending the password reset email..
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func sendPasswordReset(email: String) async throws {
-        try await withContinuation { continuation in
+        try await withCheckedThrowingVoidContinuation { continuation in
             self.sendPasswordReset(email: email) { result in
                 switch result {
                 case .success:

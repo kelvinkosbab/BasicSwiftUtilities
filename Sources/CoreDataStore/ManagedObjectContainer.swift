@@ -160,7 +160,7 @@ public class ManagedObjectContainer : StoreContainer {
     /// Check the error message to determine what the actual problem was.
     @available(iOS 13.0.0, *)
     public func load() async throws {
-        try await withContinuation { continuation in
+        try await withCheckedThrowingVoidContinuation { continuation in
             self.load() { result in
                 switch result {
                 case .success:

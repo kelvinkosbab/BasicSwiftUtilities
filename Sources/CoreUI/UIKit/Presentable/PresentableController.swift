@@ -1,7 +1,7 @@
 //
 //  PresentableController.swift
 //  
-//  Copyright © 2021 Kozinga. All rights reserved.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 #if !os(macOS)

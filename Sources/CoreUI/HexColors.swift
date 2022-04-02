@@ -1,7 +1,7 @@
 //
 //  HexColors.swift
 //
-//  Copyright © 2021 Kozinga. All rights reserved.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import UIKit
@@ -41,6 +41,28 @@ struct HexColor: RGBColor {
     public init(hex: Int) {
         self.hexValue = hex
     }
+    
+    /// Constructs a `HexColor` from a String hex value.
+    ///
+    /// Example:
+    /// ```
+    /// let color = Color(hex: "44DAA7") // For hex color code "#44DAA7"
+    /// ```
+    public init?(hex: String) {
+        var hexString = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        hexString = hexString.replacingOccurrences(of: "#", with: "")
+        hexString = hexString.replacingOccurrences(of: "0x", with: "")
+        
+        guard hexString.count == 6 else {
+            return nil
+        }
+        
+        guard let value = Int(hexString, radix: 16) else {
+            return nil
+        }
+        
+        self.hexValue = value
+    }
 
     /// The amount of red in the color.
     var red: Double {
@@ -58,13 +80,15 @@ struct HexColor: RGBColor {
     }
 
     #if DEBUG
+    
     /// Uppercased string representation of hex color.
     ///
     /// Marked internal for internal testing.
     var hexString: String {
-        return String(format: "#%06x", self.hexValue).uppercased()
+        return String(self.hexValue, radix: 16).uppercased()
  
     }
+    
     #endif
 }
  
@@ -80,7 +104,7 @@ public extension Color {
     /// ZStack {
     ///     Color.halo(.core900)
     ///     Image(systemName: "sun.max.fill")
-    ///         .foregroundStyle(.hex(0x44DAA7)) // For hex color code "#44DAA7"
+    ///         .foregroundStyle(.hex(0x5B2071)) // For hex color code "#5B2071"
     /// }
     /// .frame(width: 200, height: 100)
     /// ```
@@ -88,7 +112,7 @@ public extension Color {
     /// Note: A color used as a view expands to fill all the space it’s given, as defined by the frame of the
     /// enclosing ZStack in the above example.
     ///
-    /// - Parameter hex: The hex value in hexadecimal. For example `0x44DAA7`.
+    /// - Parameter hex: The hex value in hexadecimal. For example `0x5B2071`.
     /// - Parameter opacity: An optional degree of opacity, given in the range `0` to
     ///     `1`. A value of `0` means 100% transparency, while a value of `1`
     ///     means 100% opacity. The default is `1`.
@@ -110,7 +134,7 @@ public extension UIColor {
     /// Example usage:
     /// ```swift
     /// let view = UIView()
-    /// view.backgroundColor = .hex(0x44DAA7) // For hex color code "#44DAA7"
+    /// view.backgroundColor = .hex(0x5B2071) // For hex color code "#5B2071"
     /// ```
     ///
     /// - Parameter hex: The hex value in hexadecimal. For example `0x44DAA7`.

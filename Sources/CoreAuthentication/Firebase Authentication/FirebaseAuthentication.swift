@@ -172,7 +172,7 @@ public class FirebaseAuthentication : AuthenticationProvider {
     
     @available(iOS 13.0.0, *)
     public func signOut() async throws {
-        try await withContinuation { continuation in
+        try await withCheckedThrowingVoidContinuation { continuation in
             self.signOut { result in
                 switch result {
                 case .success:
@@ -209,9 +209,14 @@ public class FirebaseAuthentication : AuthenticationProvider {
     
     @available(iOS 13.0.0, *)
     public func sendPasswordReset(email: String) async throws {
-        try await withContinuation { continuation in
+        try await withCheckedThrowingVoidContinuation { continuation in
             self.sendPasswordReset(email: email) { result in
-                continuation.resume(returning: result)
+                switch result {
+                case .success:
+                    continuation.resume()
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
             }
         }
     }

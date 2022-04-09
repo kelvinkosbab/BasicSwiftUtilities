@@ -157,7 +157,7 @@ public extension UIColor {
 @available(iOS 13.0, macOS 11, tvOS 13.0, watchOS 6.0, *)
 struct Color_Previews: PreviewProvider {
  
-    /// In order to preview UIKit views / fonts in a `PreviewProvider` we must use
+    /// In order to preview UIKit views in a `PreviewProvider` we must use
     /// `UIViewRepresentable`. This protocol can map a UIKit object into a SwiftUI View.
     struct UIKitView: UIViewRepresentable {
  

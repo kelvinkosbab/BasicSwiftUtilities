@@ -92,6 +92,26 @@ public class ManagedObjectContainer : StoreContainer {
         self.mainContext = persistentContainer.viewContext
     }
     
+    /// Configures the persistent container's `FileProtectionType`.
+    ///
+    /// Options:
+    /// - `complete`: The file is stored in an encrypted format on disk and cannot be read from or written to while the device is
+    /// locked or booting.
+    /// - `completeUnlessOpen`: The file is stored in an encrypted format on disk after it is closed. Files with this type of
+    /// protection can be created while the device is locked, but once closed, cannot be opened again until the device is unlocked.
+    /// If the file is opened when unlocked, you may continue to access the file normally, even if the user locks the device. There is a
+    /// small performance penalty when the file is created and opened, though not when being written to or read from. This can be
+    /// mitigated by changing the file protection to complete when the device is unlocked.
+    /// - `completeUntilFirstUserAuthentication`: The file is stored in an encrypted format on disk and cannot be
+    /// accessed until after the device has booted. After the user unlocks the device for the first time, your app can access the file
+    /// and continue to access it even if the user subsequently locks the device.
+    /// - `none`: The file has no special protections associated with it. A file with this type of protection can be read from or written to at any time.
+    public func configure(fileProtectionType: FileProtectionType) {
+        let description = NSPersistentStoreDescription()
+        description.setOption(fileProtectionType as NSObject, forKey: NSPersistentStoreFileProtectionKey)
+        self.persistentContainer.persistentStoreDescriptions.append(description)
+    }
+    
     // MARK: - Error
     
     public enum Error : Swift.Error, LocalizedError {

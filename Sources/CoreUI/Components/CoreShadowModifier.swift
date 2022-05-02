@@ -8,7 +8,7 @@ import SwiftUI
 
 // MARK: - CoreShadowModifier
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 public struct CoreShadowModifier : ViewModifier {
     
     @Environment(\.colorScheme) var colorScheme
@@ -23,7 +23,7 @@ public struct CoreShadowModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 public extension View {
     
     func coreShadow() -> some View {

@@ -11,7 +11,7 @@ import Core
 
 // MARK: - ToastableContainerModifier
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct ToastableContainerModifier : ViewModifier {
     
     @State var paddingTop: CGFloat = 0
@@ -32,7 +32,7 @@ private struct ToastableContainerModifier : ViewModifier {
 
 // MARK: - Toastable
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 public extension View {
     
     /// Enables the attached container for toasts. The toasts will be bound to the container's safe area insets.

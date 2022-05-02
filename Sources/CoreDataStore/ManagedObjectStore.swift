@@ -48,15 +48,35 @@ public extension ManagedObjectStore {
         return ManagedObject.fetchOne(predicate: predicate, context: self.context)?.structValue
     }
     
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func fetchOne(id: String) async -> ObjectType.ManagedObject.StructType? {
+        let predicate = QueryPredicate.getPredicate(id: id)
+        return await ManagedObject.fetchOne(predicate: predicate, context: self.context)?.structValue
+    }
+    
     func fetchMany(in ids: [String]) -> [ManagedObject.StructType] {
         let predicate = QueryPredicate.getPredicate(ids: ids)
-        let cdObjects = ManagedObject.fetchMany(predicate: predicate, context: self.context)
+        let cdObjects = ManagedObject.fetch(predicate: predicate, context: self.context)
+        return cdObjects.structValues
+    }
+    
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func fetchMany(in ids: [String]) async -> [ManagedObject.StructType] {
+        let predicate = QueryPredicate.getPredicate(ids: ids)
+        let cdObjects = await ManagedObject.fetch(predicate: predicate, context: self.context)
         return cdObjects.structValues
     }
     
     func fetchMany(notIn ids: [String]) -> [ManagedObject.StructType] {
         let predicate = QueryPredicate.getPredicate(notIn: ids)
-        let cdObjects = ManagedObject.fetchMany(predicate: predicate, context: self.context)
+        let cdObjects = ManagedObject.fetch(predicate: predicate, context: self.context)
+        return cdObjects.structValues
+    }
+    
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func fetchMany(notIn ids: [String]) async -> [ManagedObject.StructType] {
+        let predicate = QueryPredicate.getPredicate(notIn: ids)
+        let cdObjects = await ManagedObject.fetch(predicate: predicate, context: self.context)
         return cdObjects.structValues
     }
     
@@ -66,10 +86,23 @@ public extension ManagedObjectStore {
         return ManagedObject.fetch(predicate: nil, sortDescriptors: sortDescriptors, context: self.context).structValues
     }
     
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func fetchAll(sortDescriptors: [NSSortDescriptor]?) async -> [ManagedObject.StructType] {
+        let request = ManagedObject.newFetchRequest(sortDescriptors: sortDescriptors)
+        request.returnsObjectsAsFaults = false
+        return await ManagedObject.fetch(predicate: nil, sortDescriptors: sortDescriptors, context: self.context).structValues
+    }
+    
     // MARK: - Delete
     
     func delete(_ object: ObjectType) throws {
         self.deleteOne(id: object.identifier)
+        try self.saveChanges()
+    }
+    
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func delete(_ object: ObjectType) async throws {
+        await self.deleteOne(id: object.identifier)
         try self.saveChanges()
     }
     
@@ -79,28 +112,53 @@ public extension ManagedObjectStore {
         try self.saveChanges()
     }
     
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func deleteOne(id: String) async throws{
+        let predicate = QueryPredicate.getPredicate(id: id)
+        await ManagedObject.delete(predicate: predicate, context: self.context)
+        try self.saveChanges()
+    }
+    
     func deleteMany(in ids: [String]) throws {
         let predicate = QueryPredicate.getPredicate(ids: ids)
-        for object in ManagedObject.fetchMany(predicate: predicate, context: self.context) {
+        for object in ManagedObject.fetch(predicate: predicate, context: self.context) {
             object.delete(context: self.context)
         }
+        try self.saveChanges()
+    }
+    
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func deleteMany(in ids: [String]) async throws {
+        let predicate = QueryPredicate.getPredicate(ids: ids)
+        await ManagedObject.delete(predicate: predicate, context: context)
         try self.saveChanges()
     }
     
     func deleteMany(notIn ids: [String]) throws {
         let predicate = QueryPredicate.getPredicate(notIn: ids)
-        for object in ManagedObject.fetchMany(predicate: predicate, context: self.context) {
+        for object in ManagedObject.fetch(predicate: predicate, context: self.context) {
             object.delete(context: self.context)
         }
         try self.saveChanges()
     }
     
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func deleteMany(notIn ids: [String]) async throws {
+        let predicate = QueryPredicate.getPredicate(notIn: ids)
+        await ManagedObject.delete(predicate: predicate, context: context)
+        try self.saveChanges()
+    }
+    
     func deleteAll() throws {
-        let request = ManagedObject.newFetchRequest(sortDescriptors: nil)
-        request.returnsObjectsAsFaults = false
-        for object in  ManagedObject.fetch(predicate: nil, sortDescriptors: nil, context: self.context) {
+        for object in ManagedObject.fetch(predicate: nil, sortDescriptors: nil, context: self.context) {
             object.delete(context: self.context)
         }
+        try self.saveChanges()
+    }
+    
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func deleteAll() async throws {
+        await ManagedObject.delete(predicate: nil, context: self.context)
         try self.saveChanges()
     }
 }
@@ -111,50 +169,132 @@ extension ManagedObjectStore where ObjectType.ManagedObject : ManagedObjectParen
     
     // MARK: - Fetching
     
-    func fetchOne(id: String, parentId: String) -> ObjectType.ManagedObject.StructType? {
+    func fetchOne(
+        id: String,
+        parentId: String
+    ) -> ObjectType.ManagedObject.StructType? {
         let predicate = QueryPredicate.getPredicate(id: id, parentId: parentId)
         return ManagedObject.fetchOne(predicate: predicate, context: self.context)?.structValue
     }
-
-    func fetchMany(in ids: [String], parentId: String) -> [ObjectType.ManagedObject.StructType] {
-        let predicate = QueryPredicate.getPredicate(ids: ids, parentId: parentId)
-        return ManagedObject.fetchMany(predicate: predicate, context: self.context).structValues
+    
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func fetchOne(
+        id: String,
+        parentId: String
+    ) async -> ObjectType.ManagedObject.StructType? {
+        let predicate = QueryPredicate.getPredicate(id: id, parentId: parentId)
+        return await ManagedObject.fetchOne(predicate: predicate, context: self.context)?.structValue
     }
 
-    func fetchMany(notIn ids: [String], parentId: String) -> [ObjectType.ManagedObject.StructType] {
+    func fetchMany(
+        in ids: [String],
+        parentId: String
+    ) -> [ObjectType.ManagedObject.StructType] {
+        let predicate = QueryPredicate.getPredicate(ids: ids, parentId: parentId)
+        return ManagedObject.fetch(predicate: predicate, context: self.context).structValues
+    }
+    
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func fetchMany(
+        in ids: [String],
+        parentId: String
+    ) async -> [ObjectType.ManagedObject.StructType] {
+        let predicate = QueryPredicate.getPredicate(ids: ids, parentId: parentId)
+        return await ManagedObject.fetch(predicate: predicate, context: self.context).structValues
+    }
+
+    func fetchMany(
+        notIn ids: [String],
+        parentId: String
+    ) -> [ObjectType.ManagedObject.StructType] {
         let predicate = QueryPredicate.getPredicate(notIn: ids, parentId: parentId)
-        return ManagedObject.fetchMany(predicate: predicate, context: self.context).structValues
+        return ManagedObject.fetch(predicate: predicate, context: self.context).structValues
+    }
+    
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func fetchMany(
+        notIn ids: [String],
+        parentId: String
+    ) async -> [ObjectType.ManagedObject.StructType] {
+        let predicate = QueryPredicate.getPredicate(notIn: ids, parentId: parentId)
+        return await ManagedObject.fetch(predicate: predicate, context: self.context).structValues
     }
     
     // MARK: - Delete
     
-    func deleteOne(id: String, parentId: String) throws {
+    func deleteOne(
+        id: String,
+        parentId: String
+    ) throws {
         let predicate = QueryPredicate.getPredicate(id: id, parentId: parentId)
         ManagedObject.delete(predicate: predicate, context: self.context)
         try self.saveChanges()
     }
     
-    func deleteMany(in ids: [String], parentId: String) throws {
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func deleteOne(
+        id: String,
+        parentId: String
+    ) async throws {
+        let predicate = QueryPredicate.getPredicate(id: id, parentId: parentId)
+        await ManagedObject.delete(predicate: predicate, context: self.context)
+        try self.saveChanges()
+    }
+    
+    func deleteMany(
+        in ids: [String],
+        parentId: String
+    ) throws {
         let predicate = QueryPredicate.getPredicate(ids: ids, parentId: parentId)
-        for object in ManagedObject.fetchMany(predicate: predicate, context: self.context) {
+        for object in ManagedObject.fetch(predicate: predicate, context: self.context) {
             object.delete(context: self.context)
         }
         try self.saveChanges()
     }
     
-    func deleteMany(notIn ids: [String], parentId: String) throws {
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func deleteMany(
+        in ids: [String],
+        parentId: String
+    ) async throws {
+        let predicate = QueryPredicate.getPredicate(ids: ids, parentId: parentId)
+        await ManagedObject.delete(predicate: predicate, context: self.context)
+        try self.saveChanges()
+    }
+    
+    func deleteMany(
+        notIn ids: [String],
+        parentId: String
+    ) throws {
         let predicate = QueryPredicate.getPredicate(notIn: ids, parentId: parentId)
-        for object in ManagedObject.fetchMany(predicate: predicate, context: self.context) {
+        for object in ManagedObject.fetch(predicate: predicate, context: self.context) {
             object.delete(context: self.context)
         }
+        try self.saveChanges()
+    }
+    
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func deleteMany(
+        notIn ids: [String],
+        parentId: String
+    ) async throws {
+        let predicate = QueryPredicate.getPredicate(notIn: ids, parentId: parentId)
+        await ManagedObject.delete(predicate: predicate, context: self.context)
         try self.saveChanges()
     }
     
     func deleteMany(parentId: String) throws {
         let predicate = QueryPredicate.getPredicate(parentId: parentId)
-        for object in ManagedObject.fetchMany(predicate: predicate, context: self.context) {
+        for object in ManagedObject.fetch(predicate: predicate, context: self.context) {
             object.delete(context: self.context)
         }
+        try self.saveChanges()
+    }
+    
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func deleteMany(parentId: String) async throws {
+        let predicate = QueryPredicate.getPredicate(parentId: parentId)
+        await ManagedObject.delete(predicate: predicate, context: self.context)
         try self.saveChanges()
     }
 }

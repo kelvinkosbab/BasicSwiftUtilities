@@ -8,7 +8,7 @@ import SwiftUI
 
 // MARK: - CoreActivityIndicator
 
-@available(iOS 14.0, macOS 12, *)
+@available(iOS 14.0, macOS 12.0, *)
 private struct SwiftUISpinner : View {
     
     let style: CoreSpinner.Style
@@ -75,7 +75,7 @@ private struct UIKitSpinner: UIViewRepresentable {
 ///     }
 ///
 /// If you wish to show determinate progress use the `ProgressView` component.
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 public struct CoreSpinner : View {
     
     enum Style {
@@ -119,7 +119,7 @@ public struct CoreSpinner : View {
 
 #if DEBUG
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 struct CoreSpinner_Previews: PreviewProvider {
     
     static var previews: some View {

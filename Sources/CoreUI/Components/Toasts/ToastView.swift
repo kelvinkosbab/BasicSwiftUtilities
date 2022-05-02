@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: - ToastView
 
 /// Displayable content for a toast.
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 struct ToastView : View {
     
     @Environment(\.colorScheme) var colorScheme

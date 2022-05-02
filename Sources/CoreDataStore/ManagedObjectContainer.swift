@@ -172,6 +172,7 @@ public class ManagedObjectContainer : StoreContainer {
         }
     }
     
+    /// Resets and destroys the CoreData persistent store.
     @available(iOS 15.0, *)
     public func reset() throws {
         

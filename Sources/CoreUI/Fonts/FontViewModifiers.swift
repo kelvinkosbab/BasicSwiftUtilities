@@ -12,7 +12,7 @@ import UIKit
 
 // MARK: - Body ViewModifiers
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct BodyModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -32,7 +32,7 @@ private struct BodyModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct BodyBoldModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -52,7 +52,7 @@ private struct BodyBoldModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct BodyItalicModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -73,7 +73,7 @@ private struct BodyItalicModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct BodyMonospaceModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -95,7 +95,7 @@ private struct BodyMonospaceModifier : ViewModifier {
 
 // MARK: - Footnote ViewModifiers
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct FootnoteModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -115,7 +115,7 @@ private struct FootnoteModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct FootnoteBoldModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -135,7 +135,7 @@ private struct FootnoteBoldModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct FootnoteItalicModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -156,7 +156,7 @@ private struct FootnoteItalicModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct FootnoteMonospaceModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -178,7 +178,7 @@ private struct FootnoteMonospaceModifier : ViewModifier {
 
 // MARK: - Heading ViewModifiers
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct HeadingModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -198,7 +198,7 @@ private struct HeadingModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct HeadingBoldModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -218,7 +218,7 @@ private struct HeadingBoldModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct HeadingItalicModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -239,7 +239,7 @@ private struct HeadingItalicModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct HeadingMonospaceModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -261,7 +261,7 @@ private struct HeadingMonospaceModifier : ViewModifier {
 
 // MARK: - Title ViewModifiers
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct TitleModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -281,7 +281,7 @@ private struct TitleModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct TitleBoldModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -301,7 +301,7 @@ private struct TitleBoldModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct TitleItalicModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -322,7 +322,7 @@ private struct TitleItalicModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct TitleMonospaceModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -344,7 +344,7 @@ private struct TitleMonospaceModifier : ViewModifier {
 
 // MARK: - XL Title ViewModifiers
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct XlTitleModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -364,7 +364,7 @@ private struct XlTitleModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct XlTitleBoldModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -384,7 +384,7 @@ private struct XlTitleBoldModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct XlTitleItalicModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -405,7 +405,7 @@ private struct XlTitleItalicModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct XlTitleMonospaceModifier : ViewModifier {
     
     let appFont: AppFont.Style
@@ -427,7 +427,7 @@ private struct XlTitleMonospaceModifier : ViewModifier {
 
 // MARK: - View Extension
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 public extension View {
     
     // MARK: - Body

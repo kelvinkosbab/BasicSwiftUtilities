@@ -12,7 +12,7 @@ import Core
 // MARK: - ToastState
 
 /// Defines the lifecycle of a toast.
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 enum ToastState {
     
     /// No toast shold be prepared or shown for rendering.
@@ -41,14 +41,14 @@ enum ToastState {
 
 // MARK: - ToastStateManager
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 protocol ToastStateDelegate : AnyObject {
     func didUpdate(toastState: ToastState)
 }
 
 /// Responsible for managing any incoming `showToast` requests. Incoming toasts will be queued up
 /// until all toasts have been shown to the user.
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 class ToastStateManager  {
     
     weak var delegate: ToastStateDelegate?

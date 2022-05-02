@@ -10,7 +10,7 @@ import SwiftUI
 
 // MARK: - Searchable
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 private struct Searchable : ViewModifier {
     
     @Binding var text: String
@@ -59,7 +59,7 @@ private struct Searchable : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 public extension View {
     
     func coreSearchable(text: Binding<String>,

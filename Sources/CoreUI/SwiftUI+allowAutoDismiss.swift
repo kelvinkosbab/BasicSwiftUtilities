@@ -8,17 +8,17 @@
 //  Created by https://quickplan.app on 2020/11/8.
 //
 
+#if !os(macOS)
+
 import SwiftUI
 
 /// Control if allow to dismiss the sheet by the user actions
 /// - Drag down on the sheet on iPhone and iPad
 /// - Tap outside the sheet on iPad
 /// No impact to dismiss programatically (by calling "presentationMode.wrappedValue.dismiss()")
-/// -----------------
-/// Tested on iOS 14.2 with Xcode 12.2 RC
-/// This solution may NOT work in the furture.
-/// -----------------
-@available(iOS 13.0, *)
+@available(iOS 13.0, tvOS 13.0, *)
+@available(macOS, unavailable)
+@available(watchOS, unavailable)
 struct MbModalHackView: UIViewControllerRepresentable {
     var dismissable: () -> Bool = { false }
     
@@ -31,7 +31,9 @@ struct MbModalHackView: UIViewControllerRepresentable {
     }
 }
 
-@available(iOS 13.0, *)
+@available(iOS 13.0, tvOS 13.0, *)
+@available(macOS, unavailable)
+@available(watchOS, unavailable)
 extension MbModalHackView {
     private final class MbModalViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
         let dismissable: () -> Bool
@@ -77,7 +79,9 @@ extension UIViewController {
 
 /// make the call the SwiftUI style:
 /// view.allowAutDismiss(...)
-@available(iOS 13.0, *)
+@available(iOS 13.0, tvOS 13.0, *)
+@available(macOS, unavailable)
+@available(watchOS, unavailable)
 public extension View {
     
     /// Control if allow to dismiss the sheet by the user actions
@@ -97,7 +101,9 @@ public extension View {
 
 #if DEBUG
 
-@available(iOS 13.0, *)
+@available(iOS 13.0, tvOS 13.0, *)
+@available(macOS, unavailable)
+@available(watchOS, unavailable)
 struct AllowAutoDismiss_Previews: PreviewProvider {
     
     /// Example:
@@ -142,5 +148,7 @@ struct AllowAutoDismiss_Previews: PreviewProvider {
         ContentView()
     }
 }
+
+#endif
 
 #endif

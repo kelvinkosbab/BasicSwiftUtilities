@@ -4,8 +4,11 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import UIKit
 import SwiftUI
+
+#if !os(macOS)
+import UIKit
+#endif
 
 // MARK: - RGBColor
 
@@ -116,16 +119,23 @@ public extension Color {
     /// - Parameter opacity: An optional degree of opacity, given in the range `0` to
     ///     `1`. A value of `0` means 100% transparency, while a value of `1`
     ///     means 100% opacity. The default is `1`.
-    static func hex(_ hex: Int, opacity: Double = 1) -> Color {
+    static func hex(
+        _ hex: Int,
+        opacity: Double = 1
+    ) -> Color {
         let color = HexColor(hex: hex)
-        return Color(red: color.red,
-                     green: color.green,
-                     blue: color.blue,
-                     opacity: opacity)
+        return Color(
+            red: color.red,
+            green: color.green,
+            blue: color.blue,
+            opacity: opacity
+        )
     }
 }
 
 // MARK: - UIKit Color
+
+#if !os(macOS)
 
 public extension UIColor {
 
@@ -141,7 +151,10 @@ public extension UIColor {
     /// - Parameter alpha: An optional degree of opacity, given in the range `0` to
     ///     `1`. A value of `0` means 100% transparency, while a value of `1`
     ///     means 100% opacity. The default is `1`.
-    static func hex(_ hex: Int, opacity: Double = 1) -> UIColor {
+    static func hex(
+        _ hex: Int,
+        opacity: Double = 1
+    ) -> UIColor {
         let color = HexColor(hex: hex)
         return UIColor(red: color.red,
                        green: color.green,
@@ -150,6 +163,8 @@ public extension UIColor {
     }
 }
 
+#endif
+
 // MARK: - Preview
 
 #if DEBUG
@@ -157,6 +172,7 @@ public extension UIColor {
 @available(iOS 13.0, macOS 11, tvOS 13.0, watchOS 6.0, *)
 struct Color_Previews: PreviewProvider {
  
+    #if !os(macOS)
     /// In order to preview UIKit views in a `PreviewProvider` we must use
     /// `UIViewRepresentable`. This protocol can map a UIKit object into a SwiftUI View.
     struct UIKitView: UIViewRepresentable {
@@ -178,6 +194,7 @@ struct Color_Previews: PreviewProvider {
             // do nothing
         }
     }
+    #endif
     
     static var mockHexColors: [Int] = [
         0x8250C4,
@@ -274,6 +291,7 @@ struct Color_Previews: PreviewProvider {
         }
         .previewDisplayName("SwiftUI and Color")
  
+        #if !os(macOS)
         List {
             ForEach(self.mockHexColors, id: \.self) { hex in
                 HStack {
@@ -284,6 +302,7 @@ struct Color_Previews: PreviewProvider {
             }
         }
         .previewDisplayName("UIKit and UIColor")
+        #endif
     }
 }
  

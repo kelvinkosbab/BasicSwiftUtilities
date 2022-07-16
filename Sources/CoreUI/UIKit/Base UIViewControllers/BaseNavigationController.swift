@@ -50,27 +50,24 @@ open class BaseNavigationController : UINavigationController, PresentableControl
         case transparent
         
         var isTranslucent: Bool {
-            switch self {
-            case .default, .transparent:
-                return true
-            }
+            return true
         }
         
         var barTintColor: UIColor? {
             switch self {
-            case .default:
-                return nil
             case .transparent:
                 return .clear
+            default:
+                return nil
             }
         }
         
         var tintColor: UIColor {
             switch self {
-            case .default:
-                return AppColors.appTintUIColor
             case .transparent:
                 return .white
+            default:
+                return AppColors.appTintUIColor
             }
         }
         
@@ -122,10 +119,10 @@ open class BaseNavigationController : UINavigationController, PresentableControl
     
     override open var preferredStatusBarStyle: UIStatusBarStyle {
         switch self.navigationBarStyle ?? .default {
-        case .default:
-            return .default
         case .transparent:
             return .lightContent
+        default:
+            return .default
         }
     }
 }

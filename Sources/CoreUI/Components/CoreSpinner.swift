@@ -16,10 +16,10 @@ private struct SwiftUISpinner : View {
     var body: some View {
         VStack {
             switch self.style {
-            case .color(color: let color, uiColor: _):
+            case .color(color: let color):
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: color))
-            case .default:
+            default:
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
             }
@@ -37,9 +37,9 @@ private struct UIKitSpinner: UIViewRepresentable {
         let view = UIActivityIndicatorView(style: .medium)
         view.startAnimating()
         switch self.style {
-        case .color(color: _, uiColor: let color):
+        case .color(uiColor: let color):
             view.color = color
-        case .default:
+        default:
             break
         }
         return view
@@ -80,7 +80,10 @@ public struct CoreSpinner : View {
     
     enum Style {
         case `default`
-        case color(color: Color, uiColor: UIColor)
+        case color(color: Color)
+        #if !os(macOS)
+        case color(uiColor: UIColor)
+        #endif
     }
     
     let style: Style
@@ -93,14 +96,17 @@ public struct CoreSpinner : View {
     public init(
         color: Color
     ) {
-        self.style = .color(color: color, uiColor: UIColor(color))
+        self.style = .color(color: color)
     }
     
+    #if !os(macOS)
+    @available(iOS 14.0, *)
     public init(
         uiColor: UIColor = AppColors.appTintUIColor
     ) {
-        self.style = .color(color: Color(uiColor), uiColor: uiColor)
+        self.init(color: Color(uiColor))
     }
+    #endif
     
     public var body: some View {
         #if !os(macOS)
@@ -131,9 +137,11 @@ struct CoreSpinner_Previews: PreviewProvider {
                 CoreSpinner(color: .green)
                 CoreSpinner(color: .red)
             }
+            #if !os(macOS)
             CoreSpinner(uiColor: .blue)
             CoreSpinner(uiColor: .green)
             CoreSpinner(uiColor: .red)
+            #endif
         }
         .previewDisplayName("CoreActivityIndicator")
     }

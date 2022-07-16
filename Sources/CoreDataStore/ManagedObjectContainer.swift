@@ -106,6 +106,7 @@ public class ManagedObjectContainer : StoreContainer {
     /// accessed until after the device has booted. After the user unlocks the device for the first time, your app can access the file
     /// and continue to access it even if the user subsequently locks the device.
     /// - `none`: The file has no special protections associated with it. A file with this type of protection can be read from or written to at any time.
+    @available(macOS, unavailable)
     public func configure(fileProtectionType: FileProtectionType) {
         let description = NSPersistentStoreDescription()
         description.setOption(fileProtectionType as NSObject, forKey: NSPersistentStoreFileProtectionKey)

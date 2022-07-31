@@ -8,6 +8,7 @@ import Foundation
 
 // MARK: - ObjectStore
 
+@available(iOS 13.0.0, *)
 public protocol ObjectStore  {
     
     associatedtype ObjectType

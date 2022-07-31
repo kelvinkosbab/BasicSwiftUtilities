@@ -8,6 +8,7 @@ import CoreData
 
 // MARK: - ManagedObjectStore
 
+@available(iOS 13.0.0, *)
 public protocol ManagedObjectStore : ObjectStore where ObjectType : ManagedObjectAssociated, ObjectType.ManagedObject.StructType == ObjectType {
     var context: NSManagedObjectContext { get }
     
@@ -20,6 +21,7 @@ public protocol ManagedObjectStore : ObjectStore where ObjectType : ManagedObjec
     func saveChanges() throws
 }
 
+@available(iOS 13.0.0, *)
 public extension ManagedObjectStore {
     
     typealias ManagedObject = ObjectType.ManagedObject
@@ -165,6 +167,7 @@ public extension ManagedObjectStore {
 
 // MARK: - Parent and Child
 
+@available(iOS 13.0.0, *)
 extension ManagedObjectStore where ObjectType.ManagedObject : ManagedObjectParentIdentifiable {
     
     // MARK: - Fetching

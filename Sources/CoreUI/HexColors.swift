@@ -156,10 +156,12 @@ public extension UIColor {
         opacity: Double = 1
     ) -> UIColor {
         let color = HexColor(hex: hex)
-        return UIColor(red: color.red,
-                       green: color.green,
-                       blue: color.blue,
-                       alpha: opacity)
+        return UIColor(
+            red: color.red,
+            green: color.green,
+            blue: color.blue,
+            alpha: opacity
+        )
     }
 }
 

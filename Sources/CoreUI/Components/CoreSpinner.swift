@@ -8,7 +8,7 @@ import SwiftUI
 
 // MARK: - CoreActivityIndicator
 
-@available(iOS 14.0, macOS 12.0, *)
+@available(iOS 14.0, macOS 13.0, tvOS 14.0, watchOS 7.0, *)
 private struct SwiftUISpinner : View {
     
     let style: CoreSpinner.Style
@@ -26,30 +26,6 @@ private struct SwiftUISpinner : View {
         }
     }
 }
-
-#if !os(macOS)
-@available(iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-private struct UIKitSpinner: UIViewRepresentable {
-    
-    let style: CoreSpinner.Style
-    
-    func makeUIView(context: UIViewRepresentableContext<UIKitSpinner>) -> UIActivityIndicatorView {
-        let view = UIActivityIndicatorView(style: .medium)
-        view.startAnimating()
-        switch self.style {
-        case .color(uiColor: let color):
-            view.color = color
-        default:
-            break
-        }
-        return view
-    }
-    
-    func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<UIKitSpinner>) {
-        // do nothing
-    }
-}
-#endif
 
 /// A view that shows a spinner to indicate processing or loading. This spinner does not indicate a progress value and only represents
 /// indeterminate progress.
@@ -75,15 +51,16 @@ private struct UIKitSpinner: UIViewRepresentable {
 ///     }
 ///
 /// If you wish to show determinate progress use the `ProgressView` component.
-@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 14.0, macOS 13.0, tvOS 14.0, watchOS 7.0, *)
 public struct CoreSpinner : View {
     
     enum Style {
+        
+        /// Represents the system default.
         case `default`
+        
+        /// Represents a spinner with the provided color.
         case color(color: Color)
-        #if !os(macOS)
-        case color(uiColor: UIColor)
-        #endif
     }
     
     let style: Style
@@ -92,6 +69,9 @@ public struct CoreSpinner : View {
         self.style = .default
     }
     
+    /// Constructor.
+    ///
+    /// - Parameter color: The color of the spinner.
     @available(iOS 14.0, tvOS 14.0, watchOS 7.0, *)
     public init(
         color: Color
@@ -99,25 +79,18 @@ public struct CoreSpinner : View {
         self.style = .color(color: color)
     }
     
-    #if !os(macOS)
-    @available(iOS 14.0, *)
+    /// Constructor.
+    ///
+    /// - Parameter hex: Represents a color's hex value. For example `0x44DAA7` is the value
+    /// for hex color `#44DAA7`.
     public init(
-        uiColor: UIColor = AppColors.appTintUIColor
+        hexColor: Int
     ) {
-        self.init(color: Color(uiColor))
+        self.init(color: Color.hex(hexColor))
     }
-    #endif
     
     public var body: some View {
-        #if !os(macOS)
-        if #available(iOS 14.0, *) {
-            SwiftUISpinner(style: self.style)
-        } else {
-            UIKitSpinner(style: self.style)
-        }
-        #else
         SwiftUISpinner(style: self.style)
-        #endif
     }
 }
 
@@ -125,23 +98,16 @@ public struct CoreSpinner : View {
 
 #if DEBUG
 
-@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 14.0, macOS 13.0, tvOS 14.0, watchOS 7.0, *)
 struct CoreSpinner_Previews: PreviewProvider {
     
     static var previews: some View {
         
         List {
             CoreSpinner()
-            if #available(iOS 14.0, *) {
-                CoreSpinner(color: .blue)
-                CoreSpinner(color: .green)
-                CoreSpinner(color: .red)
-            }
-            #if !os(macOS)
-            CoreSpinner(uiColor: .blue)
-            CoreSpinner(uiColor: .green)
-            CoreSpinner(uiColor: .red)
-            #endif
+            CoreSpinner(color: .blue)
+            CoreSpinner(color: .green)
+            CoreSpinner(color: .red)
         }
         .previewDisplayName("CoreActivityIndicator")
     }

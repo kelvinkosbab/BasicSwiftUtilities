@@ -15,88 +15,117 @@ private class MockDefaultCoreLogger : CoreLogger {
     var debugLogs: [String] = []
     var infoLogs: [String] = []
     var errorLogs: [String] = []
+    var faultLogs: [String] = []
     
     func debug(_ message: String) {
         self.debugLogs.append(message)
+    }
+    
+    func debug(_ message: String, private privateMessage: String) {
+        self.debugLogs.append("\(message):\(privateMessage)")
     }
     
     func info(_ message: String) {
         self.infoLogs.append(message)
     }
     
-    func error(_ message: String) {
-        self.errorLogs.append(message)
-    }
-}
-
-/// A logger that conforms to `CoreLogger` but does override the private message APIs.
-private class MockPrivateLogCoreLogger : CoreLogger {
-    
-    var debugLogs: [String] = []
-    var infoLogs: [String] = []
-    var errorLogs: [String] = []
-    
-    func debug(_ message: String) {
-        self.debugLogs.append(message)
-    }
-    
-    func info(_ message: String) {
-        self.infoLogs.append(message)
+    func info(_ message: String, private privateMessage: String) {
+        self.infoLogs.append("\(message):\(privateMessage)")
     }
     
     func error(_ message: String) {
         self.errorLogs.append(message)
     }
     
-    public func debug(_ message: String, private privateMessage: String) {
-        self.debugLogs.append("\(message): \(privateMessage)")
+    func error(_ message: String, private privateMessage: String) {
+        self.errorLogs.append("\(message):\(privateMessage)")
     }
     
-    public func info(_ message: String, private privateMessage: String) {
-        self.infoLogs.append("\(message): \(privateMessage)")
+    func fault(_ message: String) {
+        self.faultLogs.append(message)
     }
     
-    public func error(_ message: String, private privateMessage: String) {
-        self.errorLogs.append("\(message): \(privateMessage)")
+    func fault(_ message: String, private privateMessage: String) {
+        self.faultLogs.append("\(message):\(privateMessage)")
     }
 }
 
 // MARK: - Tests
 
-final class DefaultLoggerTests: XCTestCase {
+final class LoggerTests: XCTestCase {
+    
+    // MARK: - Debug Log Tests
     
     /// Default logger should log a `debug` message correctly.
     ///
     /// - Expect a logged string to be logged at the `debug` level and log to equal the input.
-    func testDefaultLoggerLogsDebug() {
+    func testLoggerLogsDebug() {
         let mockLogger = MockDefaultCoreLogger()
         let logger = Logger(logger: mockLogger)
         let someString = UUID().uuidString
         logger.debug(someString)
         XCTAssert(mockLogger.debugLogs.count == 1)
+        XCTAssert(mockLogger.debugLogs[0] == "[Debug] \(someString)")
         XCTAssert(mockLogger.infoLogs.count == 0)
         XCTAssert(mockLogger.errorLogs.count == 0)
-        XCTAssert(mockLogger.debugLogs[0] == "[Debug] \(someString)")
+        XCTAssert(mockLogger.faultLogs.count == 0)
     }
     
-    /// Default logger should log an `info` message correctly.
+    /// Default logger should log a `debug` message with a private message correctly.
+    ///
+    /// - Expect a logged string to be logged at the `debug` level and log to equal the input.
+    func testLoggerLogsDebugWithPrivateMessage() {
+        let mockLogger = MockDefaultCoreLogger()
+        let logger = Logger(logger: mockLogger)
+        let someString = UUID().uuidString
+        let somePrivateString = UUID().uuidString
+        logger.debug(someString, private: somePrivateString)
+        XCTAssert(mockLogger.debugLogs.count == 1)
+        XCTAssert(mockLogger.debugLogs[0] == "[Debug] \(someString):\(somePrivateString)")
+        XCTAssert(mockLogger.infoLogs.count == 0)
+        XCTAssert(mockLogger.errorLogs.count == 0)
+        XCTAssert(mockLogger.faultLogs.count == 0)
+    }
+    
+    // MARK: - Info Log Tests
+    
+    /// Default logger should log a `info` message correctly.
     ///
     /// - Expect a logged string to be logged at the `info` level and log to equal the input.
-    func testDefaultLoggerLogsInfo() {
+    func testLoggerLogsInfo() {
         let mockLogger = MockDefaultCoreLogger()
         let logger = Logger(logger: mockLogger)
         let someString = UUID().uuidString
         logger.info(someString)
         XCTAssert(mockLogger.debugLogs.count == 0)
         XCTAssert(mockLogger.infoLogs.count == 1)
-        XCTAssert(mockLogger.errorLogs.count == 0)
         XCTAssert(mockLogger.infoLogs[0] == "[Info] \(someString)")
+        XCTAssert(mockLogger.errorLogs.count == 0)
+        XCTAssert(mockLogger.faultLogs.count == 0)
     }
     
-    /// Default logger should log an `error` message correctly.
+    /// Default logger should log a `info` message with a private message correctly.
+    ///
+    /// - Expect a logged string to be logged at the `info` level and log to equal the input.
+    func testLoggerLogsInfoWithPrivateMessage() {
+        let mockLogger = MockDefaultCoreLogger()
+        let logger = Logger(logger: mockLogger)
+        let someString = UUID().uuidString
+        let somePrivateString = UUID().uuidString
+        logger.info(someString, private: somePrivateString)
+        XCTAssert(mockLogger.debugLogs.count == 0)
+        XCTAssert(mockLogger.infoLogs.count == 1)
+        XCTAssert(mockLogger.infoLogs[0] == "[Info] \(someString):\(somePrivateString)")
+        XCTAssert(mockLogger.errorLogs.count == 0)
+        XCTAssert(mockLogger.faultLogs.count == 0)
+    }
+    
+    // MARK: - Error Log Tests
+    
+    /// Default logger should log a `error` message correctly.
     ///
     /// - Expect a logged string to be logged at the `error` level and log to equal the input.
-    func testDefaultLoggerLogsError() {
+    func testLoggerLogsError() {
         let mockLogger = MockDefaultCoreLogger()
         let logger = Logger(logger: mockLogger)
         let someString = UUID().uuidString
@@ -105,133 +134,14 @@ final class DefaultLoggerTests: XCTestCase {
         XCTAssert(mockLogger.infoLogs.count == 0)
         XCTAssert(mockLogger.errorLogs.count == 1)
         XCTAssert(mockLogger.errorLogs[0] == "[Error] \(someString)")
+        XCTAssert(mockLogger.faultLogs.count == 0)
     }
     
-    /// Default logger should log a private `debug` message correctly.
-    ///
-    /// - Expect a logged string to be logged at the `error` level and log to equal the input minus the private message.
-    func testDefaultLoggerLogsPrivateDebug() {
-        let mockLogger = MockDefaultCoreLogger()
-        let logger = Logger(logger: mockLogger)
-        let someString = UUID().uuidString
-        let somePrivateString = UUID().uuidString
-        logger.debug(someString, private: somePrivateString)
-        XCTAssert(mockLogger.debugLogs.count == 1)
-        XCTAssert(mockLogger.infoLogs.count == 0)
-        XCTAssert(mockLogger.errorLogs.count == 0)
-        XCTAssert(mockLogger.debugLogs[0] == "[Debug] \(someString): <private>")
-    }
-    
-    /// Default logger should log a private `info` message correctly.
-    ///
-    /// - Expect a logged string to be logged at the `error` level and log to equal the input minus the private message.
-    func testDefaultLoggerLogsPrivateInfo() {
-        let mockLogger = MockDefaultCoreLogger()
-        let logger = Logger(logger: mockLogger)
-        let someString = UUID().uuidString
-        let somePrivateString = UUID().uuidString
-        logger.info(someString, private: somePrivateString)
-        XCTAssert(mockLogger.debugLogs.count == 0)
-        XCTAssert(mockLogger.infoLogs.count == 1)
-        XCTAssert(mockLogger.errorLogs.count == 0)
-        XCTAssert(mockLogger.infoLogs[0] == "[Info] \(someString): <private>")
-    }
-    
-    /// Default logger should log a private `error` message correctly.
-    ///
-    /// - Expect a logged string to be logged at the `error` level and log to equal the input minus the private message.
-    func testDefaultLoggerLogsPrivateError() {
-        let mockLogger = MockDefaultCoreLogger()
-        let logger = Logger(logger: mockLogger)
-        let someString = UUID().uuidString
-        let somePrivateString = UUID().uuidString
-        logger.error(someString, private: somePrivateString)
-        XCTAssert(mockLogger.debugLogs.count == 0)
-        XCTAssert(mockLogger.infoLogs.count == 0)
-        XCTAssert(mockLogger.errorLogs.count == 1)
-        XCTAssert(mockLogger.errorLogs[0] == "[Error] \(someString): <private>")
-    }
-}
-
-final class PrivateLoggerTests: XCTestCase {
-    
-    /// Default logger should log a `debug` message correctly.
-    ///
-    /// - Expect a logged string to be logged at the `debug` level and log to equal the input.
-    func testDefaultLoggerLogsDebug() {
-        let mockLogger = MockPrivateLogCoreLogger()
-        let logger = Logger(logger: mockLogger)
-        let someString = UUID().uuidString
-        logger.debug(someString)
-        XCTAssert(mockLogger.debugLogs.count == 1)
-        XCTAssert(mockLogger.infoLogs.count == 0)
-        XCTAssert(mockLogger.errorLogs.count == 0)
-        XCTAssert(mockLogger.debugLogs[0] == "[Debug] \(someString)")
-    }
-    
-    /// Default logger should log an `info` message correctly.
-    ///
-    /// - Expect a logged string to be logged at the `info` level and log to equal the input.
-    func testDefaultLoggerLogsInfo() {
-        let mockLogger = MockPrivateLogCoreLogger()
-        let logger = Logger(logger: mockLogger)
-        let someString = UUID().uuidString
-        logger.info(someString)
-        XCTAssert(mockLogger.debugLogs.count == 0)
-        XCTAssert(mockLogger.infoLogs.count == 1)
-        XCTAssert(mockLogger.errorLogs.count == 0)
-        XCTAssert(mockLogger.infoLogs[0] == "[Info] \(someString)")
-    }
-    
-    /// Default logger should log an `error` message correctly.
+    /// Default logger should log a `error` message with a private message correctly.
     ///
     /// - Expect a logged string to be logged at the `error` level and log to equal the input.
-    func testDefaultLoggerLogsError() {
-        let mockLogger = MockPrivateLogCoreLogger()
-        let logger = Logger(logger: mockLogger)
-        let someString = UUID().uuidString
-        logger.error(someString)
-        XCTAssert(mockLogger.debugLogs.count == 0)
-        XCTAssert(mockLogger.infoLogs.count == 0)
-        XCTAssert(mockLogger.errorLogs.count == 1)
-        XCTAssert(mockLogger.errorLogs[0] == "[Error] \(someString)")
-    }
-    
-    /// Default logger should log a private `debug` message correctly.
-    ///
-    /// - Expect a logged string to be logged at the `error` level and log to equal the input and the private message.
-    func testDefaultLoggerLogsPrivateDebug() {
-        let mockLogger = MockPrivateLogCoreLogger()
-        let logger = Logger(logger: mockLogger)
-        let someString = UUID().uuidString
-        let somePrivateString = UUID().uuidString
-        logger.debug(someString, private: somePrivateString)
-        XCTAssert(mockLogger.debugLogs.count == 1)
-        XCTAssert(mockLogger.infoLogs.count == 0)
-        XCTAssert(mockLogger.errorLogs.count == 0)
-        XCTAssert(mockLogger.debugLogs[0] == "[Debug] \(someString): \(somePrivateString)")
-    }
-    
-    /// Default logger should log a private `info` message correctly.
-    ///
-    /// - Expect a logged string to be logged at the `error` level and log to equal the input and the private message.
-    func testDefaultLoggerLogsPrivateInfo() {
-        let mockLogger = MockPrivateLogCoreLogger()
-        let logger = Logger(logger: mockLogger)
-        let someString = UUID().uuidString
-        let somePrivateString = UUID().uuidString
-        logger.info(someString, private: somePrivateString)
-        XCTAssert(mockLogger.debugLogs.count == 0)
-        XCTAssert(mockLogger.infoLogs.count == 1)
-        XCTAssert(mockLogger.errorLogs.count == 0)
-        XCTAssert(mockLogger.infoLogs[0] == "[Info] \(someString): \(somePrivateString)")
-    }
-    
-    /// Default logger should log a private `error` message correctly.
-    ///
-    /// - Expect a logged string to be logged at the `error` level and log to equal the input and the private message.
-    func testDefaultLoggerLogsPrivateError() {
-        let mockLogger = MockPrivateLogCoreLogger()
+    func testLoggerLogsErrorWithPrivateMessage() {
+        let mockLogger = MockDefaultCoreLogger()
         let logger = Logger(logger: mockLogger)
         let someString = UUID().uuidString
         let somePrivateString = UUID().uuidString
@@ -239,6 +149,40 @@ final class PrivateLoggerTests: XCTestCase {
         XCTAssert(mockLogger.debugLogs.count == 0)
         XCTAssert(mockLogger.infoLogs.count == 0)
         XCTAssert(mockLogger.errorLogs.count == 1)
-        XCTAssert(mockLogger.errorLogs[0] == "[Error] \(someString): \(somePrivateString)")
+        XCTAssert(mockLogger.errorLogs[0] == "[Error] \(someString):\(somePrivateString)")
+        XCTAssert(mockLogger.faultLogs.count == 0)
+    }
+    
+    // MARK: - Fault Log Tests
+    
+    /// Default logger should log a `fault` message correctly.
+    ///
+    /// - Expect a logged string to be logged at the `fault` level and log to equal the input.
+    func testLoggerLogsFault() {
+        let mockLogger = MockDefaultCoreLogger()
+        let logger = Logger(logger: mockLogger)
+        let someString = UUID().uuidString
+        logger.fault(someString)
+        XCTAssert(mockLogger.debugLogs.count == 0)
+        XCTAssert(mockLogger.infoLogs.count == 0)
+        XCTAssert(mockLogger.errorLogs.count == 0)
+        XCTAssert(mockLogger.faultLogs.count == 1)
+        XCTAssert(mockLogger.faultLogs[0] == "[Fault] \(someString)")
+    }
+    
+    /// Default logger should log a `fault` message with a private message correctly.
+    ///
+    /// - Expect a logged string to be logged at the `fault` level and log to equal the input.
+    func testLoggerLogsFaultWithPrivateMessage() {
+        let mockLogger = MockDefaultCoreLogger()
+        let logger = Logger(logger: mockLogger)
+        let someString = UUID().uuidString
+        let somePrivateString = UUID().uuidString
+        logger.fault(someString, private: somePrivateString)
+        XCTAssert(mockLogger.debugLogs.count == 0)
+        XCTAssert(mockLogger.infoLogs.count == 0)
+        XCTAssert(mockLogger.errorLogs.count == 0)
+        XCTAssert(mockLogger.faultLogs.count == 1)
+        XCTAssert(mockLogger.faultLogs[0] == "[Fault] \(someString):\(somePrivateString)")
     }
 }

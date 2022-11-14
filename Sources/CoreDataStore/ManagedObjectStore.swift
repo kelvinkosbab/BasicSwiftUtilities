@@ -26,13 +26,19 @@ public extension ManagedObjectStore {
     
     typealias ManagedObject = ObjectType.ManagedObject
     
+    /// Saves any changes on the context.
+    ///
+    /// If this function throws you should handle the error appropriately. You should NOT use `fatalError()` in a shipping
+    /// application, although it may be useful during development.
+    ///
+    /// - Throws if there is an error during the operation.
     func saveChanges() throws {
         
         guard self.context.hasChanges else {
             return
         }
         
-        try? self.context.save()
+        try self.context.save()
     }
     
     // MARK: - Create or Update

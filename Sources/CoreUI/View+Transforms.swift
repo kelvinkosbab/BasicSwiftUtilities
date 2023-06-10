@@ -1,5 +1,5 @@
 //
-//  View+Transforms .swift
+//  View+Transforms.swift
 //
 //  Copyright © Kozinga. All rights reserved.
 //
@@ -9,7 +9,7 @@ import SwiftUI
 @available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 public extension View {
     
-    /// ```
+    /// ```swift
     /// var body: some view {
     ///     myView
     ///         .if(X) { $0.padding(8) }
@@ -19,7 +19,10 @@ public extension View {
     ///
     /// Source: https://fivestars.blog/swiftui/conditional-modifiers.html
     @ViewBuilder
-    func `if`<Transform: View>(_ condition: Bool, transform: (Self) -> Transform) -> some View {
+    func `if`<Transform: View>(
+        _ condition: Bool,
+        transform: (Self) -> Transform
+    ) -> some View {
         if condition {
             transform(self)
         } else {
@@ -27,7 +30,7 @@ public extension View {
         }
     }
     
-    /// ```
+    /// ```swift
     /// var body: some view {
     ///     myView
     ///         .if(X) { $0.padding(8) } else: { $0.background(Color.blue) }
@@ -36,7 +39,11 @@ public extension View {
     ///
     /// Source: https://fivestars.blog/swiftui/conditional-modifiers.html
     @ViewBuilder
-    func `if`<TrueContent: View, FalseContent: View>(_ condition: Bool, if ifTransform: (Self) -> TrueContent, else elseTransform: (Self) -> FalseContent ) -> some View {
+    func `if`<TrueContent: View, FalseContent: View>(
+        _ condition: Bool,
+        if ifTransform: (Self) -> TrueContent,
+        else elseTransform: (Self) -> FalseContent
+    ) -> some View {
         if condition {
             ifTransform(self)
         } else {

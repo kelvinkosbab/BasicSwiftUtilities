@@ -5,7 +5,7 @@
 //
 
 import XCTest
-@testable import CoreUI
+@testable import BasicUIUtilities
 
 // MARK: - HexColorsTests
 

@@ -1,6 +1,6 @@
 //
 //  Concurrency.swift
-//  
+//
 //  Copyright © Kozinga. All rights reserved.
 //
 
@@ -18,7 +18,7 @@ import Foundation
 /// this function throws that error.
 ///
 /// Example:
-/// ```
+/// ```swift
 /// public func asyncFunction() async throws {
 ///     try await withUnsafeThrowingVoidContinuation { continuation in
 ///         fetchResultWithCompletion { result in
@@ -46,7 +46,7 @@ public func withUnsafeThrowingVoidContinuation(_ fn: (UnsafeContinuation<Void, E
 /// You must resume the continuation exactly once.
 ///
 /// Example:
-/// ```
+/// ```swift
 /// public func asyncFunction() async throws {
 ///     await withUnsafeVoidContinuation { continuation in
 ///         fetchResultWithCompletion { result in
@@ -72,7 +72,7 @@ public func withUnsafeVoidContinuation(_ fn: (UnsafeContinuation<Void, Never>) -
 /// this function throws that error.
 ///
 /// Example:
-/// ```
+/// ```swift
 /// public func asyncFunction() async throws {
 ///     try await withCheckedThrowingVoidContinuation { continuation in
 ///         fetchResultWithCompletion { result in
@@ -100,7 +100,7 @@ public func withCheckedThrowingVoidContinuation(_ fn: (CheckedContinuation<Void,
 /// You must resume the continuation exactly once.
 ///
 /// Example:
-/// ```
+/// ```swift
 /// public func asyncFunction() async throws {
 ///     await withUnsafeVoidContinuation { continuation in
 ///         fetchResultWithCompletion { result in

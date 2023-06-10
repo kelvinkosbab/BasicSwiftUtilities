@@ -5,6 +5,7 @@
 //
 
 #if !os(macOS)
+#if !os(watchOS)
 
 import UIKit
 
@@ -14,4 +15,5 @@ public protocol InteractiveTransitionDelegate : AnyObject {
     func interactionDidSurpassThreshold(_ interactiveTransition: InteractiveTransition)
 }
 
+#endif
 #endif

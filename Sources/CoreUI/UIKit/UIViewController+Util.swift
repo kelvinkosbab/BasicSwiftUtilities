@@ -5,6 +5,7 @@
 //
 
 #if !os(macOS)
+#if !os(watchOS)
 
 import UIKit
 
@@ -94,4 +95,5 @@ public extension UIViewController {
     }
 }
 
+#endif
 #endif

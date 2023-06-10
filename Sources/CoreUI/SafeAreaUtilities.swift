@@ -1,22 +1,24 @@
 //
-//  SafeAreaInsetsKey.swift
-//
+//  SafeAreaUtilities.swift
+//  
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import SwiftUI
-
 #if !os(macOS)
+#if !os(watchOS)
+
+import SwiftUI
 
 // MARK: - Getting SafeAreaInsets
 
-@available(iOS 13.0, macOS 11, tvOS 13.0, watchOS 6.0, *)
+@available(macOS, unavailable)
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 public extension EnvironmentValues {
     
     /// Provides the safe area insets of the application window.
     ///
     /// Usage:
-    /// ```
+    /// ```swift
     /// struct MyView: View {
     ///
     ///     @Environment(\.safeAreaInsets) private var safeAreaInsets
@@ -32,7 +34,8 @@ public extension EnvironmentValues {
     }
 }
 
-@available(iOS 13.0, macOS 11, tvOS 13.0, watchOS 6.0, *)
+@available(macOS, unavailable)
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 private struct SafeAreaInsetsKey: EnvironmentKey {
     
     static var defaultValue: EdgeInsets {
@@ -40,17 +43,24 @@ private struct SafeAreaInsetsKey: EnvironmentKey {
     }
 }
 
-@available(iOS 13.0, macOS 11, tvOS 13.0, watchOS 6.0, *)
+@available(macOS, unavailable)
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 private extension UIEdgeInsets {
     
     var insets: EdgeInsets {
-        EdgeInsets(top: top, leading: left, bottom: bottom, trailing: right)
+        EdgeInsets(
+            top: top,
+            leading: left,
+            bottom: bottom,
+            trailing: right
+        )
     }
 }
 
 // MARK: - Ignore Safe Area Edges
 
-@available(iOS 13.0, macOS 11, tvOS 13.0, watchOS 6.0, *)
+@available(macOS, unavailable)
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 private struct IgnoresSafeAreaModifier : ViewModifier {
     
     let edges: Edge.Set
@@ -66,7 +76,8 @@ private struct IgnoresSafeAreaModifier : ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 11, tvOS 13.0, watchOS 6.0, *)
+@available(macOS, unavailable)
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 internal extension View {
     
     func ignoreSafeAreaEdges(_ edges: Edge.Set) -> some View {
@@ -74,4 +85,5 @@ internal extension View {
     }
 }
 
+#endif
 #endif

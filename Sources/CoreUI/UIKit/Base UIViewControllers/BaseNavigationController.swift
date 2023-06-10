@@ -5,11 +5,16 @@
 //
 
 #if !os(macOS)
+#if !os(watchOS)
 
 import UIKit
 
 // MARK: - BaseNavigationController
 
+@available(macOS, unavailable)
+@available(tvOS, unavailable)
+@available(watchOS, unavailable)
+@available(iOS 12.0, *)
 open class BaseNavigationController : UINavigationController, PresentableController {
     
     // MARK: - PresentableController
@@ -17,41 +22,71 @@ open class BaseNavigationController : UINavigationController, PresentableControl
     public var presentedMode: PresentationMode = .default
     public var presentationManager: UIViewControllerTransitioningDelegate?
     public var currentFlowInitialController: PresentableController?
-    public var tintColor: UIColor = AppColors.appTintUIColor
+    public var prefersLargeTitles: Bool = true
+    public var tintStyle: TintStyle = .default
+    public var translucentStyle: TranslucentStyle = .default
     
     // MARK: - Lifecycle
     
     override open func viewDidLoad() {
         super.viewDidLoad()
         
-        if #available(iOS 11.0, *) {
-            self.navigationBar.prefersLargeTitles = true
-        }
         self.applyNavigationBarStyles()
+    }
+    
+    open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if self.traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
+            self.applyNavigationBarStyles()
+        }
     }
     
     // MARK: - Init
     
-    convenience init(rootViewController: UIViewController,
-                     navigationBarStyle: NavigationBarStyle,
-                     tintColor: UIColor = AppColors.appTintUIColor) {
+    convenience init(
+        rootViewController: UIViewController,
+        prefersLargeTitles: Bool = true,
+        tintStyle: TintStyle = .default,
+        translucentStyle: TranslucentStyle = .default
+    ) {
         self.init(rootViewController: rootViewController)
         
-        self.navigationBarStyle = navigationBarStyle
-        self.tintColor = tintColor
+        self.tintStyle = tintStyle
+        self.translucentStyle = translucentStyle
+        
         self.applyNavigationBarStyles()
     }
     
-    // MARK: - NavigationBarStyle
+    // MARK: - TranslucentStyle
     
-    public enum NavigationBarStyle {
+    public enum TranslucentStyle {
         
+        /// Default style is `false`.
         case `default`
-        case transparent
+        
+        case isTranslucent(_ isTranslucent: Bool)
         
         var isTranslucent: Bool {
-            return true
+            switch self {
+            case .isTranslucent(let isTranslucent):
+                return isTranslucent
+            case .default:
+                return false
+            }
         }
+    }
+    
+    // MARK: - TintStyle
+    
+    public enum TintStyle {
+        
+        /// System default.
+        case `default`
+        
+        /// Transparent bar style.
+        case transparent
+        
+        /// Color tinted bar style.
+        case tinted(color: UIColor)
         
         var barTintColor: UIColor? {
             switch self {
@@ -65,66 +100,41 @@ open class BaseNavigationController : UINavigationController, PresentableControl
         var tintColor: UIColor {
             switch self {
             case .transparent:
-                return .white
+                return .clear
+            case .tinted(color: let color):
+                return color
             default:
-                return AppColors.appTintUIColor
-            }
-        }
-        
-        var backIndicator: UIImage? {
-            switch self {
-            default:
-                return nil
-            }
-        }
-        
-        var backItemTitle: String {
-            switch self {
-            default:
-                return ""
-            }
-        }
-    }
-    
-    public var navigationBarStyle: NavigationBarStyle? {
-        didSet {
-            if self.navigationBarStyle != oldValue {
-                self.applyNavigationBarStyles()
+                if #available(iOS 13.0, *) {
+                    return UIColor.systemBackground
+                } else {
+                    return .white
+                }
             }
         }
     }
     
     private func applyNavigationBarStyles() {
         
-        let navigationBarStyle = self.navigationBarStyle ?? .default
+        self.navigationBar.prefersLargeTitles = self.prefersLargeTitles
         
-        // Title and tint
-        self.navigationBar.barTintColor = navigationBarStyle.barTintColor
-        self.navigationBar.tintColor = navigationBarStyle.tintColor
-        self.navigationBar.isTranslucent = navigationBarStyle.isTranslucent
+        // Set tint style
+        let tintStyle = self.tintStyle
+        self.navigationBar.barTintColor = tintStyle.barTintColor
+        self.navigationBar.tintColor = tintStyle.tintColor
         
-        switch navigationBarStyle {
-        case .transparent:
+        // Set translucent style
+        let isTranslucent = self.translucentStyle.isTranslucent
+        self.navigationBar.isTranslucent = isTranslucent
+        if isTranslucent {
             self.navigationBar.setBackgroundImage(UIImage(), for: .default)
             self.navigationBar.shadowImage = UIImage()
             self.navigationBar.backgroundColor = .clear
-        default: break
         }
         
         // Update the status bar
         self.setNeedsStatusBarAppearanceUpdate()
     }
-    
-    // MARK: - Status Bar Style
-    
-    override open var preferredStatusBarStyle: UIStatusBarStyle {
-        switch self.navigationBarStyle ?? .default {
-        case .transparent:
-            return .lightContent
-        default:
-            return .default
-        }
-    }
 }
 
+#endif
 #endif

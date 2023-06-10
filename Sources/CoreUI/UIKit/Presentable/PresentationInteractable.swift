@@ -5,6 +5,7 @@
 //
 
 #if !os(macOS)
+#if !os(watchOS)
 
 import UIKit
 
@@ -20,4 +21,5 @@ public protocol DismissInteractable : AnyObject {
     var dismissInteractiveViews: [UIView] { get }
 }
 
+#endif
 #endif

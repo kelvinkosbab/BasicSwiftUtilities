@@ -5,6 +5,7 @@
 //
 
 #if !os(macOS)
+#if !os(watchOS)
 
 import UIKit
 import SwiftUI
@@ -58,4 +59,5 @@ public class BaseHostingController<Content : View> : UIViewController, Presentab
     }
 }
 
+#endif
 #endif

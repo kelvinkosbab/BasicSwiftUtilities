@@ -1,6 +1,6 @@
 //
 //  SwiftUI+allowAutoDismiss.swift
-//  
+//
 //  Copyright © Kozinga. All rights reserved.
 //
 
@@ -9,6 +9,7 @@
 //
 
 #if !os(macOS)
+#if !os(watchOS)
 
 import SwiftUI
 
@@ -16,9 +17,9 @@ import SwiftUI
 /// - Drag down on the sheet on iPhone and iPad
 /// - Tap outside the sheet on iPad
 /// No impact to dismiss programatically (by calling "presentationMode.wrappedValue.dismiss()")
-@available(iOS 13.0, tvOS 13.0, *)
 @available(macOS, unavailable)
 @available(watchOS, unavailable)
+@available(iOS 13.0, tvOS 13.0, *)
 struct MbModalHackView: UIViewControllerRepresentable {
     var dismissable: () -> Bool = { false }
     
@@ -26,14 +27,12 @@ struct MbModalHackView: UIViewControllerRepresentable {
         MbModalViewController(dismissable: self.dismissable)
     }
     
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-        
-    }
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
 }
 
-@available(iOS 13.0, tvOS 13.0, *)
 @available(macOS, unavailable)
 @available(watchOS, unavailable)
+@available(iOS 13.0, tvOS 13.0, *)
 extension MbModalHackView {
     private final class MbModalViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
         let dismissable: () -> Bool
@@ -78,10 +77,10 @@ extension UIViewController {
 }
 
 /// make the call the SwiftUI style:
-/// view.allowAutDismiss(...)
-@available(iOS 13.0, tvOS 13.0, *)
+/// `view.allowAutDismiss(...)`
 @available(macOS, unavailable)
 @available(watchOS, unavailable)
+@available(iOS 13.0, tvOS 13.0, *)
 public extension View {
     
     /// Control if allow to dismiss the sheet by the user actions
@@ -101,12 +100,11 @@ public extension View {
 
 #if DEBUG
 
-@available(iOS 13.0, tvOS 13.0, *)
 @available(macOS, unavailable)
 @available(watchOS, unavailable)
+@available(iOS 13.0, tvOS 13.0, *)
 struct AllowAutoDismiss_Previews: PreviewProvider {
     
-    /// Example:
     private struct ContentView: View {
         @State private var presenting = false
         
@@ -151,4 +149,5 @@ struct AllowAutoDismiss_Previews: PreviewProvider {
 
 #endif
 
+#endif
 #endif

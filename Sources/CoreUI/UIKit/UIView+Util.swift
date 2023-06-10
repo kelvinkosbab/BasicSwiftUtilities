@@ -5,6 +5,7 @@
 //
 
 #if !os(macOS)
+#if !os(watchOS)
 
 import UIKit
 
@@ -17,18 +18,19 @@ public enum RelativeLayoutType {
 
 public extension UIView {
     
-    @available(iOS 11.0, *)
-    func addToContainer(_ containerView: UIView,
-                               atIndex index: Int? = nil,
-                               topMargin: CGFloat = 0,
-                               bottomMargin: CGFloat = 0,
-                               leadingMargin: CGFloat = 0,
-                               trailingMargin: CGFloat = 0,
-                               relativeLayoutType: RelativeLayoutType = .view) {
+    func addToContainer(
+        _ containerView: UIView,
+        atIndex index: Int? = nil,
+        topMargin: CGFloat = 0,
+        bottomMargin: CGFloat = 0,
+        leadingMargin: CGFloat = 0,
+        trailingMargin: CGFloat = 0,
+        relativeLayoutType: RelativeLayoutType = .view
+    ) {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.frame = containerView.bounds
         
-        if let index = index {
+        if let index {
             containerView.insertSubview(self, at: index)
         } else {
             containerView.addSubview(self)
@@ -42,36 +44,44 @@ public extension UIView {
                 guide.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: bottomMargin),
                 self.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: leadingMargin),
                 guide.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: trailingMargin)
-                ])
+            ])
         case .view:
-            let top = NSLayoutConstraint(item: self,
-                                         attribute: .top,
-                                         relatedBy: .equal,
-                                         toItem: containerView,
-                                         attribute: .top,
-                                         multiplier: 1,
-                                         constant: topMargin)
-            let bottom = NSLayoutConstraint(item: containerView,
-                                            attribute: .bottom,
-                                            relatedBy: .equal,
-                                            toItem: self,
-                                            attribute: .bottom,
-                                            multiplier: 1,
-                                            constant: bottomMargin)
-            let leading = NSLayoutConstraint(item: self,
-                                             attribute: .leading,
-                                             relatedBy: .equal,
-                                             toItem: containerView,
-                                             attribute: .leading,
-                                             multiplier: 1,
-                                             constant: leadingMargin)
-            let trailing = NSLayoutConstraint(item: containerView,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: self,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: trailingMargin)
+            let top = NSLayoutConstraint(
+                item: self,
+                attribute: .top,
+                relatedBy: .equal,
+                toItem: containerView,
+                attribute: .top,
+                multiplier: 1,
+                constant: topMargin
+            )
+            let bottom = NSLayoutConstraint(
+                item: containerView,
+                attribute: .bottom,
+                relatedBy: .equal,
+                toItem: self,
+                attribute: .bottom,
+                multiplier: 1,
+                constant: bottomMargin
+            )
+            let leading = NSLayoutConstraint(
+                item: self,
+                attribute: .leading,
+                relatedBy: .equal,
+                toItem: containerView,
+                attribute: .leading,
+                multiplier: 1,
+                constant: leadingMargin
+            )
+            let trailing = NSLayoutConstraint(
+                item: containerView,
+                attribute: .trailing,
+                relatedBy: .equal,
+                toItem: self,
+                attribute: .trailing,
+                multiplier: 1,
+                constant: trailingMargin
+            )
             containerView.addConstraints([ top, bottom, leading, trailing ])
         }
         
@@ -80,13 +90,23 @@ public extension UIView {
     
     // MARK: - Rounding Corners
     
-    // Simplified and adapted from https://stackoverflow.com/questions/29618760/create-a-rectangle-with-just-two-rounded-corners-in-swift/35621736#35621736
+    /// Utility function to round one or more corderns of a `UIView`.
+    ///
+    /// - Parameter corners: Corner(s) to round of the view.
+    /// - Parameter radius: Corner radius to apply to the corner(s).
+    /// 
+    /// Simplified and adapted from [this StackOverflow post](https://stackoverflow.com/questions/29618760/create-a-rectangle-with-just-two-rounded-corners-in-swift/35621736#35621736).
     func round(corners: UIRectCorner, radius: CGFloat) {
-        let path = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        let path = UIBezierPath(
+            roundedRect: bounds,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
         let mask = CAShapeLayer()
         mask.path = path.cgPath
         self.layer.mask = mask
     }
 }
 
+#endif
 #endif

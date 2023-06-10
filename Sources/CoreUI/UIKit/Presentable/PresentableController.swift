@@ -5,18 +5,24 @@
 //
 
 #if !os(macOS)
+#if !os(watchOS)
 
 import UIKit
-import Core
 
 // MARK: - PresentableController
 
+@available(macOS, unavailable)
+@available(watchOS, unavailable)
+@available(iOS 12.0, tvOS 12.0, *)
 public protocol PresentableController : AnyObject {
     var presentedMode: PresentationMode { get set }
     var presentationManager: UIViewControllerTransitioningDelegate? { get set }
     var currentFlowInitialController: PresentableController? { get set }
 }
 
+@available(macOS, unavailable)
+@available(watchOS, unavailable)
+@available(iOS 12.0, tvOS 12.0, *)
 public extension PresentableController where Self : UIViewController {
     
     // MARK: - PresentIn
@@ -122,4 +128,5 @@ public extension PresentableController where Self : UIViewController {
     }
 }
 
+#endif
 #endif

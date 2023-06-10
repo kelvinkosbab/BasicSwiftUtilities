@@ -5,11 +5,13 @@
 //
 
 #if !os(macOS)
+#if !os(watchOS)
 
 import UIKit
 
 // MARK: - InteractiveTransition
 
+@available(macOS, unavailable)
 public class InteractiveTransition : UIPercentDrivenInteractiveTransition {
     
     // MARK: - Properties
@@ -30,12 +32,14 @@ public class InteractiveTransition : UIPercentDrivenInteractiveTransition {
     
     // MARK: - Init
     
-    public init(interactiveViews: [UIView],
-                 axis: InteractiveTransition.Axis,
-                 direction: InteractiveTransition.Direction,
-                 gestureType: GestureType = .pan,
-                 options: [InteractiveTransition.Option] = [],
-                 delegate: InteractiveTransitionDelegate? = nil) {
+    public init(
+        interactiveViews: [UIView],
+        axis: InteractiveTransition.Axis,
+        direction: InteractiveTransition.Direction,
+        gestureType: GestureType = .pan,
+        options: [InteractiveTransition.Option] = [],
+        delegate: InteractiveTransitionDelegate? = nil
+    ) {
         
         self.interactiveViews = interactiveViews
         self.axis = axis
@@ -266,4 +270,5 @@ public extension Sequence where Iterator.Element == InteractiveTransition.Option
     }
 }
 
+#endif
 #endif

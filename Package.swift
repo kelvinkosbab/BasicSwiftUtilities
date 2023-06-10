@@ -1,65 +1,70 @@
-// swift-tools-version:5.3
+// swift-tools-version: 5.8
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
-    name: "Core",
+    name: "BasicSwiftUtilities",
     platforms: [
-        .iOS(.v11),
-        .macOS("12"),
-        .tvOS(.v13),
-        .watchOS(.v6)
+        .iOS("10"),
+        .macOS("11"),
+        .tvOS("10"),
+        .watchOS("3")
     ],
     products: [
         .library(
             name: "Core",
-            targets: ["Core"]),
+            targets: ["Core"]
+        ),
+        .library(
+            name: "CoreHealth",
+            targets: ["CoreHealth"]
+        ),
         .library(
             name: "CoreUI",
-            targets: ["CoreUI"]),
+            targets: ["CoreUI"]
+        ),
         .library(
-            name: "CoreDataStore",
-            targets: ["CoreDataStore"]),
-        .library(
-            name: "CoreAuthentication",
-            targets: ["CoreAuthentication"])
+            name: "CoreStorage",
+            targets: ["CoreStorage"]
+        ),
     ],
-    dependencies: [
-        .package(name: "Firebase",
-                 url: "https://github.com/firebase/firebase-ios-sdk.git",
-                 "8.0.0" ..< "9.0.0")
-    ],
+    dependencies: [],
     targets: [
         .target(
             name: "Core",
-            dependencies: []),
+            dependencies: []
+        ),
         .testTarget(
             name: "CoreTests",
-            dependencies: ["Core"]),
+            dependencies: ["Core"]
+        ),
+        
+        .target(
+            name: "CoreHealth",
+            dependencies: ["Core"]
+        ),
+        .testTarget(
+            name: "CoreHealthTests",
+            dependencies: ["CoreHealth"]
+        ),
         
         .target(
             name: "CoreUI",
-            dependencies: ["Core"]),
+            dependencies: []
+        ),
         .testTarget(
             name: "CoreUITests",
-            dependencies: ["CoreUI"]),
+            dependencies: ["CoreUI"]
+        ),
         
         .target(
-            name: "CoreDataStore",
-            dependencies: ["Core"]),
+            name: "CoreStorage",
+            dependencies: ["Core"]
+        ),
         .testTarget(
-            name: "CoreDataStoreTests",
-            dependencies: ["CoreDataStore"]),
-        
-        .target(
-            name: "CoreAuthentication",
-            dependencies: [
-                "Core",
-                .product(name: "FirebaseAuth", package: "Firebase")
-            ]),
-        .testTarget(
-            name: "CoreAuthenticationTests",
-            dependencies: ["CoreAuthentication"]),
+            name: "CoreStorageTests",
+            dependencies: ["CoreStorage"]
+        ),
     ]
 )

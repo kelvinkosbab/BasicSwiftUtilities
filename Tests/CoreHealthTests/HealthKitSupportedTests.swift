@@ -1,12 +1,12 @@
-//KitSupportedTests.swift
-//  
 //
-//  Created by Kelvin Kosbab on 7/10/22.
+//  HealthKitSupportedTests.swift
+//
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import XCTest
 import HealthKit
-@testable import HealthKitHelpers
+@testable import CoreHealth
 
 #if !os(macOS)
 import UIKit
@@ -27,7 +27,11 @@ class HealthKitSupportedTests : XCTestCase {
         case .phone:
             XCTAssert(HKHealthStore().isHealthDataAvailable == true)
         case .pad:
-            XCTAssert(HKHealthStore().isHealthDataAvailable == false)
+            if #available(iOS 17.0, *) {
+                XCTAssert(HKHealthStore().isHealthDataAvailable == true)
+            } else {
+                XCTAssert(HKHealthStore().isHealthDataAvailable == false)
+            }
         default:
             XCTFail("Platform unsupported by test case")
         }

@@ -1,7 +1,7 @@
 //
 //  Percent.swift
 //
-//  Created by Kelvin Kosbab on 9/17/22.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation

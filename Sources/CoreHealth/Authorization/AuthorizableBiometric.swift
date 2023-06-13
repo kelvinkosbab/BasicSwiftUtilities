@@ -1,7 +1,7 @@
 //
 //  AuthorizableBiometric.swift
 //
-//  Created by Kelvin Kosbab on 10/6/22.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import HealthKit
@@ -10,6 +10,7 @@ import HealthKit
 
 @available(iOS 13.0, macOS 13.0, watchOS 9.0, *)
 public enum AuthorizableBiometric : Hashable {
+    
     case cardioFitness(CardioFitnessBiometric)
     case energy(EnergyBiometric)
     case length(LengthBiometric)

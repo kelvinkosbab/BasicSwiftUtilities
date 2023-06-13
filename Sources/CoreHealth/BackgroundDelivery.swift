@@ -1,7 +1,7 @@
 //
 //  BackgroundDelivery.swift
 //
-//  Created by Kelvin Kosbab on 9/22/22.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation

@@ -1,10 +1,11 @@
-//BiometricTests.swift
 //
-//  Created by Kelvin Kosbab on 6/26/22.
+//  HealthBiometricTests.swift
+//
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import XCTest
-@testable import HealthKitHelpers
+@testable import CoreHealth
 
 // MARK: - HealthBiometricTests
 

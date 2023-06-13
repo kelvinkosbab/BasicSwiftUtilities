@@ -1,7 +1,7 @@
 //
 //  HKQuantitySampleResult.swift
 //
-//  Created by Kelvin Kosbab on 10/2/22.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import HealthKit

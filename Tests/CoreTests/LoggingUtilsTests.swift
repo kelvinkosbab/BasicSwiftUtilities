@@ -5,7 +5,7 @@
 //
 
 import XCTest
-@testable import BasicSwiftUtilities
+@testable import Core
 
 // MARK: - Mocks
 

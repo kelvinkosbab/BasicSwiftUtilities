@@ -1,7 +1,7 @@
 //
 //  Unit.swift
 //
-//  Created by Kelvin Kosbab on 8/3/22.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation

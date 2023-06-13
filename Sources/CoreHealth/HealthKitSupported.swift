@@ -1,7 +1,7 @@
-//KitSupported.swift
-//  
 //
-//  Created by Kelvin Kosbab on 7/10/22.
+//  HealthKitSupported.swift
+//
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation

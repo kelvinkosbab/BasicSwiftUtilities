@@ -45,21 +45,35 @@ given the opportunity to finish with helpful logging on the result of the backgr
 
 ## CoreHealth
 
-Provides utilties for accessing Apple's `HealthKit` APIs.
+Provides utilties for accessing Apple's `HealthKit` APIs. These APIs wrap Apple's APIs to provide
+useful ways to query data safely via units that each health biometric supports (`HealthKit`'s APIs
+will crash the app if the trying to convert a biometric value to the wront unit which is not
+an elegant way of handling this behavior).
 
-- @kelvinkosbab TODO
+- Utilities for authorizing health biometrics and also checking the authorization status
+of health biometrics.
+- Utilities for querying health biometrics with the desired units.
+- Utilities to enable background delivery for specified health biometrics.
+- Utilities to support Swift `async/await` for authorizations and queries.
 
 ## CoreStorage
 
-Provides utilities for persistently storing data.
+Provides utilities for persistently storing data. This pacakge includes utilities for Apple's
+`CoreData` as well as a custom `SQLite` implementation, `CodableStore`.
 
-- @kelvinkosbab TODO
+- Utilities for loading a `CoreData` persistent store.
+- Utilities for listening to updates from a `CoreData` persistent store on either a main or
+a background thread.
+- Utilities for mapping `CoreData` object to a thread-safe `struct` and being able to query data
+in a view's data model of those structs.
+- Utilities for querying `CoreData` stores as well as utilities for creating listeners based on
+a `Predicate`.
+- `DiskBackedCodableStore` utility for creating a way to read and write to a simple `SQLite`
+database. 
 
 ## CoreUI
 
 Provides UIKit and SwiftUI helpers, components, and utilities.
-
-- @kelvinkosbab TODO
 
 - Font utilies and custom font registration
 

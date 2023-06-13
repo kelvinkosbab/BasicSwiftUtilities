@@ -1,7 +1,7 @@
 //
 //  CodableHealthBiometricAuthorization.swift
 //
-//  Created by Kelvin Kosbab on 4/27/22.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation

@@ -46,7 +46,10 @@ public class ManagedObjectContainer : StoreContainer {
     ///
     /// - Parameter modelFileName: File name of the ManagedObjectModel.
     /// - Parameter bundle: Bundle in which the ManagedObjectModel `momd` file exists.
-    public convenience init(modelFileName: String, in bundle: Bundle) throws {
+    public convenience init(
+        modelFileName: String,
+        in bundle: Bundle
+    ) throws {
         
         guard let modelUrl = bundle.url(forResource: modelFileName, withExtension: "momd") else {
             throw Error.failedToGetModelUrl(modelFileName: modelFileName)
@@ -66,7 +69,10 @@ public class ManagedObjectContainer : StoreContainer {
     ///
     /// - Parameter storeName: File name of the ManagedObjectModel.
     /// - Parameter modelUrl: URL of the ManagedObjectModel.
-    public convenience init(storeName: String, modelUrl: URL) throws {
+    public convenience init(
+        storeName: String,
+        modelUrl: URL
+    ) throws {
         
         guard let managedObjectModel = NSManagedObjectModel(contentsOf: modelUrl) else {
             throw Error.failedToCreateModel(url: modelUrl)
@@ -86,7 +92,10 @@ public class ManagedObjectContainer : StoreContainer {
     ///
     /// - Parameter storeName: File name of the ManagedObjectModel.
     /// - Parameter managedObjectModel: A programmatic representation of the .xcdatamodeld file describing your objects.
-    public init(storeName: String, managedObjectModel: NSManagedObjectModel) {
+    public init(
+        storeName: String,
+        managedObjectModel: NSManagedObjectModel
+    ) {
         self.storeName = storeName
         let persistentContainer = NSPersistentContainer(name: storeName, managedObjectModel: managedObjectModel)
         self.persistentContainer = persistentContainer
@@ -117,6 +126,7 @@ public class ManagedObjectContainer : StoreContainer {
     // MARK: - Error
     
     public enum Error : Swift.Error, LocalizedError {
+        
         case failedToGetModelUrl(modelFileName: String)
         case failedToCreateModel(url: URL)
         

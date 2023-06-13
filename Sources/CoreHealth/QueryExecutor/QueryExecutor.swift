@@ -1,7 +1,7 @@
 //
 //  QueryExecutor.swift
 //
-//  Created by Kelvin Kosbab on 4/16/22.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import HealthKit

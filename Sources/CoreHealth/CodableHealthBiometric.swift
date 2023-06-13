@@ -1,6 +1,7 @@
-//Biometric.swift
 //
-//  Created by Kelvin Kosbab on 4/3/22.
+//  HealthBiometric.swift
+//
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation

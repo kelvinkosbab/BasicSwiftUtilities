@@ -1,7 +1,7 @@
 //
 //  Energy.swift
 //
-//  Created by Kelvin Kosbab on 9/5/22.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation

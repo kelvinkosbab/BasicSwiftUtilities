@@ -1,7 +1,7 @@
 //
 //  Rate.swift
 //
-//  Created by Kelvin Kosbab on 9/18/22.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation

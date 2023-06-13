@@ -1,7 +1,7 @@
 //
 //  RequestAuthorizationResult.swift
 //
-//  Created by Kelvin Kosbab on 10/6/22.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation

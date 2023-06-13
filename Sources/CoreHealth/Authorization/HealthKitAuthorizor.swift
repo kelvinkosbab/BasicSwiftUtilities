@@ -1,6 +1,7 @@
-//KitAuthorizor.swift
 //
-//  Created by Kelvin Kosbab on 4/15/22.
+//  HealthKitAuthorizor.swift
+//
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation

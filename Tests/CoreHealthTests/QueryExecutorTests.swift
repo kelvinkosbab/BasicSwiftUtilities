@@ -1,12 +1,12 @@
 //
 //  QueryExecutorTests.swift
 //
-//  Created by Kelvin Kosbab on 10/1/22.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import XCTest
 import HealthKit
-@testable import HealthKitHelpers
+@testable import CoreHealth
 
 // MARK: - Mocks
 
@@ -21,6 +21,7 @@ class MockQueryExecutor : QueryExecutor {
 
 // MARK: - QueryExecutorTests
 
+@available(iOS 13.0, *)
 class QueryExecutorTests : XCTestCase {
     
     let queryOptionStartDate = Date()
@@ -50,10 +51,10 @@ class QueryExecutorTests : XCTestCase {
             options: self.queryOptions
         ) { result in
             switch result {
-            case .error(let error):
+            case .error(_):
                 // do something
                 break
-            case .success(samples: let samples):
+            case .success(samples: _):
                 // do something
                 break
             }

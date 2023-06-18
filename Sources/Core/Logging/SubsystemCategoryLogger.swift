@@ -26,12 +26,21 @@ public struct SubsystemCategoryLogger : Loggable {
     ) {
         #if !os(macOS)
         if #available(iOS 14.0, watchOS 7.0, tvOS 14.0, macOS 11, *) {
-            self.init(logger: SwiftLogger(subsystem: subsystem, category: category))
+            self.init(logger: SwiftLogger(
+                subsystem: subsystem,
+                category: category
+            ))
         } else {
-            self.init(logger: ObjcOsLog(subsystem: subsystem, category: category))
+            self.init(logger: LoggableOSLog(
+                subsystem: subsystem,
+                category: category
+            ))
         }
         #else
-        self.init(logger: SwiftLogger(subsystem: subsystem, category: category))
+        self.init(logger: SwiftLogger(
+            subsystem: subsystem,
+            category: category
+        ))
         #endif
     }
     

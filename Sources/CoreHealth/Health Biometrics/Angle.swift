@@ -9,7 +9,7 @@ import HealthKit
 
 // MARK: - Angle
 
-/// Deinfes a unit of electrical frequency.
+/// Deinfes a unit of rotation.
 @available(iOS 16.0, macOS 13.0, watchOS 9.0, *)
 public enum Angle : String, Unit {
     

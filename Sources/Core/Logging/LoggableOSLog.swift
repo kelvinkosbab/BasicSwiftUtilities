@@ -1,5 +1,5 @@
 //
-//  ObjcOsLog.swift
+//  LoggableOSLog.swift
 //
 //  Copyright © Kozinga. All rights reserved.
 //
@@ -7,7 +7,7 @@
 import Foundation
 import os.log
 
-// MARK: - Objective-C OSLog
+// MARK: - LoggableOSLog
 
 /// A log object that can be passed to logging functions in order to send messages to the logging
 /// system via `os_log`.
@@ -18,16 +18,16 @@ import os.log
 @available(iOS, deprecated: 14.0, message: "Use `SwiftLogger` instead.")
 @available(watchOS, deprecated: 7.0, message: "Use `SwiftLogger` instead.")
 @available(tvOS, deprecated: 14.0, message: "Use `SwiftLogger` instead.")
-public struct ObjcOsLog : Loggable {
+public struct LoggableOSLog : Loggable {
     
-    private let osLog: OSLog
+    private let osLog: os.OSLog
     
     /// Creates a custom logger for logging to a specific subsystem and category.
     ///
     /// - Parameter subsystem: Describes the module or app from which the log is being emitted from.
     /// - Parameter category: Describes a category specifying.
     init(subsystem: String, category: String) {
-        self.osLog = OSLog(subsystem: subsystem, category: category)
+        self.osLog = os.OSLog(subsystem: subsystem, category: category)
     }
     
     // MARK: - Debug

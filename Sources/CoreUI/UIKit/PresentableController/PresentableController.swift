@@ -11,12 +11,24 @@ import UIKit
 
 // MARK: - PresentableController
 
+/// Defines a protocol to help present, manage, and dismiss view controllers. This protocol should only be applied
+/// to a `UIViewController` type.
 @available(macOS, unavailable)
 @available(watchOS, unavailable)
 @available(iOS 12.0, tvOS 12.0, *)
 public protocol PresentableController : AnyObject {
+    
+    /// How the current controller was initially presented.
+    ///
+    /// For supported modes see ``PresentationMode``.
     var presentedMode: PresentationMode { get set }
+    
+    /// Reference to the transition delegate.
     var presentationManager: UIViewControllerTransitioningDelegate? { get set }
+    
+    /// Reference of the initial view controller that was presented in the current flow. This helps for dismissing
+    /// many related view controllers if desired. For example, dismissing a modal navigation controller to set up a new
+    /// capabilitiy.
     var currentFlowInitialController: PresentableController? { get set }
 }
 
@@ -27,6 +39,11 @@ public extension PresentableController where Self : UIViewController {
     
     // MARK: - PresentIn
     
+    /// Present the provided view controller.
+    ///
+    /// - Parameter mode: How the view controller will be presented.
+    /// - Parameter options: Presentation options for the presentation.
+    /// - Parameter completion: Handler which is called when the presentation has been completed.
     func presentIn(
         _ presentingViewController: UIViewController,
         withMode mode: PresentationMode,
@@ -71,7 +88,8 @@ public extension PresentableController where Self : UIViewController {
             
         case .show:
             let viewControllerToPresent = BaseNavigationController(rootViewController: self)
-            if presentingViewController.splitViewController == nil, let navigationController = presentingViewController.navigationController {
+            if presentingViewController.splitViewController == nil,
+               let navigationController = presentingViewController.navigationController {
                 navigationController.pushViewController(self, animated: true) {
                     completion?()
                 }
@@ -82,6 +100,10 @@ public extension PresentableController where Self : UIViewController {
         }
     }
     
+    /// Asyncronously present the provided view controller.
+    ///
+    /// - Parameter mode: How the view controller will be presented.
+    /// - Parameter options: Presentation options for the presentation.
     @available(iOS 13.0.0, *)
     func presentIn(
         _ presentingViewController: UIViewController,

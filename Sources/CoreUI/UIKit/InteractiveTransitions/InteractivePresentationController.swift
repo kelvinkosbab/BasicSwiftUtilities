@@ -1,6 +1,6 @@
 //
-//  PresentationController.swift
-//  
+//  InteractivePresentationController.swift
+//
 //  Copyright © Kozinga. All rights reserved.
 //
 
@@ -9,9 +9,10 @@
 
 import UIKit
 
-// MARK: - PresentationController
+// MARK: - InteractivePresentationController
 
-public class PresentationController : UIPresentationController {
+public class InteractivePresentationController : UIPresentationController {
+    
     var presentationInteractiveTransition: InteractiveTransition?
     var dismissInteractiveTransition: InteractiveTransition?
     
@@ -24,9 +25,10 @@ public class PresentationController : UIPresentationController {
 
 // MARK: - Utilities
 
-extension PresentationController {
+public extension InteractivePresentationController {
     
-    internal var allPresentationInteractiveViews: [UIView] {
+    /// Returns all views that are interactive for presentation.
+    var allPresentationInteractiveViews: [UIView] {
         var interactiveViews: [UIView] = []
         
         // Presenting view controller
@@ -42,7 +44,8 @@ extension PresentationController {
         return interactiveViews
     }
     
-    internal var allDismissInteractiveViews: [UIView] {
+    /// Returns all views that are interactive for dismissal.
+    var allDismissInteractiveViews: [UIView] {
         var interactiveViews: [UIView] = []
         
         // Presented view controller

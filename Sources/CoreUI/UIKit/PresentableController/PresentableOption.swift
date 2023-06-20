@@ -10,7 +10,10 @@ import UIKit
 
 // MARK: - PresentableOption
 
+/// Defines options when presenting a view controller.
 public enum PresentableOption {
+    
+    /// Do not present the view controller in a navigation view controller.
     case withoutNavigationController
 }
 

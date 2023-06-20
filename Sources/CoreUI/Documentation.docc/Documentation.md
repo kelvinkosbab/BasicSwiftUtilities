@@ -16,11 +16,9 @@ Provides `UIKit` and `SwiftUI` helpers, components, and utilities.
 
 ### ``PresentableController``
 
-abc
-
-### ``InteractiveTransition``
-
-abc
+In an application ``PresentableController`` is a protocol to help view controllers present,
+manage, and dismiss view controllers. The utilities provided by this protocol's extensions
+provide ways to simplify every step in the process.
 
 ### `Storyboard` utilities.
 

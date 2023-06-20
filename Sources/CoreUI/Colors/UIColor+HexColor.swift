@@ -18,7 +18,7 @@ public extension UIColor {
     /// Example usage:
     /// ```swift
     /// let view = UIView()
-    /// view.backgroundColor = .hex(0x5B2071) // For hex color code "#5B2071"
+    /// view.backgroundColor = .hex(0x5B2071) // For hex "#5B2071"
     /// ```
     ///
     /// - Parameter hex: The hex value in hexadecimal. For example `0x44DAA7`.

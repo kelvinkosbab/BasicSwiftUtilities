@@ -27,10 +27,12 @@ public extension PresentableController where Self : UIViewController {
     
     // MARK: - PresentIn
     
-    func presentIn(_ presentingViewController: UIViewController,
-                   withMode mode: PresentationMode,
-                   options: [PresentableOption] = [],
-                   completion: (() -> Void)? = nil) {
+    func presentIn(
+        _ presentingViewController: UIViewController,
+        withMode mode: PresentationMode,
+        options: [PresentableOption] = [],
+        completion: (() -> Void)? = nil
+    ) {
         // Configure the view controller to present
         let viewControllerToPresent: UIViewController = {
             if options.inNavigationController {
@@ -55,9 +57,11 @@ public extension PresentableController where Self : UIViewController {
             presentingViewController.present(viewControllerToPresent, animated: true, completion: completion)
             
         case .formSheet:
-            self.presentIn(presentingViewController,
-                           withMode: .modal(presentationStyle: .formSheet, transitionStyle: .coverVertical),
-                           options: options)
+            self.presentIn(
+                presentingViewController,
+                withMode: .modal(presentationStyle: .formSheet, transitionStyle: .coverVertical),
+                options: options
+            )
             
         case .modal(let presentationStyle, let transitionStyle):
             viewControllerToPresent.modalPresentationStyle = presentationStyle
@@ -79,9 +83,11 @@ public extension PresentableController where Self : UIViewController {
     }
     
     @available(iOS 13.0.0, *)
-    func presentIn(_ presentingViewController: UIViewController,
-                   withMode mode: PresentationMode,
-                   options: [PresentableOption] = []) async {
+    func presentIn(
+        _ presentingViewController: UIViewController,
+        withMode mode: PresentationMode,
+        options: [PresentableOption] = []
+    ) async {
         await withCheckedContinuation { continuation in
             self.presentIn(presentingViewController,
                            withMode: mode,
@@ -93,6 +99,9 @@ public extension PresentableController where Self : UIViewController {
     
     // MARK: - DismissController
     
+    /// Dismisses the current controller.
+    ///
+    /// - Parameter completion: Hander which is executed after the controller has dismissed.
     func dismissController(completion: (() -> Void)? = nil) {
         switch self.presentedMode {
         case .show:
@@ -105,8 +114,9 @@ public extension PresentableController where Self : UIViewController {
             
             // Pop to the controller before this one
             let viewControllerToPopTo = navigationController.viewControllers[index - 1]
-            navigationController.popToViewController(viewControllerToPopTo, animated: true)
-            completion?()
+            navigationController.pop(to: viewControllerToPopTo, animated: true) {
+                completion?()
+            }
             
         default:
             
@@ -118,6 +128,7 @@ public extension PresentableController where Self : UIViewController {
         }
     }
     
+    /// Dismisses the current controller.
     @available(iOS 13.0.0, *)
     func dismissController() async {
         await withCheckedContinuation { continuation in

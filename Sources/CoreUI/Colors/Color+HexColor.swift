@@ -19,7 +19,7 @@ public extension Color {
     /// ZStack {
     ///     Color.halo(.core900)
     ///     Image(systemName: "sun.max.fill")
-    ///         .foregroundStyle(.hex(0x5B2071)) // For hex color code "#5B2071"
+    ///         .foregroundStyle(.hex(0x5B2071)) // For hex "#5B2071"
     /// }
     /// .frame(width: 200, height: 100)
     /// ```

@@ -55,7 +55,12 @@ public class InteractiveTransition : UIPercentDrivenInteractiveTransition {
         
         // Configure the dismiss interactive gesture recognizer
         for interactiveView in interactiveViews {
-            let gestureRecognizer = self.gestureType.createGestureRecognizer(target: self, action: #selector(self.handleGesture(_:)), axis: self.axis, direction: self.direction)
+            let gestureRecognizer = self.gestureType.createGestureRecognizer(
+                target: self,
+                action: #selector(self.handleGesture(_:)),
+                axis: self.axis,
+                direction: self.direction
+            )
             gestureRecognizer.delegate = self
             interactiveView.isUserInteractionEnabled = true
             interactiveView.addGestureRecognizer(gestureRecognizer)
@@ -184,6 +189,7 @@ extension InteractiveTransition {
     }
     
     public enum GestureType {
+        
         case pan
         case screenEdgePan
         

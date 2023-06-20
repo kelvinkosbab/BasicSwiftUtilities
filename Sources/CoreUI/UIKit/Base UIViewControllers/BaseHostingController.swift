@@ -12,11 +12,36 @@ import SwiftUI
 
 // MARK: - BaseHostingController
 
+/// Defines a `UIViewController` for mounting a `SwiftUI.View`. This view controller also
+/// conforms to ``PresentableController`` for simple controller presentation.
+///
+/// ```swift
+/// let viewController = BaseHostingController.newViewController {
+///      VStack {
+///          Circle()
+///              .fill(.blue)
+///          Text("SwiftUI Content View Text")
+///              .foregroundColor(.white)
+///      }
+/// }
+/// ```
 @available(iOS 13.0, *)
 public class BaseHostingController<Content : View> : UIViewController, PresentableController {
     
     // MARK: - Static Accessors
     
+    /// Creates a view controller which mounts the provided `SwiftUI.View`.
+    ///
+    /// ```swift
+    /// let viewController = BaseHostingController.newViewController {
+    ///      VStack {
+    ///          Circle()
+    ///              .fill(.blue)
+    ///          Text("SwiftUI Content View Text")
+    ///              .foregroundColor(.white)
+    ///      }
+    /// }
+    /// ```
     public static func newViewController(contentView: Content) -> BaseHostingController {
         let viewController = BaseHostingController()
         viewController.contentView = contentView
@@ -42,20 +67,10 @@ public class BaseHostingController<Content : View> : UIViewController, Presentab
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.add(childViewController: self.hostingController, intoContainerView: self.view)
-    }
-    
-    private func setupConstraints() {
-        
-        guard let view = self.hostingController.view else {
-            return
-        }
-        
-        view.translatesAutoresizingMaskIntoConstraints = true
-        view.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-        view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        view.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        self.add(
+            childViewController: self.hostingController,
+            intoContainerView: self.view
+        )
     }
 }
 

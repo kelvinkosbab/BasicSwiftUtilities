@@ -1,6 +1,6 @@
 //
-//  UIApplication+Util.swift
-//  
+//  UIApplication+BundleVersion.swift
+//
 //  Copyright © Kozinga. All rights reserved.
 //
 

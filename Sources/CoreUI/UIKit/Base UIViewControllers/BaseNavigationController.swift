@@ -22,6 +22,9 @@ open class BaseNavigationController : UINavigationController, PresentableControl
     public var presentedMode: PresentationMode = .default
     public var presentationManager: UIViewControllerTransitioningDelegate?
     public var currentFlowInitialController: PresentableController?
+    
+    // MARK: - UI Customization Properties
+    
     public var prefersLargeTitles: Bool = true
     public var tintStyle: TintStyle = .default
     public var translucentStyle: TranslucentStyle = .default
@@ -60,7 +63,7 @@ open class BaseNavigationController : UINavigationController, PresentableControl
     
     public enum TranslucentStyle {
         
-        /// Default style is `false`.
+        /// Default style is not translucent.
         case `default`
         
         case isTranslucent(_ isTranslucent: Bool)

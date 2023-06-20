@@ -11,13 +11,29 @@ import UIKit
 
 // MARK: - UIView
 
+/// Defines how a view will be added to it's parent view.
 public enum RelativeLayoutType {
+    
+    /// Child view will layout in reference to its parent view and also the safe area of the device / window.
     case safeArea
+    
+    /// Child view will layout in reference to only its parent view.
     case view
 }
 
 public extension UIView {
     
+    /// Adds a view to a container parent view.
+    ///
+    /// - Parameter containerView: The parent container view which the view will be added to.
+    /// - Parameter index: The index position in the parent view to add the view. `Default` is to add to the top of
+    /// all child views.
+    /// - Parameter topMargin: The space of the top spacing in reference to the parent view.
+    /// - Parameter bottomMargin: The space of the bottom spacing in reference to the parent view.
+    /// - Parameter leadingMargin: The space of the leading spacing in reference to the parent view.
+    /// - Parameter trailingMargin: The space of the trailing spacing in reference to the parent view.
+    /// - Parameter relativeLayoutType: Whelther the child view should layout according to only the parent view or the
+    /// safe are margin of the device / window.
     func addToContainer(
         _ containerView: UIView,
         atIndex index: Int? = nil,

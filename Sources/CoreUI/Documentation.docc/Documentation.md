@@ -60,6 +60,17 @@ a completion handler for when the animation has completed.
 
 ## `SwiftUI` utilities
 
+### Toast utilities
+
+The ``ToastableContainer`` component helps for displaying simple toasts in an app's window.
+Toasts can be configured to be displayed from the top or the bottom of the app's window and
+can contain a title, description (optional), leading image (optional), trailing image (optional).
+
+### Safe area utilities
+
+The `@Environment(\.safeAreaInsets) private var safeAreaInsets` utilitiy provides access to
+the app window's safe are inset values for a component.
+
 ### Ability to define colors by hex values
 
 Here is an example of how to define a `Color` object via it's

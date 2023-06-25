@@ -1,6 +1,6 @@
 //
-//  SafeAreaUtilities.swift
-//  
+//  SafeAreaInsets.swift
+//
 //  Copyright © Kozinga. All rights reserved.
 //
 
@@ -24,7 +24,7 @@ public extension EnvironmentValues {
     ///     @Environment(\.safeAreaInsets) private var safeAreaInsets
     ///
     ///     var body: some View {
-    ///         Text("Ciao")
+    ///         Text("Hello")
     ///             .padding(safeAreaInsets)
     ///     }
     /// }

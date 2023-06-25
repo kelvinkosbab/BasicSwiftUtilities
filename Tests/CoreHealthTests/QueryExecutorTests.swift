@@ -21,7 +21,7 @@ class MockQueryExecutor : QueryExecutor {
 
 // MARK: - QueryExecutorTests
 
-@available(iOS 13.0, *)
+@available(iOS 13.0, watchOS 8.0, *)
 class QueryExecutorTests : XCTestCase {
     
     let queryOptionStartDate = Date()

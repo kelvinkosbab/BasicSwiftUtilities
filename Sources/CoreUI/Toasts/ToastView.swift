@@ -14,8 +14,6 @@ import SwiftUI
 @available(iOS 13.0, macOS 12.0, tvOS 13.0, *)
 struct ToastView : View {
     
-    @Environment(\.colorScheme) var colorScheme
-    
     @Binding private var content: ToastContent
     
     private let imageSize: CGFloat = Spacing.large
@@ -25,30 +23,25 @@ struct ToastView : View {
     }
     
     var body: some View {
-        if #available(iOS 15.0, *) {
-            self.bodyWithoutBlur
-                .background(.ultraThinMaterial, in: Capsule())
-                .shadowIfLightColorScheme(radius: 3, y: 2)
-        } else {
-            self.bodyWithoutBlur
-                .background(Color.secondary)
-                .clipShape(Capsule())
-                .shadowIfLightColorScheme(radius: 3)
-        }
+        self.bodyWithoutBackground
+            .toastBackground()
     }
     
-    private var bodyWithoutBlur: some View {
+    private var bodyWithoutBackground: some View {
         HStack {
             if self.content.leading != .none || self.content.trailing != .none {
                 
-                self.renderSubContent(self.content.leading.body(), isLeading: true)
+                self.renderSubContent(
+                    self.content.leading.body(),
+                    isLeading: true
+                )
                 
                 self.getTextContent(
                     title: content.title,
                     description: content.description
                 )
-                    .padding(.vertical, Spacing.tiny)
-                    .padding(.horizontal, Spacing.base)
+                .padding(.vertical, Spacing.tiny)
+                .padding(.horizontal, Spacing.base)
                 
                 self.renderSubContent(
                     self.content.trailing.body(),
@@ -61,8 +54,8 @@ struct ToastView : View {
                     title: content.title,
                     description: content.description
                 )
-                    .padding(.vertical, Spacing.small)
-                    .padding(.horizontal, Spacing.xxl)
+                .padding(.vertical, Spacing.small)
+                .padding(.horizontal, Spacing.xxl)
             }
         }
         .frame(
@@ -77,7 +70,10 @@ struct ToastView : View {
         )
     }
     
-    private func getTextContent(title: String, description: String?) -> some View {
+    private func getTextContent(
+        title: String,
+        description: String?
+    ) -> some View {
         VStack(spacing: Spacing.tiny) {
             Text(title)
                 .footnoteBoldStyle(appFont: .systemBold)
@@ -97,7 +93,10 @@ struct ToastView : View {
     }
     
     @ViewBuilder
-    private func renderSubContent<Content>(_ content: Content, isLeading: Bool) -> some View where Content: View {
+    private func renderSubContent<Content>(
+        _ content: Content,
+        isLeading: Bool
+    ) -> some View where Content: View {
         content
             .frame(width: self.imageSize, height: self.imageSize)
             .padding(.vertical, Spacing.tiny)
@@ -120,16 +119,19 @@ struct ToastView_Previews: PreviewProvider {
             ToastView(.constant(ToastContent(
                 title: "Simple Toast with Title"
             )))
+            .padding()
             
             ToastView(.constant(ToastContent(
                 title: "Toast with Leading Image",
                 leading: .tintedImage(self.image, .green)
             )))
+            .padding()
             
             ToastView(.constant(ToastContent(
                 title: "Toast with Detail",
                 description: "Hello"
             )))
+            .padding()
             
             ToastView(.constant(ToastContent(
                 title: "Toast with 2 Images",
@@ -137,6 +139,7 @@ struct ToastView_Previews: PreviewProvider {
                 leading: .tintedImage(self.image, .blue),
                 trailing: .tintedImage(self.image, .blue)
             )))
+            .padding()
         }
     }
 }

@@ -5,6 +5,7 @@
 //
 
 #if !os(macOS)
+#if !os(tvOS)
 #if !os(watchOS)
 
 import UIKit
@@ -111,9 +112,11 @@ public extension PresentableController where Self : UIViewController {
         options: [PresentableOption] = []
     ) async {
         await withCheckedContinuation { continuation in
-            self.presentIn(presentingViewController,
-                           withMode: mode,
-                           options: options) {
+            self.presentIn(
+                presentingViewController,
+                withMode: mode,
+                options: options
+            ) {
                 continuation.resume()
             }
         }
@@ -161,5 +164,6 @@ public extension PresentableController where Self : UIViewController {
     }
 }
 
+#endif
 #endif
 #endif

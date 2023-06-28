@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import HealthKit
 
 // MARK: - RequestStatusResult
@@ -22,3 +24,5 @@ public enum RequestStatusResult {
     /// - Parameter status: The status returned by the request..
     case success(status: HKAuthorizationRequestStatus)
 }
+
+#endif

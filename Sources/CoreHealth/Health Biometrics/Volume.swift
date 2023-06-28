@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import Foundation
 import HealthKit
 
@@ -41,3 +43,5 @@ public enum Volume : String, Unit {
         }
     }
 }
+
+#endif

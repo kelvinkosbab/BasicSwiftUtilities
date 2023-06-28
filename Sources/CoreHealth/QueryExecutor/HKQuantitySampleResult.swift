@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import HealthKit
 
 // MARK: - HKQuantitySampleResult
@@ -22,3 +24,5 @@ public enum HKQuantitySampleResult {
     /// - Parameter samples: The samples returned from the query.
     case success(samples: [HKQuantitySample])
 }
+
+#endif

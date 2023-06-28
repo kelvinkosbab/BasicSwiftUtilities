@@ -5,6 +5,7 @@
 //
 
 #if !os(macOS)
+#if !os(tvOS)
 #if !os(watchOS)
 
 import UIKit
@@ -139,5 +140,6 @@ open class BaseNavigationController : UINavigationController, PresentableControl
     }
 }
 
+#endif
 #endif
 #endif

@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import XCTest
 import HealthKit
 @testable import CoreHealth
@@ -44,3 +46,5 @@ class HealthKitSupportedTests : XCTestCase {
         #endif
     }
 }
+
+#endif

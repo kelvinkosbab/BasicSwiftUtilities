@@ -5,6 +5,7 @@
 //
 
 #if !os(macOS)
+#if !os(tvOS)
 #if !os(watchOS)
 
 import UIKit
@@ -276,5 +277,6 @@ public extension Sequence where Iterator.Element == InteractiveTransition.Option
     }
 }
 
+#endif
 #endif
 #endif

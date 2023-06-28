@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import Foundation
 import HealthKit
 
@@ -69,3 +71,5 @@ public struct QueryOptions {
         self.sortDescriptors = sortDescriptors
     }
 }
+
+#endif

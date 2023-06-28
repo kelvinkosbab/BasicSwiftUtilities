@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import Foundation
 import HealthKit
 import Core
@@ -139,3 +141,5 @@ extension HKHealthStore : BackgroundDeliveryEnabler {
         }
     }
 }
+
+#endif

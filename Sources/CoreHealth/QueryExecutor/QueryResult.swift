@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import Foundation
 
 // MARK: - QueryResult
@@ -21,3 +23,5 @@ public enum QueryResult {
     /// - Parameter samples: The samples returned from the query.
     case success(samples: [Sample])
 }
+
+#endif

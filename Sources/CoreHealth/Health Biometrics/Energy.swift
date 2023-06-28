@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import Foundation
 import HealthKit
 
@@ -70,3 +72,5 @@ public struct EnergyBiometric : Biometric {
     /// Active energy samples use energy units (described in HKUnit) and measure cumulative values (described in HKStatisticsQuery).
     public static let activeEnergyBurned = Self(healthKitIdentifier: .activeEnergyBurned)
 }
+
+#endif

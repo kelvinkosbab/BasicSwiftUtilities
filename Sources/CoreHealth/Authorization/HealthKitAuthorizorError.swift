@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import Foundation
 
 // MARK: - HealthKitAuthorizorError
@@ -21,3 +23,4 @@ public enum HealthKitAuthorizorError : Swift.Error {
     case failedToRequestAuthorization
 }
 
+#endif

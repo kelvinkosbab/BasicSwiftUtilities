@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import Foundation
 
 // MARK: - RequestAuthorizationResult
@@ -20,3 +22,5 @@ public enum RequestAuthorizationResult {
     /// - Note: This does not indicate whether the user actually granted permission.
     case success
 }
+
+#endif

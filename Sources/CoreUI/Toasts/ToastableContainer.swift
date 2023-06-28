@@ -32,7 +32,7 @@ import SwiftUI
 ///     self.toastApi.show(title: "Simple Title")
 /// }
 /// ```
-@available(iOS 13.0, macOS 12.0, tvOS 13.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 15.0, *)
 struct ToastableContainer<Content> : View where Content: View{
     
     var content: () -> Content
@@ -106,7 +106,7 @@ struct ToastableContainer<Content> : View where Content: View{
 
 #if DEBUG
 
-@available(iOS 13.0, macOS 12.0, tvOS 13.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 15.0, *)
 struct ToastableContainer_Previews: PreviewProvider {
     
     static let topToastApi = ToastApi(options: ToastOptions(position: .top))

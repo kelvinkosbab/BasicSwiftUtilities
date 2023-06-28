@@ -10,7 +10,7 @@ import SwiftUI
 
 // MARK: - CircleImageButton
 
-@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 16.0, watchOS 6.0, *)
 public struct CircleImageButton : View {
     
     private let image: Image
@@ -70,7 +70,7 @@ public struct CircleImageButton : View {
 
 #if DEBUG
 
-@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 16.0, watchOS 6.0, *)
 struct CircleImageButton_Previews: PreviewProvider {
     
     static var previews: some View {

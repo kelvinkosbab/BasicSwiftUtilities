@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import Foundation
 import HealthKit
 
@@ -208,3 +210,5 @@ struct CodableHealthBiometric {
         self.sampleType = sampleType
     }
 }
+
+#endif

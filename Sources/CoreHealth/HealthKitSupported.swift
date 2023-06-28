@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import Foundation
 import HealthKit
 
@@ -28,3 +30,5 @@ extension HKHealthStore : HealthKitSupported {
         return Self.isHealthDataAvailable()
     }
 }
+
+#endif

@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import Foundation
 import HealthKit
 
@@ -104,3 +106,5 @@ public extension BackgroundDeliveryEnabler {
         try await self.disableBackgroundDelivery(for: biometric.sampleType)
     }
 }
+
+#endif

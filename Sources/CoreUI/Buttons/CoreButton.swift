@@ -109,7 +109,7 @@ private struct MaxWidthModifier : ViewModifier {
 struct CoreButton_Previews: PreviewProvider {
     
     static var previews: some View {
-        if #available(iOS 14.0, watchOS 7.0, *) {
+        if #available(iOS 14.0, tvOS 15.0, watchOS 7.0, *) {
             NavigationView {
                 VStack {
                     self.simpleButtons
@@ -141,7 +141,7 @@ struct CoreButton_Previews: PreviewProvider {
             NavigationLink("Hello World", destination: Text("Hi"))
                 .buttonStyle(.core)
             
-            if #available(iOS 15.0, watchOS 8.0, *) {
+            if #available(iOS 15.0, tvOS 15.0, watchOS 8.0, *) {
                 Button("Hello World iOS 15", role: .destructive) { print("Hello world") }
                     .buttonStyle(.core)
             }
@@ -163,7 +163,7 @@ struct CoreButton_Previews: PreviewProvider {
             NavigationLink("Hello World", destination: Text("Hi"))
                 .buttonStyle(.coreFilled)
             
-            if #available(iOS 15.0, watchOS 8.0, *) {
+            if #available(iOS 15.0, tvOS 15.0, watchOS 8.0, *) {
                 Button("Hello World iOS 15", role: .destructive) {
                     print("Hello world")
                 }

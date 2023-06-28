@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import Foundation
 import HealthKit
 
@@ -23,3 +25,5 @@ public enum Frequency : String, Unit {
         }
     }
 }
+
+#endif

@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import HealthKit
 
 // MARK: - QueryExecutor and HKQuantityTypeIdentifier
@@ -70,3 +72,5 @@ internal extension QueryExecutor {
         }
     }
 }
+
+#endif

@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import HealthKit
 
 // MARK: - AuthorizableBiometric
@@ -35,3 +37,5 @@ public enum AuthorizableBiometric : Hashable {
         }
     }
 }
+
+#endif

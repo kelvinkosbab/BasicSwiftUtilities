@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import HealthKit
 
 // MARK: - QueryExecutor and QueryOptions
@@ -102,3 +104,5 @@ public extension QueryExecutor {
         }
     }
 }
+
+#endif

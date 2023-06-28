@@ -5,6 +5,7 @@
 //
 
 #if !os(macOS)
+#if !os(tvOS)
 #if !os(watchOS)
 
 import UIKit
@@ -25,7 +26,7 @@ import SwiftUI
 ///      }
 /// }
 /// ```
-@available(iOS 13.0, *)
+@available(iOS 13.0, tvOS 13.0, *)
 public class BaseHostingController<Content : View> : UIViewController, PresentableController {
     
     // MARK: - Static Accessors
@@ -74,5 +75,6 @@ public class BaseHostingController<Content : View> : UIViewController, Presentab
     }
 }
 
+#endif
 #endif
 #endif

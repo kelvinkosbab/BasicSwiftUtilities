@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import Foundation
 import HealthKit
 
@@ -61,3 +63,5 @@ struct CodableHealthBiometricAuthorization {
         self.status = status
     }
 }
+
+#endif

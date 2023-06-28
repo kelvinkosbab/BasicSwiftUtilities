@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import XCTest
 @testable import CoreHealth
 
@@ -35,3 +37,5 @@ class HealthBiometricTests : XCTestCase {
         XCTAssert(bodyMassIndex?.biometricType == .category)
     }
 }
+
+#endif

@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: - ToastView
 
 /// Displayable content for a toast.
-@available(iOS 13.0, macOS 12.0, tvOS 13.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 15.0, *)
 struct ToastView : View {
     
     @Binding private var content: ToastContent
@@ -108,7 +108,7 @@ struct ToastView : View {
 
 #if DEBUG
 
-@available(iOS 13.0, macOS 12.0, tvOS 13.0, *)
+@available(iOS 13.0, macOS 12.0, tvOS 15.0, *)
 struct ToastView_Previews: PreviewProvider {
     
     static let image: Image = Image(systemName: "heart.circle.fill")

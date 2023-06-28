@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import Foundation
 import HealthKit
 import Core
@@ -77,3 +79,5 @@ public protocol HealthKitAuthorizor : HealthKitSupported {
 
 @available(macOS 13.0, *)
 extension HKHealthStore : HealthKitAuthorizor {}
+
+#endif

@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import HealthKit
 import Core
 
@@ -177,3 +179,5 @@ public extension HealthKitAuthorizor {
         }
     }
 }
+
+#endif

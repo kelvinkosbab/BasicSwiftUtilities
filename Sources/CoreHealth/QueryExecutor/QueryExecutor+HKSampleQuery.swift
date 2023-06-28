@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import HealthKit
 
 // MARK: - QueryExecutor and HKSampleQuery
@@ -136,3 +138,5 @@ public extension QueryExecutor {
         return []
     }
 }
+
+#endif

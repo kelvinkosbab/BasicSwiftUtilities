@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import HealthKit
 
 // MARK: - QueryError
@@ -19,3 +21,5 @@ public enum QueryError : Error {
     /// Throws when a query result quantity type is not compatible with the requested unit.
     case unitIncompatibleWithQuantityType(quantityType: HKQuantityType, desiredUnit: HKUnit)
 }
+
+#endif

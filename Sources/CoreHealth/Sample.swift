@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import Foundation
 
 // MARK: - Sample
@@ -23,3 +25,5 @@ public struct Sample {
     /// The measurement unit of the sample.
     public let unit: Unit
 }
+
+#endif

@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import HealthKit
 
 // MARK: - QueryExecutor
@@ -31,3 +33,5 @@ public protocol QueryExecutor {
 
 @available(macOS 13.0, *)
 extension HKHealthStore : QueryExecutor {}
+
+#endif

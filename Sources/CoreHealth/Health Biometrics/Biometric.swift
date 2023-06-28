@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import HealthKit
 
 // MARK: - Biometric
@@ -29,3 +31,5 @@ public extension Biometric {
         return lhs.healthKitIdentifier == rhs.healthKitIdentifier
     }
 }
+
+#endif

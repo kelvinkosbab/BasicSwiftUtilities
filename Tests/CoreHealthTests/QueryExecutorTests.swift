@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(tvOS)
+
 import XCTest
 import HealthKit
 @testable import CoreHealth
@@ -69,10 +71,13 @@ class QueryExecutorTests : XCTestCase {
             _ = try await mock.query(
                 identifier: healthKitIdentifier,
                 unit: Length.meters,
-                options: self.queryOptions)
+                options: self.queryOptions
+            )
             XCTAssert(mock.query != nil)
         } catch {
             XCTFail("Test threw error: \(error)")
         }
     }
 }
+
+#endif

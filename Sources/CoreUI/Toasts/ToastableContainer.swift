@@ -59,7 +59,7 @@ struct ToastableContainer<Content> : View where Content: View{
             #else
             let safeArea: CGFloat = 0
             #endif
-            return max(safeArea, Spacing.base) + Spacing.small
+            return max(safeArea, Spacing.base)
         } else {
             return -toastSize.height
         }

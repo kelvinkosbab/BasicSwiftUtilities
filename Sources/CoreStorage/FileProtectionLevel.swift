@@ -24,7 +24,7 @@ public extension URL {
     /// - **No protection**. The file is always accessible.
     /// - **Complete until first user authentication**. (**Default**) The file is inaccessible until the first time the user
     /// unlocks the device. After the first unlocking of the device, the file remains accessible until the device shuts down or reboots.
-    /// - ** Complete unless open**. You can open existing files only when the device is unlocked. If you have a file already
+    /// - **Complete unless open**. You can open existing files only when the device is unlocked. If you have a file already
     /// open, you may continue to access that file even after the user locks the device. You can also create new files and access
     /// them while the device is locked or unlocked.
     /// - **Complete**. The file is accessible only when the device is unlocked.

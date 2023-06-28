@@ -7,15 +7,6 @@ Note: `HealthKit`'s APIs will crash the app if the trying to convert a biometric
 incompatable unit, which is not very elegant for error handling. This package protects consumers
 from this.
 
-
-Supporting `async/await` @kelvinkosbab TODO
-
-- Utilities for querying health biometrics with the desired units.
-- Utilities to enable background delivery for specified health biometrics.
-- Utilities to support Swift `async/await` for authorizations and queries.
-
-
-
 ## Authorization of `HealthKit` Biometrics
 
 Provides utilities for authorizing and checking authorization status of `HealthKit` biometrics. 

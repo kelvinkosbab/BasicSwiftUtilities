@@ -59,7 +59,8 @@ internal extension QueryExecutor {
             
             guard sample.quantityType.is(compatibleWith: unit.healthKitUnit) else {
                 throw QueryError.unitIncompatibleWithQuantityType(
-                    quantityType: sample.quantityType, desiredUnit: unit.healthKitUnit
+                    quantityType: sample.quantityType,
+                    desiredUnit: unit.healthKitUnit
                 )
             }
             

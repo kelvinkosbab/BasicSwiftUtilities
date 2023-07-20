@@ -18,27 +18,27 @@ enum CodableHealthBiometricType : Int {
     
     /// A type that identifies samples that store numerical values.
     ///
-    /// https://developer.apple.com/documentation/healthkit/hkquantitytypeidentifier
+    /// See [Apple's hkquantitytypeidentifier documentation.](https://developer.apple.com/documentation/healthkit/hkquantitytypeidentifier)
     case quantity = 0
     
     /// A type that identifies samples that contain a value from a small set of possible values.
     ///
-    /// https://developer.apple.com/documentation/healthkit/hkcategorytypeidentifier
+    /// See [Apple's hkcategorytypeidentifier documentation.](https://developer.apple.com/documentation/healthkit/hkcategorytypeidentifier)
     case category = 1
     
     /// A type that identifies samples that group multiple subsamples.
     ///
-    /// https://developer.apple.com/documentation/healthkit/hkcorrelationtypeidentifier
+    /// See [Apple's hkcorrelationtypeidentifier documentation.](https://developer.apple.com/documentation/healthkit/hkcorrelationtypeidentifier)
     case correlation = 2
     
     /// The identifiers for documents.
     ///
-    /// https://developer.apple.com/documentation/healthkit/hkdocumenttypeidentifier
+    /// See [Apple's hkdocumenttypeidentifier documentation.](https://developer.apple.com/documentation/healthkit/hkdocumenttypeidentifier)
     case document = 3
     
     /// A type that identifies samples that store information about a workout.
     ///
-    /// https://developer.apple.com/documentation/healthkit/hkworkouttype
+    /// See [Apple's hkworkouttype documentation.](https://developer.apple.com/documentation/healthkit/hkworkouttype)
     case workout = 4
 }
 

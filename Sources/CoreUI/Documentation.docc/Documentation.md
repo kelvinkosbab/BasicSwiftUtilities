@@ -10,7 +10,7 @@ Provides `UIKit` and `SwiftUI` helpers, components, and utilities.
   - Button styles and view modifiers
   - Color utiliites
   - Core spacing and margins
-  - Toasts
+  - Application toast provider
 
 ## `UIKit` Uutilities
 

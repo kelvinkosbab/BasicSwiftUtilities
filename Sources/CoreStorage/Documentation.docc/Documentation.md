@@ -6,7 +6,6 @@ Provides utilities for persistently storing data. This pacakge includes utilitie
 
 ## `CoreData` Utilities
 
-
 Notes:
 
 `async/await` support

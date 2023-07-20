@@ -28,7 +28,10 @@ public struct LongRunningTaskOrchestrator {
     // MARK: - Properties
     
     private let workQueue = DispatchQueue(label: "LongRunningTaskOrchestrator")
-    private let logger: Loggable = SubsystemCategoryLogger(subsystem: "LongRunningTaskOrchestrator", category: "RegisterTask")
+    private let logger: Loggable = SubsystemCategoryLogger(
+        subsystem: "LongRunningTaskOrchestrator",
+        category: "RegisterTask"
+    )
     
     // MARK: - Result
     
@@ -60,10 +63,6 @@ public struct LongRunningTaskOrchestrator {
         taskName: String,
         timeout: Double = 60
     ) -> DoneWorking {
-        
-        // Random `Int` to use in logs to tell messages apart from the same source.
-        let id = Int.random(in: 1..<1000)
-        
         let info = ProcessInfo()
         let start = info.systemUptime
         var backgroundTaskId = UIBackgroundTaskIdentifier.invalid

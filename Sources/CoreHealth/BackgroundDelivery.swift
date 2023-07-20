@@ -31,7 +31,7 @@ public protocol BackgroundDeliveryEnabler {
     /// or `HKCorrelationType`).
     /// - Parameter frequency: The maximum frequency of the updates. The system wakes your app from the
     /// background at most once per time period specified. For a complete list of valid frequencies, see
-    /// [`HKUpdateFrequency`](https://developer.apple.com/documentation/healthkit/hkupdatefrequency).
+    /// [HKUpdateFrequency](https://developer.apple.com/documentation/healthkit/hkupdatefrequency).
     ///
     /// - Throws if there was an error enabling background delivery.
     func enableBackgroundDelivery(

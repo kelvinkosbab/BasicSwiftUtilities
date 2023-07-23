@@ -88,7 +88,10 @@ public class DiskBackedJSONCodableStore<T: Codable> : CodableStore {
     
     // MARK: - CodableStore
     
-    public func set(value: T?, forKey key: String) async throws {
+    public func set(
+        value: T?,
+        forKey key: String
+    ) async throws {
         try await withCheckedThrowingVoidContinuation { continuation in
             self.workQueue.async {
                 do {

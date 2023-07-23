@@ -9,8 +9,12 @@ import CoreData
 
 // MARK: - QueryPredicate
 
+/// Provides built-in predicates for simple queries for `CoreData`.
 internal struct QueryPredicate {
-    static var defaultSortDescriptors = [ NSSortDescriptor(key: "identifier", ascending: true) ]
+    
+    static var defaultSortDescriptors = [
+        NSSortDescriptor(key: "identifier", ascending: true)
+    ]
     
     static func getPredicate(id: String) -> NSPredicate {
         return NSPredicate(format: "identifier == %@", id)

@@ -1,5 +1,5 @@
 //
-//  CoreDataContainer.swift
+//  ManagedObjectContainer.swift
 //
 //  Copyright © Kozinga. All rights reserved.
 //
@@ -7,8 +7,69 @@
 import CoreData
 import Core
 
-// MARK: - CoreDataContainer
+// MARK: - ManagedObjectContainer
 
+/// An object which allows for simple configuration of a managed object container with `async/await` support.
+///
+/// Example usage:
+/// ```swift
+/// public struct YourAppDataContainer {
+///
+///     public static let shared = TallyBokDataContainer()
+///
+///     private let container: ManagedObjectContainer
+///     private let logger: Logger
+///
+///     private init() {
+///         do {
+///             self.container = try ManagedObjectContainer(
+///                 modelFileName: "ModelFileName",
+///                 in: .module
+///             )
+///             self.logger = Logger(category: "TallyBokDataContainer")
+///         } catch {
+///             fatalError("Failed to init TallyBokDataContainer: \(error)")
+///         }
+///     }
+///
+///     init(container: ManagedObjectContainer, logger: Logger) {
+///         self.container = container
+///         self.logger = logger
+///     }
+///
+///     public func configure() async {
+///         do {
+///             let result = try await self.container.load()
+///             switch result {
+///             case .failure(let error):
+///                 let message = "Failed to load data store: \(error)"
+///                 self.logger.error(message)
+///                 fatalError(message)
+///             case .success:
+///                 break
+///             }
+///         } catch {
+///             let message = "Failed to load data store: \(error)"
+///             self.logger.error(message)
+///             fatalError(message)
+///         }
+///     }
+///
+///     public var context: NSManagedObjectContext {
+///         return self.container.mainContext
+///     }
+///
+///     public func saveContext() throws {
+///         do {
+///             try self.context.save()
+///         } catch {
+///             let message = "Unresolved error: \(error.localizedDescription)"
+///             self.logger.error(message)
+///             throw error
+///         }
+///     }
+/// }
+/// ```
 @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
 public class ManagedObjectContainer : StoreContainer {
     
@@ -102,7 +163,7 @@ public class ManagedObjectContainer : StoreContainer {
         self.mainContext = persistentContainer.viewContext
     }
     
-    /// Configures the persistent container's `FileProtectionType`.
+    /// Configures the data container's `FileProtectionType`.
     ///
     /// Options:
     /// - `complete`: The file is stored in an encrypted format on disk and cannot be read from or written to while the device is
@@ -125,6 +186,7 @@ public class ManagedObjectContainer : StoreContainer {
     
     // MARK: - Error
     
+    /// Defines errors for creating a managed object container.
     public enum Error : Swift.Error, LocalizedError {
         
         case failedToGetModelUrl(modelFileName: String)
@@ -171,7 +233,7 @@ public class ManagedObjectContainer : StoreContainer {
         }
     }
     
-    /// Loads the persistent container for the application.
+    /// Asyncronously loads the persistent container for the application.
     ///
     /// This implementation creates and returns a container, having loaded the store for the
     /// application to it. This property is optional since there are legitimate error conditions that
@@ -204,7 +266,7 @@ public class ManagedObjectContainer : StoreContainer {
         }
     }
     
-    /// Resets and destroys the CoreData persistent store.
+    /// Resets and destroys the `CoreData` persistent store.
     @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     public func reset() throws {
         
@@ -216,8 +278,16 @@ public class ManagedObjectContainer : StoreContainer {
             return
         }
         
-        try self.persistentContainer.persistentStoreCoordinator.destroyPersistentStore(at: currentStoreURL, type: .sqlite)
-        try self.persistentContainer.persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: currentStoreURL)
+        try self.persistentContainer.persistentStoreCoordinator.destroyPersistentStore(
+            at: currentStoreURL,
+            type: .sqlite
+        )
+        
+        try self.persistentContainer.persistentStoreCoordinator.addPersistentStore(
+            ofType: NSSQLiteStoreType,
+            configurationName: nil,
+            at: currentStoreURL
+        )
     }
     
     // MARK: - Managed Object Context

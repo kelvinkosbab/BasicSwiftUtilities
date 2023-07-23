@@ -19,7 +19,6 @@ When requesting authorization to read or write for the given biometric:
 - See ``HealthKitAuthorizor/requestAuthorization(toShare:read:)-46j3n``
 - See ``HealthKitAuthorizor/requestAuthorization(toShare:read:completion:)-9cqni``
 
-
 ## Querying `HealthKit` Biometrics
 
 The ``QueryExecutor`` protocol defines methods for executing queries for health biometric data

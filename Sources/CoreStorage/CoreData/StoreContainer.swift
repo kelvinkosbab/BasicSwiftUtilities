@@ -11,6 +11,6 @@ import Foundation
 /// Represents a local data store container.
 public protocol StoreContainer {
     
-    /// The name of the core data model store. Should match the name of the *.xcdatamodeld file.
+    /// The name of the core data model store. Should match the name of the `*.xcdatamodeld` file.
     var storeName: String { get }
 }

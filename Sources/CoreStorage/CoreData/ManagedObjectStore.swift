@@ -8,8 +8,51 @@ import CoreData
 
 // MARK: - ManagedObjectStore
 
+/// A data store which provides utilities for fetching objects of a certain data type. Data types in CoreData are
+/// mapped to a `struct` data type for thread safe operations and allow easy access for consumers of the
+/// data store API.
+///
+/// In your app with this data store defined you can easily perform fetch, create, update, or delete objects
+/// without the need for any deep knowledge of how `CoreData` works.
+///
+/// This object also provides support for classes that are a sub-class of a parent `CoreData` object. Similar
+/// to parent objects these sub-class objects can be created, queried, updated, or deleted.
+///
+/// Example usage:
+/// ```swift
+///
+/// public enum StoreOperationType {
+///     case mainQueue
+///     case privateQueue
+/// }
+///
+/// public struct SomeObjectDataStore : ManagedObjectStore {
+///
+///     public typealias ObjectType = SomeObjectStructType
+///
+///     public let context: NSManagedObjectContext
+///
+///     public init(operation: StoreOperationType) {
+///         switch operation {
+///         case .mainQueue:
+///             self.context = TallyBokDataContainer.shared.context
+///         case .privateQueue:
+///             let continaer = TallyBokDataContainer.shared
+///             let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+///             context.parent = continaer.context
+///             self.context = context
+///         }
+///     }
+/// }
+///
+/// // Example usage of this data store to fetch an object with a unique ID of 'objectID'.
+///
+/// let store = OneObjectDataStore()
+/// let object = store.fetchOne(id: "objectID")
+/// ```
 @available(iOS 13.0.0, *)
 public protocol ManagedObjectStore : ObjectStore where ObjectType : ManagedObjectAssociated, ObjectType.ManagedObject.StructType == ObjectType {
+    
     var context: NSManagedObjectContext { get }
     
     /// Saves any changes on the context.

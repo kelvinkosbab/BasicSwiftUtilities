@@ -8,16 +8,31 @@ import Foundation
 import CoreData
 import Core
 
-// MARK: - DataObserver
+// MARK: - DataObserverDelegate
 
+/// Deflines the interface for objects to listen to underlyhing data store udpates for a given data type.
 public protocol DataObserverDelegate : AnyObject where ObjectType == ObjectType.ManagedObject.StructType {
     
+    /// Object which is associated with a `CoreData` manged object.
     associatedtype ObjectType : ManagedObjectAssociated
     
+    /// Called when an object is added to the data store.
+    ///
+    /// - Parameter object: Object which was added to the data store.
     func didAdd(object: ObjectType) -> Void
+    
+    /// Called when an object is updated in the data store.
+    ///
+    /// - Parameter object: Object which was updated in the data store.
     func didUpdate(object: ObjectType) -> Void
+    
+    /// Called when an object is removed from the data store.
+    ///
+    /// - Parameter object: Object which was removed from the data store.
     func didRemove(object: ObjectType) -> Void
 }
+
+// MARK: - DataObserver
 
 public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedResultsControllerDelegate {
     
@@ -35,12 +50,18 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
         self.init(fetchedResultsController: fetchedResultsController)
     }
     
-    public convenience init(id: String, context: NSManagedObjectContext) {
+    public convenience init(
+        id: String,
+        context: NSManagedObjectContext
+    ) {
         let fetchedResultsController = ManagedObject.newFetchedResultsController(id: id, context: context)
         self.init(fetchedResultsController: fetchedResultsController)
     }
     
-    public convenience init(ids: [String], context: NSManagedObjectContext) {
+    public convenience init(
+        ids: [String],
+        context: NSManagedObjectContext
+    ) {
         let fetchedResultsController = ManagedObject.newFetchedResultsController(ids: ids, context: context)
         self.init(fetchedResultsController: fetchedResultsController)
     }
@@ -116,13 +137,14 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
             
         case .move:
             self.logger.debug("Unsupported operation 'move'.")
+            
         @unknown default:
-            fatalError("Unsupported operation 'unknown' for")
+            fatalError("Unsupported operation 'unknown' for DataObserver")
         }
     }
 }
 
-// MARK: - ManagedObjectParentIdentifiable
+// MARK: - DataObserver & ManagedObjectParentIdentifiable
 
 public extension DataObserver where Delegate.ObjectType.ManagedObject : ManagedObjectParentIdentifiable {
     

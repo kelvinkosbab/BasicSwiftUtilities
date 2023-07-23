@@ -27,14 +27,14 @@ https://kelvinkosbab.github.io/BasicSwiftUtilities
 
 Provides basic utilities for an app running on Apple platforms.
 
-See [`Core's Documentation`](./Sources/Core/Documentation.docc/Documentation.md).
+For a full breakdown and details see [`Core's Documentation`](./Sources/Core/Documentation.docc/Documentation.md).
 
 ## CoreHealth
 
 Provides utilties for accessing Apple's `HealthKit` APIs. These APIs wrap Apple's APIs to provide
 useful ways to query data safely via units that each health biometric supports.
 
-See [`CoreHealth's Documentation`](./Sources/CoreHealth/Documentation.docc/Documentation.md).
+For a full breakdown and details see [`CoreHealth's Documentation`](./Sources/CoreHealth/Documentation.docc/Documentation.md).
 
 ## CoreStorage
 
@@ -42,7 +42,7 @@ Provides utilities for persistently storing data. This pacakge includes utilitie
 `CoreData` as well as a custom `SQLite` implementation, ``CodableStore`` and
 ``DiskBackedJSONCodableStore``.
 
-See [`CoreStorage's Documentation`](./Sources/CoreStorage/Documentation.docc/Documentation.md).
+For a full breakdown and details see [`CoreStorage's Documentation`](./Sources/CoreStorage/Documentation.docc/Documentation.md).
 
 ## CoreUI
 
@@ -61,4 +61,4 @@ Provides `UIKit` and `SwiftUI` helpers, components, and utilities.
   - Interactive view controller presentation utilities
   - `UIView` and `UIViewController` utilities
 
-See [`CoreUI's Documentation`](./Sources/CoreUI/Documentation.docc/Documentation.md).
+For a full breakdown and details see [`CoreUI's Documentation`](./Sources/CoreUI/Documentation.docc/Documentation.md).

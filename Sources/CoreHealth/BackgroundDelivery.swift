@@ -69,7 +69,7 @@ public enum BackgroundDeliveryError : Error {
     case unknownError
 }
 
-// MARK: - BackgroundDelivery
+// MARK: - HKHealthStore & BackgroundDelivery
 
 @available(iOS 13.0, macOS 13.0, watchOS 8.0, *)
 extension HKHealthStore : BackgroundDeliveryEnabler {

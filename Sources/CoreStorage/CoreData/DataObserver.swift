@@ -73,6 +73,8 @@ public protocol DataObserverDelegate : AnyObject where ObjectType == ObjectType.
 ///         observer.delegate = self
 ///     }
 ///
+///     // MARK: - Hashable
+///
 ///     public func hash(into hasher: inout Hasher) {
 ///         hasher.combine(self.id)
 ///     }

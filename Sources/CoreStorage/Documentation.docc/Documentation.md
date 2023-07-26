@@ -64,3 +64,9 @@ underlying data store when updates happen.
 simple API for storing and accessing persistent data backed by a `SQLite` database. This database
 provides a key-value API making it easy for lightweight and fast operations for querying or
 setting persistent data. 
+
+## ``CodableStore``
+
+The ``DiskBackedJSONCodableStore`` ([link](../CodableStore/DiskBackedJSONCodableStore.swift)) provides a simple
+and lightweight key-value store. When creating a ``DiskBackedJSONCodableStore`` you can specify the type of
+data to be persisted, being bound by the `Codable` protocol.

@@ -71,7 +71,7 @@ Getting into a new software stack can be overwhelming. Here are some resources I
 useful for understanding core concepts of developing on Apple Platforms and develpoing with
 the Swift programming language.
 
-### What are the differences between `Struct` vs `class`?
+### What are the differences between `struct` vs `class`?
 
 Structures and classes are good choices for storing data and modeling behavior in your apps, but their similarities can make it difficult to choose one over the other.
 

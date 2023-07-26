@@ -34,6 +34,68 @@ public protocol DataObserverDelegate : AnyObject where ObjectType == ObjectType.
 
 // MARK: - DataObserver
 
+/// Provides a way for a module to actively listen to underlying `CoreData` object changes.
+///
+/// - Note: This is a `class` object to convorm to `CoreData.NSFetchedResultsControllerDelegate`
+///
+/// Example usage for an object that listens to updates for a user profile object:
+/// ```swift
+/// public protocol UserProfileObserverDelegate : AnyObject {
+///     func didAdd(userProfile: UserProfile)
+///     func didUpdate(userProfile: UserProfile)
+///     func didRemove(userProfile: UserProfile)
+/// }
+///
+/// public class UserProfileObserver : Hashable, DataObserverDelegate {
+///
+///     public weak var delegate: UserProfileObserverDelegate?
+///     private let id: String
+///     private let observer: DataObserver<UserProfileObserver>
+///
+///     public var userProfiles: Set<UserProfile> {
+///         return self.observer.objects
+///     }
+///
+///     public convenience init(id: String) {
+///         let observer: DataObserver<UserProfileObserver> = DataObserver(
+///             id: id,
+///             context: TallyBokDataContainer.shared.context
+///         )
+///         self.init(hashValue: id, observer: observer)
+///     }
+///
+///     internal init(
+///         hashValue: String,
+///         observer: DataObserver<UserProfileObserver>
+///     ) {
+///         self.id = "UserProfile.\(hashValue)"
+///         self.observer = observer
+///         observer.delegate = self
+///     }
+///
+///     public func hash(into hasher: inout Hasher) {
+///         hasher.combine(self.id)
+///     }
+///
+///     public static func ==(lhs: UserProfileObserver, rhs: UserProfileObserver) -> Bool {
+///         return lhs.id == rhs.id
+///     }
+///
+///     // MARK: - DataObserverDelegate
+///
+///     public func didAdd(object: UserProfile) {
+///         self.delegate?.didAdd(userProfile: object)
+///     }
+///
+///     public func didUpdate(object: UserProfile) {
+///         self.delegate?.didAdd(userProfile: object)
+///     }
+///
+///     public func didRemove(object: UserProfile) {
+///         self.delegate?.didAdd(userProfile: object)
+///     }
+/// }
+/// ```
 public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedResultsControllerDelegate {
     
     public typealias ManagedObject = Delegate.ObjectType.ManagedObject
@@ -45,29 +107,46 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
     
     public private(set) var objects: Set<ObjectType> = Set()
     
-    public convenience init(context: NSManagedObjectContext) {
+    public convenience init(
+        context: NSManagedObjectContext,
+        delegate: Delegate? = nil
+    ) {
         let fetchedResultsController = ManagedObject.newFetchedResultsController(context: context)
-        self.init(fetchedResultsController: fetchedResultsController)
+        self.init(
+            fetchedResultsController: fetchedResultsController,
+            delegate: delegate
+        )
     }
     
     public convenience init(
         id: String,
-        context: NSManagedObjectContext
+        context: NSManagedObjectContext,
+        delegate: Delegate? = nil
     ) {
         let fetchedResultsController = ManagedObject.newFetchedResultsController(id: id, context: context)
-        self.init(fetchedResultsController: fetchedResultsController)
+        self.init(
+            fetchedResultsController: fetchedResultsController,
+            delegate: delegate
+        )
     }
     
     public convenience init(
         ids: [String],
-        context: NSManagedObjectContext
+        context: NSManagedObjectContext,
+        delegate: Delegate? = nil
     ) {
         let fetchedResultsController = ManagedObject.newFetchedResultsController(ids: ids, context: context)
-        self.init(fetchedResultsController: fetchedResultsController)
+        self.init(
+            fetchedResultsController: fetchedResultsController,
+            delegate: delegate
+        )
     }
     
-    public init(fetchedResultsController: NSFetchedResultsController<ManagedObject>) {
-        
+    public init(
+        fetchedResultsController: NSFetchedResultsController<ManagedObject>,
+        delegate: Delegate? = nil
+    ) {
+        self.delegate = delegate
         self.fetchedResultsController = fetchedResultsController
         self.logger = SubsystemCategoryLogger(
             subsystem: "CoreDataStore",

@@ -65,11 +65,7 @@ Provides `UIKit` and `SwiftUI` helpers, components, and utilities.
 
 For a full breakdown and details see [`CoreUI's Documentation`](./Sources/CoreUI/Documentation.docc/Documentation.md).
 
-## Useful 3p Resources
-
-Getting into a new software stack can be overwhelming. Here are some resources I have found
-useful for understanding core concepts of developing on Apple Platforms and develpoing with
-the Swift programming language.
+## Useful topics to learn about for developing on Apple's platforms
 
 ### What are the differences between `struct` vs `class`?
 
@@ -86,6 +82,12 @@ Consider the following recommendations to help choose which option makes sense w
 > - Apple Developer's [Choosing Between Structures and Classes documentation](https://developer.apple.com/documentation/swift/choosing-between-structures-and-classes).
 > - Antoine Van Der Lee's post [Struct vs classes in Swift: The differences explained](https://www.avanderlee.com/swift/struct-class-differences/). 
 
+## Useful Learning Resources
+
+Getting into a new software stack can be overwhelming. Here are some resources I have found
+useful for understanding core concepts of developing on Apple Platforms and develpoing with
+the Swift programming language.
+
 ### Kodeco / Ray Wenderlich
 
 RayWenderlich (rebranded to Kodeco) have been providing useful programming resources for 
@@ -99,3 +101,14 @@ With more free Swift tutorials than any other site, Hacking with Swift will help
 \learn app development with UIKit and SwiftUI.
 
 See [hackingwithswift.com](https://www.hackingwithswift.com).
+
+### The Wisdom of Quinn
+
+The [Wisdom of Quinn GitHub page](https://github.com/macshome/The-Wisdom-of-Quinn) provides resources for just
+about everyting for developering on Apple's platforms including but by no means limited to:
+- [Code Signing](https://github.com/macshome/The-Wisdom-of-Quinn#code-signing)
+- [Distribution](https://github.com/macshome/The-Wisdom-of-Quinn#distribution)
+- [File Systems](https://github.com/macshome/The-Wisdom-of-Quinn#filesystems)
+- [Security](https://github.com/macshome/The-Wisdom-of-Quinn#security)
+- [Logging](https://github.com/macshome/The-Wisdom-of-Quinn#logging)
+- and much... much more...

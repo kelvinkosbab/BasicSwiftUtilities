@@ -72,7 +72,7 @@ struct ToastView : View {
     
     private func getTextContent(
         title: String,
-        description: String?
+        description: ToastDescriptionView.ContentType?
     ) -> some View {
         VStack(spacing: Spacing.tiny) {
             Text(title)
@@ -82,12 +82,7 @@ struct ToastView : View {
                 .multilineTextAlignment(.center)
                 .foregroundColor(Color.primary)
             if let description = description {
-                Text(description)
-                    .footnoteStyle(appFont: .systemRegular)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .lineLimit(1)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(Color.gray)
+                ToastDescriptionView(content: description)
             }
         }
     }
@@ -128,16 +123,34 @@ struct ToastView_Previews: PreviewProvider {
             .padding()
             
             ToastView(.constant(ToastContent(
-                title: "Toast with Detail",
-                description: "Hello"
+                title: "Toast with 2 Images",
+                description: .string("Description"),
+                leading: .tintedImage(self.image, .blue),
+                trailing: .tintedImage(self.image, .green)
             )))
             .padding()
             
             ToastView(.constant(ToastContent(
-                title: "Toast with 2 Images",
-                description: "Hello",
-                leading: .tintedImage(self.image, .blue),
-                trailing: .tintedImage(self.image, .blue)
+                title: "Toast with Detail",
+                description: .string("Hello")
+            )))
+            .padding()
+            
+            ToastView(.constant(ToastContent(
+                title: "Toast with Detail",
+                description: .leadingImage(
+                    Image(systemName: "battery.75"),
+                    description: "75%"
+                )
+            )))
+            .padding()
+            
+            ToastView(.constant(ToastContent(
+                title: "Toast with Detail",
+                description: .trailingImage(
+                    Image(systemName: "battery.75"),
+                    description: "75%"
+                )
             )))
             .padding()
         }

@@ -15,67 +15,22 @@ import SwiftUI
 @available(iOS 13.0, macOS 12.0, tvOS 15.0, *)
 public struct ToastContent {
     
-    public enum SubContent : Equatable {
-        
-        case none
-        case image(_ image: Image)
-        case tintedImage(_ image: Image, _ tintColor: Color)
-        
-        @ViewBuilder
-        func body() -> some View {
-            switch self {
-            case .none:
-                Rectangle()
-                    .fill(.clear)
-                
-            case .image(let image):
-                image
-                    .resizable()
-                
-            case .tintedImage(let image, let tintColor):
-                image
-                    .resizable()
-                    .foregroundColor(tintColor)
-            }
-        }
-        
-        public static func == (lhs: SubContent, rhs: SubContent) -> Bool {
-            switch lhs {
-            case .none:
-                switch rhs {
-                case .none: return true
-                default: return false
-                }
-            case .image:
-                switch rhs {
-                case .image: return true
-                default: return false
-                }
-            case .tintedImage:
-                switch rhs {
-                case .tintedImage: return true
-                default: return false
-                }
-            }
-        }
-    }
-    
     /// Primary title message.
     let title: String
     
-    /// Optional description. This text will be displayed directly below the title.
-    let description: String?
+    /// Optional description. This view will be displayed directly below the title.
+    let description: ToastDescriptionView.ContentType?
     
     /// Optional image and optional tint color displayed on tthe leading edge of the toast.
-    let leading: SubContent
+    let leading: ToastImageContent
 
     /// Optional image and optional tint color displayed on tthe trailing edge of the toast.
-    let trailing: SubContent
+    let trailing: ToastImageContent
     
     /// Constructor.
     ///
     /// - Parameter title: Primary title message.
-    /// - Parameter description: Optional description. This text will be displayed directly below the title.
+    /// - Parameter description: Optional description. This view will be displayed directly below the title.
     /// Default is `nil`.
     /// - Parameter leadingImage: Optional image and optional tint color displayed on tthe leading edge
     /// of the toast. Default is `.none`.
@@ -83,9 +38,9 @@ public struct ToastContent {
     /// of the toast. Default is `.none`.
     public init(
         title: String,
-        description: String? = nil,
-        leading: ToastContent.SubContent = .none,
-        trailing: ToastContent.SubContent = .none
+        description: ToastDescriptionView.ContentType? = nil,
+        leading: ToastImageContent = .none,
+        trailing: ToastImageContent = .none
     ) {
         self.title = title
         self.description = description

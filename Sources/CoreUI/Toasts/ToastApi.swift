@@ -34,9 +34,9 @@ public class ToastApi : ObservableObject, ToastStateDelegate {
     /// - Parameter trailing: Content to be displayed on the trailing edge of the toast.
     public func show(
         title: String,
-        description: String? = nil,
-        leading: ToastContent.SubContent = .none,
-        trailing: ToastContent.SubContent = .none
+        description: ToastDescriptionView.ContentType? = nil,
+        leading: ToastImageContent = .none,
+        trailing: ToastImageContent = .none
     ) {
         let content = ToastContent(
             title: title,

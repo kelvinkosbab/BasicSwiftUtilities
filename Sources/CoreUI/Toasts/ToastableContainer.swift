@@ -127,7 +127,7 @@ struct ToastableContainer_Previews: PreviewProvider {
                 Button("Top: Show Title & Description") {
                     self.topToastApi.show(
                         title: "Simple Title",
-                        description: "Some Description"
+                        description: .string("Some Description")
                     )
                 }
                 
@@ -169,7 +169,7 @@ struct ToastableContainer_Previews: PreviewProvider {
                 Button("Bottom: Show Title & Description") {
                     self.bottomToastApi.show(
                         title: "Simple Title",
-                        description: "Some Description"
+                        description: .string("Some Description")
                     )
                 }
                 

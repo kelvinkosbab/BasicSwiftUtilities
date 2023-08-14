@@ -112,3 +112,7 @@ about everyting for developering on Apple's platforms including but by no means 
 - [Security](https://github.com/macshome/The-Wisdom-of-Quinn#security)
 - [Logging](https://github.com/macshome/The-Wisdom-of-Quinn#logging)
 - and much... much more...
+
+## License
+
+See [LICENSE](./LICENSE).

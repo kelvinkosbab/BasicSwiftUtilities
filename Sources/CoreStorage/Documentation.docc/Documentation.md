@@ -48,15 +48,38 @@ for creating, updating, and deleting objects of a certain type in the data store
 the data store provides useful utilites making it easy to manage data in your app. For example
 
 ```swift
-let store = OneObjectDataStore()
+let dataContainer = YourAppDataContainer()
+let store = OneObjectDataStore(context: dataContainer.context)
 let object = store.fetchOne(id: "objectID")
 ```
+
+#### Utilizing `CoreData` main and private data queues
+
+Core Data is designed to work in a multithreaded environment. However, not every object under the
+Core Data framework is thread safe. To use Core Data in a multithreaded environment, ensure that:
+
+- Managed object contexts are bound to the thread (queue) that they are associated with upon initialization.
+- Managed objects retrieved from a context are bound to the same queue that the context is bound to.
+
+To utilize the private queue you can use something like this when creating your object data store:
+```swift
+let dataContainer = YourAppDataContainer()
+let privateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+context.parent = dataContainer.context
+let store = OneObjectDataStore(context: privateContext)
+```
+
+For more information see [Apple's documentation](https://developer.apple.com/documentation/coredata/using_core_data_in_the_background).
 
 ### Listening to updates to the `CoreData` store
 
 App's often have to react to when data updates to keep the UI/UX up to date. The ``DataObserver``
 ([link](../CoreData/DataObserver.swift)) class provides ways to actively listen for updates to the
 underlying data store when updates happen.
+
+### Utilizing a `NSManagedObjectContext` with a concurrency type of `.privateQueueConcurrencyType`\
+
+abc
 
 ## Custom Lightweight `SQLite` Utilities
 

@@ -28,6 +28,10 @@ let package = Package(
             name: "CoreStorage",
             targets: ["CoreStorage"]
         ),
+        .library(
+            name: "RunMode",
+            targets: ["RunMode"]
+        ),
     ],
     dependencies: [],
     targets: [
@@ -65,6 +69,15 @@ let package = Package(
         .testTarget(
             name: "CoreStorageTests",
             dependencies: ["CoreStorage"]
+        ),
+        
+        .target(
+            name: "RunMode",
+            dependencies: []
+        ),
+        .testTarget(
+            name: "RunModeTests",
+            dependencies: ["RunMode"]
         ),
     ]
 )

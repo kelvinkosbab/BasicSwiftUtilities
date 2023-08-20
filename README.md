@@ -13,6 +13,7 @@ This repository contains the following Swift packages (also supports exporting o
 - ``CoreHealth``
 - ``CoreStorage``
 - ``CoreUI``
+- ``RunMode``
 
 For detailed information of these packages / frameworks see below.
 
@@ -64,6 +65,22 @@ Provides `UIKit` and `SwiftUI` helpers, components, and utilities.
   - `UIView` and `UIViewController` utilities
 
 For a full breakdown and details see [`CoreUI's Documentation`](./Sources/CoreUI/Documentation.docc/Documentation.md).
+
+### RunMode
+
+Determines the active run mode off the current process.
+
+Possibilities include:
+ - Main application
+ - Unit tests
+ - UI unit tests
+
+To determine the current process's ``RunMode``:
+```swift
+let activeRunMode = RunMode.getActive()
+```
+
+For a full breakdown and details see [`RunMode's Documentation`](./Sources/RunMode/Documentation.docc/Documentation.md).
 
 ## Useful topics to learn about for developing on Apple's platforms
 

@@ -33,9 +33,9 @@ struct UnitTestStatus : UnitTestStatusProvider {
 
 // MARK: - RunMode
 
-/// Determines the active run mode off the application.
+/// Determines the active run mode off the current process.
 ///
-/// Options include:
+/// Possibilities include:
 /// - Main application
 /// - Unit tests
 /// - UI unit tests

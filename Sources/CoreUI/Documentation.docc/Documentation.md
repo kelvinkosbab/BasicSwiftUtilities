@@ -12,7 +12,7 @@ Provides `UIKit` and `SwiftUI` helpers, components, and utilities.
   - Core spacing and margins
   - Application toast provider
 
-## `UIKit` Uutilities
+## `UIKit` utilities
 
 ### ``PresentableController``
 

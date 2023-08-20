@@ -8,7 +8,7 @@ import Foundation
 
 // MARK: - Protocols
 
-/// Protocol for objects that determine whether or not a unit test or UI unit test  is currently running.
+/// Protocol for objects that determine whether or not a unit test or UI unit test is currently running.
 protocol UnitTestStatusProvider {
     
     /// Returns whether or not a unit test is currently running (excludes UI unit tests).
@@ -34,6 +34,16 @@ struct UnitTestStatus : UnitTestStatusProvider {
 // MARK: - RunMode
 
 /// Determines the active run mode off the application.
+///
+/// Options include:
+/// - Main application
+/// - Unit tests
+/// - UI unit tests
+///
+/// To determine the current process's ``RunMode``:
+/// ```swift
+/// let activeRunMode = RunMode.getActive()
+/// ```
 public enum RunMode {
     
     /// The process is running the main application.

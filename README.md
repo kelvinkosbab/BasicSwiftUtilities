@@ -97,7 +97,85 @@ Consider the following recommendations to help choose which option makes sense w
 
 > More resources:
 > - Apple Developer's [Choosing Between Structures and Classes documentation](https://developer.apple.com/documentation/swift/choosing-between-structures-and-classes).
-> - Antoine Van Der Lee's post [Struct vs classes in Swift: The differences explained](https://www.avanderlee.com/swift/struct-class-differences/). 
+> - Antoine Van Der Lee's post [Struct vs classes in Swift: The differences explained](https://www.avanderlee.com/swift/struct-class-differences/).
+
+### Common communication and data transmission patterns
+
+1. Delegation
+2. Notifications
+3. Key value observing
+
+#### Delegation
+
+The basic idea of delegation, is that a controller defines a protocol (a set of method definitions)
+that describe what a delegate object must do in order to be allowed to respond to a controller’s
+events. The protocol is a contract where the delegator says “If you want to be my delegate, then
+you must implement these methods”.
+
+**Pros:**
+- All events to be heard are clearly defined in the delegate protocol.
+- Errors are not repelled as it should be by a delegate.
+- Protocol defined within the scope of the controller only.
+- Very traceable, and easy to identify flow of control within an application.
+- No third party object required to maintain / monitor the communication process.
+
+**Cons:**
+- Many lines of code required to define: 1. the protocol definition, 2. the delegate property in
+the controller, and 3. the implementation of the delegate method definitions within the delegate itself.
+- Need to be careful to correctly set delegates to `nil` on object deallocation, failure to do so
+can cause memory crashes by calling methods on deallocated objects.
+- Although possible, it can be difficult and the pattern does not really lend itself to have
+multiple delegates of the same protocol in a controller (telling multiple objects about the same event)
+
+#### Notifications
+
+In iOS applications there is a concept of a “Notification Center”. The main feature of this
+pattern is that the sender and recipients (there can be many) do not talk directly, like with
+delegate pattern. Instead, they both talk to `NotificationCenter` - the sender calls method
+`postNotification` on the `NotificationCenter` to send a notification, while recipients opt-in
+for receiving the notifications by calling `addObserver` on `NotificationCenter`. They can
+later opt-out with `removeObserver`. Important note though is that NotificationCenter does
+not store notifications for future subscribers - only present subscribers receive the
+notifications.
+
+**Pros:**
+- Easy to implement, with not many lines of code.
+- Can easily have multiple objects reacting to the same notification being posted.
+- Controller can pass in a context (dictionary) object with custom information (`userInfo`)
+related to the notification being posted.
+
+**Cons:**
+- No compile time to checks to ensure that notifications are correctly handled by observers.
+- Battery leackage or it uses more memory.
+- Required to un-register with the notification center if your previously registered object
+is deallocated.
+- Third party object required to manage the link between controllers and observer objects.
+- Notification Names, and UserInfo dictionary keys need to be known by both the observers
+and the controllers. If these are not defined in a common place, they can very easily
+become out of sync.
+
+#### Observation
+
+`KVO` is a traditional [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) built-in
+any `NSObject` out of the box. With `KVO` observers can be notified of any changes of a `@property`
+values. It leverages Objective-C runtime for automated notifications dispatch, and because of that
+for Swift class, you would need to opt into Objective-C dynamism by inheriting `NSObject` and marking
+the `var` you’re going to observe with modifier dynamic. The observers should also be `NSObject`
+descendants because this is enforced by the `KVO` API.
+
+**Pros:**
+- Can provide an easy way to sync information between two objects. For example, a model and a view.
+- Allows us to respond to state changes inside objects that we did not create, and don’t have
+access to alter the implementations of (SKD objects).
+- Can provide us with the new value and previous value of the property we are observing.
+- Can use key paths to observe properties, thus nested objects can be observed.
+
+**Cons:**
+- The properties we wish to observe, must be defined using strings. Thus no compile time
+warnings or checking occurs.
+- Re-factoring of properties can leave our observation code no longer working.
+- Complex “IF” statements required if an object is observing multiple values.
+- Need to remove the observer when it is deallocated.
 
 ## Useful Learning Resources
 
@@ -115,7 +193,7 @@ See [Kodeco's iOS and Swift Start Page](https://www.kodeco.com/ios/paths/learn).
 ### Hacking with Swift
 
 With more free Swift tutorials than any other site, Hacking with Swift will help you
-\learn app development with UIKit and SwiftUI.
+learn app development with UIKit and SwiftUI.
 
 See [hackingwithswift.com](https://www.hackingwithswift.com).
 
@@ -129,6 +207,19 @@ about everyting for developering on Apple's platforms including but by no means 
 - [Security](https://github.com/macshome/The-Wisdom-of-Quinn#security)
 - [Logging](https://github.com/macshome/The-Wisdom-of-Quinn#logging)
 - and much... much more...
+
+### Swift concurrency resources
+
+- [Async await in Swift explained with code examples](https://www.avanderlee.com/swift/async-await/)
+- [Actors in Swift: how to use and prevent data races](https://www.avanderlee.com/swift/actors/)
+- [Swift actors: How do they work, and what kinds of problems do they solve?](https://www.swiftbysundell.com/articles/swift-actors/)
+- [Sendable and @Sendable closures explained with code examples](https://www.avanderlee.com/swift/sendable-protocol-closures/)
+
+### Other resources
+
+- [MVVM Architectural Design Pattern in Swift](https://medium.com/dev-genius/mvvm-architectural-design-pattern-in-swift-87dde74758b0)
+- [VIPER Design Pattern in Swift](https://blog.devgenius.io/viper-design-pattern-with-a-basic-example-2a5802f6e6f1)
+- [Haacking with Swift interview questions](https://www.hackingwithswift.com/interview-questions)
 
 ## License
 

@@ -224,3 +224,23 @@ about everyting for developering on Apple's platforms including but by no means 
 ## License
 
 See [LICENSE](./LICENSE).
+
+## Features to be added to this package in the future:
+
+### CoreHealth
+
+1. Support for `HKAnchoredObjectQuery` queries with type-safe and unit-safe implementation.
+
+### CoreUI
+
+1. **[Font Modifiers]** Ability to adjust default font to enable an app developer to use the simple
+modifiers with the font of their choice. This should also allow the developer to use one-off fonts
+if desired on a `Button` or `Text` object.
+
+2. **[Toasts]** Add flexibility so developers can render any `View` as the toast content without enforcing
+a `String` title.
+
+3. **[Toasts]** Add ability to customize appearance with app-specific font, not just the default system
+fonts. 
+
+4. **[Accessibility]** Add utilities for accessibility.

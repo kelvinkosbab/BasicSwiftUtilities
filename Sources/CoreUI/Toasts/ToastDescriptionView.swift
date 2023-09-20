@@ -70,7 +70,7 @@ public struct ToastDescriptionView : View {
     
     private func render(descriptionText text: String) -> some View {
         Text(text)
-            .footnoteStyle(appFont: .systemRegular)
+            .footnoteStyle()
             .fixedSize(
                 horizontal: false,
                 vertical: true

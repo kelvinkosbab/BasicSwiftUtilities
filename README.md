@@ -215,15 +215,16 @@ about everyting for developering on Apple's platforms including but by no means 
 - [Swift actors: How do they work, and what kinds of problems do they solve?](https://www.swiftbysundell.com/articles/swift-actors/)
 - [Sendable and @Sendable closures explained with code examples](https://www.avanderlee.com/swift/sendable-protocol-closures/)
 
+### SwiftUI resources
+
+- [SwiftUI Button Tutorial: Customization](https://www.kodeco.com/34851726-swiftui-button-tutorial-customization)
+
 ### Other resources
 
 - [MVVM Architectural Design Pattern in Swift](https://medium.com/dev-genius/mvvm-architectural-design-pattern-in-swift-87dde74758b0)
 - [VIPER Design Pattern in Swift](https://blog.devgenius.io/viper-design-pattern-with-a-basic-example-2a5802f6e6f1)
 - [Haacking with Swift interview questions](https://www.hackingwithswift.com/interview-questions)
-
-## License
-
-See [LICENSE](./LICENSE).
+- [iOS Interview Guide: Questions for Senior Developers](https://iosinterviewguide.com/ios-interview-questions-for-senior-developers-in-2020)
 
 ## Features to be added to this package in the future:
 
@@ -243,4 +244,10 @@ a `String` title.
 3. **[Toasts]** Add ability to customize appearance with app-specific font, not just the default system
 fonts. 
 
-4. **[Accessibility]** Add utilities for accessibility.
+4. **[Toasts]** Apply a minimum capsule size if no content is present.
+
+5. **[Accessibility]** Add utilities for accessibility.
+
+## License
+
+See [LICENSE](./LICENSE).

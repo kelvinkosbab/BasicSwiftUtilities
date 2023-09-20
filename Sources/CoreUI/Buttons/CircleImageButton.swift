@@ -47,19 +47,13 @@ public struct CircleImageButton : View {
     }
 
     public var body: some View {
-        Button(action: {}) {
+        Button(action: self.action) {
             if self.isIcon {
                 CircleImage(image: self.image)
                     .foregroundColor(self.tintColor)
-                    .onTapGesture {
-                        self.action()
-                    }
                     .frame(width: self.size, height: self.size)
             } else {
                 CircleImage(image: self.image)
-                    .onTapGesture {
-                        self.action()
-                    }
                     .frame(width: self.size, height: self.size)
             }
         }
@@ -74,11 +68,19 @@ public struct CircleImageButton : View {
 struct CircleImageButton_Previews: PreviewProvider {
     
     static var previews: some View {
-        VStack {
-            CircleImageButton("plus.circle.fill", size: 100, tintColor: .blue) {
+        VStack(spacing: 16) {
+            CircleImageButton(
+                "plus.circle.fill",
+                size: 100,
+                tintColor: .blue
+            ) {
                 // do nothing
             }
-            CircleImageButton("minus.circle.fill", size: 100, tintColor: .blue) {
+            CircleImageButton(
+                "minus.circle.fill",
+                size: 100,
+                tintColor: .blue
+            ) {
                 // do nothing
             }
         }

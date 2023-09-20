@@ -12,23 +12,8 @@ import UIKit
 
 // MARK: - AppFont
 
-/// Defines ``AppFont.Style`` and ``AppFont.Size``.
+/// Defines ``AppFont.Size``.
 public struct AppFont {
-    
-    // MARK: - Style
-    
-    public enum Style {
-        case systemRegular
-        case systemBold
-        case systemItalic
-        case systemMonospace
-        case custom(String)
-    }
-    
-    public static var regular: Style = .systemRegular
-    public static var bold: Style = .systemBold
-    public static var italic: Style = .systemItalic
-    public static var monospace: Style = .systemMonospace
     
     // MARK: - Size
     

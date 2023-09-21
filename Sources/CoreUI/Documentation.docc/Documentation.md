@@ -103,37 +103,3 @@ ZStack {
 ```
 
 See [HexColor](../Colors/HexColor.swift) for implementation details.
-
-### System font utilities
-
-Sometimes picking the right app fonts for your app can be tedious, especially when initially
-working on an app. `SwiftUI`'s `font(_:)` modifier is powerful, but also provides dozens upon
-dozens of options. These options can be annoying for developers who want to get started designing
-their app quickly or if the styled font for your app hasn't been decided upon yet.
-
-This package provides a small handful of Font view modifiers for easily defining a `View`'s size
-and style.
-
-Supported font sizes include:
-- `footnote`: size 13
-- `body`: size 16
-- `heading`: size 20
-- `title`: size 28
-- `xlTitle`: size 78
-
-Supported font styles include:
-- System regular
-- System bold
-- System italic
-- System monospace
-
-For example, to apply a bold footnote sized style to a `Text` view: 
-```swift
-Text("A string")
-    .footnoteBoldStyle()
-```
-
-Note: By default all these modifiers support accessibility's Dynamic Text
-
-Once you are ready to define your app's specific font's you can create your own modifiers
-to help your app feel distinct and unique.

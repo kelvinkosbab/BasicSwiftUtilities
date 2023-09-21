@@ -54,6 +54,9 @@ private class MockDefaultCoreLogger : Loggable {
 
 final class SubsystemCategoryLoggerTests: XCTestCase {
     
+    let mockSubsystem = "mockSubsystem"
+    let mockCategory = "mockCategory"
+    
     // MARK: - Debug Log Tests
     
     /// Default logger should log a `debug` message correctly.
@@ -61,7 +64,11 @@ final class SubsystemCategoryLoggerTests: XCTestCase {
     /// - Expect a logged string to be logged at the `debug` level and log to equal the input.
     func testLoggerLogsDebug() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = SubsystemCategoryLogger(logger: mockLogger)
+        let logger = SubsystemCategoryLogger(
+            subsystem: self.mockSubsystem,
+            category: self.mockCategory,
+            logger: mockLogger
+        )
         let someString = UUID().uuidString
         logger.debug(someString)
         XCTAssert(mockLogger.debugLogs.count == 1)
@@ -76,7 +83,11 @@ final class SubsystemCategoryLoggerTests: XCTestCase {
     /// - Expect a logged string to be logged at the `debug` level and log to equal the input.
     func testLoggerLogsDebugWithPrivateMessage() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = SubsystemCategoryLogger(logger: mockLogger)
+        let logger = SubsystemCategoryLogger(
+            subsystem: self.mockSubsystem,
+            category: self.mockCategory,
+            logger: mockLogger
+        )
         let someString = UUID().uuidString
         let somePrivateString = UUID().uuidString
         logger.debug(someString, censored: somePrivateString)
@@ -94,7 +105,11 @@ final class SubsystemCategoryLoggerTests: XCTestCase {
     /// - Expect a logged string to be logged at the `info` level and log to equal the input.
     func testLoggerLogsInfo() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = SubsystemCategoryLogger(logger: mockLogger)
+        let logger = SubsystemCategoryLogger(
+            subsystem: self.mockSubsystem,
+            category: self.mockCategory,
+            logger: mockLogger
+        )
         let someString = UUID().uuidString
         logger.info(someString)
         XCTAssert(mockLogger.debugLogs.count == 0)
@@ -109,7 +124,11 @@ final class SubsystemCategoryLoggerTests: XCTestCase {
     /// - Expect a logged string to be logged at the `info` level and log to equal the input.
     func testLoggerLogsInfoWithPrivateMessage() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = SubsystemCategoryLogger(logger: mockLogger)
+        let logger = SubsystemCategoryLogger(
+            subsystem: self.mockSubsystem,
+            category: self.mockCategory,
+            logger: mockLogger
+        )
         let someString = UUID().uuidString
         let somePrivateString = UUID().uuidString
         logger.info(someString, censored: somePrivateString)
@@ -127,7 +146,11 @@ final class SubsystemCategoryLoggerTests: XCTestCase {
     /// - Expect a logged string to be logged at the `error` level and log to equal the input.
     func testLoggerLogsError() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = SubsystemCategoryLogger(logger: mockLogger)
+        let logger = SubsystemCategoryLogger(
+            subsystem: self.mockSubsystem,
+            category: self.mockCategory,
+            logger: mockLogger
+        )
         let someString = UUID().uuidString
         logger.error(someString)
         XCTAssert(mockLogger.debugLogs.count == 0)
@@ -142,7 +165,11 @@ final class SubsystemCategoryLoggerTests: XCTestCase {
     /// - Expect a logged string to be logged at the `error` level and log to equal the input.
     func testLoggerLogsErrorWithPrivateMessage() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = SubsystemCategoryLogger(logger: mockLogger)
+        let logger = SubsystemCategoryLogger(
+            subsystem: self.mockSubsystem,
+            category: self.mockCategory,
+            logger: mockLogger
+        )
         let someString = UUID().uuidString
         let somePrivateString = UUID().uuidString
         logger.error(someString, censored: somePrivateString)
@@ -160,7 +187,11 @@ final class SubsystemCategoryLoggerTests: XCTestCase {
     /// - Expect a logged string to be logged at the `fault` level and log to equal the input.
     func testLoggerLogsFault() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = SubsystemCategoryLogger(logger: mockLogger)
+        let logger = SubsystemCategoryLogger(
+            subsystem: self.mockSubsystem,
+            category: self.mockCategory,
+            logger: mockLogger
+        )
         let someString = UUID().uuidString
         logger.fault(someString)
         XCTAssert(mockLogger.debugLogs.count == 0)
@@ -175,7 +206,11 @@ final class SubsystemCategoryLoggerTests: XCTestCase {
     /// - Expect a logged string to be logged at the `fault` level and log to equal the input.
     func testLoggerLogsFaultWithPrivateMessage() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = SubsystemCategoryLogger(logger: mockLogger)
+        let logger = SubsystemCategoryLogger(
+            subsystem: self.mockSubsystem,
+            category: self.mockCategory,
+            logger: mockLogger
+        )
         let someString = UUID().uuidString
         let somePrivateString = UUID().uuidString
         logger.fault(someString, censored: somePrivateString)

@@ -76,7 +76,7 @@ struct ToastView : View {
     ) -> some View {
         VStack(spacing: Spacing.tiny) {
             Text(title)
-                .footnoteBoldStyle()
+                .font(.footnote)
                 .fixedSize(horizontal: false, vertical: true)
                 .lineLimit(2)
                 .multilineTextAlignment(.center)

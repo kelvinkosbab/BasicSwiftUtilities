@@ -6,10 +6,10 @@ import PackageDescription
 let package = Package(
     name: "BasicSwiftUtilities",
     platforms: [
-        .iOS("10"),
-        .macOS("11"),
-        .tvOS("10"),
-        .watchOS("3")
+        .iOS("15"),
+        .macOS("12"),
+        .tvOS("15"),
+        .watchOS("7")
     ],
     products: [
         .library(

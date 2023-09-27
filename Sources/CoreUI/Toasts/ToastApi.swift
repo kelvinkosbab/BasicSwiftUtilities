@@ -29,12 +29,52 @@ public class ToastApi : ObservableObject, ToastStateDelegate {
     /// Shows a toast.
     ///
     /// - Parameter title: Primary title message.
-    /// - Parameter description: Optional description. This text will be displayed directly below the title.
+    /// - Parameter description: Optional string. This text will be displayed directly below the title.
     /// - Parameter leading: Content to be displayed on the leading edge of the toast.
     /// - Parameter trailing: Content to be displayed on the trailing edge of the toast.
     public func show(
         title: String,
-        description: ToastDescriptionView.ContentType? = nil,
+        description: String,
+        leading: ToastImageContent = .none,
+        trailing: ToastImageContent = .none
+    ) {
+        self.show(
+            title: .string(title),
+            description: .string(description),
+            leading: leading,
+            trailing: trailing
+        )
+    }
+    
+    /// Shows a toast.
+    ///
+    /// - Parameter title: Primary title message.
+    /// - Parameter description: Optional description. This content will be displayed directly below the title.
+    /// - Parameter leading: Content to be displayed on the leading edge of the toast.
+    /// - Parameter trailing: Content to be displayed on the trailing edge of the toast.
+    public func show(
+        title: String,
+        description: ToastSimpleContent? = nil,
+        leading: ToastImageContent = .none,
+        trailing: ToastImageContent = .none
+    ) {
+        self.show(
+            title: .string(title),
+            description: description,
+            leading: leading,
+            trailing: trailing
+        )
+    }
+    
+    /// Shows a toast.
+    ///
+    /// - Parameter title: Primary title content.
+    /// - Parameter description: Optional description. This content will be displayed directly below the title.
+    /// - Parameter leading: Content to be displayed on the leading edge of the toast.
+    /// - Parameter trailing: Content to be displayed on the trailing edge of the toast.
+    public func show(
+        title: ToastSimpleContent,
+        description: ToastSimpleContent? = nil,
         leading: ToastImageContent = .none,
         trailing: ToastImageContent = .none
     ) {

@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: - ToastView
 
 /// Displayable content for a toast.
-@available(iOS 13.0, macOS 12.0, tvOS 15.0, *)
+@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
 struct ToastView : View {
     
     @Binding private var content: ToastContent
@@ -31,28 +31,28 @@ struct ToastView : View {
         HStack {
             if self.content.leading != .none || self.content.trailing != .none {
                 
-                self.renderSubContent(
+                self.renderLeadingTrailingContent(
                     self.content.leading.body(),
                     isLeading: true
                 )
                 
-                self.getTextContent(
-                    title: content.title,
-                    description: content.description
+                self.renderPrimaryContent(
+                    title: self.content.title,
+                    description: self.content.description
                 )
                 .padding(.vertical, Spacing.tiny)
                 .padding(.horizontal, Spacing.base)
                 
-                self.renderSubContent(
+                self.renderLeadingTrailingContent(
                     self.content.trailing.body(),
                     isLeading: false
                 )
                 
             } else {
                 
-                self.getTextContent(
-                    title: content.title,
-                    description: content.description
+                self.renderPrimaryContent(
+                    title: self.content.title,
+                    description: self.content.description
                 )
                 .padding(.vertical, Spacing.small)
                 .padding(.horizontal, Spacing.xxl)
@@ -70,25 +70,41 @@ struct ToastView : View {
         )
     }
     
-    private func getTextContent(
-        title: String,
-        description: ToastDescriptionView.ContentType?
+    private func renderPrimaryContent(
+        title: ToastSimpleContent,
+        description: ToastSimpleContent?
     ) -> some View {
         VStack(spacing: Spacing.tiny) {
-            Text(title)
-                .font(.footnote)
-                .fixedSize(horizontal: false, vertical: true)
-                .lineLimit(2)
-                .multilineTextAlignment(.center)
-                .foregroundColor(Color.primary)
+            switch title {
+            case .string(let titleString):
+                if #available(iOS 16.0, *) {
+                    Text(titleString)
+                        .font(.system(.footnote, weight: .bold))
+                        .fixedSize(horizontal: false, vertical: true)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.primary)
+                } else {
+                    Text(titleString)
+                        .font(.footnote)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.primary)
+                }
+            default:
+                Text("KAK TODO")
+//                ToastDescriptionView(content: title, style: .primary)
+            }
             if let description = description {
-                ToastDescriptionView(content: description)
+                Text("KAK TODO 2")
+//                ToastDescriptionView(content: description, style: .secondary)
             }
         }
     }
     
     @ViewBuilder
-    private func renderSubContent<Content>(
+    private func renderLeadingTrailingContent<Content>(
         _ content: Content,
         isLeading: Bool
     ) -> some View where Content: View {
@@ -103,7 +119,7 @@ struct ToastView : View {
 
 #if DEBUG
 
-@available(iOS 13.0, macOS 12.0, tvOS 15.0, *)
+@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
 struct ToastView_Previews: PreviewProvider {
     
     static let image: Image = Image(systemName: "heart.circle.fill")
@@ -112,18 +128,18 @@ struct ToastView_Previews: PreviewProvider {
         VStack(spacing: Spacing.base) {
             
             ToastView(.constant(ToastContent(
-                title: "Simple Toast with Title"
+                title: .string("Simple Toast with Title")
             )))
             .padding()
             
             ToastView(.constant(ToastContent(
-                title: "Toast with Leading Image",
+                title: .string("Toast with Leading Image"),
                 leading: .tintedImage(self.image, .green)
             )))
             .padding()
             
             ToastView(.constant(ToastContent(
-                title: "Toast with 2 Images",
+                title: .string("Toast with 2 Images"),
                 description: .string("Description"),
                 leading: .tintedImage(self.image, .blue),
                 trailing: .tintedImage(self.image, .green)
@@ -131,13 +147,13 @@ struct ToastView_Previews: PreviewProvider {
             .padding()
             
             ToastView(.constant(ToastContent(
-                title: "Toast with Detail",
+                title: .string("Toast with Detail"),
                 description: .string("Hello")
             )))
             .padding()
             
             ToastView(.constant(ToastContent(
-                title: "Toast with Detail",
+                title: .string("Toast with Detail"),
                 description: .leadingImage(
                     Image(systemName: "battery.75"),
                     description: "75%"
@@ -146,7 +162,7 @@ struct ToastView_Previews: PreviewProvider {
             .padding()
             
             ToastView(.constant(ToastContent(
-                title: "Toast with Detail",
+                title: .string("Toast with Detail"),
                 description: .trailingImage(
                     Image(systemName: "battery.75"),
                     description: "75%"

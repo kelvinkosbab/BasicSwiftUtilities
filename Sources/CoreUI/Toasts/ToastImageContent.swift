@@ -12,11 +12,16 @@ import SwiftUI
 
 // MARK: - ToastImageContent
 
-@available(iOS 13.0, macOS 12.0, tvOS 15.0, *)
+@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
 public enum ToastImageContent : Equatable {
     
+    /// Empty content.
     case none
+    
+    /// Custom image.
     case image(_ image: Image)
+    
+    /// Custom image with specified tint color.
     case tintedImage(_ image: Image, _ tintColor: Color)
     
     @ViewBuilder
@@ -47,20 +52,26 @@ public enum ToastImageContent : Equatable {
         switch lhs {
         case .none:
             switch rhs {
-            case .none: return true
-            default: return false
+            case .none: 
+                return true
+            default:
+                return false
             }
             
         case .image:
             switch rhs {
-            case .image: return true
-            default: return false
+            case .image: 
+                return true
+            default:
+                return false
             }
             
         case .tintedImage:
             switch rhs {
-            case .tintedImage: return true
-            default: return false
+            case .tintedImage: 
+                return true
+            default:
+                return false
             }
         }
     }

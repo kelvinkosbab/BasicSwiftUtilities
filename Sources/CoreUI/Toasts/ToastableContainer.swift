@@ -32,7 +32,7 @@ import SwiftUI
 ///     self.toastApi.show(title: "Simple Title")
 /// }
 /// ```
-@available(iOS 13.0, macOS 12.0, tvOS 15.0, *)
+@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
 struct ToastableContainer<Content> : View where Content: View{
     
     var content: () -> Content
@@ -85,7 +85,7 @@ struct ToastableContainer<Content> : View where Content: View{
                     }
                 }
                 .padding(self.toastApi.options.position == .top ? .top : .bottom, self.getToastTopOffset(toastSize: geometry.size))
-                .animation(.easeInOut(duration: self.toastApi.options.animationDuration))
+                .animation(.easeInOut, value: self.toastApi.options.animationDuration)
             }
         }
         #if !os(macOS)
@@ -106,7 +106,7 @@ struct ToastableContainer<Content> : View where Content: View{
 
 #if DEBUG
 
-@available(iOS 13.0, macOS 12.0, tvOS 15.0, *)
+@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
 struct ToastableContainer_Previews: PreviewProvider {
     
     static let topToastApi = ToastApi(options: ToastOptions(position: .top))

@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: - ToastDescriptionView
 
 /// Displays a styled text view for the description of a toast view.
-@available(iOS 13.0, macOS 12.0, tvOS 15.0, *)
+@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
 public struct ToastDescriptionView : View {
     
     /// Determines what kind of content to render in the description under the title of the toast.
@@ -42,7 +42,7 @@ public struct ToastDescriptionView : View {
         HStack {
             switch self.content {
             case .string(let description):
-                self.render(descriptionText: description)
+                self.render(text: description)
                 
             case .image(let image):
                 self.render(image: image)
@@ -53,7 +53,7 @@ public struct ToastDescriptionView : View {
             ):
                 HStack {
                     self.render(image: image)
-                    self.render(descriptionText: description)
+                    self.render(text: description)
                 }
                 
             case .trailingImage(
@@ -61,23 +61,23 @@ public struct ToastDescriptionView : View {
                 description: let description
             ):
                 HStack {
-                    self.render(descriptionText: description)
+                    self.render(text: description)
                     self.render(image: image)
                 }
             }
         }
     }
     
-    private func render(descriptionText text: String) -> some View {
+    private func render(text: String) -> some View {
         Text(text)
             .font(.footnote)
             .fixedSize(
                 horizontal: false,
                 vertical: true
             )
-            .lineLimit(1)
+            .lineLimit(2)
             .multilineTextAlignment(.center)
-            .foregroundColor(Color.gray)
+            .foregroundStyle(.secondary)
     }
     
     private func render(image: Image) -> some View {
@@ -88,25 +88,24 @@ public struct ToastDescriptionView : View {
                 width: Spacing.large,
                 height: Spacing.base
             )
+            .foregroundStyle(.secondary)
     }
 }
 
 // MARK: - Preview
 
-#if DEBUG
-
-@available(iOS 13.0, macOS 12.0, tvOS 15.0, *)
+@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
 struct ToastDescriptionView_Previews: PreviewProvider {
     
     static let mockImage: Image = Image(systemName: "battery.75")
     
-    static let mockDescirption: String = "Simple Description"
+    static let mockString: String = "Simple string"
     
     static var previews: some View {
         VStack(spacing: Spacing.base) {
             
             ToastDescriptionView(
-                content: .string(self.mockDescirption)
+                content: .string(self.mockString)
             )
             .padding()
             
@@ -118,7 +117,7 @@ struct ToastDescriptionView_Previews: PreviewProvider {
             ToastDescriptionView(
                 content: .leadingImage(
                     self.mockImage,
-                    description: self.mockDescirption
+                    description: self.mockString
                 )
             )
             .padding()
@@ -126,7 +125,7 @@ struct ToastDescriptionView_Previews: PreviewProvider {
             ToastDescriptionView(
                 content: .trailingImage(
                     self.mockImage,
-                    description: self.mockDescirption
+                    description: self.mockString
                 )
             )
             .padding()
@@ -134,5 +133,4 @@ struct ToastDescriptionView_Previews: PreviewProvider {
     }
 }
 
-#endif
 #endif

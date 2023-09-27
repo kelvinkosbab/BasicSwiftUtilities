@@ -12,14 +12,14 @@ import SwiftUI
 // MARK: - ToastContent
 
 /// Defines content supported content for a toast.
-@available(iOS 13.0, macOS 12.0, tvOS 15.0, *)
+@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
 public struct ToastContent {
     
-    /// Primary title message.
-    let title: String
+    /// Primary content of the toast.
+    let title: ToastSimpleContent
     
     /// Optional description. This view will be displayed directly below the title.
-    let description: ToastDescriptionView.ContentType?
+    let description: ToastSimpleContent?
     
     /// Optional image and optional tint color displayed on tthe leading edge of the toast.
     let leading: ToastImageContent
@@ -37,8 +37,8 @@ public struct ToastContent {
     /// - Parameter trailingImage: Optional image and optional tint color displayed on tthe trailing edge
     /// of the toast. Default is `.none`.
     public init(
-        title: String,
-        description: ToastDescriptionView.ContentType? = nil,
+        title: ToastSimpleContent,
+        description: ToastSimpleContent? = nil,
         leading: ToastImageContent = .none,
         trailing: ToastImageContent = .none
     ) {

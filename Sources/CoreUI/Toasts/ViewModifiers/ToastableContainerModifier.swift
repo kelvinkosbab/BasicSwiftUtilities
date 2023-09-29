@@ -10,30 +10,25 @@ import SwiftUI
 
 // MARK: - ToastableContainerModifier
 
-@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
 private struct ToastableContainerModifier : ViewModifier {
     
-    @State var paddingTop: CGFloat = 0
-    
     let toastApi: ToastApi
-    let options: ToastOptions
     
     init(
-        toastApi: ToastApi,
-        options: ToastOptions = ToastOptions()
+        toastApi: ToastApi
     ) {
         self.toastApi = toastApi
-        self.options = options
     }
     
     func body(content: Content) -> some View {
-        ToastableContainer(toastApi: toastApi) { content }
+        ToastableContainer(toastApi: self.toastApi) {
+            content
+        }
     }
 }
 
 // MARK: - Toastable
 
-@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
 public extension View {
     
     /// Enables the attached container for toasts. The toasts will be bound to the container's safe area insets.

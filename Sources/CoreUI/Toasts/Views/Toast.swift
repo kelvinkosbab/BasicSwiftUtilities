@@ -1,5 +1,5 @@
 //
-//  CoreToastContent.swift
+//  Toast.swift
 //
 //  Copyright © Kozinga. All rights reserved.
 //
@@ -8,16 +8,16 @@
 
 import SwiftUI
 
-// MARK: - CoreToastContent
+// MARK: - Toast
 
 /// Displayable content for a toast.
-@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
-struct CoreToastContent<Content: View, Leading: View, Trailing: View> : View {
+struct Toast<Content, Leading, Trailing> : View where Content: View, Leading: View, Trailing: View {
     
     let content: () -> Content
     let leading: (() -> Leading)?
     let trailing: (() -> Trailing)?
     
+    /// TODO documentation
     init(
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder leading: @escaping () -> Leading,
@@ -26,30 +26,6 @@ struct CoreToastContent<Content: View, Leading: View, Trailing: View> : View {
         self.content = content
         self.leading = leading
         self.trailing = trailing
-    }
-    
-    init(
-        @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder trailing: @escaping () -> Trailing
-    ) where Leading == EmptyView {
-        self.content = content
-        self.leading = nil
-        self.trailing = trailing
-    }
-    
-    init(
-        @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder leading: @escaping () -> Leading
-    ) where Trailing == EmptyView {
-        self.content = content
-        self.leading = leading
-        self.trailing = nil
-    }
-    
-    init(@ViewBuilder content: @escaping () -> Content) where Leading == EmptyView, Trailing == EmptyView {
-        self.content = content
-        self.leading = nil
-        self.trailing = nil
     }
     
     var body: some View {
@@ -90,7 +66,7 @@ struct CoreToastContent<Content: View, Leading: View, Trailing: View> : View {
             horizontal: true,
             vertical: true
         )
-        .toastBackground()
+        .modifier(ToastBackgroundModifier())
     }
     
     private var renderClearRectangle: some View {
@@ -102,29 +78,22 @@ struct CoreToastContent<Content: View, Leading: View, Trailing: View> : View {
 
 // MARK: - Preview
 
-@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
-struct CoreToastContent_Previews: PreviewProvider {
+struct Toast_Previews: PreviewProvider {
+    
+    static var mockContent: some View {
+        Text("Hello there")
+            .font(.footnote)
+            .fixedSize(horizontal: false, vertical: true)
+            .lineLimit(2)
+            .multilineTextAlignment(.center)
+            .foregroundColor(.primary)
+    }
     
     static var previews: some View {
         VStack(spacing: Spacing.base) {
             
-            CoreToastContent {
-                Text("Hello there")
-                    .font(.footnote)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.primary)
-            }
-            .padding()
-            
-            CoreToastContent {
-                Text("Hello there")
-                    .font(.footnote)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.primary)
+            Toast {
+                self.mockContent
             } leading: {
                 Image(systemName: "heart.circle.fill")
                     .resizable()
@@ -134,29 +103,16 @@ struct CoreToastContent_Previews: PreviewProvider {
                     .symbolRenderingMode(.palette)
                     .foregroundStyle(.blue, .green, .red)
             }
-            .padding()
             
-            CoreToastContent {
-                Text("Hello there")
-                    .font(.footnote)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.primary)
+            Toast {
+                VStack(spacing: Spacing.tiny) {
+                    self.mockContent
+                    self.mockContent
+                }
             } leading: {
                 Image(systemName: "heart.circle.fill")
                     .resizable()
                     .frame(width: 24, height: 24)
-            }
-            .padding()
-            
-            CoreToastContent {
-                Text("Hello there")
-                    .font(.footnote)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.primary)
             } trailing: {
                 Image(systemName: "person.3.sequence.fill")
                     .symbolRenderingMode(.palette)
@@ -166,7 +122,6 @@ struct CoreToastContent_Previews: PreviewProvider {
                         .linearGradient(colors: [.blue, .clear], startPoint: .top, endPoint: .bottomTrailing)
                     )
             }
-            .padding()
         }
     }
 }

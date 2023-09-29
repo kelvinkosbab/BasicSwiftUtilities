@@ -32,8 +32,7 @@ import SwiftUI
 ///     self.toastApi.show(title: "Simple Title")
 /// }
 /// ```
-@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
-struct ToastableContainer<Content> : View where Content: View{
+struct ToastableContainer<Content> : View where Content: View {
     
     var content: () -> Content
     
@@ -93,10 +92,10 @@ struct ToastableContainer<Content> : View where Content: View{
         #endif
     }
     
-    private func renderToast(toast: ToastContent) -> some View {
+    private func renderToast(toast: AnyView) -> some View {
         HStack {
             Spacer()
-            ToastView(.constant(toast))
+            toast
             Spacer()
         }
     }
@@ -104,9 +103,6 @@ struct ToastableContainer<Content> : View where Content: View{
 
 // MARK: - Preview
 
-#if DEBUG
-
-@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
 struct ToastableContainer_Previews: PreviewProvider {
     
     static let topToastApi = ToastApi(options: ToastOptions(position: .top))
@@ -127,31 +123,112 @@ struct ToastableContainer_Previews: PreviewProvider {
                 Button("Top: Show Title & Description") {
                     self.topToastApi.show(
                         title: "Simple Title",
-                        description: .string("Some Description")
+                        description: "Some Description"
                     )
                 }
                 
-                Button("Top: Show with Leading Image") {
+                Button("Top: Show Custom Content") {
                     self.topToastApi.show(
-                        title: "Simple Title",
-                        leading: .tintedImage(self.image, .green)
+                        content: {
+                            HStack {
+                                Circle()
+                                    .foregroundColor(.cyan)
+                                    .padding()
+                                Rectangle()
+                                    .foregroundColor(.green)
+                                    .padding()
+                            }
+                        }
                     )
                 }
                 
-                Button("Top: Show with Trailing Image") {
+                Button("Top: Show Custom Content & Leading") {
                     self.topToastApi.show(
-                        title: "Simple Title",
-                        trailing: .tintedImage(self.image, .blue)
+                        content: {
+                            Text("Hello there")
+                                .font(.body)
+                                .foregroundColor(.primary)
+                        },
+                        leading: {
+                            Image(systemName: "heart.circle.fill")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                                .foregroundColor(.blue)
+                        }
                     )
                 }
                 
-                Button("Top: Show with Leading and Trailing") {
+                Button("Top: Show Custom Content & Trailing") {
                     self.topToastApi.show(
-                        title: "Simple Title",
-                        leading: .tintedImage(self.image, .green),
-                        trailing: .tintedImage(self.image, .blue)
+                        content: {
+                            Text("Hello there")
+                                .font(.body)
+                                .foregroundColor(.primary)
+                        },
+                        trailing: {
+                            Image(systemName: "person.3.sequence.fill")
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(
+                                    .linearGradient(colors: [.red, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                                    .linearGradient(colors: [.green, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                                    .linearGradient(colors: [.blue, .clear], startPoint: .top, endPoint: .bottomTrailing)
+                                )
+                        }
                     )
                 }
+                
+                Button("Top: Show Custom Content & Leading & Trailing") {
+                    self.topToastApi.show(
+                        content: {
+                            VStack(spacing: Spacing.tiny) {
+                                Text("Hello there")
+                                    .font(.footnote)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .lineLimit(2)
+                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(.primary)
+                                Text("Hello there")
+                                    .font(.footnote)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .lineLimit(2)
+                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(.primary)
+                            }
+                        },
+                        leading: {
+                            Image(systemName: "heart.circle.fill")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                        },
+                        trailing: {
+                            Image(systemName: "person.3.sequence.fill")
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(.blue, .green, .red)
+                        }
+                    )
+                }
+                
+//                Button("Top: Show with Leading Image") {
+//                    self.topToastApi.show(
+//                        title: "Simple Title",
+//                        leading: .tintedImage(self.image, .green)
+//                    )
+//                }
+//                
+//                Button("Top: Show with Trailing Image") {
+//                    self.topToastApi.show(
+//                        title: "Simple Title",
+//                        trailing: .tintedImage(self.image, .blue)
+//                    )
+//                }
+//                
+//                Button("Top: Show with Leading and Trailing") {
+//                    self.topToastApi.show(
+//                        title: "Simple Title",
+//                        leading: .tintedImage(self.image, .green),
+//                        trailing: .tintedImage(self.image, .blue)
+//                    )
+//                }
             }
         }
         .toastableContainer(toastApi: self.topToastApi)
@@ -169,31 +246,112 @@ struct ToastableContainer_Previews: PreviewProvider {
                 Button("Bottom: Show Title & Description") {
                     self.bottomToastApi.show(
                         title: "Simple Title",
-                        description: .string("Some Description")
+                        description: "Some Description"
                     )
                 }
                 
-                Button("Bottom: Show with Leading Image") {
+                Button("Top: Show Custom Content") {
                     self.bottomToastApi.show(
-                        title: "Simple Title",
-                        leading: .tintedImage(self.image, .green)
+                        content: {
+                            HStack {
+                                Circle()
+                                    .foregroundColor(.cyan)
+                                    .padding()
+                                Rectangle()
+                                    .foregroundColor(.green)
+                                    .padding()
+                            }
+                        }
                     )
                 }
                 
-                Button("Bottom: Show with Trailing Image") {
+                Button("Top: Show Custom Content & Leading") {
                     self.bottomToastApi.show(
-                        title: "Simple Title",
-                        trailing: .tintedImage(self.image, .blue)
+                        content: {
+                            Text("Hello there")
+                                .font(.body)
+                                .foregroundColor(.primary)
+                        },
+                        leading: {
+                            Image(systemName: "heart.circle.fill")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                                .foregroundColor(.blue)
+                        }
                     )
                 }
                 
-                Button("Show with Leading and Trailing") {
+                Button("Top: Show Custom Content & Trailing") {
                     self.bottomToastApi.show(
-                        title: "Simple Title",
-                        leading: .tintedImage(self.image, .green),
-                        trailing: .tintedImage(self.image, .blue)
+                        content: {
+                            Text("Hello there")
+                                .font(.body)
+                                .foregroundColor(.primary)
+                        },
+                        trailing: {
+                            Image(systemName: "person.3.sequence.fill")
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(
+                                    .linearGradient(colors: [.red, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                                    .linearGradient(colors: [.green, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                                    .linearGradient(colors: [.blue, .clear], startPoint: .top, endPoint: .bottomTrailing)
+                                )
+                        }
                     )
                 }
+                
+                Button("Top: Show Custom Content & Leading & Trailing") {
+                    self.bottomToastApi.show(
+                        content: {
+                            VStack(spacing: Spacing.tiny) {
+                                Text("Hello there")
+                                    .font(.footnote)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .lineLimit(2)
+                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(.primary)
+                                Text("Hello there")
+                                    .font(.footnote)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .lineLimit(2)
+                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(.primary)
+                            }
+                        },
+                        leading: {
+                            Image(systemName: "heart.circle.fill")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                        },
+                        trailing: {
+                            Image(systemName: "person.3.sequence.fill")
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(.blue, .green, .red)
+                        }
+                    )
+                }
+                
+//                Button("Bottom: Show with Leading Image") {
+//                    self.bottomToastApi.show(
+//                        title: "Simple Title",
+//                        leading: .tintedImage(self.image, .green)
+//                    )
+//                }
+//                
+//                Button("Bottom: Show with Trailing Image") {
+//                    self.bottomToastApi.show(
+//                        title: "Simple Title",
+//                        trailing: .tintedImage(self.image, .blue)
+//                    )
+//                }
+//                
+//                Button("Show with Leading and Trailing") {
+//                    self.bottomToastApi.show(
+//                        title: "Simple Title",
+//                        leading: .tintedImage(self.image, .green),
+//                        trailing: .tintedImage(self.image, .blue)
+//                    )
+//                }
             }
         }
         .toastableContainer(toastApi: self.bottomToastApi)
@@ -201,5 +359,4 @@ struct ToastableContainer_Previews: PreviewProvider {
     }
 }
 
-#endif
 #endif

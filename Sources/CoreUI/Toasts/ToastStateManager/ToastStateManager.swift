@@ -8,59 +8,27 @@
 
 import SwiftUI
 
-// MARK: - ToastState
-
-/// Defines the lifecycle of a toast.
-@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
-enum ToastState {
-    
-    /// No toast shold be prepared or shown for rendering.
-    case none
-    
-    /// Prepare a toast for display. A toast needs a short amount of time to define its bounds
-    /// before it is ready to be animated onto the screen.
-    case prepare(ToastContent)
-    
-    /// The toast should be animated into view of the screen.
-    case show(ToastContent)
-    
-    /// The toast should be animatted out of the view of the screen.
-    case hiding(ToastContent)
-    
-    /// Utility returing whether or not the toast should be rendered and vvisible.
-    var shouldBeVisible: Bool {
-        switch self {
-        case .none, .hiding, .prepare:
-            return false
-        case .show:
-            return true
-        }
-    }
-}
-
 // MARK: - ToastStateManager
 
-@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
 protocol ToastStateDelegate : AnyObject {
     func didUpdate(toastState: ToastState)
 }
 
 /// Responsible for managing any incoming `showToast` requests. Incoming toasts will be queued up
 /// until all toasts have been shown to the user.
-@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
 class ToastStateManager  {
     
     weak var delegate: ToastStateDelegate?
     private let options: ToastOptions
-    private var toasts: [ToastContent] = []
+    private var toasts: [AnyView] = []
     private var isProcessingCurrentToast: Bool = false
     
     init(options: ToastOptions) {
         self.options = options
     }
     
-    func show(_ content: ToastContent) {
-        self.toasts.append(content)
+    func show(toast: AnyView) {
+        self.toasts.append(toast)
         self.processNextToast()
     }
     

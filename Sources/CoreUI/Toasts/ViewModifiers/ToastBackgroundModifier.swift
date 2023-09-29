@@ -10,8 +10,7 @@ import SwiftUI
 
 // MARK: - ToastBackgroundModifier
 
-@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
-private struct ToastBackgroundModifier : ViewModifier {
+struct ToastBackgroundModifier : ViewModifier {
     
     func body(content: Content) -> some View {
         #if os(tvOS)
@@ -28,8 +27,7 @@ private struct ToastBackgroundModifier : ViewModifier {
 
 // MARK: - ApplyToastBackground
 
-@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
-public extension View {
+extension View {
     
     func toastBackground() -> some View {
         self.modifier(ToastBackgroundModifier())

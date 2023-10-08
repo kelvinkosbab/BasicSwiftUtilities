@@ -61,12 +61,24 @@ Core Data framework is thread safe. To use Core Data in a multithreaded environm
 - Managed object contexts are bound to the thread (queue) that they are associated with upon initialization.
 - Managed objects retrieved from a context are bound to the same queue that the context is bound to.
 
-To utilize the private queue you can use something like this when creating your object data store:
+Core data private queues are useful for executing `CoreData` database operations on a private queue.
+To utilize private managed object queues for a ``ManagedObjectStore`` type simply initialize the store
+with a `NAManagedObjectContext` set with a concurrency type of `.privateQueueConcurrencyType`.
+
+Creating this kind of context can be done in two ways (be sure to set the private context's `parent`
+to the app managed object store's primary context''):
 ```swift
-let dataContainer = YourAppDataContainer()
-let privateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-context.parent = dataContainer.context
-let store = OneObjectDataStore(context: privateContext)
+let appCoreDataContainer = YourAppManagedObjectStore.shared
+let privateQueueContext = appCoreDataContainer.newBackgroundContext()
+privateQueueContext.parent = appCoreDataContainer.context
+
+let objectStore
+
+- or -
+
+let appCoreDataContainer = YourAppManagedObjectStore.shared
+let privateQueueContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+privateQueueContext.parent = appCoreDataContainer.context
 ```
 
 For more information see [Apple's documentation](https://developer.apple.com/documentation/coredata/using_core_data_in_the_background).
@@ -77,10 +89,6 @@ App's often have to react to when data updates to keep the UI/UX up to date. The
 ([link](../CoreData/DataObserver.swift)) class provides ways to actively listen for updates to the
 underlying data store when updates happen.
 
-### Utilizing a `NSManagedObjectContext` with a concurrency type of `.privateQueueConcurrencyType`\
-
-abc
-
 ## Custom Lightweight `SQLite` Utilities
 
 ``DiskBackedJSONCodableStore`` ([link](../CodableStore/DiskBackedJSONCodableStore.swift)) provides a
@@ -88,7 +96,7 @@ simple API for storing and accessing persistent data backed by a `SQLite` databa
 provides a key-value API making it easy for lightweight and fast operations for querying or
 setting persistent data. 
 
-## ``CodableStore``
+### ``CodableStore``
 
 The ``DiskBackedJSONCodableStore`` ([link](../CodableStore/DiskBackedJSONCodableStore.swift)) provides a simple
 and lightweight key-value store. When creating a ``DiskBackedJSONCodableStore`` you can specify the type of

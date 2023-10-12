@@ -32,7 +32,7 @@ and watchOS 8.0.
 On app startup it is recommended to load your app's `CoreData` store as soon as possible. If the
 store is not loaded the app may perform in unpredictable ways. This API provides mechanisms for
 utilizing Swift's `async/await` operations to wait to perform important app operations until your
-app's data stores have been loaded. See ``ManagedObjectContainer`` (link)[../CoreData/ManagedObjectContainer.swift] for details.
+app's data stores have been loaded. See ``ManagedObjectContainer`` [link](../CoreData/ManagedObjectContainer.swift) for details.
 
 Loading your `CoreData` store is as easy as this:
 
@@ -43,7 +43,7 @@ await dataStore.configure()
 
 ### Managing objects in your app's `CoreData` store
 
-To manage objects in your `CoreData` store see ``ManagedObjectStore`` (link)[../CoreData/ManagedObjectStore.swift]. This protocol provides APIs
+To manage objects in your `CoreData` store see ``ManagedObjectStore`` [link](../CoreData/ManagedObjectStore.swift). This protocol provides APIs
 for creating, updating, and deleting objects of a certain type in the data store. Once defined
 the data store provides useful utilites making it easy to manage data in your app. For example
 
@@ -71,8 +71,6 @@ to the app managed object store's primary context''):
 let appCoreDataContainer = YourAppManagedObjectStore.shared
 let privateQueueContext = appCoreDataContainer.newBackgroundContext()
 privateQueueContext.parent = appCoreDataContainer.context
-
-let objectStore
 
 - or -
 

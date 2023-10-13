@@ -13,11 +13,11 @@ import Core
 ///
 /// Example usage:
 /// ```swift
-/// public struct YourAppDataContainer {
+/// public struct YourAppCoreDataContainer {
 ///
-///     public static let shared = TallyBokDataContainer()
+///     public static let shared = YourAppCoreDataContainer()
 ///
-///     private let container: ManagedObjectContainer
+///     let container: ManagedObjectContainer
 ///     private let logger: Logger
 ///
 ///     private init() {
@@ -26,9 +26,9 @@ import Core
 ///                 modelFileName: "ModelFileName",
 ///                 in: .module
 ///             )
-///             self.logger = Logger(category: "TallyBokDataContainer")
+///             self.logger = Logger(category: "YourAppCoreDataContainer")
 ///         } catch {
-///             fatalError("Failed to init TallyBokDataContainer: \(error)")
+///             fatalError("Failed to init YourAppCoreDataContainer: \(error)")
 ///         }
 ///     }
 ///
@@ -39,56 +39,22 @@ import Core
 ///
 ///     public func configure() async {
 ///         do {
-///             let result = try await self.container.load()
-///             switch result {
-///             case .failure(let error):
-///                 let message = "Failed to load data store: \(error)"
-///                 self.logger.error(message)
-///                 fatalError(message)
-///             case .success:
-///                 break
-///             }
+///             try await self.container.load()
 ///         } catch {
 ///             let message = "Failed to load data store: \(error)"
 ///             self.logger.error(message)
 ///             fatalError(message)
 ///         }
 ///     }
-///
-///     public var context: NSManagedObjectContext {
-///         return self.container.mainContext
-///     }
-///
-///     public func saveContext() throws {
-///         do {
-///             try self.context.save()
-///         } catch {
-///             let message = "Unresolved error: \(error.localizedDescription)"
-///             self.logger.error(message)
-///             throw error
-///         }
-///     }
 /// }
 /// ```
 @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
-public class ManagedObjectContainer : StoreContainer {
+public class ManagedObjectContainer : CoreDataContainer {
     
     // MARK: - Properties
     
-    /// The name of the core data model store. Should match the name of the *.xcdatamodeld file.
     public let storeName: String
-    
-    /// An instance of NSPersistentContainer includes all objects needed to represent a functioning Core Data stack, and provides
-    /// convenience methods and properties for common patterns.
     public let persistentContainer: NSPersistentContainer
-    
-    /// The main queue’s managed object context.
-    ///
-    /// This property contains a reference to the `NSManagedObjectContext` that is created and owned by the persistent container
-    /// which is associated with the main queue of the application. This context is created automatically as part of the initialization
-    /// of the persistent container.
-    ///
-    /// This context is associated directly with the `NSPersistentStoreCoordinator` and is non-generational by default
     public let mainContext: NSManagedObjectContext
     
     // MARK: - Init
@@ -202,27 +168,8 @@ public class ManagedObjectContainer : StoreContainer {
         }
     }
     
-    // MARK: - Persistent Container
+    // MARK: - CoreDataContainer
     
-    /// Loads the persistent container for the application.
-    ///
-    /// This implementation creates and returns a container, having loaded the store for the
-    /// application to it. This property is optional since there are legitimate error conditions that
-    /// could cause the creation of the store to fail.
-    ///
-    /// Once the persistent container has been initialized, you need to execute loadPersistentStores(completionHandler:) to instruct
-    /// the container to load the persistent stores and complete the creation of the Core Data stack.
-    ///
-    /// Once the completion handler has fired, the stack is fully initialized and is ready for use. The completion handler will be called
-    /// once for each persistent store that is created. If there is an error in the loading of the persistent stores, the NSError value
-    /// will be populated.
-    ///
-    /// Typical reasons for an error here include:
-    /// * The parent directory does not exist, cannot be created, or disallows writing.
-    /// * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-    /// * The device is out of space.
-    /// * The store could not be migrated to the current model version.
-    /// Check the error message to determine what the actual problem was.
     public func load(completion: @escaping (_ result: Result) -> Void) {
         self.persistentContainer.loadPersistentStores { _, error in
             if let error = error {
@@ -233,40 +180,6 @@ public class ManagedObjectContainer : StoreContainer {
         }
     }
     
-    /// Asyncronously loads the persistent container for the application.
-    ///
-    /// This implementation creates and returns a container, having loaded the store for the
-    /// application to it. This property is optional since there are legitimate error conditions that
-    /// could cause the creation of the store to fail.
-    ///
-    /// Once the persistent container has been initialized, you need to execute loadPersistentStores(completionHandler:) to instruct
-    /// the container to load the persistent stores and complete the creation of the Core Data stack.
-    ///
-    /// Once the completion handler has fired, the stack is fully initialized and is ready for use. The completion handler will be called
-    /// once for each persistent store that is created. If there is an error in the loading of the persistent stores, the NSError value
-    /// will be populated.
-    ///
-    /// Typical reasons for an error here include:
-    /// * The parent directory does not exist, cannot be created, or disallows writing.
-    /// * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-    /// * The device is out of space.
-    /// * The store could not be migrated to the current model version.
-    /// Check the error message to determine what the actual problem was.
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
-    public func load() async throws {
-        try await withCheckedThrowingVoidContinuation { continuation in
-            self.load() { result in
-                switch result {
-                case .success:
-                    continuation.resume()
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
-    }
-    
-    /// Resets and destroys the `CoreData` persistent store.
     @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     public func reset() throws {
         
@@ -288,20 +201,5 @@ public class ManagedObjectContainer : StoreContainer {
             configurationName: nil,
             at: currentStoreURL
         )
-    }
-    
-    // MARK: - Managed Object Context
-    
-    /// Saves any changes on the main data store context.
-    ///
-    /// If this function throws you should handle the error appropriately. You should NOT use `fatalError()` in a shipping
-    /// application, although it may be useful during development.
-    public func saveMainContext() throws {
-        
-        guard self.mainContext.hasChanges else {
-            return
-        }
-        
-        try self.mainContext.save()
     }
 }

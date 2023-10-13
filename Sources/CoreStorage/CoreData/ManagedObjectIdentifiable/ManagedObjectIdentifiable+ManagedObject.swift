@@ -25,35 +25,35 @@ public extension ManagedObjectIdentifiable where Self : NSManagedObject {
     static func fetchOne(
         id: String,
         context: NSManagedObjectContext
-    ) -> Self? {
+    ) throws -> Self? {
         let predicate = QueryPredicate.getPredicate(id: id)
-        return self.fetchOne(predicate: predicate, context: context)
+        return try self.fetchOne(predicate: predicate, context: context)
     }
     
     @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     static func fetchOne(
         id: String,
         context: NSManagedObjectContext
-    ) async -> Self? {
+    ) async throws -> Self? {
         let predicate = QueryPredicate.getPredicate(id: id)
-        return await self.fetchOne(predicate: predicate, context: context)
+        return try await self.fetchOne(predicate: predicate, context: context)
     }
     
     static func fetchOne(
         predicate: NSPredicate,
         context: NSManagedObjectContext
-    ) -> Self? {
-        return self.fetch(predicate: predicate, sortDescriptors: nil, context: context).first
+    ) throws -> Self? {
+        return try self.fetch(predicate: predicate, sortDescriptors: nil, context: context).first
     }
     
     @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     static func fetchOne(
         predicate: NSPredicate,
         context: NSManagedObjectContext
-    ) async -> Self? {
-        return await context.perform {
+    ) async throws -> Self? {
+        return try await context.perform {
             let request = self.newFetchRequest(predicate: predicate)
-            return try? context.fetch(request).first
+            return try context.fetch(request).first
         }
     }
     
@@ -61,10 +61,9 @@ public extension ManagedObjectIdentifiable where Self : NSManagedObject {
         predicate: NSPredicate?,
         sortDescriptors: [NSSortDescriptor]? = nil,
         context: NSManagedObjectContext
-    ) -> [Self] {
+    ) throws -> [Self] {
         let request = self.newFetchRequest(predicate: predicate, sortDescriptors: sortDescriptors)
-        let fetched = try? context.fetch(request)
-        return fetched ?? []
+        return try context.fetch(request)
     }
     
     @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
@@ -100,8 +99,8 @@ public extension ManagedObjectIdentifiable where Self : NSManagedObject {
     static func fetchOrCreate(
         id: String,
         context: NSManagedObjectContext
-    ) -> Self {
-        if let object = self.fetchOne(id: id, context: context) {
+    ) throws -> Self {
+        if let object = try self.fetchOne(id: id, context: context) {
             return object
         } else {
             var object = self.create(context: context)
@@ -128,8 +127,8 @@ public extension ManagedObjectIdentifiable where Self : NSManagedObject {
     static func delete(
         predicate: NSPredicate?,
         context: NSManagedObjectContext
-    ) {
-        for object in self.fetch(predicate: predicate, context: context) {
+    ) throws {
+        for object in try self.fetch(predicate: predicate, context: context) {
             object.delete(context: context)
         }
     }
@@ -194,31 +193,11 @@ public extension ManagedObjectIdentifiable where Self : NSManagedObject {
     ) -> NSFetchedResultsController<Self> {
         let sortDescriptors = sortDescriptors ?? [ NSSortDescriptor(key: "identifier", ascending: true) ]
         let fetchRequest = self.newFetchRequest(predicate: predicate, sortDescriptors: sortDescriptors)
-        return NSFetchedResultsController(fetchRequest: fetchRequest,
-                                          managedObjectContext: context,
-                                          sectionNameKeyPath: nil,
-                                          cacheName: nil)
-    }
-}
-
-// MARK: - ManagedObjectParentIdentifiable
-
-public extension ManagedObjectIdentifiable where Self : NSManagedObject, Self : ManagedObjectParentIdentifiable {
-    
-    static func newFetchedResultsController(
-        id: String,
-        parentId: String,
-        context: NSManagedObjectContext
-    ) -> NSFetchedResultsController<Self>{
-        let predicate = QueryPredicate.getPredicate(id: id, parentId: parentId)
-        return self.newFetchedResultsController(predicate: predicate, context: context)
-    }
-    
-    static func newFetchedResultsController(
-        parentId: String,
-        context: NSManagedObjectContext
-    ) -> NSFetchedResultsController<Self>{
-        let predicate = QueryPredicate.getPredicate(parentId: parentId)
-        return self.newFetchedResultsController(predicate: predicate, context: context)
+        return NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: context,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
     }
 }

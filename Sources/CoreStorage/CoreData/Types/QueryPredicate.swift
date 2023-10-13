@@ -4,7 +4,6 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import Foundation
 import CoreData
 
 // MARK: - QueryPredicate
@@ -23,7 +22,7 @@ internal struct QueryPredicate {
     ///
     /// - Parameter id: Identifier to query for.
     static func getPredicate(id: String) -> NSPredicate {
-        return NSPredicate(
+        NSPredicate(
             format: "identifier == %@",
             id
         )
@@ -31,9 +30,9 @@ internal struct QueryPredicate {
     
     /// Creates a query predicate for the given IDs.
     ///
-    /// - Parameter id: Identifiers to query for.
+    /// - Parameter ids: Identifiers to query for.
     static func getPredicate(ids: [String]) -> NSPredicate {
-        return NSPredicate(
+        NSPredicate(
             format: "identifier IN %@",
             ids
         )
@@ -41,9 +40,9 @@ internal struct QueryPredicate {
     
     /// Creates a query predicate for any IDs not included in the set.
     ///
-    /// - Parameter id: Identifiers to exclude from the query.
+    /// - Parameter ids: Identifiers to exclude from the query.
     static func getPredicate(notIn ids: [String]) -> NSPredicate {
-        return NSPredicate(
+        NSPredicate(
             format: "NOT (identifier IN %@)",
             ids
         )
@@ -53,7 +52,7 @@ internal struct QueryPredicate {
     ///
     /// - Parameter parentId: Parent Identifier of the objects to query for.
     static func getPredicate(parentId: String) -> NSPredicate {
-        return NSPredicate(
+        NSPredicate(
             format: "parentIdentifier == %@",
             parentId
         )
@@ -65,8 +64,9 @@ internal struct QueryPredicate {
     /// - Parameter parentId: Parent Identifier of the object to query for.
     static func getPredicate(
         id: String,
-        parentId: String) -> NSPredicate {
-        return NSPredicate(
+        parentId: String
+    ) -> NSPredicate {
+        NSPredicate(
             format: "parentIdentifier == %@ && identifier == %@",
             parentId,
             id
@@ -79,8 +79,9 @@ internal struct QueryPredicate {
     /// - Parameter parentId: Parent Identifier of the object to query for.
     static func getPredicate(
         ids: [String],
-        parentId: String) -> NSPredicate {
-        return NSPredicate(
+        parentId: String
+    ) -> NSPredicate {
+        NSPredicate(
             format: "parentIdentifier == %@ && identifier IN %@",
             parentId,
             ids)
@@ -94,7 +95,7 @@ internal struct QueryPredicate {
         notIn ids: [String],
         parentId: String
     ) -> NSPredicate {
-        return NSPredicate(
+        NSPredicate(
             format: "parentIdentifier == %@ && NOT (identifier IN %@)",
             parentId,
             ids

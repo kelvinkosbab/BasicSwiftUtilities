@@ -8,30 +8,6 @@ import Foundation
 import CoreData
 import Core
 
-// MARK: - DataObserverDelegate
-
-/// Deflines the interface for objects to listen to underlyhing data store udpates for a given data type.
-public protocol DataObserverDelegate : AnyObject where ObjectType == ObjectType.ManagedObject.StructType {
-    
-    /// Object which is associated with a `CoreData` manged object.
-    associatedtype ObjectType : ManagedObjectAssociated
-    
-    /// Called when an object is added to the data store.
-    ///
-    /// - Parameter object: Object which was added to the data store.
-    func didAdd(object: ObjectType) -> Void
-    
-    /// Called when an object is updated in the data store.
-    ///
-    /// - Parameter object: Object which was updated in the data store.
-    func didUpdate(object: ObjectType) -> Void
-    
-    /// Called when an object is removed from the data store.
-    ///
-    /// - Parameter object: Object which was removed from the data store.
-    func didRemove(object: ObjectType) -> Void
-}
-
 // MARK: - DataObserver
 
 /// Provides a way for a module to actively listen to underlying `CoreData` object changes.
@@ -222,24 +198,5 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
         @unknown default:
             fatalError("Unsupported operation 'unknown' for DataObserver")
         }
-    }
-}
-
-// MARK: - DataObserver & ManagedObjectParentIdentifiable
-
-public extension DataObserver where Delegate.ObjectType.ManagedObject : ManagedObjectParentIdentifiable {
-    
-    convenience init(
-        id: String,
-        parentId: String,
-        context: NSManagedObjectContext
-    ) {
-        let fetchedResultsController = ManagedObject.newFetchedResultsController(id: id, parentId: parentId, context: context)
-        self.init(fetchedResultsController: fetchedResultsController)
-    }
-    
-    convenience init(parentId: String, context: NSManagedObjectContext) {
-        let fetchedResultsController = ManagedObject.newFetchedResultsController(parentId: parentId, context: context)
-        self.init(fetchedResultsController: fetchedResultsController)
     }
 }

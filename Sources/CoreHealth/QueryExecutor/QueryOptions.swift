@@ -47,8 +47,8 @@ public struct QueryOptions {
     /// An array of NSSortDescriptors.
     ///
     /// Consider these key paths for predicates:
-    /// - `HKPredicateKeyPathQuantity`: The key path for accessing the sample’s quantity.
-    /// - `HKPredicateKeyPathCount`: A key path for the sample’s count.
+    /// - `HKpredicateKeyPathQuantity`: The key path for accessing the sample’s quantity.
+    /// - `HKpredicateKeyPathCount`: A key path for the sample’s count.
     let sortDescriptors: [NSSortDescriptor]?
     
     /// Constructor.
@@ -57,8 +57,8 @@ public struct QueryOptions {
     /// - Parameter endDate: The end date limit of the query.
     /// - Parameter limit: The maximum number of results the receiver will return upon completion.
     /// - Parameter sortDescriptors: An array of NSSortDescriptors. Consider these key paths for predicates.
-    ///   `HKPredicateKeyPathQuantity`: The key path for accessing the sample’s quantity.
-    ///   `HKPredicateKeyPathCount`: A key path for the sample’s count.
+    ///   `HKpredicateKeyPathQuantity`: The key path for accessing the sample’s quantity.
+    ///   `HKpredicateKeyPathCount`: A key path for the sample’s count.
     public init(
         startDate: Date,
         endDate: Date,

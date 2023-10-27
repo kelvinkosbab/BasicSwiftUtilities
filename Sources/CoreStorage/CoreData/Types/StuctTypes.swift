@@ -24,9 +24,9 @@ public protocol ObjectParentIdentifiable {
     var parentIdentifier: String { get }
 }
 
-// MARK: - ManagedObjectAssociated
+// MARK: - AssociatedWithPersistentObject
 
 /// Defines an object that is associated with a `NSManagedObjectType`.
-public protocol ManagedObjectAssociated : Hashable, ObjectIdentifiable {
-    associatedtype ManagedObject : NSManagedObject, StructConvertable, ManagedObjectIdentifiable
+public protocol AssociatedWithPersistentObject : Hashable, ObjectIdentifiable {
+    associatedtype PersistentObject : NSManagedObject, StructConvertable, PersistentObjectIdentifiable
 }

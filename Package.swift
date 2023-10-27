@@ -29,6 +29,10 @@ let package = Package(
             targets: ["CoreStorage"]
         ),
         .library(
+            name: "KeyValueStore",
+            targets: ["KeyValueStore"]
+        ),
+        .library(
             name: "RunMode",
             targets: ["RunMode"]
         ),
@@ -68,9 +72,11 @@ let package = Package(
         ),
         .testTarget(
             name: "CoreStorageTests",
-            dependencies: ["CoreStorage"]
+            dependencies: ["CoreStorage"],
+            resources: [
+                .process("Resources")
+            ]
         ),
-        
         .target(
             name: "RunMode",
             dependencies: []
@@ -78,6 +84,25 @@ let package = Package(
         .testTarget(
             name: "RunModeTests",
             dependencies: ["RunMode"]
+        ),
+        
+        .target(
+            name: "KeyValueStore",
+            dependencies: [
+                "Core",
+                "CoreStorage"
+            ],
+            resources: [
+                .process("Resources")
+            ]
+        ),
+        .testTarget(
+            name: "KeyValueStoreTests",
+            dependencies: [
+                "Core",
+                "CoreStorage",
+                "KeyValueStore"
+            ]
         ),
     ]
 )

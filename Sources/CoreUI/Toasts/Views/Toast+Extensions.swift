@@ -83,6 +83,15 @@ extension Toast {
         self.leading = nil
         self.trailing = nil
     }
+    
+    // MARK: - Extensions for Leading & Trailing Images
+    
+    /// https://www.hackingwithswift.com/quick-start/swiftui/how-to-get-custom-colors-and-transparency-with-sf-symbols
+    /// 
+    /// Options
+    /// - `.foregroundColor(.blue)`
+    /// - `.symbolRenderingMode(.hierarchical)`
+    /// - `.symbolRenderingMode(.palette)`
 }
 
 // MARK: - Preview

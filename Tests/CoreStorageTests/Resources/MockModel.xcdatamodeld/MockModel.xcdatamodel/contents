@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22511.1" systemVersion="23B5067a" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="KeyValueManagedObject" representedClassName="KeyValueManagedObject" syncable="YES" codeGenerationType="class">
+        <attribute name="identifier" optional="YES" attributeType="String"/>
+        <attribute name="value" optional="YES" attributeType="String"/>
+    </entity>
+</model>

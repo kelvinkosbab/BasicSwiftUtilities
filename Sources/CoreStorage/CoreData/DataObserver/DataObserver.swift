@@ -4,7 +4,6 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import Foundation
 import CoreData
 import Core
 
@@ -12,7 +11,7 @@ import Core
 
 /// Provides a way for a module to actively listen to underlying `CoreData` object changes.
 ///
-/// - Note: This is a `class` object to convorm to `CoreData.NSFetchedResultsControllerDelegate`
+/// - Note: This is a `class` object to conform to `CoreData.NSFetchedResultsControllerDelegate`
 ///
 /// Example usage for an object that listens to updates for a user profile object:
 /// ```swift
@@ -76,20 +75,20 @@ import Core
 /// ```
 public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedResultsControllerDelegate {
     
-    public typealias ManagedObject = Delegate.ObjectType.ManagedObject
-    public typealias ObjectType = Delegate.ObjectType
+    public typealias PersistedObject = Delegate.ObjectType.PersistentObject
+    public typealias Object = Delegate.ObjectType
     
     public weak var delegate: Delegate?
-    private let fetchedResultsController: NSFetchedResultsController<ManagedObject>
+    private let fetchedResultsController: NSFetchedResultsController<PersistedObject>
     private let logger: Loggable
     
-    public private(set) var objects: Set<ObjectType> = Set()
+    public private(set) var objects: Set<Object> = Set()
     
     public convenience init(
         context: NSManagedObjectContext,
         delegate: Delegate? = nil
     ) {
-        let fetchedResultsController = ManagedObject.newFetchedResultsController(context: context)
+        let fetchedResultsController = PersistedObject.newFetchedResultsController(context: context)
         self.init(
             fetchedResultsController: fetchedResultsController,
             delegate: delegate
@@ -101,7 +100,7 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
         context: NSManagedObjectContext,
         delegate: Delegate? = nil
     ) {
-        let fetchedResultsController = ManagedObject.newFetchedResultsController(id: id, context: context)
+        let fetchedResultsController = PersistedObject.newFetchedResultsController(id: id, context: context)
         self.init(
             fetchedResultsController: fetchedResultsController,
             delegate: delegate
@@ -113,7 +112,7 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
         context: NSManagedObjectContext,
         delegate: Delegate? = nil
     ) {
-        let fetchedResultsController = ManagedObject.newFetchedResultsController(ids: ids, context: context)
+        let fetchedResultsController = PersistedObject.newFetchedResultsController(ids: ids, context: context)
         self.init(
             fetchedResultsController: fetchedResultsController,
             delegate: delegate
@@ -121,14 +120,14 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
     }
     
     public init(
-        fetchedResultsController: NSFetchedResultsController<ManagedObject>,
+        fetchedResultsController: NSFetchedResultsController<PersistedObject>,
         delegate: Delegate? = nil
     ) {
         self.delegate = delegate
         self.fetchedResultsController = fetchedResultsController
         self.logger = SubsystemCategoryLogger(
             subsystem: "CoreDataStore",
-            category: "DatabaseObserver.\(String(describing: ManagedObject.self))"
+            category: "DatabaseObserver.\(String(describing: PersistedObject.self))"
         )
         
         super.init()
@@ -158,7 +157,7 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
         newIndexPath: IndexPath?
     ) {
         
-        guard let cdObject = anObject as? ManagedObject else {
+        guard let cdObject = anObject as? PersistedObject else {
             self.logger.error("Updated object is not of type NSManagedObject.")
             return
         }
@@ -193,7 +192,7 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
             }
             
         case .move:
-            self.logger.debug("Unsupported operation 'move'.")
+            self.logger.error("Unsupported operation 'move'.")
             
         @unknown default:
             fatalError("Unsupported operation 'unknown' for DataObserver")

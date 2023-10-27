@@ -9,10 +9,10 @@ import Foundation
 // MARK: - DataObserverDelegate
 
 /// Deflines the interface for objects to listen to underlyhing data store udpates for a given data type.
-public protocol DataObserverDelegate : AnyObject where ObjectType == ObjectType.ManagedObject.StructType {
+public protocol DataObserverDelegate : AnyObject where ObjectType == ObjectType.PersistentObject.Object {
     
     /// Object which is associated with a `CoreData` manged object.
-    associatedtype ObjectType : ManagedObjectAssociated
+    associatedtype ObjectType : AssociatedWithPersistentObject
     
     /// Called when an object is added to the data store.
     ///

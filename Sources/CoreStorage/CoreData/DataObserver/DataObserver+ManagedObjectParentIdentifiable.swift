@@ -1,21 +1,25 @@
 //
-//  DataObserver+ManagedObjectParentIdentifiable.swift
+//  DataObserver+PersistedObjectParentIdentifiable.swift
 //
 //  Copyright © Kozinga. All rights reserved.
 //
 
 import CoreData
 
-// MARK: - DataObserver & ManagedObjectParentIdentifiable
+// MARK: - DataObserver & PersistedObjectParentIdentifiable
 
-public extension DataObserver where Delegate.ObjectType.ManagedObject : ManagedObjectParentIdentifiable {
+public extension DataObserver where Delegate.ObjectType.PersistentObject : PersistedObjectParentIdentifiable {
     
     convenience init(
         id: String,
         parentId: String,
         context: NSManagedObjectContext
     ) {
-        let fetchedResultsController = ManagedObject.newFetchedResultsController(id: id, parentId: parentId, context: context)
+        let fetchedResultsController = PersistedObject.newFetchedResultsController(
+            id: id,
+            parentId: parentId,
+            context: context
+        )
         self.init(fetchedResultsController: fetchedResultsController)
     }
     
@@ -23,7 +27,10 @@ public extension DataObserver where Delegate.ObjectType.ManagedObject : ManagedO
         parentId: String,
         context: NSManagedObjectContext
     ) {
-        let fetchedResultsController = ManagedObject.newFetchedResultsController(parentId: parentId, context: context)
+        let fetchedResultsController = PersistedObject.newFetchedResultsController(
+            parentId: parentId,
+            context: context
+        )
         self.init(fetchedResultsController: fetchedResultsController)
     }
 }

@@ -79,15 +79,15 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
     public typealias Object = Delegate.ObjectType
     
     public weak var delegate: Delegate?
-    private let fetchedResultsController: NSFetchedResultsController<PersistedObject>
+    private let predicate: ObserverPredicate<PersistedObject>
     private let logger: Loggable
     
     public private(set) var objects: Set<Object> = Set()
     
     public init(
-        fetchedResultsController: NSFetchedResultsController<PersistedObject>
+        predicate: ObserverPredicate<PersistedObject>
     ) {
-        self.fetchedResultsController = fetchedResultsController
+        self.predicate = predicate
         self.logger = Logger(
             subsystem: "CoreDataStore",
             category: "DatabaseObserver.\(String(describing: PersistedObject.self))"
@@ -96,14 +96,14 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
         super.init()
         
         do {
-            try self.fetchedResultsController.performFetch()
+            try self.predicate.performFetch()
         } catch {
             self.logger.error("Failed to performFetch: \(error.localizedDescription)")
         }
         
-        self.fetchedResultsController.delegate = self
+        self.predicate.delegate = self
         
-        for cdObject in self.fetchedResultsController.fetchedObjects ?? [] {
+        for cdObject in self.predicate.fetchedObjects ?? [] {
             if let object = cdObject.structValue {
                 self.objects.insert(object)
             }
@@ -121,7 +121,7 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
     ) {
         
         guard let cdObject = anObject as? PersistedObject else {
-            self.logger.error("Updated object is not of type NSManagedObject.")
+            self.logger.error("Updated object is not castable to `PersistedObject`")
             return
         }
         
@@ -158,6 +158,7 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
             self.logger.error("Unsupported operation 'move'.")
             
         @unknown default:
+            self.logger.error("Unsupported operation 'unknown' for DataObserver")
             fatalError("Unsupported operation 'unknown' for DataObserver")
         }
     }

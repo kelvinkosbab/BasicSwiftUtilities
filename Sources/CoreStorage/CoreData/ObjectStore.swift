@@ -8,6 +8,7 @@ import CoreData
 
 // MARK: - ObjectStore
 
+/// TODO
 @available(iOS 13.0.0, *)
 public protocol ObjectStore where Object.PersistentObject.Object == Object {
     

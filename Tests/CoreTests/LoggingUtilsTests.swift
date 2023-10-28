@@ -64,7 +64,7 @@ final class SubsystemCategoryLoggerTests: XCTestCase {
     /// - Expect a logged string to be logged at the `debug` level and log to equal the input.
     func testLoggerLogsDebug() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = SubsystemCategoryLogger(
+        let logger = Logger(
             subsystem: self.mockSubsystem,
             category: self.mockCategory,
             logger: mockLogger
@@ -83,7 +83,7 @@ final class SubsystemCategoryLoggerTests: XCTestCase {
     /// - Expect a logged string to be logged at the `debug` level and log to equal the input.
     func testLoggerLogsDebugWithPrivateMessage() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = SubsystemCategoryLogger(
+        let logger = Logger(
             subsystem: self.mockSubsystem,
             category: self.mockCategory,
             logger: mockLogger
@@ -105,7 +105,7 @@ final class SubsystemCategoryLoggerTests: XCTestCase {
     /// - Expect a logged string to be logged at the `info` level and log to equal the input.
     func testLoggerLogsInfo() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = SubsystemCategoryLogger(
+        let logger = Logger(
             subsystem: self.mockSubsystem,
             category: self.mockCategory,
             logger: mockLogger
@@ -124,7 +124,7 @@ final class SubsystemCategoryLoggerTests: XCTestCase {
     /// - Expect a logged string to be logged at the `info` level and log to equal the input.
     func testLoggerLogsInfoWithPrivateMessage() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = SubsystemCategoryLogger(
+        let logger = Logger(
             subsystem: self.mockSubsystem,
             category: self.mockCategory,
             logger: mockLogger
@@ -146,7 +146,7 @@ final class SubsystemCategoryLoggerTests: XCTestCase {
     /// - Expect a logged string to be logged at the `error` level and log to equal the input.
     func testLoggerLogsError() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = SubsystemCategoryLogger(
+        let logger = Logger(
             subsystem: self.mockSubsystem,
             category: self.mockCategory,
             logger: mockLogger
@@ -165,7 +165,7 @@ final class SubsystemCategoryLoggerTests: XCTestCase {
     /// - Expect a logged string to be logged at the `error` level and log to equal the input.
     func testLoggerLogsErrorWithPrivateMessage() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = SubsystemCategoryLogger(
+        let logger = Logger(
             subsystem: self.mockSubsystem,
             category: self.mockCategory,
             logger: mockLogger
@@ -187,7 +187,7 @@ final class SubsystemCategoryLoggerTests: XCTestCase {
     /// - Expect a logged string to be logged at the `fault` level and log to equal the input.
     func testLoggerLogsFault() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = SubsystemCategoryLogger(
+        let logger = Logger(
             subsystem: self.mockSubsystem,
             category: self.mockCategory,
             logger: mockLogger
@@ -206,7 +206,7 @@ final class SubsystemCategoryLoggerTests: XCTestCase {
     /// - Expect a logged string to be logged at the `fault` level and log to equal the input.
     func testLoggerLogsFaultWithPrivateMessage() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = SubsystemCategoryLogger(
+        let logger = Logger(
             subsystem: self.mockSubsystem,
             category: self.mockCategory,
             logger: mockLogger

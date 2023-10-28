@@ -16,7 +16,7 @@ public extension ObjectStore where Object : ObjectParentIdentifiable, PersistedO
         id: String,
         parentId: String
     ) throws -> Object.PersistentObject.Object? {
-        let predicate = QueryPredicate.getPredicate(id: id, parentId: parentId)
+        let predicate = NSPredicate(id: id, parentId: parentId)
         return try self.fetchOne(predicate: predicate)
     }
     
@@ -25,7 +25,7 @@ public extension ObjectStore where Object : ObjectParentIdentifiable, PersistedO
         id: String,
         parentId: String
     ) async throws -> Object.PersistentObject.Object? {
-        let predicate = QueryPredicate.getPredicate(id: id, parentId: parentId)
+        let predicate = NSPredicate(id: id, parentId: parentId)
         return try await self.fetchOne(predicate: predicate)
     }
 
@@ -33,7 +33,7 @@ public extension ObjectStore where Object : ObjectParentIdentifiable, PersistedO
         in ids: [String],
         parentId: String
     ) throws -> [Object.PersistentObject.Object] {
-        let predicate = QueryPredicate.getPredicate(ids: ids, parentId: parentId)
+        let predicate = NSPredicate(ids: ids, parentId: parentId)
         return try self.fetch(predicate: predicate)
     }
     
@@ -42,7 +42,7 @@ public extension ObjectStore where Object : ObjectParentIdentifiable, PersistedO
         in ids: [String],
         parentId: String
     ) async throws -> [Object.PersistentObject.Object] {
-        let predicate = QueryPredicate.getPredicate(ids: ids, parentId: parentId)
+        let predicate = NSPredicate(ids: ids, parentId: parentId)
         return try await self.fetch(predicate: predicate)
     }
 
@@ -50,7 +50,7 @@ public extension ObjectStore where Object : ObjectParentIdentifiable, PersistedO
         notIn ids: [String],
         parentId: String
     ) throws -> [Object.PersistentObject.Object] {
-        let predicate = QueryPredicate.getPredicate(notIn: ids, parentId: parentId)
+        let predicate = NSPredicate(notIn: ids, parentId: parentId)
         return try self.fetch(predicate: predicate)
     }
     
@@ -59,7 +59,7 @@ public extension ObjectStore where Object : ObjectParentIdentifiable, PersistedO
         notIn ids: [String],
         parentId: String
     ) async throws -> [Object.PersistentObject.Object] {
-        let predicate = QueryPredicate.getPredicate(notIn: ids, parentId: parentId)
+        let predicate = NSPredicate(notIn: ids, parentId: parentId)
         return try await self.fetch(predicate: predicate)
     }
     
@@ -69,7 +69,7 @@ public extension ObjectStore where Object : ObjectParentIdentifiable, PersistedO
         id: String,
         parentId: String
     ) throws {
-        let predicate = QueryPredicate.getPredicate(id: id, parentId: parentId)
+        let predicate = NSPredicate(id: id, parentId: parentId)
         try self.delete(predicate: predicate)
     }
     
@@ -78,7 +78,7 @@ public extension ObjectStore where Object : ObjectParentIdentifiable, PersistedO
         id: String,
         parentId: String
     ) async throws {
-        let predicate = QueryPredicate.getPredicate(id: id, parentId: parentId)
+        let predicate = NSPredicate(id: id, parentId: parentId)
         try await self.delete(predicate: predicate)
     }
     
@@ -86,7 +86,7 @@ public extension ObjectStore where Object : ObjectParentIdentifiable, PersistedO
         in ids: [String],
         parentId: String
     ) throws {
-        let predicate = QueryPredicate.getPredicate(ids: ids, parentId: parentId)
+        let predicate = NSPredicate(ids: ids, parentId: parentId)
         try self.delete(predicate: predicate)
     }
     
@@ -95,7 +95,7 @@ public extension ObjectStore where Object : ObjectParentIdentifiable, PersistedO
         in ids: [String],
         parentId: String
     ) async throws {
-        let predicate = QueryPredicate.getPredicate(ids: ids, parentId: parentId)
+        let predicate = NSPredicate(ids: ids, parentId: parentId)
         try await self.delete(predicate: predicate)
     }
     
@@ -103,7 +103,7 @@ public extension ObjectStore where Object : ObjectParentIdentifiable, PersistedO
         notIn ids: [String],
         parentId: String
     ) throws {
-        let predicate = QueryPredicate.getPredicate(notIn: ids, parentId: parentId)
+        let predicate = NSPredicate(notIn: ids, parentId: parentId)
         try self.delete(predicate: predicate)
     }
     
@@ -112,18 +112,18 @@ public extension ObjectStore where Object : ObjectParentIdentifiable, PersistedO
         notIn ids: [String],
         parentId: String
     ) async throws {
-        let predicate = QueryPredicate.getPredicate(notIn: ids, parentId: parentId)
+        let predicate = NSPredicate(notIn: ids, parentId: parentId)
         try await self.delete(predicate: predicate)
     }
     
     func deleteMany(parentId: String) throws {
-        let predicate = QueryPredicate.getPredicate(parentId: parentId)
+        let predicate = NSPredicate(parentId: parentId)
         try self.delete(predicate: predicate)
     }
     
     @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     func deleteMany(parentId: String) async throws {
-        let predicate = QueryPredicate.getPredicate(parentId: parentId)
+        let predicate = NSPredicate(parentId: parentId)
         try await self.delete(predicate: predicate)
     }
 }

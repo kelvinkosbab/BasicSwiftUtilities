@@ -17,6 +17,7 @@ public protocol ObjectStore where Object.PersistentObject.Object == Object {
     /// Type of the `NSObject.NSManagedObject` that is persisted in the `CoreData` persistent model store.
     typealias PersistedObject = Object.PersistentObject
     
+    /// TODO
     var context: NSManagedObjectContext { get }
 }
 
@@ -45,11 +46,14 @@ internal extension ObjectStore {
     
     // MARK: - Create
     
-    func create() -> Object.PersistentObject {
-        let object = NSEntityDescription.insertNewObject(
+    func create() throws -> Object.PersistentObject {
+        guard let object = NSEntityDescription.insertNewObject(
             forEntityName: self.entityName,
             into: self.context
-        ) as! Object.PersistentObject
+        ) as? Object.PersistentObject else {
+            throw ObjectStoreError.unableToCreate(entityName: self.entityName)
+        }
+        
         return object
     }
 }
@@ -60,7 +64,7 @@ internal extension ObjectStore {
 public extension ObjectStore {
     
     func createOrUpdate(_ object: Object) throws {
-        let predicate = QueryPredicate.getPredicate(id: object.identifier)
+        let predicate = NSPredicate(id: object.identifier)
         let request = self.newFetchRequest(
             predicate: predicate,
             sortDescriptors: nil
@@ -98,7 +102,7 @@ public extension ObjectStore {
         return fetchRequest
     }
     
-    // MARK: - Fetch by Predicate
+    // MARK: - Fetch by NSPredicate
     
     func fetch(
         predicate: NSPredicate?,
@@ -148,7 +152,7 @@ public extension ObjectStore {
     func fetchOne(
         id: String
     ) throws -> Object.PersistentObject.Object? {
-        let predicate = QueryPredicate.getPredicate(id: id)
+        let predicate = NSPredicate(id: id)
         return try self.fetchOne(predicate: predicate)
     }
     
@@ -156,7 +160,7 @@ public extension ObjectStore {
     func fetchOne(
         id: String
     ) async throws -> Object.PersistentObject.Object? {
-        let predicate = QueryPredicate.getPredicate(id: id)
+        let predicate = NSPredicate(id: id)
         return try await self.fetchOne(
             predicate: predicate
         )
@@ -167,7 +171,7 @@ public extension ObjectStore {
     func fetchMany(
         in ids: [String]
     ) throws -> [Object.PersistentObject.Object] {
-        let predicate = QueryPredicate.getPredicate(ids: ids)
+        let predicate = NSPredicate(ids: ids)
         return try self.fetch(predicate: predicate)
     }
     
@@ -175,7 +179,7 @@ public extension ObjectStore {
     func fetchMany(
         in ids: [String]
     ) async throws -> [Object.PersistentObject.Object] {
-        let predicate = QueryPredicate.getPredicate(ids: ids)
+        let predicate = NSPredicate(ids: ids)
         return try await self.fetch(
             predicate: predicate
         )
@@ -184,7 +188,7 @@ public extension ObjectStore {
     func fetchMany(
         notIn ids: [String]
     ) throws -> [Object.PersistentObject.Object] {
-        let predicate = QueryPredicate.getPredicate(notIn: ids)
+        let predicate = NSPredicate(notIn: ids)
         return try self.fetch(
             predicate: predicate
         )
@@ -194,7 +198,7 @@ public extension ObjectStore {
     func fetchMany(
         notIn ids: [String]
     ) async throws -> [Object.PersistentObject.Object] {
-        let predicate = QueryPredicate.getPredicate(notIn: ids)
+        let predicate = NSPredicate(notIn: ids)
         return try await self.fetch(
             predicate: predicate
         )
@@ -232,7 +236,7 @@ public extension ObjectStore {
 @available(iOS 13.0.0, *)
 public extension ObjectStore {
     
-    // MARK: - Deletion by Predicate
+    // MARK: - Deletion by NSPredicate
     
     func delete(
         predicate: NSPredicate?
@@ -260,48 +264,48 @@ public extension ObjectStore {
     // MARK: - Delete One
     
     func delete(_ object: Object) throws {
-        let predicate = QueryPredicate.getPredicate(id: object.identifier)
+        let predicate = NSPredicate(id: object.identifier)
         try self.delete(predicate: predicate)
     }
     
     @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     func delete(_ object: Object) async throws {
-        let predicate = QueryPredicate.getPredicate(id: object.identifier)
+        let predicate = NSPredicate(id: object.identifier)
         try await self.delete(predicate: predicate)
     }
     
     func deleteOne(id: String) throws {
-        let predicate = QueryPredicate.getPredicate(id: id)
+        let predicate = NSPredicate(id: id)
         try self.delete(predicate: predicate)
     }
     
     @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     func deleteOne(id: String) async throws{
-        let predicate = QueryPredicate.getPredicate(id: id)
+        let predicate = NSPredicate(id: id)
         try await self.delete(predicate: predicate)
     }
     
     // MARK: - Delete Many
     
     func deleteMany(in ids: [String]) throws {
-        let predicate = QueryPredicate.getPredicate(ids: ids)
+        let predicate = NSPredicate(ids: ids)
         try self.delete(predicate: predicate)
     }
     
     @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     func deleteMany(in ids: [String]) async throws {
-        let predicate = QueryPredicate.getPredicate(ids: ids)
+        let predicate = NSPredicate(ids: ids)
         try await self.delete(predicate: predicate)
     }
     
     func deleteMany(notIn ids: [String]) throws {
-        let predicate = QueryPredicate.getPredicate(notIn: ids)
+        let predicate = NSPredicate(notIn: ids)
         try self.delete(predicate: predicate)
     }
     
     @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     func deleteMany(notIn ids: [String]) async throws {
-        let predicate = QueryPredicate.getPredicate(notIn: ids)
+        let predicate = NSPredicate(notIn: ids)
         try await self.delete(predicate: predicate)
     }
     

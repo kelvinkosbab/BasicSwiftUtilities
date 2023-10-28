@@ -16,12 +16,11 @@ import CoreData
 ///
 ///     static let shared = YourCoreDataContainer() // Recommended to use singleton
 ///
-///     let storeName: String
 ///     let persistentContainer: NSPersistentContainer
 ///
 ///     private init() { // Use a `private` to enfornce the singleton for the data container
 ///         self.init(
-///             storeName: "YourCoreDataModelName",
+///             storeName: "YourCoreDataModelName", // The name of your core data model file
 ///             bindle: .model // or .main if in app target
 ///         )
 ///     }
@@ -78,7 +77,7 @@ public extension PersistentDataContainer {
     ) throws {
         
         guard let modelUrl = bundle.url(forResource: storeName, withExtension: "momd") else {
-            throw PersistentModelContainerError.failedToLocateModel(name: storeName, bundle: bundle)
+            throw PersistentDataContainerError.failedToLocateModel(name: storeName, bundle: bundle)
         }
         
         try self.init(storeName: storeName, modelUrl: modelUrl)
@@ -101,7 +100,7 @@ public extension PersistentDataContainer {
     ) throws {
         
         guard let managedObjectModel = NSManagedObjectModel(contentsOf: modelUrl) else {
-            throw PersistentModelContainerError.failedToLoadModel(url: modelUrl)
+            throw PersistentDataContainerError.failedToLoadModel(url: modelUrl)
         }
         
         self.init(storeName: storeName, managedObjectModel: managedObjectModel)

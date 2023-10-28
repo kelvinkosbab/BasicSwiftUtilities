@@ -1,15 +1,15 @@
 //
-//  PersistentModelContainerError.swift
+//  PersistentDataContainerError.swift
 //
 //  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation
 
-// MARK: - PersistentModelContainerError
+// MARK: - PersistentDataContainerError
 
 /// Defines errors for creating a managed object container.
-public enum PersistentModelContainerError : Swift.Error, LocalizedError {
+public enum PersistentDataContainerError : Swift.Error, LocalizedError {
     
     /// Defines an error where the managed object store could not be located with the given store name in the given bundle..
     case failedToLocateModel(name: String, bundle: Bundle)

@@ -84,48 +84,11 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
     
     public private(set) var objects: Set<Object> = Set()
     
-    public convenience init(
-        context: NSManagedObjectContext,
-        delegate: Delegate? = nil
-    ) {
-        let fetchedResultsController = PersistedObject.newFetchedResultsController(context: context)
-        self.init(
-            fetchedResultsController: fetchedResultsController,
-            delegate: delegate
-        )
-    }
-    
-    public convenience init(
-        id: String,
-        context: NSManagedObjectContext,
-        delegate: Delegate? = nil
-    ) {
-        let fetchedResultsController = PersistedObject.newFetchedResultsController(id: id, context: context)
-        self.init(
-            fetchedResultsController: fetchedResultsController,
-            delegate: delegate
-        )
-    }
-    
-    public convenience init(
-        ids: [String],
-        context: NSManagedObjectContext,
-        delegate: Delegate? = nil
-    ) {
-        let fetchedResultsController = PersistedObject.newFetchedResultsController(ids: ids, context: context)
-        self.init(
-            fetchedResultsController: fetchedResultsController,
-            delegate: delegate
-        )
-    }
-    
     public init(
-        fetchedResultsController: NSFetchedResultsController<PersistedObject>,
-        delegate: Delegate? = nil
+        fetchedResultsController: NSFetchedResultsController<PersistedObject>
     ) {
-        self.delegate = delegate
         self.fetchedResultsController = fetchedResultsController
-        self.logger = SubsystemCategoryLogger(
+        self.logger = Logger(
             subsystem: "CoreDataStore",
             category: "DatabaseObserver.\(String(describing: PersistedObject.self))"
         )

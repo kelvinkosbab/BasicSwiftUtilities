@@ -1,18 +1,18 @@
 //
-//  SubsystemCategoryLogger.swift
+//  Logger.swift
 //
 //  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation
 
-// MARK: - SubsystemCategoryLogger
+// MARK: - Logger
 
 /// An object that adds interpolated strings to the data store of the unified logging system for a
 /// specified `subsystem` and `category`.
 ///
 /// This object either wraps `os.Logger` or `os_log` depending on Platform and OS version.
-public struct SubsystemCategoryLogger : Loggable {
+public struct Logger : Loggable {
     
     private let logger: Loggable
     private let subsystem: String

@@ -75,8 +75,8 @@ import Core
 /// ```
 public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedResultsControllerDelegate {
     
-    public typealias PersistedObject = Delegate.ObjectType.PersistentObject
-    public typealias Object = Delegate.ObjectType
+    public typealias PersistedObject = Delegate.Object.PersistentObject
+    public typealias Object = Delegate.Object
     
     public weak var delegate: Delegate?
     private let predicate: ObserverPredicate<PersistedObject>

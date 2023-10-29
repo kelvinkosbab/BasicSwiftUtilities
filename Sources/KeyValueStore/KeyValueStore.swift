@@ -7,43 +7,6 @@
 import CoreData
 import CoreStorage
 
-// MARK: - KeyValue
-
-public struct KeyValue: ObjectIdentifiable, AssociatedWithPersistentObject, Hashable {
-    
-    public typealias PersistentObject = KeyValueManagedObject
-    
-    public let identifier: String
-    public let value: String
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(self.identifier)
-    }
-}
-
-// MARK: - KeyValueManagedObject
-
-extension KeyValueManagedObject: PersistentObjectIdentifiable, StructConvertable {
-    
-    public var structValue: KeyValue? {
-        get {
-            
-            guard let identifier = self.identifier, let value = self.value else {
-                return nil
-            }
-            
-            return KeyValue(
-                identifier: identifier,
-                value: value
-            )
-        }
-        set {
-            self.identifier = newValue?.identifier
-            self.value = newValue?.value
-        }
-    }
-}
-
 // MARK: - KeyValueDataContainer
 
 class KeyValueDataContainer : PersistentDataContainer {
@@ -104,6 +67,8 @@ public extension KeyValueStore {
     }
 }
 
+// MARK: - Observer
+
 public class KeyValueObserver : ObservableObject, DataObserverDelegate {
     
     @Published var value: String?
@@ -121,10 +86,8 @@ public class KeyValueObserver : ObservableObject, DataObserverDelegate {
         key: String,
         container: PersistentDataContainer
     ) {
-        self.observer = DataObserver<KeyValueObserver>(
-            id: key,
-            context: container.persistentContainer.viewContext
-        )
+        let dataStore = KeyValueStore()
+        self.observer = dataStore.newObserver(id: key)
         self.observer.delegate = self
     }
     

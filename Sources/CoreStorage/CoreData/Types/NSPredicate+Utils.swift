@@ -41,6 +41,8 @@ public extension NSPredicate {
         )
     }
     
+    // MARK: - Object with Parent
+    
     /// Query predicate for objects which have the given `parentIdentifier`.
     ///
     /// - Parameter parentId: Parent Identifier of the objects to query for.

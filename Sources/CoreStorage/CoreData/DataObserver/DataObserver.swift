@@ -79,13 +79,13 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
     public typealias Object = Delegate.Object
     
     public weak var delegate: Delegate?
-    private let predicate: ObserverPredicate<PersistedObject>
+    private let predicate: NSFetchedResultsController<PersistedObject>
     private let logger: Loggable
     
     public private(set) var objects: Set<Object> = Set()
     
     public init(
-        predicate: ObserverPredicate<PersistedObject>
+        predicate: NSFetchedResultsController<PersistedObject>
     ) {
         self.predicate = predicate
         self.logger = Logger(
@@ -126,20 +126,12 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
         }
         
         guard let object = cdObject.structValue else {
+            self.logger.error("Unable to cast persistent object to the associated type")
             return
         }
         
         switch type {
-        case .insert:
-            
-            guard !self.objects.contains(object) else {
-                return
-            }
-            
-            self.objects.insert(object)
-            self.delegate?.didAdd(object: object)
-            
-        case .update:
+        case .insert, .update:
             if self.objects.contains(object) {
                 self.objects.update(with: object)
                 self.delegate?.didUpdate(object: object)
@@ -155,7 +147,7 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
             }
             
         case .move:
-            self.logger.error("Unsupported operation 'move'.")
+            self.logger.error("Unsupported operation 'move'")
             
         @unknown default:
             self.logger.error("Unsupported operation 'unknown' for DataObserver")

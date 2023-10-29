@@ -6,10 +6,6 @@
 
 import CoreData
 
-// MARK: - ObserverPredicate
-
-public typealias ObserverPredicate = NSFetchedResultsController
-
 // MARK: - ObjectStore & ObserverPredicate
 
 @available(iOS 13.0, *)
@@ -22,8 +18,7 @@ public extension ObjectStore {
     ) -> DataObserver<Delegate> where Delegate : DataObserverDelegate, Delegate.Object.PersistentObject == PersistedObject {
         let predicate = NSPredicate(id: id)
         return self.newObserver(
-            predicate: predicate,
-            context: self.context
+            predicate: predicate
         )
     }
     
@@ -32,8 +27,7 @@ public extension ObjectStore {
     ) -> DataObserver<Delegate> where Delegate : DataObserverDelegate, Delegate.Object.PersistentObject == PersistedObject {
         let predicate = NSPredicate(ids: ids)
         return self.newObserver(
-            predicate: predicate,
-            context: self.context
+            predicate: predicate
         )
     }
     
@@ -42,8 +36,7 @@ public extension ObjectStore {
     ) -> DataObserver<Delegate> where Delegate : DataObserverDelegate, Delegate.Object.PersistentObject == PersistedObject {
         let predicate = NSPredicate(notIn: ids)
         return self.newObserver(
-            predicate: predicate,
-            context: self.context
+            predicate: predicate
         )
     }
     
@@ -55,7 +48,6 @@ public extension ObjectStore {
     
     func newObserver<Delegate>(
         predicate: NSPredicate?,
-        context: NSManagedObjectContext,
         sortDescriptors: [NSSortDescriptor]? = nil
     ) -> DataObserver<Delegate> where Delegate : DataObserverDelegate, Delegate.Object.PersistentObject == PersistedObject {
         let sortDescriptors = sortDescriptors ?? [ NSSortDescriptor(key: "identifier", ascending: true) ]
@@ -65,7 +57,7 @@ public extension ObjectStore {
         )
         let controller = NSFetchedResultsController(
             fetchRequest: fetchRequest,
-            managedObjectContext: context,
+            managedObjectContext: self.context,
             sectionNameKeyPath: nil,
             cacheName: nil
         )

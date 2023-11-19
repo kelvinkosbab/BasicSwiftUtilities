@@ -13,7 +13,7 @@ import Foundation
 /// Defines toast options.
 public struct ToastOptions {
     
-    // MARK - Position
+    // MARK: - Position
     
     public enum Position {
         case top
@@ -23,7 +23,22 @@ public struct ToastOptions {
     /// Where on the screen the toast will be displayed.
     let position: Position
     
-    // MARK - Animations
+    // MARK: - Shape
+    
+    public enum Shape {
+        case capsule
+        case roundedRectangle
+    }
+    
+    /// Shape of the
+    let shape: Shape
+    
+    // MARK: - Animations
+    
+    public enum AnimationStyle {
+        case slide
+        case pop
+    }
     
     /// The amount of time the tost takes to move between shown or hidden.
     let animationDuration: TimeInterval
@@ -40,16 +55,19 @@ public struct ToastOptions {
     /// Creates `ToastOptions`.
     ///
     /// - Parameter position: The ``Position`` of where the toasts are displayed from. Default is `.top`.
+    /// - Parameter shape: The ``Shape`` of the toast. Default is `.capsule`.
     /// - Parameter animationDuration: The duration of the toast animating in and out. Default is 0.5s.
     /// - Parameter prepareDuration: The duration for the views to populate the toast with it's content. Default is 0.2s.
     /// - Parameter showDuration: The duration that the toast stays in place.
     public init(
         position: Position = .top,
+        shape: Shape = .capsule,
         animationDuration: TimeInterval = 0.75,
         prepareDuration: TimeInterval = 0.2,
         showDuration: TimeInterval = 1.0
     ) {
         self.position = position
+        self.shape = shape
         self.animationDuration = animationDuration
         self.prepareDuration = prepareDuration
         self.showDuration = showDuration

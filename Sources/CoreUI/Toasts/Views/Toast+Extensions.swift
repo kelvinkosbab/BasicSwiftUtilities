@@ -16,9 +16,11 @@ extension Toast {
     
     /// TODO documentation
     init(
+        shape: ToastOptions.Shape,
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder trailing: @escaping () -> Trailing
     ) where Leading == EmptyView {
+        self.shape = shape
         self.content = content
         self.leading = nil
         self.trailing = trailing
@@ -26,9 +28,11 @@ extension Toast {
     
     /// TODO documentation
     init(
+        shape: ToastOptions.Shape,
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder leading: @escaping () -> Leading
     ) where Trailing == EmptyView {
+        self.shape = shape
         self.content = content
         self.leading = leading
         self.trailing = nil
@@ -36,8 +40,10 @@ extension Toast {
     
     /// TODO documentation
     init(
+        shape: ToastOptions.Shape,
         @ViewBuilder content: @escaping () -> Content
     ) where Leading == EmptyView, Trailing == EmptyView {
+        self.shape = shape
         self.content = content
         self.leading = nil
         self.trailing = nil
@@ -49,8 +55,10 @@ extension Toast {
     ///
     /// Renders a view with a `footnote` title
     init(
+        shape: ToastOptions.Shape,
         title: String
     ) where Content == SimpleToastText, Leading == EmptyView, Trailing == EmptyView {
+        self.shape = shape
         self.content = {
             SimpleToastText(
                 text: title,
@@ -65,9 +73,11 @@ extension Toast {
     ///
     /// Renders a view with a `footnote` title and description below it
     init(
+        shape: ToastOptions.Shape,
         title: String,
         description: String
     ) where Content == VStack<TupleView<(SimpleToastText, SimpleToastText)>>, Leading == EmptyView, Trailing == EmptyView {
+        self.shape = shape
         self.content = {
             VStack(spacing: Spacing.small) {
                 SimpleToastText(
@@ -98,11 +108,11 @@ struct ToastExtensions_Previews: PreviewProvider {
     static var previews: some View {
         VStack(spacing: Spacing.base) {
             
-            Toast {
+            Toast(shape: .capsule) {
                 self.mockContent
             }
             
-            Toast {
+            Toast(shape: .capsule) {
                 HStack {
                     Circle()
                         .foregroundColor(.cyan)
@@ -113,7 +123,7 @@ struct ToastExtensions_Previews: PreviewProvider {
                 }
             }
             
-            Toast {
+            Toast(shape: .capsule) {
                 self.mockContent
             } leading: {
                 Image(systemName: "heart.circle.fill")
@@ -122,7 +132,7 @@ struct ToastExtensions_Previews: PreviewProvider {
                     .foregroundColor(.blue)
             }
             
-            Toast {
+            Toast(shape: .capsule) {
                 self.mockContent
             } trailing: {
                 Image(systemName: "person.3.sequence.fill")
@@ -133,19 +143,64 @@ struct ToastExtensions_Previews: PreviewProvider {
                         .linearGradient(colors: [.blue, .clear], startPoint: .top, endPoint: .bottomTrailing)
                     )
             }
-        }
-        .previewDisplayName("Generic Extensions")
-        
-        VStack(spacing: Spacing.base) {
             
-            Toast(title: "Simple title only")
+            Toast(shape: .capsule, title: "Simple title only")
             
             Toast(
+                shape: .capsule,
                 title: "Simple title",
                 description: "And a description"
             )
         }
-        .previewDisplayName("Simple Type Extensions")
+        .previewDisplayName("Capsule Extensions")
+        
+        VStack(spacing: Spacing.base) {
+            
+            Toast(shape: .roundedRectangle) {
+                self.mockContent
+            }
+            
+            Toast(shape: .roundedRectangle) {
+                HStack {
+                    Circle()
+                        .foregroundColor(.cyan)
+                        .padding()
+                    Rectangle()
+                        .foregroundColor(.green)
+                        .padding()
+                }
+            }
+            
+            Toast(shape: .roundedRectangle) {
+                self.mockContent
+            } leading: {
+                Image(systemName: "heart.circle.fill")
+                    .resizable()
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(.blue)
+            }
+            
+            Toast(shape: .roundedRectangle) {
+                self.mockContent
+            } trailing: {
+                Image(systemName: "person.3.sequence.fill")
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(
+                        .linearGradient(colors: [.red, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                        .linearGradient(colors: [.green, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                        .linearGradient(colors: [.blue, .clear], startPoint: .top, endPoint: .bottomTrailing)
+                    )
+            }
+            
+            Toast(shape: .roundedRectangle, title: "Simple title only")
+            
+            Toast(
+                shape: .roundedRectangle,
+                title: "Simple title",
+                description: "And a description"
+            )
+        }
+        .previewDisplayName("RoundedRectangle Extensions")
     }
 }
 

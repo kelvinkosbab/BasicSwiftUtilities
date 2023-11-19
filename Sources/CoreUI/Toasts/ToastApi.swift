@@ -34,6 +34,7 @@ public class ToastApi : ObservableObject, ToastStateDelegate {
         title: String
     ) {
         let toast = Toast(
+            shape: options.shape,
             title: title
         )
         self.toastStateManager.show(toast: AnyView(toast))
@@ -48,6 +49,7 @@ public class ToastApi : ObservableObject, ToastStateDelegate {
         description: String
     ) {
         let toast = Toast(
+            shape: options.shape,
             title: title,
             description: description
         )
@@ -62,6 +64,7 @@ public class ToastApi : ObservableObject, ToastStateDelegate {
         @ViewBuilder trailing: @escaping () -> Trailing
     ) where Content: View, Leading: View, Trailing: View {
         let toast = Toast(
+            shape: self.options.shape,
             content: content,
             leading: leading,
             trailing: trailing
@@ -74,6 +77,7 @@ public class ToastApi : ObservableObject, ToastStateDelegate {
         @ViewBuilder trailing: @escaping () -> Trailing
     ) where Content: View, Trailing: View {
         let toast = Toast(
+            shape: options.shape,
             content: content,
             trailing: trailing
         )
@@ -86,6 +90,7 @@ public class ToastApi : ObservableObject, ToastStateDelegate {
         @ViewBuilder leading: @escaping () -> Leading
     ) where Content: View, Leading: View {
         let toast = Toast(
+            shape: options.shape,
             content: content,
             leading: leading
         )
@@ -97,6 +102,7 @@ public class ToastApi : ObservableObject, ToastStateDelegate {
         @ViewBuilder content: @escaping () -> Content
     ) where Content: View {
         let toast = Toast(
+            shape: options.shape,
             content: content
         )
         self.toastStateManager.show(toast: AnyView(toast))

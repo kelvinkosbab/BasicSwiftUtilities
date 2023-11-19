@@ -105,30 +105,32 @@ struct ToastableContainer<Content> : View where Content: View {
 
 struct ToastableContainer_Previews: PreviewProvider {
     
-    static let topToastApi = ToastApi(options: ToastOptions(position: .top))
-    static let bottomToastApi = ToastApi(options: ToastOptions(position: .bottom))
+    static let topCapsuleToastApi = ToastApi(options: ToastOptions(position: .top, shape: .capsule))
+    static let bottomCapsuleToastApi = ToastApi(options: ToastOptions(position: .bottom, shape: .capsule))
+    static let topRoundedRectangleToastApi = ToastApi(options: ToastOptions(position: .top, shape: .roundedRectangle))
+    static let bottomRoundedRectangleToastApi = ToastApi(options: ToastOptions(position: .bottom, shape: .roundedRectangle))
     static let image: Image = Image(systemName: "heart.circle.fill")
     
     static var previews: some View {
         
-        // MARK: - Top Previews
+        // MARK: - Top Capsule Previews
         
         NavigationView {
             List {
                 
                 Button("Top: Show Simple Title") {
-                    self.topToastApi.show(title: "Simple Title")
+                    self.topCapsuleToastApi.show(title: "Simple Title")
                 }
                 
                 Button("Top: Show Title & Description") {
-                    self.topToastApi.show(
+                    self.topCapsuleToastApi.show(
                         title: "Simple Title",
                         description: "Some Description"
                     )
                 }
                 
                 Button("Top: Show Custom Content") {
-                    self.topToastApi.show(
+                    self.topCapsuleToastApi.show(
                         content: {
                             HStack {
                                 Circle()
@@ -143,7 +145,7 @@ struct ToastableContainer_Previews: PreviewProvider {
                 }
                 
                 Button("Top: Show Custom Content & Leading") {
-                    self.topToastApi.show(
+                    self.topCapsuleToastApi.show(
                         content: {
                             Text("Hello there")
                                 .font(.body)
@@ -159,7 +161,7 @@ struct ToastableContainer_Previews: PreviewProvider {
                 }
                 
                 Button("Top: Show Custom Content & Trailing") {
-                    self.topToastApi.show(
+                    self.topCapsuleToastApi.show(
                         content: {
                             Text("Hello there")
                                 .font(.body)
@@ -178,7 +180,7 @@ struct ToastableContainer_Previews: PreviewProvider {
                 }
                 
                 Button("Top: Show Custom Content & Leading & Trailing") {
-                    self.topToastApi.show(
+                    self.topCapsuleToastApi.show(
                         content: {
                             VStack(spacing: Spacing.tiny) {
                                 Text("Hello there")
@@ -207,51 +209,29 @@ struct ToastableContainer_Previews: PreviewProvider {
                         }
                     )
                 }
-                
-//                Button("Top: Show with Leading Image") {
-//                    self.topToastApi.show(
-//                        title: "Simple Title",
-//                        leading: .tintedImage(self.image, .green)
-//                    )
-//                }
-//                
-//                Button("Top: Show with Trailing Image") {
-//                    self.topToastApi.show(
-//                        title: "Simple Title",
-//                        trailing: .tintedImage(self.image, .blue)
-//                    )
-//                }
-//                
-//                Button("Top: Show with Leading and Trailing") {
-//                    self.topToastApi.show(
-//                        title: "Simple Title",
-//                        leading: .tintedImage(self.image, .green),
-//                        trailing: .tintedImage(self.image, .blue)
-//                    )
-//                }
             }
         }
-        .toastableContainer(toastApi: self.topToastApi)
-        .previewDisplayName("Top Toast Tests")
+        .toastableContainer(toastApi: self.topCapsuleToastApi)
+        .previewDisplayName("Top Capsule Toast Tests")
         
-        // MARK: - Bottom Previews
+        // MARK: - Bottom Capsule Previews
         
         NavigationView {
             List {
                 
                 Button("Bottom: Show Simple Title") {
-                    self.bottomToastApi.show(title: "Simple Title")
+                    self.bottomCapsuleToastApi.show(title: "Simple Title")
                 }
                 
                 Button("Bottom: Show Title & Description") {
-                    self.bottomToastApi.show(
+                    self.bottomCapsuleToastApi.show(
                         title: "Simple Title",
                         description: "Some Description"
                     )
                 }
                 
                 Button("Top: Show Custom Content") {
-                    self.bottomToastApi.show(
+                    self.bottomCapsuleToastApi.show(
                         content: {
                             HStack {
                                 Circle()
@@ -266,7 +246,7 @@ struct ToastableContainer_Previews: PreviewProvider {
                 }
                 
                 Button("Top: Show Custom Content & Leading") {
-                    self.bottomToastApi.show(
+                    self.bottomCapsuleToastApi.show(
                         content: {
                             Text("Hello there")
                                 .font(.body)
@@ -282,7 +262,7 @@ struct ToastableContainer_Previews: PreviewProvider {
                 }
                 
                 Button("Top: Show Custom Content & Trailing") {
-                    self.bottomToastApi.show(
+                    self.bottomCapsuleToastApi.show(
                         content: {
                             Text("Hello there")
                                 .font(.body)
@@ -301,7 +281,7 @@ struct ToastableContainer_Previews: PreviewProvider {
                 }
                 
                 Button("Top: Show Custom Content & Leading & Trailing") {
-                    self.bottomToastApi.show(
+                    self.bottomCapsuleToastApi.show(
                         content: {
                             VStack(spacing: Spacing.tiny) {
                                 Text("Hello there")
@@ -330,32 +310,212 @@ struct ToastableContainer_Previews: PreviewProvider {
                         }
                     )
                 }
-                
-//                Button("Bottom: Show with Leading Image") {
-//                    self.bottomToastApi.show(
-//                        title: "Simple Title",
-//                        leading: .tintedImage(self.image, .green)
-//                    )
-//                }
-//                
-//                Button("Bottom: Show with Trailing Image") {
-//                    self.bottomToastApi.show(
-//                        title: "Simple Title",
-//                        trailing: .tintedImage(self.image, .blue)
-//                    )
-//                }
-//                
-//                Button("Show with Leading and Trailing") {
-//                    self.bottomToastApi.show(
-//                        title: "Simple Title",
-//                        leading: .tintedImage(self.image, .green),
-//                        trailing: .tintedImage(self.image, .blue)
-//                    )
-//                }
             }
         }
-        .toastableContainer(toastApi: self.bottomToastApi)
-        .previewDisplayName("Bottom Toast Tests")
+        .toastableContainer(toastApi: self.bottomCapsuleToastApi)
+        .previewDisplayName("Bottom Capsule Toast Tests")
+        
+        // MARK: - Top RoundedRectangle Previews
+        
+        NavigationView {
+            List {
+                
+                Button("Top: Show Simple Title") {
+                    self.topRoundedRectangleToastApi.show(title: "Simple Title")
+                }
+                
+                Button("Top: Show Title & Description") {
+                    self.topRoundedRectangleToastApi.show(
+                        title: "Simple Title",
+                        description: "Some Description"
+                    )
+                }
+                
+                Button("Top: Show Custom Content") {
+                    self.topRoundedRectangleToastApi.show(
+                        content: {
+                            HStack {
+                                Circle()
+                                    .foregroundColor(.cyan)
+                                    .padding()
+                                Rectangle()
+                                    .foregroundColor(.green)
+                                    .padding()
+                            }
+                        }
+                    )
+                }
+                
+                Button("Top: Show Custom Content & Leading") {
+                    self.topRoundedRectangleToastApi.show(
+                        content: {
+                            Text("Hello there")
+                                .font(.body)
+                                .foregroundColor(.primary)
+                        },
+                        leading: {
+                            Image(systemName: "heart.circle.fill")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                                .foregroundColor(.blue)
+                        }
+                    )
+                }
+                
+                Button("Top: Show Custom Content & Trailing") {
+                    self.topRoundedRectangleToastApi.show(
+                        content: {
+                            Text("Hello there")
+                                .font(.body)
+                                .foregroundColor(.primary)
+                        },
+                        trailing: {
+                            Image(systemName: "person.3.sequence.fill")
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(
+                                    .linearGradient(colors: [.red, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                                    .linearGradient(colors: [.green, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                                    .linearGradient(colors: [.blue, .clear], startPoint: .top, endPoint: .bottomTrailing)
+                                )
+                        }
+                    )
+                }
+                
+                Button("Top: Show Custom Content & Leading & Trailing") {
+                    self.topRoundedRectangleToastApi.show(
+                        content: {
+                            VStack(spacing: Spacing.tiny) {
+                                Text("Hello there")
+                                    .font(.footnote)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .lineLimit(2)
+                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(.primary)
+                                Text("Hello there")
+                                    .font(.footnote)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .lineLimit(2)
+                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(.primary)
+                            }
+                        },
+                        leading: {
+                            Image(systemName: "heart.circle.fill")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                        },
+                        trailing: {
+                            Image(systemName: "person.3.sequence.fill")
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(.blue, .green, .red)
+                        }
+                    )
+                }
+            }
+        }
+        .toastableContainer(toastApi: self.topRoundedRectangleToastApi)
+        .previewDisplayName("Top RoundedRectangle Toast Tests")
+        
+        // MARK: - Bottom RoundedRectangle Previews
+        
+        NavigationView {
+            List {
+                
+                Button("Bottom: Show Simple Title") {
+                    self.bottomRoundedRectangleToastApi.show(title: "Simple Title")
+                }
+                
+                Button("Bottom: Show Title & Description") {
+                    self.bottomRoundedRectangleToastApi.show(
+                        title: "Simple Title",
+                        description: "Some Description"
+                    )
+                }
+                
+                Button("Top: Show Custom Content") {
+                    self.bottomRoundedRectangleToastApi.show(
+                        content: {
+                            HStack {
+                                Circle()
+                                    .foregroundColor(.cyan)
+                                    .padding()
+                                Rectangle()
+                                    .foregroundColor(.green)
+                                    .padding()
+                            }
+                        }
+                    )
+                }
+                
+                Button("Top: Show Custom Content & Leading") {
+                    self.bottomRoundedRectangleToastApi.show(
+                        content: {
+                            Text("Hello there")
+                                .font(.body)
+                                .foregroundColor(.primary)
+                        },
+                        leading: {
+                            Image(systemName: "heart.circle.fill")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                                .foregroundColor(.blue)
+                        }
+                    )
+                }
+                
+                Button("Top: Show Custom Content & Trailing") {
+                    self.bottomRoundedRectangleToastApi.show(
+                        content: {
+                            Text("Hello there")
+                                .font(.body)
+                                .foregroundColor(.primary)
+                        },
+                        trailing: {
+                            Image(systemName: "person.3.sequence.fill")
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(
+                                    .linearGradient(colors: [.red, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                                    .linearGradient(colors: [.green, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                                    .linearGradient(colors: [.blue, .clear], startPoint: .top, endPoint: .bottomTrailing)
+                                )
+                        }
+                    )
+                }
+                
+                Button("Top: Show Custom Content & Leading & Trailing") {
+                    self.bottomRoundedRectangleToastApi.show(
+                        content: {
+                            VStack(spacing: Spacing.tiny) {
+                                Text("Hello there")
+                                    .font(.footnote)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .lineLimit(2)
+                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(.primary)
+                                Text("Hello there")
+                                    .font(.footnote)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .lineLimit(2)
+                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(.primary)
+                            }
+                        },
+                        leading: {
+                            Image(systemName: "heart.circle.fill")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                        },
+                        trailing: {
+                            Image(systemName: "person.3.sequence.fill")
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(.blue, .green, .red)
+                        }
+                    )
+                }
+            }
+        }
+        .toastableContainer(toastApi: self.bottomRoundedRectangleToastApi)
+        .previewDisplayName("Bottom RoundedRectangle Toast Tests")
     }
 }
 

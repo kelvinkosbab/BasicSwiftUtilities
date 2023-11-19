@@ -25,7 +25,10 @@ final class RunModeTests: XCTestCase {
             isUIUnitTest: false
         )
         let result = RunMode.getActive(unitTestStatusProvider: provider)
-        XCTAssert(result == .mainApplication)
+        XCTAssertEqual(
+            result,
+            .mainApplication
+        )
     }
     
     /// Should return `RunMode.unitTests` if not running unit tests
@@ -35,7 +38,10 @@ final class RunModeTests: XCTestCase {
             isUIUnitTest: false
         )
         let result = RunMode.getActive(unitTestStatusProvider: provider)
-        XCTAssert(result == .unitTests)
+        XCTAssertEqual(
+            result,
+            .unitTests
+        )
     }
     
     /// Should return `RunMode.uiUnitTests` if not running unit tests
@@ -45,6 +51,9 @@ final class RunModeTests: XCTestCase {
             isUIUnitTest: true
         )
         let result = RunMode.getActive(unitTestStatusProvider: provider)
-        XCTAssert(result == .uiUnitTests)
+        XCTAssertEqual(
+            result,
+            .uiUnitTests
+        )
     }
 }

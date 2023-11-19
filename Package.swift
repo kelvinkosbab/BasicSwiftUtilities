@@ -35,6 +35,9 @@ let package = Package(
     ],
     dependencies: [],
     targets: [
+        
+        // MARK: - Core
+        
         .target(
             name: "Core",
             dependencies: []
@@ -43,6 +46,8 @@ let package = Package(
             name: "CoreTests",
             dependencies: ["Core"]
         ),
+        
+        // MARK: - CoreHealth
         
         .target(
             name: "CoreHealth",
@@ -53,6 +58,7 @@ let package = Package(
             dependencies: ["CoreHealth"]
         ),
         
+        // MARK: - CoreUI
         .target(
             name: "CoreUI",
             dependencies: []
@@ -62,14 +68,21 @@ let package = Package(
             dependencies: ["CoreUI"]
         ),
         
+        // MARK: - CoreStorage
+        
         .target(
             name: "CoreStorage",
             dependencies: ["Core"]
         ),
         .testTarget(
             name: "CoreStorageTests",
-            dependencies: ["CoreStorage"]
+            dependencies: ["CoreStorage"],
+            resources: [
+                .process("Resources")
+            ]
         ),
+        
+        // MARK: - RunMode
         
         .target(
             name: "RunMode",

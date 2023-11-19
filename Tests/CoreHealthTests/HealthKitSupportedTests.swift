@@ -27,22 +27,40 @@ class HealthKitSupportedTests : XCTestCase {
         #if os(iOS)
         switch UIDevice.current.userInterfaceIdiom {
         case .phone:
-            XCTAssert(HKHealthStore().isHealthDataAvailable == true)
+            XCTAssertEqual(
+                HKHealthStore().isHealthDataAvailable,
+                true
+            )
         case .pad:
             if #available(iOS 17.0, *) {
-                XCTAssert(HKHealthStore().isHealthDataAvailable == true)
+                XCTAssertEqual(
+                    HKHealthStore().isHealthDataAvailable,
+                    true
+                )
             } else {
-                XCTAssert(HKHealthStore().isHealthDataAvailable == false)
+                XCTAssertEqual(
+                    HKHealthStore().isHealthDataAvailable,
+                    false
+                )
             }
         default:
             XCTFail("Platform unsupported by test case")
         }
         #elseif os(watchOS)
-        XCTAssert(HKHealthStore().isHealthDataAvailable == true)
+        XCTAssertEqual(
+            HKHealthStore().isHealthDataAvailable,
+            true
+        )
         #elseif os(tvOS)
-        XCTAssert(HKHealthStore().isHealthDataAvailable == false)
+        XCTAssertEqual(
+            HKHealthStore().isHealthDataAvailable,
+            false
+        )
         #elseif os(macOS)
-        XCTAssert(HKHealthStore().isHealthDataAvailable == false)
+        XCTAssertEqual(
+            HKHealthStore().isHealthDataAvailable,
+            false
+        )
         #endif
     }
 }

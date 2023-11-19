@@ -16,25 +16,52 @@ class HealthBiometricTests : XCTestCase {
     
     /// Tests the expected raw values of `HealthBiometric.Type`. These values should not change.
     func testHealthBiometricTypeTests() {
-        XCTAssert(CodableHealthBiometricType.quantity.rawValue == 0)
-        XCTAssert(CodableHealthBiometricType.category.rawValue == 1)
-        XCTAssert(CodableHealthBiometricType.correlation.rawValue == 2)
-        XCTAssert(CodableHealthBiometricType.document.rawValue == 3)
-        XCTAssert(CodableHealthBiometricType.workout.rawValue == 4)
+        XCTAssertEqual(
+            CodableHealthBiometricType.quantity.rawValue,
+            0
+        )
+        XCTAssertEqual(
+            CodableHealthBiometricType.category.rawValue,
+            1
+        )
+        XCTAssertEqual(
+            CodableHealthBiometricType.correlation.rawValue,
+            2
+        )
+        XCTAssertEqual(
+            CodableHealthBiometricType.document.rawValue,
+            3
+        )
+        XCTAssertEqual(
+            CodableHealthBiometricType.workout.rawValue,
+            4
+        )
     }
     
     /// Tests a single HealthKit quantity type biometirc to insure it correctly maps in the `HealthBiometric` type.
     func testHKQuantityTypeIdentifierBiometrics() {
         let bodyMassIndex = try? CodableHealthBiometric(identifier: .bodyMassIndex)
-        XCTAssert(bodyMassIndex?.identifier == "HKQuantityTypeIdentifierBodyMassIndex")
-        XCTAssert(bodyMassIndex?.biometricType == .quantity)
+        XCTAssertEqual(
+            bodyMassIndex?.identifier,
+            "HKQuantityTypeIdentifierBodyMassIndex"
+        )
+        XCTAssertEqual(
+            bodyMassIndex?.biometricType,
+            .quantity
+        )
     }
     
     /// Tests a single HealthKit category type biometirc to insure it correctly maps in the `HealthBiometric` type.
     func testHKCategoryTypeIdentifierBiometrics() {
         let bodyMassIndex = try? CodableHealthBiometric(identifier: .sleepAnalysis)
-        XCTAssert(bodyMassIndex?.identifier == "HKCategoryTypeIdentifierSleepAnalysis")
-        XCTAssert(bodyMassIndex?.biometricType == .category)
+        XCTAssertEqual(
+            bodyMassIndex?.identifier,
+            "HKCategoryTypeIdentifierSleepAnalysis"
+        )
+        XCTAssertEqual(
+            bodyMassIndex?.biometricType,
+            .category
+        )
     }
 }
 

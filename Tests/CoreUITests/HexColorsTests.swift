@@ -16,8 +16,14 @@ final class HexColorsTests: XCTestCase {
             let hexString = String(value, radix: 16).uppercased()
             let intHexColor = HexColor(hex: value)
             let stringHexColor = HexColor(hex: hexString)
-            XCTAssert(intHexColor.hexValue == stringHexColor?.hexValue)
-            XCTAssert(intHexColor.hexString == hexString)
+            XCTAssertEqual(
+                intHexColor.hexValue,
+                stringHexColor?.hexValue
+            )
+            XCTAssertEqual(
+                intHexColor.hexString,
+                hexString
+            )
         }
     }
     
@@ -34,7 +40,10 @@ final class HexColorsTests: XCTestCase {
         ]
         for testString in validHexStrings {
             let color = HexColor(hex: testString)
-            XCTAssert(color?.hexValue == 0xD3004C)
+            XCTAssertEqual(
+                color?.hexValue,
+                0xD3004C
+            )
         }
     }
     

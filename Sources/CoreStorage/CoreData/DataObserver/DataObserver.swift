@@ -1,10 +1,9 @@
 //
-//  CoreDataObserver.swift
+//  DataObserver.swift
 //
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import Foundation
 import CoreData
 import Core
 
@@ -12,7 +11,7 @@ import Core
 
 /// Provides a way for a module to actively listen to underlying `CoreData` object changes.
 ///
-/// - Note: This is a `class` object to convorm to `CoreData.NSFetchedResultsControllerDelegate`
+/// - Note: This is a `class` object to conform to `CoreData.NSFetchedResultsControllerDelegate`
 ///
 /// Example usage for an object that listens to updates for a user profile object:
 /// ```swift
@@ -22,7 +21,7 @@ import Core
 ///     func didRemove(userProfile: UserProfile)
 /// }
 ///
-/// public class UserProfileObserver : Hashable, DataObserverDelegate {
+/// public class UserProfileObserver : DataObserverDelegate {
 ///
 ///     public weak var delegate: UserProfileObserverDelegate?
 ///     private let id: String
@@ -49,16 +48,6 @@ import Core
 ///         observer.delegate = self
 ///     }
 ///
-///     // MARK: - Hashable
-///
-///     public func hash(into hasher: inout Hasher) {
-///         hasher.combine(self.id)
-///     }
-///
-///     public static func ==(lhs: UserProfileObserver, rhs: UserProfileObserver) -> Bool {
-///         return lhs.id == rhs.id
-///     }
-///
 ///     // MARK: - DataObserverDelegate
 ///
 ///     public func didAdd(object: UserProfile) {
@@ -74,82 +63,47 @@ import Core
 ///     }
 /// }
 /// ```
-public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedResultsControllerDelegate {
-    
-    public typealias ManagedObject = Delegate.ObjectType.ManagedObject
-    public typealias ObjectType = Delegate.ObjectType
-    
+public class DataObserver<Delegate>: NSObject, NSFetchedResultsControllerDelegate where Delegate: DataObserverDelegate {
+
+    public typealias PersistedObject = Delegate.Object.PersistentObject
+    public typealias Object = Delegate.Object
+
     public weak var delegate: Delegate?
-    private let fetchedResultsController: NSFetchedResultsController<ManagedObject>
+    private let predicate: NSFetchedResultsController<PersistedObject>
     private let logger: Loggable
-    
-    public private(set) var objects: Set<ObjectType> = Set()
-    
-    public convenience init(
-        context: NSManagedObjectContext,
-        delegate: Delegate? = nil
-    ) {
-        let fetchedResultsController = ManagedObject.newFetchedResultsController(context: context)
-        self.init(
-            fetchedResultsController: fetchedResultsController,
-            delegate: delegate
-        )
-    }
-    
-    public convenience init(
-        id: String,
-        context: NSManagedObjectContext,
-        delegate: Delegate? = nil
-    ) {
-        let fetchedResultsController = ManagedObject.newFetchedResultsController(id: id, context: context)
-        self.init(
-            fetchedResultsController: fetchedResultsController,
-            delegate: delegate
-        )
-    }
-    
-    public convenience init(
-        ids: [String],
-        context: NSManagedObjectContext,
-        delegate: Delegate? = nil
-    ) {
-        let fetchedResultsController = ManagedObject.newFetchedResultsController(ids: ids, context: context)
-        self.init(
-            fetchedResultsController: fetchedResultsController,
-            delegate: delegate
-        )
-    }
-    
+
+    public private(set) var objects: Set<Object> = Set()
+
     public init(
-        fetchedResultsController: NSFetchedResultsController<ManagedObject>,
-        delegate: Delegate? = nil
+        predicate: NSFetchedResultsController<PersistedObject>
     ) {
-        self.delegate = delegate
-        self.fetchedResultsController = fetchedResultsController
-        self.logger = SubsystemCategoryLogger(
-            subsystem: "CoreDataStore",
-            category: "DatabaseObserver.\(String(describing: ManagedObject.self))"
+        self.predicate = predicate
+        self.logger = Logger(
+            subsystem: "DataObserver",
+            category: String(describing: PersistedObject.self)
         )
-        
+
         super.init()
-        
+
         do {
-            try self.fetchedResultsController.performFetch()
+            try self.predicate.performFetch()
         } catch {
             self.logger.error("Failed to performFetch: \(error.localizedDescription)")
         }
-        
-        self.fetchedResultsController.delegate = self
-        
-        for cdObject in self.fetchedResultsController.fetchedObjects ?? [] {
+
+        self.predicate.delegate = self
+
+        for cdObject in self.predicate.fetchedObjects ?? [] {
             if let object = cdObject.structValue {
                 self.objects.insert(object)
+            } else {
+                self.logger.error("Unable to cast fetched object to associated type")
             }
         }
     }
-    
+
     // MARK: - NSFetchedResultsController
-    
+
     public func controller(
         _ controller: NSFetchedResultsController<NSFetchRequestResult>,
         didChange anObject: Any,
@@ -157,45 +111,38 @@ public class DataObserver<Delegate: DataObserverDelegate> : NSObject, NSFetchedR
         for type: NSFetchedResultsChangeType,
         newIndexPath: IndexPath?
     ) {
-        
-        guard let cdObject = anObject as? ManagedObject else {
-            self.logger.error("Updated object is not of type NSManagedObject.")
+
+        guard let cdObject = anObject as? PersistedObject else {
+            self.logger.error("Updated object is not castable to `PersistedObject`")
             return
         }
-        
+
         guard let object = cdObject.structValue else {
+            self.logger.error("Unable to cast persistent object to the associated type")
             return
         }
-        
+
         switch type {
         case .insert:
-            
-            guard !self.objects.contains(object) else {
-                return
-            }
-            
             self.objects.insert(object)
             self.delegate?.didAdd(object: object)
-            
+
         case .update:
-            if self.objects.contains(object) {
-                self.objects.update(with: object)
-                self.delegate?.didUpdate(object: object)
-            } else {
-                self.objects.insert(object)
-                self.delegate?.didAdd(object: object)
-            }
-            
+            self.objects.remove(object)
+            self.objects.insert(object)
+            self.delegate?.didUpdate(object: object)
+
         case .delete:
             if self.objects.contains(object) {
                 self.objects.remove(object)
                 self.delegate?.didRemove(object: object)
             }
-            
+
         case .move:
-            self.logger.debug("Unsupported operation 'move'.")
-            
+            self.logger.error("Unsupported operation 'move'")
+
         @unknown default:
+            self.logger.error("Unsupported operation 'unknown' for DataObserver")
             fatalError("Unsupported operation 'unknown' for DataObserver")
         }
     }

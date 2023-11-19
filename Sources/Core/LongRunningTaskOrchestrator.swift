@@ -28,7 +28,7 @@ public struct LongRunningTaskOrchestrator {
     // MARK: - Properties
     
     private let workQueue = DispatchQueue(label: "LongRunningTaskOrchestrator")
-    private let logger: Loggable = SubsystemCategoryLogger(
+    private let logger: Loggable = Logger(
         subsystem: "LongRunningTaskOrchestrator",
         category: "RegisterTask"
     )

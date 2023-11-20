@@ -36,10 +36,6 @@ struct ToastableContainer<Content> : View where Content: View {
     
     var content: () -> Content
     
-    #if !os(macOS)
-    @Environment(\.safeAreaInsets) private var safeAreaInsets
-    #endif
-    
     @ObservedObject private var toastApi: ToastApi
 
     public init(
@@ -48,20 +44,6 @@ struct ToastableContainer<Content> : View where Content: View {
     ) {
         self.toastApi = toastApi
         self.content = content
-    }
-    
-    private func getToastTopOffset(toastSize: CGSize) -> CGFloat {
-        if self.toastApi.currentToastState.shouldBeVisible {
-            let position = self.toastApi.options.position
-            #if !os(macOS)
-            let safeArea = position == .top ? self.safeAreaInsets.top : self.safeAreaInsets.bottom
-            #else
-            let safeArea: CGFloat = 0
-            #endif
-            return max(safeArea, Spacing.base)
-        } else {
-            return -toastSize.height
-        }
     }
     
     public var body: some View {
@@ -83,12 +65,15 @@ struct ToastableContainer<Content> : View where Content: View {
                         }
                     }
                 }
-                .padding(self.toastApi.options.position == .top ? .top : .bottom, self.getToastTopOffset(toastSize: geometry.size))
-                .animation(.easeInOut, value: self.toastApi.options.animationDuration)
+                .modifier(AnimatedToastModifier(
+                    toastApi: self.toastApi,
+                    containerSize: geometry.size
+                ))
             }
         }
+        .environmentObject(self.toastApi)
         #if !os(macOS)
-        .ignoreSafeAreaEdges(.all)
+        .ignoresSafeArea()
         #endif
     }
     
@@ -101,14 +86,77 @@ struct ToastableContainer<Content> : View where Content: View {
     }
 }
 
+// MARK: - AnimatedToastModifier
+
+private struct AnimatedToastModifier: ViewModifier {
+    
+    #if !os(macOS)
+    @Environment(\.safeAreaInsets) private var safeAreaInsets
+    #endif
+    
+    @ObservedObject var toastApi: ToastApi
+    let containerSize: CGSize
+    
+    func body(content: Content) -> some View {
+        switch self.toastApi.options.animationStyle {
+        case .slide:
+            content
+                .padding(
+                    self.toastApi.options.position == .top ? .top : .bottom,
+                    self.getToastTopOffset(toastSize: self.containerSize)
+                )
+                .animation(.easeInOut, value: self.toastApi.options.animationDuration)
+        case .pop:
+            content
+                .padding(
+                    self.toastApi.options.position == .top ? .top : .bottom, 
+                    10 + (self.toastApi.options.position == .top ? self.safeAreaInsets.top : self.safeAreaInsets.bottom)
+                )
+                .animation(.easeInOut, value: self.toastApi.options.animationDuration)
+        }
+    }
+    
+    private func getToastTopOffset(toastSize: CGSize) -> CGFloat {
+        if self.toastApi.currentToastState.shouldBeVisible {
+            let position = self.toastApi.options.position
+            #if !os(macOS)
+            let safeArea = position == .top ? self.safeAreaInsets.top : self.safeAreaInsets.bottom
+            #else
+            let safeArea: CGFloat = 0
+            #endif
+            return max(safeArea, Spacing.base)
+        } else {
+            return -toastSize.height
+        }
+    }
+}
+
 // MARK: - Preview
 
 struct ToastableContainer_Previews: PreviewProvider {
     
-    static let topCapsuleToastApi = ToastApi(options: ToastOptions(position: .top, shape: .capsule))
-    static let bottomCapsuleToastApi = ToastApi(options: ToastOptions(position: .bottom, shape: .capsule))
-    static let topRoundedRectangleToastApi = ToastApi(options: ToastOptions(position: .top, shape: .roundedRectangle))
-    static let bottomRoundedRectangleToastApi = ToastApi(options: ToastOptions(position: .bottom, shape: .roundedRectangle))
+    static let topCapsuleToastApi = ToastApi(options: ToastOptions(
+        position: .top, 
+        shape: .capsule
+    ))
+    
+    static let bottomCapsuleToastApi = ToastApi(options: ToastOptions(
+        position: .bottom,
+        shape: .capsule,
+        style: .pop
+    ))
+    
+    static let topRoundedRectangleToastApi = ToastApi(options: ToastOptions(
+        position: .top,
+        shape: .roundedRectangle,
+        style: .pop
+    ))
+    
+    static let bottomRoundedRectangleToastApi = ToastApi(options: ToastOptions(
+        position: .bottom,
+        shape: .roundedRectangle
+    ))
+    
     static let image: Image = Image(systemName: "heart.circle.fill")
     
     static var previews: some View {

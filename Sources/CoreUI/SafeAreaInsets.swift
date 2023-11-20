@@ -57,33 +57,5 @@ private extension UIEdgeInsets {
     }
 }
 
-// MARK: - Ignore Safe Area Edges
-
-@available(macOS, unavailable)
-@available(iOS 13.0, tvOS 15.0, watchOS 6.0, *)
-private struct IgnoresSafeAreaModifier : ViewModifier {
-    
-    let edges: Edge.Set
-    
-    func body(content: Content) -> some View {
-        if #available(iOS 14.0, *) {
-            content
-                .ignoresSafeArea(.all, edges: self.edges)
-        } else {
-            content
-                .edgesIgnoringSafeArea(self.edges)
-        }
-    }
-}
-
-@available(macOS, unavailable)
-@available(iOS 13.0, tvOS 15.0, watchOS 6.0, *)
-internal extension View {
-    
-    func ignoreSafeAreaEdges(_ edges: Edge.Set) -> some View {
-        self.modifier(IgnoresSafeAreaModifier(edges: edges))
-    }
-}
-
 #endif
 #endif

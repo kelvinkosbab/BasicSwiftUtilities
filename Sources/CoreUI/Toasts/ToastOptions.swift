@@ -25,20 +25,29 @@ public struct ToastOptions {
     
     // MARK: - Shape
     
+    /// Defines the supported shape for toasts.
     public enum Shape {
         case capsule
         case roundedRectangle
     }
     
-    /// Shape of the
+    /// Defines the shape of the toast.
     let shape: Shape
     
     // MARK: - Animations
     
+    /// Defines how toasts will be presented to the user.
     public enum AnimationStyle {
+        
+        /// Toast will slide in from the edge of the screen.
         case slide
+        
+        /// Toasts will animate and `pop` in place.
         case pop
     }
+    
+    /// Defines how toasts will be presented to the user.
+    let animationStyle: AnimationStyle
     
     /// The amount of time the tost takes to move between shown or hidden.
     let animationDuration: TimeInterval
@@ -56,21 +65,22 @@ public struct ToastOptions {
     ///
     /// - Parameter position: The ``Position`` of where the toasts are displayed from. Default is `.top`.
     /// - Parameter shape: The ``Shape`` of the toast. Default is `.capsule`.
-    /// - Parameter animationDuration: The duration of the toast animating in and out. Default is 0.5s.
-    /// - Parameter prepareDuration: The duration for the views to populate the toast with it's content. Default is 0.2s.
-    /// - Parameter showDuration: The duration that the toast stays in place.
     public init(
         position: Position = .top,
         shape: Shape = .capsule,
-        animationDuration: TimeInterval = 0.75,
-        prepareDuration: TimeInterval = 0.2,
-        showDuration: TimeInterval = 1.0
+        style: AnimationStyle = .slide
     ) {
         self.position = position
         self.shape = shape
-        self.animationDuration = animationDuration
-        self.prepareDuration = prepareDuration
-        self.showDuration = showDuration
+        self.animationStyle = style
+        switch style {
+        case .slide:
+            self.animationDuration = 0.75
+        case .pop:
+            self.animationDuration = 0.2
+        }
+        self.prepareDuration = 0.2
+        self.showDuration = 1.0
     }
 }
 

@@ -14,22 +14,29 @@ import SwiftUI
 ///
 /// Usage:
 /// ```swift
+/// // Define the toastableContainer
 /// @main
 /// struct CoreSampleApp: App {
-///
-///     let toastApi = ToastApi()
 ///
 ///     var body: some Scene {
 ///         WindowGroup {
 ///             ContentView(toastApi: self.toastApi)
-///                 .toastableContainer(toastApi: self.toastApi)
+///                 .toastableContainer()
 ///         }
 ///     }
 /// }
 ///
 /// // In a sub-component:
-/// Button("Bottom: Show Simple Title") {
-///     self.toastApi.show(title: "Simple Title")
+///
+/// struct AnotherView: View {
+///
+///     @EnvironmentObject var toastApi: ToastApi
+///
+///     var body: some View {
+///         Button("Bottom: Show Simple Title") {
+///             self.toastApi.show(title: "Simple Title")
+///         }
+///     }
 /// }
 /// ```
 struct ToastableContainer<Content> : View where Content: View {
@@ -59,7 +66,9 @@ struct ToastableContainer<Content> : View where Content: View {
                         if self.toastApi.options.position == .bottom {
                             Spacer()
                         }
+                        
                         self.renderToast(toast: toast)
+                        
                         if self.toastApi.options.position == .top {
                             Spacer()
                         }
@@ -105,14 +114,17 @@ private struct AnimatedToastModifier: ViewModifier {
                     self.toastApi.options.position == .top ? .top : .bottom,
                     self.getToastTopOffset(toastSize: self.containerSize)
                 )
-                .animation(.easeInOut, value: self.toastApi.options.animationDuration)
+                .animation(
+                    .easeIn(duration: self.toastApi.options.animationDuration),
+                    value: self.toastApi.currentToastState.shouldBeVisible
+                )
         case .pop:
             content
+                .transition(.opacity.animation(.easeInOut(duration: self.toastApi.options.animationDuration)))
                 .padding(
-                    self.toastApi.options.position == .top ? .top : .bottom, 
+                    self.toastApi.options.position == .top ? .top : .bottom,
                     10 + (self.toastApi.options.position == .top ? self.safeAreaInsets.top : self.safeAreaInsets.bottom)
                 )
-                .animation(.easeInOut, value: self.toastApi.options.animationDuration)
         }
     }
     

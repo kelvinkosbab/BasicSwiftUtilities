@@ -14,7 +14,11 @@ extension Toast {
     
     // MARK: - Generic Extensions
     
-    /// TODO documentation
+    /// Creates a toast view.
+    ///
+    /// - Parameter shape: Defines the shape of the toast.
+    /// - Parameter content: Defines content that is rendered in the center of the toast.
+    /// - Parameter trailing: Defines content that is rendered on the trailing side of the toast.
     init(
         shape: ToastOptions.Shape,
         @ViewBuilder content: @escaping () -> Content,
@@ -26,7 +30,11 @@ extension Toast {
         self.trailing = trailing
     }
     
-    /// TODO documentation
+    /// Creates a toast view.
+    ///
+    /// - Parameter shape: Defines the shape of the toast.
+    /// - Parameter content: Defines content that is rendered in the center of the toast.
+    /// - Parameter leading: Defines content that is rendered on the leading side of the toast.
     init(
         shape: ToastOptions.Shape,
         @ViewBuilder content: @escaping () -> Content,
@@ -38,7 +46,10 @@ extension Toast {
         self.trailing = nil
     }
     
-    /// TODO documentation
+    /// Creates a toast view.
+    ///
+    /// - Parameter shape: Defines the shape of the toast.
+    /// - Parameter content: Defines content that is rendered in the center of the toast.
     init(
         shape: ToastOptions.Shape,
         @ViewBuilder content: @escaping () -> Content
@@ -51,9 +62,10 @@ extension Toast {
     
     // MARK: - Simple Type Extensions
     
-    /// TODO documentation
+    /// Creates a toast view with a simple title.
     ///
-    /// Renders a view with a `footnote` title
+    /// - Parameter shape: Defines the shape of the toast.
+    /// - Parameter title: Primary text of the toast.
     init(
         shape: ToastOptions.Shape,
         title: String
@@ -66,12 +78,14 @@ extension Toast {
             )
         }
         self.leading = nil
-        self.trailing = nil
+        self.trailing = nil 
     }
     
-    /// TODO documentation
+    /// Creates a toast view with a simple title.
     ///
-    /// Renders a view with a `footnote` title and description below it
+    /// - Parameter shape: Defines the shape of the toast.
+    /// - Parameter title: Primary text of the toast.
+    /// - Parameter description: Secondary text of the toast.
     init(
         shape: ToastOptions.Shape,
         title: String,

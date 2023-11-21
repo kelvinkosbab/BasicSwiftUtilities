@@ -10,7 +10,7 @@ import SwiftUI
 
 // MARK: - Toast
 
-/// Displayable content for a toast.
+/// Defines the content of a toast.
 struct Toast<Content, Leading, Trailing> : View where Content: View, Leading: View, Trailing: View {
     
     let shape: ToastOptions.Shape
@@ -18,7 +18,12 @@ struct Toast<Content, Leading, Trailing> : View where Content: View, Leading: Vi
     let leading: (() -> Leading)?
     let trailing: (() -> Trailing)?
     
-    /// TODO documentation
+    /// Creates a toast view.
+    ///
+    /// - Parameter shape: Defines the shape of the toast.
+    /// - Parameter content: Defines content that is rendered in the center of the toast.
+    /// - Parameter leading: Defines content that is rendered on the leading side of the toast.
+    /// - Parameter trailing: Defines content that is rendered on the trailing side of the toast.
     init(
         shape: ToastOptions.Shape,
         @ViewBuilder content: @escaping () -> Content,

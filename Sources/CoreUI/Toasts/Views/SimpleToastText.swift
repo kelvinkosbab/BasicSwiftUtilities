@@ -10,7 +10,7 @@ import SwiftUI
 
 // MARK: - SimpleToastText
 
-/// TODO documentation
+/// Defines a view for a primary or secondary styled text element.
 public struct SimpleToastText : View {
     
     enum ForegroundStyle {
@@ -18,10 +18,10 @@ public struct SimpleToastText : View {
         case secondary
     }
     
-    /// TODO documentation
+    /// Text to display.
     let text: String
     
-    /// TODO documentation
+    /// Style to apply to the text.
     let foregroundStyle: ForegroundStyle
     
     public var body: some View {
@@ -39,7 +39,6 @@ public struct SimpleToastText : View {
 
 private struct ForegroundStyleFontStyleModifier : ViewModifier {
     
-    /// TODO documentation
     let foregroundStyle: SimpleToastText.ForegroundStyle
     
     func body(content: Content) -> some View {

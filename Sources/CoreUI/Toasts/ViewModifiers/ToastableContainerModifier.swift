@@ -14,9 +14,11 @@ private struct ToastableContainerModifier : ViewModifier {
     
     let toastApi: ToastApi
     
-    init(
-        toastApi: ToastApi
-    ) {
+    init(options: ToastOptions) {
+        self.init(toastApi: ToastApi(options: options))
+    }
+    
+    init(toastApi: ToastApi) {
         self.toastApi = toastApi
     }
     
@@ -33,28 +35,44 @@ public extension View {
     
     /// Enables the attached container for toasts. The toasts will be bound to the container's safe area insets.
     ///
-    /// If an app has multiple windows/scenes a toast target can be defined by expanding the
-    /// `Toast.Target OptionalSet` type.
-    ///
     /// SwiftUI usage:
     /// ```
     /// @main
-    /// struct CoreSampleApp: App {
-    ///
-    ///     let sessionId = UUID()
+    /// struct SampleApp: App {
     ///
     ///     var body: some Scene {
     ///         WindowGroup {
-    ///             ContentView(currentSessionId: currentSessionId) // Pass into ContentView so can be referenced when registering Toast.
-    ///                 .toastableContainer(sessionID: sessionId)
+    ///             ContentView()
+    ///                 .toastableContainer()
     ///         }
     ///     }
     ///}
     /// ```
     ///
-    /// - Parameter target: Target window/scene of the container. Default is `.primary`.
+    /// - Parameter options: Customizable options for the toast..
+    func toastableContainer(options: ToastOptions = ToastOptions()) -> some View {
+        self.toastableContainer(toastApi: ToastApi(options: options))
+    }
+    
+    /// Enables the attached container for toasts. The toasts will be bound to the container's safe area insets.
+    ///
+    /// SwiftUI usage:
+    /// ```
+    /// @main
+    /// struct SampleApp: App {
+    ///
+    ///     var body: some Scene {
+    ///         WindowGroup {
+    ///             ContentView()
+    ///                 .toastableContainer()
+    ///         }
+    ///     }
+    ///}
+    /// ```
+    ///
+    /// - Parameter toastApi: API which manages the presentation of toasts.
     func toastableContainer(toastApi: ToastApi) -> some View {
-        self.modifier(ToastableContainerModifier(toastApi: toastApi))
+        modifier(ToastableContainerModifier(toastApi: toastApi))
     }
 }
 

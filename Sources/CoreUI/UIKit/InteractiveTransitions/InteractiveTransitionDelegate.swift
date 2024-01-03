@@ -7,6 +7,7 @@
 #if !os(macOS)
 #if !os(tvOS)
 #if !os(watchOS)
+#if !os(visionOS)
 
 import UIKit
 
@@ -16,6 +17,7 @@ public protocol InteractiveTransitionDelegate : AnyObject {
     func interactionDidSurpassThreshold(_ interactiveTransition: InteractiveTransition)
 }
 
+#endif
 #endif
 #endif
 #endif

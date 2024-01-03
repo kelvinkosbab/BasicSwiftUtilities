@@ -157,6 +157,5 @@ struct Color_Previews: PreviewProvider {
 }
  
 #endif
-
 #endif
 #endif

@@ -74,7 +74,7 @@ struct Toast<Content, Leading, Trailing> : View where Content: View, Leading: Vi
             horizontal: true,
             vertical: true
         )
-        .modifier(ToastBackgroundModifier(shape: self.shape))
+        .toastBackground(shape: self.shape)
     }
     
     private var renderClearRectangle: some View {

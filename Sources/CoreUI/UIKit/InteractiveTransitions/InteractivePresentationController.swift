@@ -7,6 +7,7 @@
 #if !os(macOS)
 #if !os(tvOS)
 #if !os(watchOS)
+#if !os(visionOS)
 
 import UIKit
 
@@ -63,6 +64,7 @@ public extension InteractivePresentationController {
     }
 }
 
+#endif
 #endif
 #endif
 #endif

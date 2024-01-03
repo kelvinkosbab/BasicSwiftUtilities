@@ -105,7 +105,7 @@ public extension View {
 @available(iOS 13.0, tvOS 13.0, *)
 struct AllowAutoDismiss_Previews: PreviewProvider {
     
-    private struct ContentView: View {
+    struct ContentView: View {
         @State private var presenting = false
         
         var body: some View {
@@ -125,7 +125,7 @@ struct AllowAutoDismiss_Previews: PreviewProvider {
         }
     }
 
-    private struct ModalContent: View {
+    struct ModalContent: View {
         @Environment(\.presentationMode) private var presentationMode
         
         var body: some View {
@@ -148,6 +148,5 @@ struct AllowAutoDismiss_Previews: PreviewProvider {
 }
 
 #endif
-
 #endif
 #endif

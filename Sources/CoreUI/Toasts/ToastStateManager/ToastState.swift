@@ -30,9 +30,9 @@ enum ToastState {
     var shouldBeVisible: Bool {
         switch self {
         case .none, .hiding, .prepare:
-            return false
+            false
         case .show:
-            return true
+            true
         }
     }
 }

@@ -135,8 +135,10 @@ open class BaseNavigationController : UINavigationController, PresentableControl
             self.navigationBar.backgroundColor = .clear
         }
         
+        #if !os(visionOS)
         // Update the status bar
         self.setNeedsStatusBarAppearanceUpdate()
+        #endif
     }
 }
 

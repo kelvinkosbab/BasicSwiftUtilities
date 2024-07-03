@@ -1,9 +1,10 @@
 //
-//  File.swift
-//  
+//  VerticalScrollOnDynamicTypeSize.swift
 //
 //  Created by Kelvin Kosbab on 11/18/23.
 //
+
+#if !os(watchOS)
 
 import SwiftUI
  
@@ -75,3 +76,5 @@ public extension View {
     }
     .verticalScroll(greaterThanEqualTo: .accessibility2)
 }
+
+#endif

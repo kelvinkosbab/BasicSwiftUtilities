@@ -16,7 +16,7 @@ protocol ToastStateDelegate : AnyObject {
 
 /// Responsible for managing any incoming `showToast` requests. Incoming toasts will be queued up
 /// until all toasts have been shown to the user.
-class ToastStateManager  {
+class ToastStateManager {
     
     weak var delegate: ToastStateDelegate?
     private let options: ToastOptions

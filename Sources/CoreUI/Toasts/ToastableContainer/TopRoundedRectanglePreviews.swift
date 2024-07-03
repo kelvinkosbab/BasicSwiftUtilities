@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(watchOS)
+
 import SwiftUI
 
 // MARK: - TopRoundedRectanglePreviews
@@ -115,3 +117,5 @@ import SwiftUI
     .toastableContainer(toastApi: topRoundedRectangleToastApi)
     .previewDisplayName("Top RoundedRectangle Toast Tests")
 }
+
+#endif

@@ -4,6 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+#if !os(watchOS)
+
 import SwiftUI
 
 // MARK: - BottomCapsulePreviews
@@ -115,3 +117,5 @@ import SwiftUI
     .toastableContainer(toastApi: bottomCapsuleToastApi)
     .previewDisplayName("Bottom Capsule Toast Tests")
 }
+
+#endif

@@ -7,7 +7,7 @@
 #if !os(watchOS)
 
 import SwiftUI
- 
+
 // MARK: - VerticalScrollOnDynamicTypeSize
 
 private struct VerticalScrollOnDynamicTypeSize: ViewModifier {

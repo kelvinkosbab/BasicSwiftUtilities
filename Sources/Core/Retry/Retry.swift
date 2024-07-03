@@ -27,12 +27,12 @@ public func retry(
     retryIf shouldRetry: @escaping (Error) -> Bool = { _ in true },
     block: @escaping RetryBlock
 ) -> RetryReturn {
-    
+
     let queue = DispatchQueue(label: "BasicSwiftUtilities.Core.retry")
     let group = DispatchGroup()
-    
+
     var attempts: UInt = 0
-    
+
     return {
         while true {
             var blockSuccess = false
@@ -45,15 +45,15 @@ public func retry(
                     return .failure(error: error)
                 }
             }
-            
+
             // Exit with success if block finished successfully.
             if blockSuccess {
                 return .success(attempts: attempts)
             }
-            
+
             // If failure, increment the retries attempts counter.
             attempts += 1
-            
+
             // Delay using the provided strategy (do not display on the last failure)
             if attempts < max {
                 let timer = DispatchWorkItem(block: group.leave)

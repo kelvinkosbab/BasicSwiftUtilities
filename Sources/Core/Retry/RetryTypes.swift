@@ -15,12 +15,12 @@ internal let NANOSECONDS_IN_SECOND: Double = 1_000_000_000
 
 /// Outcome of `retry`. It either succeeds or fails.
 public enum RetryResult {
-    
+
     /// The retry succeeded.
     ///
     /// - Parameter attempts: The number of attempts it took to succeed.
     case success(attempts: UInt)
-    
+
     /// The retry failed.
     ///
     /// - Parameter error: The error thrown by the retry attempt.
@@ -34,13 +34,13 @@ public typealias RetryReturn = () -> RetryResult
 
 /// Outcome of `asyncRetry`. It either succeeds or fails.
 public enum AsyncRetryResult<T> {
-    
+
     /// The retry succeeded.
     ///
     /// - Parameter attempts: The number of attempts it took to succeed.
     /// - Parameter value: The value of the successful operation.
     case success(attempts: UInt, value: T)
-    
+
     /// The retry failed.
     ///
     /// - Parameter error: The error thrown by the retry attempt.

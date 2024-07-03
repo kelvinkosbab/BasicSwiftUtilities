@@ -16,8 +16,8 @@ import UIKit
 
 // MARK: - HealthKitSupportedTests
 
-class HealthKitSupportedTests : XCTestCase {
-    
+class HealthKitSupportedTests: XCTestCase {
+
     /// HealthKit's static `isHealthDataAvailable()` method is meant to help developers determine if the platform supports
     /// querying health data. However, ther is not much information as to what platforms it supports and if that platform support
     /// changes. This test is meant to dtermine the current state of platform support for HealthKit as well as to track any future

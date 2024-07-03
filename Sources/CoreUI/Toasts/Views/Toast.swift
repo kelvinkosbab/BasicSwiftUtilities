@@ -11,13 +11,13 @@ import SwiftUI
 // MARK: - Toast
 
 /// Defines the content of a toast.
-struct Toast<Content, Leading, Trailing> : View where Content: View, Leading: View, Trailing: View {
-    
+struct Toast<Content, Leading, Trailing>: View where Content: View, Leading: View, Trailing: View {
+
     let shape: ToastOptions.Shape
     let content: () -> Content
     let leading: (() -> Leading)?
     let trailing: (() -> Trailing)?
-    
+
     /// Creates a toast view.
     ///
     /// - Parameter shape: Defines the shape of the toast.
@@ -35,7 +35,7 @@ struct Toast<Content, Leading, Trailing> : View where Content: View, Leading: Vi
         self.leading = leading
         self.trailing = trailing
     }
-    
+
     var body: some View {
         HStack {
             HStack {
@@ -48,11 +48,11 @@ struct Toast<Content, Leading, Trailing> : View where Content: View, Leading: Vi
                 }
                 Spacer()
             }
-            
+
             self.content()
                 .padding(.vertical, Spacing.tiny)
                 .padding(.horizontal, Spacing.small)
-            
+
             HStack {
                 Spacer()
                 if let trailing {
@@ -76,7 +76,7 @@ struct Toast<Content, Leading, Trailing> : View where Content: View, Leading: Vi
         )
         .toastBackground(shape: self.shape)
     }
-    
+
     private var renderClearRectangle: some View {
         Rectangle()
             .fill(.clear)
@@ -87,7 +87,7 @@ struct Toast<Content, Leading, Trailing> : View where Content: View, Leading: Vi
 // MARK: - Preview
 
 struct Toast_Previews: PreviewProvider {
-    
+
     static var mockContent: some View {
         Text("Hello there")
             .font(.footnote)
@@ -96,10 +96,10 @@ struct Toast_Previews: PreviewProvider {
             .multilineTextAlignment(.center)
             .foregroundColor(.primary)
     }
-    
+
     static var previews: some View {
         VStack(spacing: Spacing.base) {
-            
+
             Toast(shape: .capsule) {
                 self.mockContent
             } leading: {
@@ -111,7 +111,7 @@ struct Toast_Previews: PreviewProvider {
                     .symbolRenderingMode(.palette)
                     .foregroundStyle(.blue, .green, .red)
             }
-            
+
             Toast(shape: .capsule) {
                 VStack(spacing: Spacing.tiny) {
                     self.mockContent
@@ -132,9 +132,9 @@ struct Toast_Previews: PreviewProvider {
             }
         }
         .previewDisplayName("Capsule shaped toast")
-        
+
         VStack(spacing: Spacing.base) {
-            
+
             Toast(shape: .roundedRectangle) {
                 self.mockContent
             } leading: {
@@ -146,7 +146,7 @@ struct Toast_Previews: PreviewProvider {
                     .symbolRenderingMode(.palette)
                     .foregroundStyle(.blue, .green, .red)
             }
-            
+
             Toast(shape: .roundedRectangle) {
                 VStack(spacing: Spacing.tiny) {
                     self.mockContent

@@ -13,13 +13,13 @@ import HealthKit
 
 /// Defines a unit of rate.
 @available(macOS 13.0, *)
-public enum Rate : String, Unit {
-    
+public enum Rate: String, Unit {
+
     case countPerSecond = "count/second"
     case countPerMinute = "count/minute"
     case countPerHour = "count/hour"
     case countPerDay = "count/day"
-    
+
     var healthKitUnit: HKUnit {
         switch self {
         case .countPerSecond:
@@ -37,12 +37,12 @@ public enum Rate : String, Unit {
 // MARK: - RateBiometric
 
 @available(macOS 13.0, *)
-public struct RateBiometric : Biometric {
-    
+public struct RateBiometric: Biometric {
+
     public static let Units = Rate.self
-    
+
     public let healthKitIdentifier: HKQuantityTypeIdentifier
-    
+
     /// A quantity sample type that measures the user’s heart rate.
     ///
     /// These samples use count/time units (described in HKUnit) and measure discrete values (described in `HKStatisticsQuery`).
@@ -67,7 +67,7 @@ public struct RateBiometric : Biometric {
     /// have the motion context metadata key. Treat these samples as if they used the
     /// `HKHeartRateMotionContext.notSet` motion context.
     public static let heartRate = Self(healthKitIdentifier: .heartRate)
-    
+
     /// A quantity sample type that measures the user’s respiratory rate.
     ///
     /// These samples use count/time units (described in `HKUnit`) and measure discrete values (described in `HKStatisticsQuery`).
@@ -78,7 +78,7 @@ public struct RateBiometric : Biometric {
 
 @available(iOS 13.0, macOS 13.0, watchOS 8.0, *)
 public extension QueryExecutor {
-    
+
     func fetch(
         _ biometric: RateBiometric,
         in unit: RateBiometric.UnitofMeasurement,
@@ -96,7 +96,7 @@ public extension QueryExecutor {
 
 @available(macOS 13.0, *)
 public extension BackgroundDeliveryEnabler {
-    
+
     func enableBackgroundDelivery(
         for type: RateBiometric,
         frequency: HKUpdateFrequency
@@ -104,7 +104,7 @@ public extension BackgroundDeliveryEnabler {
         let biometric = try CodableHealthBiometric(identifier: type.healthKitIdentifier)
         try await self.enableBackgroundDelivery(for: biometric.sampleType, frequency: frequency)
     }
-    
+
     func disableBackgroundDelivery(
         for type: RateBiometric
     ) async throws {

@@ -11,14 +11,14 @@ import Foundation
 
 /// An enumeration of the erros that may be thrown by the `DiskBackedJSONCodableStore`.
 @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
-public enum DiskBackedJSONCodableStoreError : Error, CustomStringConvertible {
-    
+public enum DiskBackedJSONCodableStoreError: Error, CustomStringConvertible {
+
     case fileManagerError(cause: Error)
     case encodingFailure(cause: Error)
     case writeFailure(cause: Error)
     case readFailure(cause: Error)
     case decodingFailure(cause: Error)
-    
+
     public var description: String {
         switch self {
         case .fileManagerError(let cause):

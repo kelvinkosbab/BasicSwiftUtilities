@@ -14,26 +14,26 @@ import UIKit
 // MARK: - InteractiveTransition
 
 @available(macOS, unavailable)
-public class InteractiveTransition : UIPercentDrivenInteractiveTransition {
-    
+public class InteractiveTransition: UIPercentDrivenInteractiveTransition {
+
     // MARK: - Properties
-    
+
     private let interactiveViews: [UIView]
     private let axis: InteractiveTransition.Axis
     private let direction: InteractiveTransition.Direction
     public weak var delegate: InteractiveTransitionDelegate?
-    
+
     private let gestureType: InteractiveTransition.GestureType
     private let contentSize: CGSize?
     private let percentThreshold: CGFloat
     private let velocityThreshold: CGFloat
-    
+
     private(set) var hasStarted: Bool = false
     private var shouldFinish: Bool = false
     private var activeGestureRecognizers: [UIPanGestureRecognizer] = []
-    
+
     // MARK: - Init
-    
+
     public init(
         interactiveViews: [UIView],
         axis: InteractiveTransition.Axis,
@@ -42,19 +42,19 @@ public class InteractiveTransition : UIPercentDrivenInteractiveTransition {
         options: [InteractiveTransition.Option] = [],
         delegate: InteractiveTransitionDelegate? = nil
     ) {
-        
+
         self.interactiveViews = interactiveViews
         self.axis = axis
         self.direction = direction
         self.delegate = delegate
-        
+
         self.gestureType = options.gestureType
         self.contentSize = options.contentSize
         self.percentThreshold = options.percentThreshold
         self.velocityThreshold = options.velocityThreshold
-        
+
         super.init()
-        
+
         // Configure the dismiss interactive gesture recognizer
         for interactiveView in interactiveViews {
             let gestureRecognizer = self.gestureType.createGestureRecognizer(
@@ -69,19 +69,19 @@ public class InteractiveTransition : UIPercentDrivenInteractiveTransition {
             self.activeGestureRecognizers.append(gestureRecognizer)
         }
     }
-    
+
     // MARK: - Gestures
-    
+
     @objc private func handleGesture(_ sender: UIPanGestureRecognizer) {
-        
+
         guard let view = sender.view, self.interactiveViews.contains(view) else {
             return
         }
-        
+
         // Convert position to progress
         let translation = sender.translation(in: view)
         let progress = self.calculateProgress(translation: translation, in: view)
-        
+
         // Velocity calculations
         let velocity: CGFloat
         let velocityVector = sender.velocity(in: view)
@@ -93,11 +93,11 @@ public class InteractiveTransition : UIPercentDrivenInteractiveTransition {
         case .xy:
             velocity = CGFloat(sqrtf(powf(Float(velocityVector.x), 2) + powf(Float(velocityVector.y), 2)))
         }
-        
+
         // Handle the gesture state
         self.handleGestureState(gesture: sender, progress: progress, velocity: velocity)
     }
-    
+
     private func handleGestureState(gesture: UIPanGestureRecognizer, progress: CGFloat, velocity: CGFloat) {
         switch gesture.state {
         case .began:
@@ -116,9 +116,9 @@ public class InteractiveTransition : UIPercentDrivenInteractiveTransition {
         default: break
         }
     }
-    
+
     // MARK: - Calculations
-    
+
     private func calculateShouldFinish(progress: CGFloat, velocity: CGFloat) -> Bool {
         if progress > self.percentThreshold {
             return true
@@ -127,11 +127,11 @@ public class InteractiveTransition : UIPercentDrivenInteractiveTransition {
         }
         return false
     }
-    
+
     private func calculateProgress(translation: CGPoint, in view: UIView) -> CGFloat {
         let xMovement = (self.direction == .negative ? -translation.x : translation.x) / (self.contentSize?.width ?? view.bounds.width)
         let yMovement = (self.direction == .negative ? -translation.y : translation.y) / (self.contentSize?.height ?? view.bounds.height)
-        
+
         let movement: CGFloat
         switch self.axis {
         case .x:
@@ -141,15 +141,15 @@ public class InteractiveTransition : UIPercentDrivenInteractiveTransition {
         case .xy:
             movement = CGFloat(sqrt(pow(Double(xMovement), 2) + pow(Double(yMovement), 2)))
         }
-        
+
         return CGFloat(min(max(Double(movement), 0.0), 1.0))
     }
 }
 
 // MARK: - UIGestureRecognizerDelegate
 
-extension InteractiveTransition : UIGestureRecognizerDelegate {
-    
+extension InteractiveTransition: UIGestureRecognizerDelegate {
+
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         // gestureRecognizer is the activeGestureRecognizer associated with this interactive transition
         if gestureRecognizer.view == otherGestureRecognizer.view, let scrollView = gestureRecognizer.view as? UIScrollView {
@@ -168,33 +168,33 @@ extension InteractiveTransition : UIGestureRecognizerDelegate {
 }
 
 extension InteractiveTransition {
-    
+
     public enum Axis {
         case x
         case y
         case xy
     }
-    
+
     public enum Direction {
         case negative
         case positive
     }
-    
+
     public enum Option {
         case percent(CGFloat)
         case velocity(CGFloat)
         case contentSize(CGSize)
         case gestureType(InteractiveTransition.GestureType)
-        
+
         static let defaultPercentThreshold: CGFloat = 0.5
         static let defaultVelocityThreshold: CGFloat = 850
     }
-    
+
     public enum GestureType {
-        
+
         case pan
         case screenEdgePan
-        
+
         public func createGestureRecognizer(target: Any?, action: Selector?, axis: InteractiveTransition.Axis, direction: InteractiveTransition.Direction) -> UIPanGestureRecognizer {
             switch self {
             case .pan:
@@ -228,7 +228,7 @@ extension InteractiveTransition {
 // MARK: - Sequence
 
 public extension Sequence where Iterator.Element == InteractiveTransition.Option {
-    
+
     var percentThreshold: CGFloat {
         for option in self {
             switch option {
@@ -240,7 +240,7 @@ public extension Sequence where Iterator.Element == InteractiveTransition.Option
         }
         return 0.3
     }
-    
+
     var velocityThreshold: CGFloat {
         for option in self {
             switch option {
@@ -252,7 +252,7 @@ public extension Sequence where Iterator.Element == InteractiveTransition.Option
         }
         return 850
     }
-    
+
     var gestureType: InteractiveTransition.GestureType {
         for option in self {
             switch option {
@@ -264,7 +264,7 @@ public extension Sequence where Iterator.Element == InteractiveTransition.Option
         }
         return .pan
     }
-    
+
     var contentSize: CGSize? {
         for option in self {
             switch option {

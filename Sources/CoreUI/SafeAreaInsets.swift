@@ -14,7 +14,7 @@ import SwiftUI
 @available(macOS, unavailable)
 @available(iOS 13.0, tvOS 15.0, watchOS 6.0, *)
 public extension EnvironmentValues {
-    
+
     /// Provides the safe area insets of the application window.
     ///
     /// Usage:
@@ -37,7 +37,7 @@ public extension EnvironmentValues {
 @available(macOS, unavailable)
 @available(iOS 13.0, tvOS 15.0, watchOS 6.0, *)
 private struct SafeAreaInsetsKey: EnvironmentKey {
-    
+
     static var defaultValue: EdgeInsets {
         (UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.safeAreaInsets ?? .zero).insets
     }
@@ -46,7 +46,7 @@ private struct SafeAreaInsetsKey: EnvironmentKey {
 @available(macOS, unavailable)
 @available(iOS 13.0, tvOS 15.0, watchOS 6.0, *)
 private extension UIEdgeInsets {
-    
+
     var insets: EdgeInsets {
         EdgeInsets(
             top: top,

@@ -11,15 +11,15 @@ import Core
 
 /// A `CodableStore` that persists a `Codable` as a JSON file on disk.
 @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
-public class DiskBackedJSONCodableStore<T: Codable> : CodableStore {
-    
+public class DiskBackedJSONCodableStore<T: Codable>: CodableStore {
+
     public typealias PersistedType = T
-    
+
     private enum CachedValue<CodablePersistedType: Codable> {
         case uninitiated
         case initialized(value: [String: CodablePersistedType])
     }
-    
+
     private let label: String
     private let jsonDecoder: JSONDecoder
     private let jsonEncoder: JSONEncoder
@@ -28,11 +28,11 @@ public class DiskBackedJSONCodableStore<T: Codable> : CodableStore {
     private let bundleIdentifier: String
     private var cachedDisctionary: CachedValue<T> = .uninitiated
     private var backingFileURL: URL?
-    
+
     private var backingFileName: String {
         return "DiskBackedJSONCodableStore.\(self.label).json"
     }
-    
+
     /// Constructs a `DiskBackedJSONCodableStore`.
     ///
     /// - Parameter label: The name of the `DiskBackedJSONCodableStore`. This value is also used as part of the
@@ -58,7 +58,7 @@ public class DiskBackedJSONCodableStore<T: Codable> : CodableStore {
         self.workQueue = workQueue
         self.bundleIdentifier = bundleIdentifier
     }
-    
+
     /// Constructs a `DiskBackedJSONCodableStore`.
     ///
     /// - Parameter label: The name of the `DiskBackedJSONCodableStore`. This value is also used as part of the
@@ -85,9 +85,9 @@ public class DiskBackedJSONCodableStore<T: Codable> : CodableStore {
             bundleIdentifier: bundleIdentifier
         )
     }
-    
+
     // MARK: - CodableStore
-    
+
     public func set(
         value: T?,
         forKey key: String
@@ -95,28 +95,28 @@ public class DiskBackedJSONCodableStore<T: Codable> : CodableStore {
         try await withCheckedThrowingVoidContinuation { continuation in
             self.workQueue.async {
                 do {
-                    
+
                     // Get the current value of the cached `Dictionary`
                     var currentDictionary = try self.getCachedDictionary()
-                    
+
                     // The Swift Dictionary data structure is a struct, which is a value type.
                     // By assigning the cached Dictionary to a new member variable, we
                     // automatically get a (shallow) copy of the dictionary that we can freely
                     // mutate here.
                     currentDictionary[key] = value
-                    
+
                     // Persist the new Dictionary
                     try self.set(cachedDictionary: currentDictionary)
-                    
+
                     continuation.resume()
-                    
+
                 } catch {
                     continuation.resume(throwing: error)
                 }
             }
         }
     }
-    
+
     public func getValue(forKey key: String) async throws -> T? {
         try await withCheckedThrowingContinuation { continuation in
             self.workQueue.async {
@@ -129,7 +129,7 @@ public class DiskBackedJSONCodableStore<T: Codable> : CodableStore {
             }
         }
     }
-    
+
     public func getAllKeys() async throws -> [String] {
         try await withCheckedThrowingContinuation { continuation in
             self.workQueue.async {
@@ -142,11 +142,11 @@ public class DiskBackedJSONCodableStore<T: Codable> : CodableStore {
             }
         }
     }
-    
+
     public func removeValue(forKey key: String) async throws {
         try await self.set(value: nil, forKey: key)
     }
-    
+
     public func removeAllValues() async throws {
         try await withCheckedThrowingVoidContinuation { continuation in
             self.workQueue.async {
@@ -156,57 +156,57 @@ public class DiskBackedJSONCodableStore<T: Codable> : CodableStore {
                     // `internalRemoveAllValues` is called we directory remove the backing file
                     // from the file system.
                     let backingFileURL = try self.getBackingFileURL()
-                    
+
                     if self.fileSystem.fileExists(atURL: backingFileURL) {
                         try self.fileSystem.delete(at: backingFileURL)
                     }
-                    
+
                     // Persist the new empty vlue to the in-memory cache.
                     self.cachedDisctionary = .initialized(value: [:])
-                    
+
                     continuation.resume()
-                    
+
                 } catch {
                     continuation.resume(throwing: error)
                 }
             }
         }
     }
-    
+
     // MARK: - Helpers
-    
+
     private func set(cachedDictionary: [String: T]) throws {
-        
+
         // We always need to try to propagate the write to disk in this case.
         let backingFileURL = try self.getBackingFileURL()
-        
+
         let data: Data
         do {
             data = try self.jsonEncoder.encode(cachedDictionary)
         } catch {
             throw DiskBackedJSONCodableStoreError.writeFailure(cause: error)
         }
-        
+
         do {
             try self.fileSystem.write(data: data, to: backingFileURL, options: .atomic)
         } catch {
             throw DiskBackedJSONCodableStoreError.writeFailure(cause: error)
         }
-        
+
         // Persist the value to the in-memory cache after the disk cache is initialized.
         self.cachedDisctionary = .initialized(value: cachedDictionary)
     }
-    
+
     private func getCachedDictionary() throws -> [String: T] {
-        
+
         // If we already have a chached version in memory, use it.
         if case let .initialized(value) = self.cachedDisctionary {
             return value
         }
-        
+
         // Otherwise, we need to read the value from disk.
         let backingFileURL = try self.getBackingFileURL()
-        
+
         let data: Data
         if self.fileSystem.fileExists(atURL: backingFileURL) {
             do {
@@ -217,7 +217,7 @@ public class DiskBackedJSONCodableStore<T: Codable> : CodableStore {
         } else {
             data = Data()
         }
-        
+
         let dictionary: [String: T]
         if data.isEmpty {
             dictionary = [:]
@@ -228,20 +228,20 @@ public class DiskBackedJSONCodableStore<T: Codable> : CodableStore {
                 throw DiskBackedJSONCodableStoreError.decodingFailure(cause: error)
             }
         }
-        
+
         // Persist the value to the in-memory cache
         self.cachedDisctionary = .initialized(value: dictionary)
-        
+
         return dictionary
     }
-    
+
     private func getBackingFileURL() throws -> URL {
-        
+
         // Use the cached value if possible.
         if let backingFileURL {
             return backingFileURL
         }
-        
+
         // Otherwise, build the URL of the backing file based on the
         // Application Support directory for this app.
         let applicationSupportDirectoryURL: URL
@@ -255,7 +255,7 @@ public class DiskBackedJSONCodableStore<T: Codable> : CodableStore {
         } catch {
             throw DiskBackedJSONCodableStoreError.fileManagerError(cause: error)
         }
-        
+
         // Once we have the Application Support directory for this app, we need to ensure that
         // it exists. The FIleManger API is fairly unusual here -- if `withIntermediateDirectories`
         // is set to `true`, then the method will succeed even if the directory already exists.
@@ -269,7 +269,7 @@ public class DiskBackedJSONCodableStore<T: Codable> : CodableStore {
         } else {
             appBundleSupportDirectoryURL = applicationSupportDirectoryURL.appendingPathComponent(self.bundleIdentifier)
         }
-        
+
         do {
             try self.fileSystem.createDirectory(
                 at: appBundleSupportDirectoryURL,
@@ -279,7 +279,7 @@ public class DiskBackedJSONCodableStore<T: Codable> : CodableStore {
         } catch {
             throw DiskBackedJSONCodableStoreError.fileManagerError(cause: error)
         }
-        
+
         let backingFileURL: URL
         if #available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, *) {
             backingFileURL = appBundleSupportDirectoryURL.appending(path: self.backingFileName)
@@ -287,7 +287,7 @@ public class DiskBackedJSONCodableStore<T: Codable> : CodableStore {
             backingFileURL = applicationSupportDirectoryURL.appendingPathComponent(self.backingFileName)
         }
         self.backingFileURL = backingFileURL
-        
+
         return backingFileURL
     }
 }

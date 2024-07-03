@@ -21,11 +21,11 @@ import HealthKit
 /// cross-country skiers, can achieve V̇O2 max values exceeding 90 mL/(kg·min), while some endurance animals, such as Alaskan
 /// huskies, have V̇O2 max values exceeding 200 mL/(kg·min).
 @available(macOS 13.0, *)
-public enum CardioFitness : String, Unit {
-    
+public enum CardioFitness: String, Unit {
+
     /// Standard unit for `vo2max` (`mL/kg·min`).
     case mLkgPerMin = "mL/min·kg"
-    
+
     var healthKitUnit: HKUnit {
         switch self {
         case .mLkgPerMin:
@@ -40,12 +40,12 @@ public enum CardioFitness : String, Unit {
 // MARK: - CardioFitnessBiometric
 
 @available(macOS 13.0, *)
-public struct CardioFitnessBiometric : Biometric {
-    
+public struct CardioFitnessBiometric: Biometric {
+
     public static let Units = CardioFitness.self
-    
+
     public let healthKitIdentifier: HKQuantityTypeIdentifier
-    
+
     /// A quantity sample that measures the maximal oxygen consumption during exercise.
     ///
     /// VO2max—the maximum amount of oxygen your body can consume during exercise— is a strong predictor of overall
@@ -71,7 +71,7 @@ public struct CardioFitnessBiometric : Biometric {
 
 @available(iOS 13.0, macOS 13.0, watchOS 8.0, *)
 public extension QueryExecutor {
-    
+
     func fetch(
         _ biometric: CardioFitnessBiometric,
         in unit: CardioFitnessBiometric.UnitofMeasurement,
@@ -85,12 +85,11 @@ public extension QueryExecutor {
     }
 }
 
-
 // MARK: - BackgroundDelivery + CardioFitness
 
 @available(macOS 13.0, *)
 public extension BackgroundDeliveryEnabler {
-    
+
     func enableBackgroundDelivery(
         for type: CardioFitnessBiometric,
         frequency: HKUpdateFrequency
@@ -98,7 +97,7 @@ public extension BackgroundDeliveryEnabler {
         let biometric = try CodableHealthBiometric(identifier: type.healthKitIdentifier)
         try await self.enableBackgroundDelivery(for: biometric.sampleType, frequency: frequency)
     }
-    
+
     func disableBackgroundDelivery(
         for type: CardioFitnessBiometric
     ) async throws {

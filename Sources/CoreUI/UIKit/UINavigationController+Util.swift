@@ -11,7 +11,7 @@
 import UIKit
 
 public extension UINavigationController {
-    
+
     /// Push a view controller on top of the current `UINavigationController`.
     ///
     /// - Parameter viewController: View controller to push on the navigation stack.
@@ -23,15 +23,15 @@ public extension UINavigationController {
         completion: (() -> Void)? = nil
     ) {
         self.pushViewController(viewController, animated: animated)
-        
+
         guard animated, let coordinator = self.transitionCoordinator else {
             completion?()
             return
         }
-        
+
         coordinator.animate(alongsideTransition: nil) { _ in completion?() }
     }
-    
+
     /// Asyncronously push a view controller on top of the current `UINavigationController`.
     ///
     /// - Parameter viewController: View controller to push on the navigation stack.
@@ -50,7 +50,7 @@ public extension UINavigationController {
             }
         }
     }
-    
+
     /// Pops the navigation stack to the root view controller.
     ///
     /// - Parameter animated: Determines if the pop action should be animated. Default is `true`.
@@ -60,15 +60,15 @@ public extension UINavigationController {
         completion: (() -> Void)? = nil
     ) {
         self.popToRootViewController(animated: animated)
-        
+
         guard animated, let coordinator = self.transitionCoordinator else {
             completion?()
             return
         }
-        
+
         coordinator.animate(alongsideTransition: nil) { _ in completion?() }
     }
-    
+
     /// Asyncronously pops the navigation stack to the root view controller.
     ///
     /// - Parameter animated: Determines if the pop action should be animated. Default is `true`.
@@ -80,7 +80,7 @@ public extension UINavigationController {
             }
         }
     }
-    
+
     /// Pops the navigation stack to the root view controller.
     ///
     /// - Parameter viewController: View controller to pop to in the navigation stack.
@@ -91,7 +91,7 @@ public extension UINavigationController {
         animated: Bool = true,
         completion: (() -> Void)? = nil
     ) {}
-    
+
     /// Asyncronously pops the navigation stack to the root view controller.
     ///
     /// - Parameter viewController: View controller to pop to in the navigation stack.

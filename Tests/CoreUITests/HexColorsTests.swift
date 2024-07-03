@@ -26,7 +26,7 @@ final class HexColorsTests: XCTestCase {
             )
         }
     }
-    
+
     func testValidHexStrings() {
         let hex = "D3004C"
         let validHexStrings = [
@@ -46,7 +46,7 @@ final class HexColorsTests: XCTestCase {
             )
         }
     }
-    
+
     func testInvalidHexStrings() {
         let validHexStrings = [
             "1234567", // Too many valid characters

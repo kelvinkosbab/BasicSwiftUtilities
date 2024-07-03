@@ -10,13 +10,13 @@ import SwiftUI
 
 // MARK: - ToastApi
 
-public class ToastApi : ObservableObject, ToastStateDelegate {
-    
+public class ToastApi: ObservableObject, ToastStateDelegate {
+
     @Published var currentToastState: ToastState = .none
-    
+
     let options: ToastOptions
     private let toastStateManager: ToastStateManager
-    
+
     /// Constructs ``ToastApi``.
     ///
     /// - Parameter options: Options to apply when showing a toast.
@@ -25,15 +25,15 @@ public class ToastApi : ObservableObject, ToastStateDelegate {
         self.toastStateManager = ToastStateManager(options: options)
         self.toastStateManager.delegate = self
     }
-    
+
     // MARK: - ToastStateDelegate
-    
+
     func didUpdate(toastState: ToastState) {
         self.currentToastState = toastState
     }
-    
+
     // MARK: - Showing Simple Toasts
-    
+
     /// Shows a toast with a title.
     ///
     /// - Parameter title: Primary title message.
@@ -44,7 +44,7 @@ public class ToastApi : ObservableObject, ToastStateDelegate {
         )
         self.toastStateManager.show(toast: AnyView(toast))
     }
-    
+
     /// Shows a toast with a title and a description below the title.
     ///
     /// - Parameter title: Primary title message.
@@ -60,9 +60,9 @@ public class ToastApi : ObservableObject, ToastStateDelegate {
         )
         self.toastStateManager.show(toast: AnyView(toast))
     }
-    
+
     // MARK: - Showing Toasts with Custom Content
-    
+
     /// Shows a toast with the provided content.
     ///
     /// - Parameter content: Views that are rendered at the center of the toast.
@@ -81,7 +81,7 @@ public class ToastApi : ObservableObject, ToastStateDelegate {
         )
         self.toastStateManager.show(toast: AnyView(toast))
     }
-    
+
     /// Shows a toast with the provided content.
     ///
     /// - Parameter content: Views that are rendered at the center of the toast.
@@ -97,7 +97,7 @@ public class ToastApi : ObservableObject, ToastStateDelegate {
         )
         self.toastStateManager.show(toast: AnyView(toast))
     }
-    
+
     /// Shows a toast with the provided content.
     ///
     /// - Parameter content: Views that are rendered at the center of the toast.
@@ -113,7 +113,7 @@ public class ToastApi : ObservableObject, ToastStateDelegate {
         )
         self.toastStateManager.show(toast: AnyView(toast))
     }
-    
+
     /// Shows a toast with the provided content.
     ///
     /// - Parameter content: Views that are rendered at the center of the toast.
@@ -124,7 +124,7 @@ public class ToastApi : ObservableObject, ToastStateDelegate {
         )
         self.toastStateManager.show(toast: AnyView(toast))
     }
-    
+
     /// Shows a toast.
     ///
     /// - Parameter title: Primary title message.
@@ -144,7 +144,7 @@ public class ToastApi : ObservableObject, ToastStateDelegate {
         )
         self.toastStateManager.show(toast: AnyView(toast))
     }
-    
+
 //    /// Shows a toast.
 //    ///
 //    /// - Parameter title: Primary title message.

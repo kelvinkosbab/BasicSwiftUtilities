@@ -13,14 +13,14 @@ import HealthKit
 
 /// Defines a unit of mass.
 @available(macOS 13.0, *)
-public enum Mass : String, Unit {
-    
+public enum Mass: String, Unit {
+
     /// Grams is the SI unit of mass.
     case grams = "g"
     case ounces = "oz"
     case pounds = "lb"
     case stones = "st"
-    
+
     var healthKitUnit: HKUnit {
         switch self {
         case .grams:

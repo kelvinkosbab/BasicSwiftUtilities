@@ -13,13 +13,13 @@ import HealthKit
 
 /// Deinfes a unit of temperature.
 @available(macOS 13.0, *)
-public enum Temperature : String, Unit {
-    
+public enum Temperature: String, Unit {
+
     // Kelvin is the SI unit of temperature.
     case kelvin = "K"
     case celsius = "degC"
     case fahrenheit = "degF"
-    
+
     var healthKitUnit: HKUnit {
         switch self {
         case .kelvin:
@@ -35,17 +35,17 @@ public enum Temperature : String, Unit {
 // MARK: - TemperatureBiometric
 
 @available(macOS 13.0, watchOS 9.0, *)
-public struct TemperatureBiometric : Biometric {
-    
+public struct TemperatureBiometric: Biometric {
+
     public static let Units = Temperature.self
-    
+
     public let healthKitIdentifier: HKQuantityTypeIdentifier
-    
+
     /// A quantity sample type that measures the user’s body temperature.
     ///
     /// These samples use temperature units (described in `HKUnit`) and measure discrete values (described in `HKStatisticsQuery`).
     public static let bodyTemperature = Self(healthKitIdentifier: .bodyTemperature)
-    
+
     /// A quantity sample type that measures the user’s sleeping wrist temperature temperature.
     @available(iOS 16.0, *)
     public static let appleSleepingWristTemperature = Self(healthKitIdentifier: .appleSleepingWristTemperature)
@@ -55,7 +55,7 @@ public struct TemperatureBiometric : Biometric {
 
 @available(iOS 13.0, macOS 13.0, watchOS 9.0, *)
 public extension QueryExecutor {
-    
+
     func fetch(
         _ biometric: TemperatureBiometric,
         in unit: TemperatureBiometric.UnitofMeasurement,
@@ -73,7 +73,7 @@ public extension QueryExecutor {
 
 @available(macOS 13.0, watchOS 9.0, *)
 public extension BackgroundDeliveryEnabler {
-    
+
     func enableBackgroundDelivery(
         for type: TemperatureBiometric,
         frequency: HKUpdateFrequency
@@ -81,7 +81,7 @@ public extension BackgroundDeliveryEnabler {
         let biometric = try CodableHealthBiometric(identifier: type.healthKitIdentifier)
         try await self.enableBackgroundDelivery(for: biometric.sampleType, frequency: frequency)
     }
-    
+
     func disableBackgroundDelivery(
         for type: TemperatureBiometric
     ) async throws {

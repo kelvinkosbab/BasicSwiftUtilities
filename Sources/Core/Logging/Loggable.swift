@@ -10,9 +10,9 @@ import Foundation
 
 /// Defines a protocol for an object that logs messages.
 public protocol Loggable {
-    
+
     // MARK: - Debug
-    
+
     /// Logs a message at the `debug` level.
     ///
     /// Examples
@@ -24,7 +24,7 @@ public protocol Loggable {
     ///
     /// - Parameter message: A string to log.
     func debug(_ message: String)
-    
+
     /// Logs a message at the `debug` level along with a private message.
     ///
     /// Examples
@@ -42,9 +42,9 @@ public protocol Loggable {
     /// - Parameter message: A string to log.
     /// - Parameter censored: A string that will be hidden in production builds.
     func debug(_ message: String, censored censoredMessage: String)
-    
+
     // MARK: - Info
-    
+
     /// Logs a message at the `info` level.
     ///
     /// Examples
@@ -56,7 +56,7 @@ public protocol Loggable {
     ///
     /// - Parameter message: A string to log.
     func info(_ message: String)
-    
+
     /// Logs a message at the `info` level along with a private message.
     ///
     /// Examples
@@ -76,7 +76,7 @@ public protocol Loggable {
     func info(_ message: String, censored censoredMessage: String)
 
     // MARK: - Error
-    
+
     /// Logs a message at the `error` level.
     ///
     /// Examples
@@ -88,7 +88,7 @@ public protocol Loggable {
     ///
     /// - Parameter message: A string to log.
     func error(_ message: String)
-    
+
     /// Logs a message at the `error` level along with a private message.
     ///
     /// Examples
@@ -108,7 +108,7 @@ public protocol Loggable {
     func error(_ message: String, censored censoredMessage: String)
 
     // MARK: - Fault
-    
+
     /// Logs a message at the `critical` level.
     ///
     /// Examples
@@ -120,7 +120,7 @@ public protocol Loggable {
     ///
     /// - Parameter message: A string to log.
     func fault(_ message: String)
-    
+
     /// Logs a message at the `critical` level along with a private message.
     ///
     /// Examples

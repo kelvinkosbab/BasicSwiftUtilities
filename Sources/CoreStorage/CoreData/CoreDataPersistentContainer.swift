@@ -9,7 +9,7 @@ import CoreData
 // MARK: - CoreDataPersistentContainer
 
 public protocol CoreDataPersistentContainer: AnyObject {
-    
+
     /// The main queue’s managed object context.
     ///
     /// This property contains a reference to the `NSManagedObjectContext` that is created and owned
@@ -18,7 +18,7 @@ public protocol CoreDataPersistentContainer: AnyObject {
     ///
     /// This context is associated directly with the `NSPersistentStoreCoordinator` and is non-generational by default.
     var viewContext: NSManagedObjectContext { get }
-    
+
     /// The descriptions of the container’s persistent stores.
     ///
     /// If you want to override the type (or types) of persistent store(s) used by the persistent container, you can set this
@@ -27,7 +27,7 @@ public protocol CoreDataPersistentContainer: AnyObject {
     /// If you will be configuring custom persistent store descriptions, you must set this property before calling
     /// `loadPersistentStores(completionHandler:)`.
     var persistentStoreDescriptions: [NSPersistentStoreDescription] { get set }
-    
+
     /// Loads the persistent container for the application.
     ///
     /// This implementation creates and returns a container, having loaded the store for the

@@ -13,7 +13,7 @@ import UIKit
 
 // MARK: - InteractiveTransitionDelegate
 
-public protocol InteractiveTransitionDelegate : AnyObject {
+public protocol InteractiveTransitionDelegate: AnyObject {
     func interactionDidSurpassThreshold(_ interactiveTransition: InteractiveTransition)
 }
 

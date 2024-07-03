@@ -14,7 +14,7 @@ import Core
 
 @available(macOS 13.0, *)
 public protocol BackgroundDeliveryEnabler {
-    
+
     /// Enable the delivery of updates to an app running in the background.
     ///
     /// For more info see [Apple's documentation](https://developer.apple.com/documentation/healthkit/hkhealthstore/1614175-enablebackgrounddelivery).
@@ -38,7 +38,7 @@ public protocol BackgroundDeliveryEnabler {
         for type: HKObjectType,
         frequency: HKUpdateFrequency
     ) async throws
-    
+
     /// Disables background deliveries of update notifications for the specified data type.
     ///
     /// For more info see [Apple's documentation](https://developer.apple.com/documentation/healthkit/hkhealthstore/1614177-disablebackgrounddelivery).
@@ -51,7 +51,7 @@ public protocol BackgroundDeliveryEnabler {
     func disableBackgroundDelivery(
         for type: HKObjectType
     ) async throws
-    
+
     /// Disables all background deliveries of update notifications.
     ///
     /// For more info see [Apple's documentation](https://developer.apple.com/documentation/healthkit/hkhealthstore/1614158-disableallbackgrounddelivery).
@@ -63,8 +63,8 @@ public protocol BackgroundDeliveryEnabler {
 // MARK: - BackgroundDeliveryError
 
 /// Defines errors thrown by HealthKit enable background delivery.
-public enum BackgroundDeliveryError : Error {
-    
+public enum BackgroundDeliveryError: Error {
+
     /// Thrown when `enableBackgroundDelivery` fails for unknown reasons.
     case unknownError
 }
@@ -72,8 +72,8 @@ public enum BackgroundDeliveryError : Error {
 // MARK: - HKHealthStore & BackgroundDelivery
 
 @available(iOS 13.0, macOS 13.0, watchOS 8.0, *)
-extension HKHealthStore : BackgroundDeliveryEnabler {
-    
+extension HKHealthStore: BackgroundDeliveryEnabler {
+
     public func enableBackgroundDelivery(
         for type: HKObjectType,
         frequency: HKUpdateFrequency
@@ -83,12 +83,12 @@ extension HKHealthStore : BackgroundDeliveryEnabler {
                 for: type,
                 frequency: frequency
             ) { success, error in
-                
+
                 if success {
                     continuation.resume()
                     return
                 }
-                
+
                 if let error = error {
                     continuation.resume(throwing: error)
                 } else {
@@ -97,18 +97,18 @@ extension HKHealthStore : BackgroundDeliveryEnabler {
             }
         }
     }
-    
+
     public func disableBackgroundDelivery(
         for type: HKObjectType
     ) async throws {
         try await withCheckedThrowingVoidContinuation { continuation in
             self.disableBackgroundDelivery(for: type) { success, error in
-                
+
                 if success {
                     continuation.resume()
                     return
                 }
-                
+
                 if let error = error {
                     continuation.resume(throwing: error)
                 } else {
@@ -125,13 +125,13 @@ extension HKHealthStore : BackgroundDeliveryEnabler {
     /// - Throws if there was an error disabling background delivery.
     public func disableAllBackgroundDelivery() async throws {
         try await withCheckedThrowingVoidContinuation { continuation in
-            self.disableAllBackgroundDelivery() { success, error in
-                
+            self.disableAllBackgroundDelivery { success, error in
+
                 if success {
                     continuation.resume()
                     return
                 }
-                
+
                 if let error = error {
                     continuation.resume(throwing: error)
                 } else {

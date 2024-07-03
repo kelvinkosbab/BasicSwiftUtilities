@@ -13,12 +13,12 @@ import HealthKit
 
 /// Deinfes a unit of speed.
 @available(macOS 13.0, *)
-public enum Speed : String, Unit {
-    
+public enum Speed: String, Unit {
+
     case metersPerSecond = "m/s"
     case kilometersPerHour = "km/h"
     case milesPerHour = "m/h"
-    
+
     var healthKitUnit: HKUnit {
         switch self {
         case .metersPerSecond:

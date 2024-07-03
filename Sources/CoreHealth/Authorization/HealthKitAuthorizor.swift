@@ -13,8 +13,8 @@ import Core
 // MARK: - HealthKitAuthorizor
 
 @available(macOS 13.0, watchOS 5.0, *)
-public protocol HealthKitAuthorizor : HealthKitSupported {
-    
+public protocol HealthKitAuthorizor: HealthKitSupported {
+
     /// Determines whether requesting authorization for the given types is necessary.
     ///
     /// Applications may call this method to determine whether the user would be prompted for authorization if
@@ -26,7 +26,7 @@ public protocol HealthKitAuthorizor : HealthKitSupported {
         read typesToRead: Set<HKObjectType>,
         completion: @escaping (HKAuthorizationRequestStatus, Error?) -> Void
     )
-    
+
     /// Prompts the user to authorize the application for reading and saving objects of the given types.
     ///
     /// Before attempting to execute queries or save objects, the application should first request authorization
@@ -78,6 +78,6 @@ public protocol HealthKitAuthorizor : HealthKitSupported {
 // MARK: - HKHealthStore
 
 @available(macOS 13.0, *)
-extension HKHealthStore : HealthKitAuthorizor {}
+extension HKHealthStore: HealthKitAuthorizor {}
 
 #endif

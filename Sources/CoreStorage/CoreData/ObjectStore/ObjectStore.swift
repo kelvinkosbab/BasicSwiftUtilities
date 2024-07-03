@@ -25,7 +25,7 @@ public protocol ObjectStore where Object.PersistentObject.Object == Object {
 internal extension ObjectStore {
 
     // MARK: - Save
-    
+
     var context: NSManagedObjectContext {
         self.container.coreDataContainer.viewContext
     }

@@ -10,7 +10,7 @@
 import UIKit
 
 public extension UIApplication {
-    
+
     /// The release or version number of the bundle.
     ///
     /// This key is a user-visible string for the version of the bundle. The required format is three period-separated integers, such as 10.14.1. The string can only contain numeric characters (0-9) and periods.
@@ -24,7 +24,7 @@ public extension UIApplication {
     var shortVersionString: String? {
         return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     }
-    
+
     /// The build version that identifies an iteration of the bundle.
     ///
     /// This key is a machine-readable string composed of one to three period-separated integers, such as 10.14.1. The string can only contain numeric characters (0-9) and periods.

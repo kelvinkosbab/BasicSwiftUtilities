@@ -16,7 +16,7 @@ import UIKit
 
 @available(iOS 13.0, macOS 12, tvOS 13.0, watchOS 6.0, *)
 struct Color_Previews: PreviewProvider {
- 
+
     /// In order to preview UIKit views in a `PreviewProvider` we must use
     /// `UIViewRepresentable`. This protocol can map a UIKit object into a SwiftUI View.
     #if !os(macOS)
@@ -41,7 +41,7 @@ struct Color_Previews: PreviewProvider {
         }
     }
     #endif
-    
+
     static var mockHexColors: [Int] = [
         0x8250C4,
         0x5ECBC8,
@@ -123,7 +123,7 @@ struct Color_Previews: PreviewProvider {
         0xCCAA14,
         0xD82C20
     ]
- 
+
     static var previews: some View {
         List {
             ForEach(self.mockHexColors, id: \.self) { hex in
@@ -140,7 +140,7 @@ struct Color_Previews: PreviewProvider {
             }
         }
         .previewDisplayName("SwiftUI and Color")
- 
+
         #if !os(macOS)
         List {
             ForEach(self.mockHexColors, id: \.self) { hex in
@@ -155,7 +155,7 @@ struct Color_Previews: PreviewProvider {
         #endif
     }
 }
- 
+
 #endif
 #endif
 #endif

@@ -13,7 +13,7 @@ import Core
 
 @available(iOS 13.0, macOS 13.0, watchOS 6.0, *)
 public extension HealthKitAuthorizor {
-    
+
     /// Determines whether requesting authorization for the given types is necessary.
     ///
     /// Applications may call this method to determine whether the user would be prompted for authorization if
@@ -25,12 +25,12 @@ public extension HealthKitAuthorizor {
         read typesToRead: Set<HKObjectType>
     ) async throws -> HKAuthorizationRequestStatus {
         try await withCheckedThrowingContinuation { continuation in
-            
+
             guard self.isHealthDataAvailable else {
                 continuation.resume(throwing: HealthKitAuthorizorError.healthDataNotAvailable)
                 return
             }
-            
+
             self.getRequestStatusForAuthorization(
                 toShare: typesToShare,
                 read: typesToRead
@@ -43,7 +43,7 @@ public extension HealthKitAuthorizor {
             }
         }
     }
-    
+
     /// Prompts the user to authorize the application for reading and saving objects of the given types.
     ///
     /// Before attempting to execute queries or save objects, the application should first request authorization
@@ -73,12 +73,12 @@ public extension HealthKitAuthorizor {
         read typesToRead: Set<HKObjectType>
     ) async throws {
         try await withCheckedThrowingVoidContinuation { continuation in
-            
+
             guard self.isHealthDataAvailable else {
                 continuation.resume(throwing: HealthKitAuthorizorError.healthDataNotAvailable)
                 return
             }
-            
+
             self.requestAuthorization(toShare: typesToShare, read: typesToRead) { success, error in
                 if let error = error {
                     continuation.resume(throwing: error)

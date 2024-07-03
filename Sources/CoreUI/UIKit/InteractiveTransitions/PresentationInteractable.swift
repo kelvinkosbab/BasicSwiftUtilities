@@ -11,13 +11,13 @@ import UIKit
 
 // MARK: - PresentationInteractable
 
-public protocol PresentationInteractable : AnyObject {
+public protocol PresentationInteractable: AnyObject {
     var presentationInteractiveViews: [UIView] { get }
 }
 
 // MARK: - DismissInteractable
 
-public protocol DismissInteractable : AnyObject {
+public protocol DismissInteractable: AnyObject {
     var dismissInteractiveViews: [UIView] { get }
 }
 

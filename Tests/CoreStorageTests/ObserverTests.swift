@@ -14,22 +14,22 @@ import CoreData
 // MARK: - Mocks
 
 private struct MockObjectStore: ObjectStore {
-    
+
     typealias Object = KeyValue
-    
+
     let container: PersistentDataContainer
-    
+
     init() {
         self.container = KeyValueDataContainer.shared
     }
 }
 
 private class MockObserver: DataObserverDelegate {
-    
+
     let key: String
-    
+
     private(set) var value: String?
-    
+
     private let observer: DataObserver<MockObserver>
 
     public init(
@@ -60,16 +60,16 @@ private class MockObserver: DataObserverDelegate {
 // MARK: - ObserverTests
 
 final class ObserverTests: XCTestCase {
-    
+
     override func setUp() async throws {
         try? await KeyValueDataContainer.shared.load()
     }
-    
+
     override func tearDown() async throws {
         let store = MockObjectStore()
         try await store.deleteAll()
     }
-    
+
     func testIniitailValue() throws {
         let mockIdentifier = "mockIdentifier"
         let store = MockObjectStore()
@@ -78,7 +78,7 @@ final class ObserverTests: XCTestCase {
             observer.value,
             nil
         )
-        
+
         // Test updating the value for the key
         let mockValue = "mockValue"
         try store.createOrUpdate(KeyValue(
@@ -89,14 +89,14 @@ final class ObserverTests: XCTestCase {
             observer.value,
             mockValue
         )
-        
+
         // Test with another observer
         let anotherObserver = MockObserver(key: mockIdentifier)
         XCTAssertEqual(
             anotherObserver.value,
             mockValue
         )
-        
+
         // Test udpating the value
         let anotherMockValue = "anotherMockValue"
         try store.createOrUpdate(KeyValue(
@@ -107,7 +107,7 @@ final class ObserverTests: XCTestCase {
             observer.value,
             anotherMockValue
         )
-        
+
         // Test delete
         try store.deleteOne(id: mockIdentifier)
         XCTAssertEqual(

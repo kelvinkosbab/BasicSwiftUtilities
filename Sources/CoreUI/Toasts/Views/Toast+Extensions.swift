@@ -11,9 +11,9 @@ import SwiftUI
 // MARK: - Toast
 
 extension Toast {
-    
+
     // MARK: - Generic Extensions
-    
+
     /// Creates a toast view.
     ///
     /// - Parameter shape: Defines the shape of the toast.
@@ -29,7 +29,7 @@ extension Toast {
         self.leading = nil
         self.trailing = trailing
     }
-    
+
     /// Creates a toast view.
     ///
     /// - Parameter shape: Defines the shape of the toast.
@@ -45,7 +45,7 @@ extension Toast {
         self.leading = leading
         self.trailing = nil
     }
-    
+
     /// Creates a toast view.
     ///
     /// - Parameter shape: Defines the shape of the toast.
@@ -59,9 +59,9 @@ extension Toast {
         self.leading = nil
         self.trailing = nil
     }
-    
+
     // MARK: - Simple Type Extensions
-    
+
     /// Creates a toast view with a simple title.
     ///
     /// - Parameter shape: Defines the shape of the toast.
@@ -78,9 +78,9 @@ extension Toast {
             )
         }
         self.leading = nil
-        self.trailing = nil 
+        self.trailing = nil
     }
-    
+
     /// Creates a toast view with a simple title.
     ///
     /// - Parameter shape: Defines the shape of the toast.
@@ -112,20 +112,20 @@ extension Toast {
 // MARK: - Preview
 
 struct ToastExtensions_Previews: PreviewProvider {
-    
+
     static var mockContent: some View {
         Text("Hello there")
             .font(.body)
             .foregroundColor(.primary)
     }
-    
+
     static var previews: some View {
         VStack(spacing: Spacing.base) {
-            
+
             Toast(shape: .capsule) {
                 self.mockContent
             }
-            
+
             Toast(shape: .capsule) {
                 HStack {
                     Circle()
@@ -136,7 +136,7 @@ struct ToastExtensions_Previews: PreviewProvider {
                         .padding()
                 }
             }
-            
+
             Toast(shape: .capsule) {
                 self.mockContent
             } leading: {
@@ -145,7 +145,7 @@ struct ToastExtensions_Previews: PreviewProvider {
                     .frame(width: 24, height: 24)
                     .foregroundColor(.blue)
             }
-            
+
             Toast(shape: .capsule) {
                 self.mockContent
             } trailing: {
@@ -157,9 +157,9 @@ struct ToastExtensions_Previews: PreviewProvider {
                         .linearGradient(colors: [.blue, .clear], startPoint: .top, endPoint: .bottomTrailing)
                     )
             }
-            
+
             Toast(shape: .capsule, title: "Simple title only")
-            
+
             Toast(
                 shape: .capsule,
                 title: "Simple title",
@@ -167,13 +167,13 @@ struct ToastExtensions_Previews: PreviewProvider {
             )
         }
         .previewDisplayName("Capsule Extensions")
-        
+
         VStack(spacing: Spacing.base) {
-            
+
             Toast(shape: .roundedRectangle) {
                 self.mockContent
             }
-            
+
             Toast(shape: .roundedRectangle) {
                 HStack {
                     Circle()
@@ -184,7 +184,7 @@ struct ToastExtensions_Previews: PreviewProvider {
                         .padding()
                 }
             }
-            
+
             Toast(shape: .roundedRectangle) {
                 self.mockContent
             } leading: {
@@ -193,7 +193,7 @@ struct ToastExtensions_Previews: PreviewProvider {
                     .frame(width: 24, height: 24)
                     .foregroundColor(.blue)
             }
-            
+
             Toast(shape: .roundedRectangle) {
                 self.mockContent
             } trailing: {
@@ -205,9 +205,9 @@ struct ToastExtensions_Previews: PreviewProvider {
                         .linearGradient(colors: [.blue, .clear], startPoint: .top, endPoint: .bottomTrailing)
                     )
             }
-            
+
             Toast(shape: .roundedRectangle, title: "Simple title only")
-            
+
             Toast(
                 shape: .roundedRectangle,
                 title: "Simple title",

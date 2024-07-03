@@ -10,41 +10,41 @@ import XCTest
 // MARK: - Mocks
 
 /// A logger that conforms to `CoreLogger` but does not override the private message APIs.
-private class MockDefaultCoreLogger : Loggable {
-    
+private class MockDefaultCoreLogger: Loggable {
+
     var debugLogs: [String] = []
     var infoLogs: [String] = []
     var errorLogs: [String] = []
     var faultLogs: [String] = []
-    
+
     func debug(_ message: String) {
         self.debugLogs.append(message)
     }
-    
+
     func debug(_ message: String, censored censoredMessage: String) {
         self.debugLogs.append("\(message):\(censoredMessage)")
     }
-    
+
     func info(_ message: String) {
         self.infoLogs.append(message)
     }
-    
+
     func info(_ message: String, censored censoredMessage: String) {
         self.infoLogs.append("\(message):\(censoredMessage)")
     }
-    
+
     func error(_ message: String) {
         self.errorLogs.append(message)
     }
-    
+
     func error(_ message: String, censored censoredMessage: String) {
         self.errorLogs.append("\(message):\(censoredMessage)")
     }
-    
+
     func fault(_ message: String) {
         self.faultLogs.append(message)
     }
-    
+
     func fault(_ message: String, censored censoredMessage: String) {
         self.faultLogs.append("\(message):\(censoredMessage)")
     }
@@ -53,12 +53,12 @@ private class MockDefaultCoreLogger : Loggable {
 // MARK: - Tests
 
 final class LoggerTests: XCTestCase {
-    
+
     let mockSubsystem = "mockSubsystem"
     let mockCategory = "mockCategory"
-    
+
     // MARK: - Debug Log Tests
-    
+
     /// Default logger should log a `debug` message correctly.
     ///
     /// - Expect a logged string to be logged at the `debug` level and log to equal the input.
@@ -92,7 +92,7 @@ final class LoggerTests: XCTestCase {
             0
         )
     }
-    
+
     /// Default logger should log a `debug` message with a private message correctly.
     ///
     /// - Expect a logged string to be logged at the `debug` level and log to equal the input.
@@ -107,7 +107,7 @@ final class LoggerTests: XCTestCase {
         let somePrivateString = UUID().uuidString
         logger.debug(someString, censored: somePrivateString)
         XCTAssertEqual(
-            mockLogger.debugLogs.count, 
+            mockLogger.debugLogs.count,
             1
         )
         XCTAssertEqual(
@@ -127,9 +127,9 @@ final class LoggerTests: XCTestCase {
             0
         )
     }
-    
+
     // MARK: - Info Log Tests
-    
+
     /// Default logger should log a `info` message correctly.
     ///
     /// - Expect a logged string to be logged at the `info` level and log to equal the input.
@@ -163,7 +163,7 @@ final class LoggerTests: XCTestCase {
             0
         )
     }
-    
+
     /// Default logger should log a `info` message with a private message correctly.
     ///
     /// - Expect a logged string to be logged at the `info` level and log to equal the input.
@@ -198,9 +198,9 @@ final class LoggerTests: XCTestCase {
             0
         )
     }
-    
+
     // MARK: - Error Log Tests
-    
+
     /// Default logger should log a `error` message correctly.
     ///
     /// - Expect a logged string to be logged at the `error` level and log to equal the input.
@@ -234,7 +234,7 @@ final class LoggerTests: XCTestCase {
             0
         )
     }
-    
+
     /// Default logger should log a `error` message with a private message correctly.
     ///
     /// - Expect a logged string to be logged at the `error` level and log to equal the input.
@@ -269,9 +269,9 @@ final class LoggerTests: XCTestCase {
             0
         )
     }
-    
+
     // MARK: - Fault Log Tests
-    
+
     /// Default logger should log a `fault` message correctly.
     ///
     /// - Expect a logged string to be logged at the `fault` level and log to equal the input.
@@ -301,11 +301,11 @@ final class LoggerTests: XCTestCase {
             1
         )
         XCTAssertEqual(
-            mockLogger.faultLogs[0], 
+            mockLogger.faultLogs[0],
             "[Fault] <\(self.mockCategory)> \(someString)"
         )
     }
-    
+
     /// Default logger should log a `fault` message with a private message correctly.
     ///
     /// - Expect a logged string to be logged at the `fault` level and log to equal the input.
@@ -336,7 +336,7 @@ final class LoggerTests: XCTestCase {
             1
         )
         XCTAssertEqual(
-            mockLogger.faultLogs[0], 
+            mockLogger.faultLogs[0],
             "[Fault] <\(self.mockCategory)> \(someString):\(somePrivateString)"
         )
     }

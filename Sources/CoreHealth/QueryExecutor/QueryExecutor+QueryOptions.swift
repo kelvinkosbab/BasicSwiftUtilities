@@ -12,7 +12,7 @@ import HealthKit
 
 @available(iOS 13.0, macOS 13.0, watchOS 8.0, *)
 public extension QueryExecutor {
-    
+
     /// After executing a query, the completion, update, and/or results handlers of that query will be invoked
     /// asynchronously on an arbitrary background queue as results become available.  Errors that prevent a
     /// query from executing will be delivered to one of the query's handlers.  Which handler the error will be
@@ -34,12 +34,12 @@ public extension QueryExecutor {
         options: QueryOptions,
         completion: @escaping (_ result: HKQuantitySampleResult) -> Void
     ) {
-        
+
         let predicate = HKQuery.predicateForSamples(
             withStart: options.startDate,
             end: options.endDate
         )
-        
+
         self.query(
             sampleType: sampleType,
             predicate: predicate,
@@ -51,7 +51,7 @@ public extension QueryExecutor {
                 )
             ]
         ) { _, samples, error in
-            
+
             guard let samples else {
                 if let error {
                     completion(.error(error))
@@ -60,16 +60,16 @@ public extension QueryExecutor {
                 }
                 return
             }
-            
+
             guard let quantitySamples = samples as? [HKQuantitySample] else {
                 completion(.error(QueryError.unsupportedSampleType(samples: samples)))
                 return
             }
-            
+
             completion(.success(samples: quantitySamples))
         }
     }
-    
+
     /// After executing a query, the completion, update, and/or results handlers of that query will be invoked
     /// asynchronously on an arbitrary background queue as results become available.  Errors that prevent a
     /// query from executing will be delivered to one of the query's handlers.  Which handler the error will be

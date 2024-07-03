@@ -14,15 +14,15 @@ public func asyncRetry<T>(
     retryIf shouldRetry: @escaping (Error) -> Bool = { _ in true },
     block: @escaping AsyncRetryBlock<T>
 ) -> AsyncRetryReturn<T> {
-    
+
     let queue = DispatchQueue(label: "BasicSwiftUtilities.Core.retry")
     let group = DispatchGroup()
-    
+
     var attempts: UInt = 0
-    
+
     return {
         while true {
-            
+
             // Try to run the async block.
             do {
                 let result = try await block()
@@ -32,10 +32,10 @@ public func asyncRetry<T>(
                     return .failure(error: error)
                 }
             }
-            
+
             // If failure, increment the retry attempts counter.
             attempts += 1
-            
+
             // Delay using the provided strategy (do not delay on the last failure).
             if attempts < max {
                 let timer = DispatchWorkItem(block: group.leave)

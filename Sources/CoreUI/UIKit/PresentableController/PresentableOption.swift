@@ -12,13 +12,13 @@ import UIKit
 
 /// Defines options when presenting a view controller.
 public enum PresentableOption {
-    
+
     /// Do not present the view controller in a navigation view controller.
     case withoutNavigationController
 }
 
 extension Sequence where Iterator.Element == PresentableOption {
-    
+
     var inNavigationController: Bool {
         return !self.contains { option -> Bool in
             switch option {

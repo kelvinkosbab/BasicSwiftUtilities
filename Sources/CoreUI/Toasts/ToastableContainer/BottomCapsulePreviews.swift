@@ -11,27 +11,27 @@ import SwiftUI
 // MARK: - BottomCapsulePreviews
 
 #Preview("Bottom Capsule Previews") {
-    
+
     let bottomCapsuleToastApi = ToastApi(options: ToastOptions(
         position: .bottom,
         shape: .capsule,
         style: .pop
     ))
-    
+
     return NavigationView {
         List {
-            
+
             Button("Bottom: Show Simple Title") {
                 bottomCapsuleToastApi.show(title: "Simple Title")
             }
-            
+
             Button("Bottom: Show Title & Description") {
                 bottomCapsuleToastApi.show(
                     title: "Simple Title",
                     description: "Some Description"
                 )
             }
-            
+
             Button("Top: Show Custom Content") {
                 bottomCapsuleToastApi.show(
                     content: {
@@ -46,7 +46,7 @@ import SwiftUI
                     }
                 )
             }
-            
+
             Button("Top: Show Custom Content & Leading") {
                 bottomCapsuleToastApi.show(
                     content: {
@@ -62,7 +62,7 @@ import SwiftUI
                     }
                 )
             }
-            
+
             Button("Top: Show Custom Content & Trailing") {
                 bottomCapsuleToastApi.show(
                     content: {
@@ -81,7 +81,7 @@ import SwiftUI
                     }
                 )
             }
-            
+
             Button("Top: Show Custom Content & Leading & Trailing") {
                 bottomCapsuleToastApi.show(
                     content: {

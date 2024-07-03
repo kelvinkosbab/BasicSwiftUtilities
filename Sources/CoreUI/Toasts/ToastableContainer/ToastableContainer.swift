@@ -39,10 +39,10 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-struct ToastableContainer<Content> : View where Content: View {
-    
+struct ToastableContainer<Content>: View where Content: View {
+
     var content: () -> Content
-    
+
     @ObservedObject private var toastApi: ToastApi
 
     public init(
@@ -52,7 +52,7 @@ struct ToastableContainer<Content> : View where Content: View {
         self.toastApi = toastApi
         self.content = content
     }
-    
+
     public var body: some View {
         #if os(visionOS)
         self.content()
@@ -63,31 +63,31 @@ struct ToastableContainer<Content> : View where Content: View {
                 switch self.toastApi.currentToastState {
                 case .none:
                     EmptyView()
-                    
+
                 case .show(let toast), .hiding(let toast), .prepare(let toast):
                     toast
                         .glassBackgroundEffect()
                 }
             }
-        
+
         #else
-        
+
         ZStack {
             self.content()
-            
+
             GeometryReader { geometry in
                 VStack {
                     switch self.toastApi.currentToastState {
                     case .none:
                         EmptyView()
-                        
+
                     case .show(let toast), .hiding(let toast), .prepare(let toast):
                         if self.toastApi.options.position == .bottom {
                             Spacer()
                         }
-                        
+
                         self.renderToast(toast: toast)
-                        
+
                         if self.toastApi.options.position == .top {
                             Spacer()
                         }
@@ -103,10 +103,10 @@ struct ToastableContainer<Content> : View where Content: View {
         #if !os(macOS)
         .ignoresSafeArea()
         #endif
-        
+
         #endif
     }
-    
+
     private func renderToast(toast: AnyView) -> some View {
         HStack {
             Spacer()
@@ -121,14 +121,16 @@ struct ToastableContainer<Content> : View where Content: View {
 // MARK: - AnimatedToastModifier
 
 private struct AnimatedToastModifier: ViewModifier {
-    
+
     #if !os(macOS)
     @Environment(\.safeAreaInsets) private var safeAreaInsets
+    #else
+    private let safeAreaInsets = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
     #endif
-    
+
     @ObservedObject var toastApi: ToastApi
     let toastSize: CGSize
-    
+
     func body(content: Content) -> some View {
         switch self.toastApi.options.animationStyle {
         case .slide:
@@ -141,6 +143,7 @@ private struct AnimatedToastModifier: ViewModifier {
                     .easeIn(duration: self.toastApi.options.animationDuration),
                     value: self.toastApi.currentToastState.shouldBeVisible
                 )
+
         case .pop:
             content
                 .transition(.opacity.animation(.easeInOut(duration: self.toastApi.options.animationDuration)))
@@ -150,7 +153,7 @@ private struct AnimatedToastModifier: ViewModifier {
                 )
         }
     }
-    
+
     private func getToastTopOffset() -> CGFloat {
         if self.toastApi.currentToastState.shouldBeVisible {
             let position = self.toastApi.options.position

@@ -10,10 +10,10 @@ import SwiftUI
 
 // MARK: - ToastBackgroundModifier
 
-private struct ToastBackgroundModifier : ViewModifier {
-    
+private struct ToastBackgroundModifier: ViewModifier {
+
     let shape: ToastOptions.Shape
-    
+
     func body(content: Content) -> some View {
         #if os(tvOS)
         switch self.shape {
@@ -26,7 +26,7 @@ private struct ToastBackgroundModifier : ViewModifier {
                 .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10.0))
                 .shadowIfLightColorScheme(radius: 1, y: 1)
         }
-        
+
         #elseif os(visionOS)
         switch self.shape {
         case .capsule:
@@ -36,7 +36,7 @@ private struct ToastBackgroundModifier : ViewModifier {
             content
                 .glassBackgroundEffect(in: .rect)
         }
-            
+
         #else
         switch self.shape {
         case .capsule:
@@ -52,10 +52,10 @@ private struct ToastBackgroundModifier : ViewModifier {
     }
 }
 
-private struct ToastShapeModifier : ViewModifier {
-    
+private struct ToastShapeModifier: ViewModifier {
+
     let shape: ToastOptions.Shape
-    
+
     func body(content: Content) -> some View {
         switch self.shape {
         case .capsule:
@@ -69,7 +69,7 @@ private struct ToastShapeModifier : ViewModifier {
 // MARK: - ApplyToastBackground
 
 extension View {
-    
+
     func toastBackground(shape: ToastOptions.Shape) -> some View {
         self.modifier(ToastBackgroundModifier(shape: shape))
     }

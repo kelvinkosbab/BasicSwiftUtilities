@@ -12,16 +12,16 @@ import HealthKit
 /// An object that provides configuration options for a Health Store query.
 @available(macOS 13.0, *)
 public struct QueryOptions {
-    
+
     /// Defines the maximum number of results the receiver will return upon completion.
     public enum Limit {
-        
+
         /// The query returns all samples that match the given sampleType and predicate.
         case noLimit
-        
+
         /// The query returns the limit of samples specified from the `max` parameter.
         case limit(_ max: Int)
-        
+
         /// The maximum number of results the receiver will return upon completion.
         var rawValue: Int {
             switch self {
@@ -32,25 +32,25 @@ public struct QueryOptions {
             }
         }
     }
-    
+
     /// The start date limit of the query.
     ///
     /// If all health data is desired consider using `Date.distantPast`.
     let startDate: Date
-    
+
     /// The end date limit of the query.
     let endDate: Date
-    
+
     /// The maximum number of results the receiver will return upon completion.
     let limit: Limit
-    
+
     /// An array of NSSortDescriptors.
     ///
     /// Consider these key paths for predicates:
     /// - `HKPredicateKeyPathQuantity`: The key path for accessing the sample’s quantity.
     /// - `HKPredicateKeyPathCount`: A key path for the sample’s count.
     let sortDescriptors: [NSSortDescriptor]?
-    
+
     /// Constructor.
     ///
     /// - Parameter startDate: The start date limit of the query. If all health data is desired consider using `Date.distantPast`.

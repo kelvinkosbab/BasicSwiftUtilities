@@ -18,10 +18,10 @@ import os.log
 @available(iOS, deprecated: 14.0, message: "Use `SwiftLogger` instead.")
 @available(watchOS, deprecated: 7.0, message: "Use `SwiftLogger` instead.")
 @available(tvOS, deprecated: 14.0, message: "Use `SwiftLogger` instead.")
-public struct LoggableOSLog : Loggable {
-    
+public struct LoggableOSLog: Loggable {
+
     private let osLog: os.OSLog
-    
+
     /// Creates a custom logger for logging to a specific subsystem and category.
     ///
     /// - Parameter subsystem: Describes the module or app from which the log is being emitted from.
@@ -29,9 +29,9 @@ public struct LoggableOSLog : Loggable {
     init(subsystem: String, category: String) {
         self.osLog = os.OSLog(subsystem: subsystem, category: category)
     }
-    
+
     // MARK: - Debug
-    
+
     public func debug(_ message: String) {
         if #available(macOS 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *) {
             os_log(
@@ -48,7 +48,7 @@ public struct LoggableOSLog : Loggable {
             )
         }
     }
-    
+
     public func debug(_ message: String, censored censoredMessage: String) {
         if #available(macOS 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *) {
             os_log(
@@ -66,9 +66,9 @@ public struct LoggableOSLog : Loggable {
             )
         }
     }
-    
+
     // MARK: - Info
-    
+
     public func info(_ message: String) {
         if #available(macOS 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *) {
             os_log(
@@ -86,7 +86,7 @@ public struct LoggableOSLog : Loggable {
             )
         }
     }
-    
+
     public func info(_ message: String, censored censoredMessage: String) {
         if #available(macOS 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *) {
             os_log(
@@ -105,9 +105,9 @@ public struct LoggableOSLog : Loggable {
             )
         }
     }
-    
+
     // MARK: - Error
-    
+
     public func error(_ message: String) {
         if #available(macOS 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *) {
             os_log(
@@ -125,7 +125,7 @@ public struct LoggableOSLog : Loggable {
             )
         }
     }
-    
+
     public func error(_ message: String, censored censoredMessage: String) {
         if #available(macOS 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *) {
             os_log(
@@ -143,9 +143,9 @@ public struct LoggableOSLog : Loggable {
             )
         }
     }
-    
+
     // MARK: - Fault
-    
+
     public func fault(_ message: String) {
         if #available(macOS 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *) {
             os_log(
@@ -163,7 +163,7 @@ public struct LoggableOSLog : Loggable {
             )
         }
     }
-    
+
     public func fault(_ message: String, censored censoredMessage: String) {
         if #available(macOS 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *) {
             os_log(

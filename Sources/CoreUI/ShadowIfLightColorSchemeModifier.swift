@@ -9,15 +9,15 @@ import SwiftUI
 // MARK: - CoreShadowModifier
 
 @available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
-public struct ShadowIfLightColorSchemeModifier : ViewModifier {
-    
+public struct ShadowIfLightColorSchemeModifier: ViewModifier {
+
     @Environment(\.colorScheme) var colorScheme
-    
+
     let color: Color
     let radius: CGFloat
     let x: CGFloat
     let y: CGFloat
-    
+
     public func body(content: Content) -> some View {
         if self.colorScheme == .dark {
             content
@@ -35,7 +35,7 @@ public struct ShadowIfLightColorSchemeModifier : ViewModifier {
 
 @available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 public extension View {
-    
+
     /// Adds a  shadow for this view only when the environment `colorScheme` is not `dark`.
     ///
     /// Use this modifier to add a shadow of a specified color behind a view.

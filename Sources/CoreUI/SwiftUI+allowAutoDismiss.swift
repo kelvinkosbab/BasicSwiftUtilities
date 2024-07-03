@@ -22,11 +22,11 @@ import SwiftUI
 @available(iOS 13.0, tvOS 13.0, *)
 struct MbModalHackView: UIViewControllerRepresentable {
     var dismissable: () -> Bool = { false }
-    
+
     func makeUIViewController(context: UIViewControllerRepresentableContext<MbModalHackView>) -> UIViewController {
         MbModalViewController(dismissable: self.dismissable)
     }
-    
+
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
 }
 
@@ -36,26 +36,26 @@ struct MbModalHackView: UIViewControllerRepresentable {
 extension MbModalHackView {
     private final class MbModalViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
         let dismissable: () -> Bool
-        
+
         init(dismissable: @escaping () -> Bool) {
             self.dismissable = dismissable
             super.init(nibName: nil, bundle: nil)
         }
-        
+
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
-        
+
         override func didMove(toParent parent: UIViewController?) {
             super.didMove(toParent: parent)
-            
+
             setup()
         }
-        
+
         func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
             dismissable()
         }
-        
+
         // set delegate to the presentation of the root parent
         private func setup() {
             guard let rootPresentationViewController = self.rootParent.presentationController, rootPresentationViewController.delegate == nil else { return }
@@ -65,12 +65,11 @@ extension MbModalHackView {
 }
 
 extension UIViewController {
-    
+
     fileprivate var rootParent: UIViewController {
         if let parent = self.parent {
             return parent.rootParent
-        }
-        else {
+        } else {
             return self
         }
     }
@@ -82,13 +81,13 @@ extension UIViewController {
 @available(watchOS, unavailable)
 @available(iOS 13.0, tvOS 13.0, *)
 public extension View {
-    
+
     /// Control if allow to dismiss the sheet by the user actions
     func allowAutoDismiss(_ dismissable: @escaping () -> Bool) -> some View {
         self
             .background(MbModalHackView(dismissable: dismissable))
     }
-    
+
     /// Control if allow to dismiss the sheet by the user actions
     func allowAutoDismiss(_ dismissable: Bool) -> some View {
         self
@@ -104,10 +103,10 @@ public extension View {
 @available(watchOS, unavailable)
 @available(iOS 13.0, tvOS 13.0, *)
 struct AllowAutoDismiss_Previews: PreviewProvider {
-    
+
     struct ContentView: View {
         @State private var presenting = false
-        
+
         var body: some View {
             VStack {
                 Button {
@@ -127,12 +126,12 @@ struct AllowAutoDismiss_Previews: PreviewProvider {
 
     struct ModalContent: View {
         @Environment(\.presentationMode) private var presentationMode
-        
+
         var body: some View {
             VStack {
                 Text("Hello")
                     .padding()
-                
+
                 Button {
                     presentationMode.wrappedValue.dismiss()
                 } label: {
@@ -141,7 +140,7 @@ struct AllowAutoDismiss_Previews: PreviewProvider {
             }
         }
     }
-    
+
     static var previews: some View {
         ContentView()
     }

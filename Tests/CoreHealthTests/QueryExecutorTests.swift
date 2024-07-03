@@ -12,10 +12,10 @@ import HealthKit
 
 // MARK: - Mocks
 
-class MockQueryExecutor : QueryExecutor {
-    
+class MockQueryExecutor: QueryExecutor {
+
     var query: HKQuery?
-    
+
     func execute(_ query: HKQuery) {
         self.query = query
     }
@@ -24,25 +24,25 @@ class MockQueryExecutor : QueryExecutor {
 // MARK: - QueryExecutorTests
 
 @available(iOS 13.0, watchOS 8.0, *)
-class QueryExecutorTests : XCTestCase {
-    
+class QueryExecutorTests: XCTestCase {
+
     let queryOptionStartDate = Date()
     let queryOptionsEndDate = Date()
-    
+
     var queryOptions: QueryOptions {
         return QueryOptions(
             startDate: self.queryOptionStartDate,
             endDate: self.queryOptionsEndDate
         )
     }
-    
+
     func testQuerySampleTypeWithCompletionCallsHKExecute() {
     }
-    
+
     func testQuerySampleTypeCallsHKExecute() async {
-        
+
     }
-    
+
     func testQueryIdentifierWithCompletionCallsHKExecute() {
         let expectation = expectation(description: #function)
         let healthKitIdentifier: HKQuantityTypeIdentifier = .bodyTemperature
@@ -53,17 +53,17 @@ class QueryExecutorTests : XCTestCase {
             options: self.queryOptions
         ) { result in
             switch result {
-            case .error(_):
+            case .error:
                 // do something
                 break
-            case .success(samples: _):
+            case .success:
                 // do something
                 break
             }
         }
         wait(for: [expectation], timeout: 5)
     }
-    
+
     func testQueryIdentifierCallsHKExecute() async {
         do {
             let healthKitIdentifier: HKQuantityTypeIdentifier = .bodyTemperature

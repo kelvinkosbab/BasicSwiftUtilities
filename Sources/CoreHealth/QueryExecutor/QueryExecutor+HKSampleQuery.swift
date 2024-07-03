@@ -12,7 +12,7 @@ import HealthKit
 
 @available(macOS 13.0, watchOS 8.0, *)
 public extension QueryExecutor {
-    
+
     /// Queries HKSamples matching the given predicate.
     ///
     /// - Parameter sampleType: The type of sample to retrieve.
@@ -27,7 +27,7 @@ public extension QueryExecutor {
         sortDescriptors: [NSSortDescriptor]?,
         resultsHandler: @escaping (HKSampleQuery, [HKSample]?, Error?) -> Void
     ) {
-        
+
         let query = HKSampleQuery(
             sampleType: sampleType,
             predicate: predicate,
@@ -35,10 +35,10 @@ public extension QueryExecutor {
             sortDescriptors: sortDescriptors,
             resultsHandler: resultsHandler
         )
-        
+
         self.execute(query)
     }
-    
+
     /// Queries HKSamples matching the given predicate.
     ///
     /// - Parameter sampleType: The type of sample to retrieve.
@@ -53,7 +53,7 @@ public extension QueryExecutor {
     ) async throws -> [HKSample] {
         return []
     }
-    
+
     /// Queries  HKSamples matching any of the given queryDescriptors.
     ///
     /// - Parameter queryDescriptors: An array of query descriptors that describes the sample types and predicates
@@ -69,16 +69,16 @@ public extension QueryExecutor {
         limit: Int,
         resultsHandler: @escaping (HKSampleQuery, [HKSample]?, Error?) -> Void
     ) {
-        
+
         let query = HKSampleQuery(
             queryDescriptors: queryDescriptors,
             limit: limit,
             resultsHandler: resultsHandler
         )
-        
+
         self.execute(query)
     }
-    
+
     /// Queries  HKSamples matching any of the given queryDescriptors.
     ///
     /// - Parameter queryDescriptors: An array of query descriptors that describes the sample types and predicates
@@ -92,7 +92,7 @@ public extension QueryExecutor {
     ) async throws -> [HKSample] {
         return []
     }
-    
+
     /// Queries HKSamples matching any of the given queryDescriptors.
     ///
     /// - Parameter queryDescriptors: An array of query descriptors that describes the sample types and predicates
@@ -111,17 +111,17 @@ public extension QueryExecutor {
         sortDescriptors: [NSSortDescriptor],
         resultsHandler: @escaping (HKSampleQuery, [HKSample]?, Error?) -> Void
     ) {
-        
+
         let query = HKSampleQuery(
             queryDescriptors: queryDescriptors,
             limit: limit,
             sortDescriptors: sortDescriptors,
             resultsHandler: resultsHandler
         )
-        
+
         self.execute(query)
     }
-    
+
     /// Queries HKSamples matching any of the given queryDescriptors.
     ///
     /// - Parameter queryDescriptors: An array of query descriptors that describes the sample types and predicates

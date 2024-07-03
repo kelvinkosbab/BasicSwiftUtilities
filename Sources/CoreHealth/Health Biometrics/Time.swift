@@ -13,14 +13,14 @@ import HealthKit
 
 /// Deinfes a unit of time.
 @available(macOS 13.0, *)
-public enum Time : String, Unit {
-    
+public enum Time: String, Unit {
+
     /// Seconds is the SI unit of time.
     case seconds = "s"
     case minutes = "min"
     case hours = "hr"
     case days = "d"
-    
+
     var healthKitUnit: HKUnit {
         switch self {
         case .seconds:
@@ -39,12 +39,12 @@ public enum Time : String, Unit {
 
 /// Defines a time biometric.
 @available(iOS 13.0, macOS 13.0, watchOS 6.0, *)
-public struct TimeBiometric : Biometric {
-    
+public struct TimeBiometric: Biometric {
+
     public static let Units = Time.self
-    
+
     public let healthKitIdentifier: HKQuantityTypeIdentifier
-    
+
     /// A quantity sample type that measures the amount of time the user spent exercising.
     ///
     /// This quantity type measures every full minute of movement that equals or exceeds the intensity of a brisk walk.
@@ -58,7 +58,7 @@ public struct TimeBiometric : Biometric {
     ///
     /// These samples use time units (described in `HKUnit`) and measure cumulative values (described in `HKStatisticsQuery`).
     public static let appleExerciseTime = Self(healthKitIdentifier: .appleExerciseTime)
-    
+
     /// A quantity sample type that measures the amount of time the user has spent standing.
     ///
     /// These samples use time units (described in `HKUnit`) and measure cumulative values (described in `HKStatisticsQuery`).
@@ -69,7 +69,7 @@ public struct TimeBiometric : Biometric {
 
 @available(iOS 13.0, macOS 13.0, watchOS 8.0, *)
 public extension QueryExecutor {
-    
+
     func fetch(
         _ biometric: TimeBiometric,
         in unit: TimeBiometric.UnitofMeasurement,
@@ -87,7 +87,7 @@ public extension QueryExecutor {
 
 @available(iOS 13.0, macOS 13.0, watchOS 6.0, *)
 public extension BackgroundDeliveryEnabler {
-    
+
     func enableBackgroundDelivery(
         for type: TimeBiometric,
         frequency: HKUpdateFrequency
@@ -95,7 +95,7 @@ public extension BackgroundDeliveryEnabler {
         let biometric = try CodableHealthBiometric(identifier: type.healthKitIdentifier)
         try await self.enableBackgroundDelivery(for: biometric.sampleType, frequency: frequency)
     }
-    
+
     func disableBackgroundDelivery(
         for type: TimeBiometric
     ) async throws {

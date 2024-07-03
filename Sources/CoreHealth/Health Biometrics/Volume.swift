@@ -13,8 +13,8 @@ import HealthKit
 
 /// Deinfes a unit of volume.
 @available(macOS 13.0, *)
-public enum Volume : String, Unit {
-    
+public enum Volume: String, Unit {
+
     /// Liters is the SI unit of volume.
     case liters = "L"
     case usFluidOunces = "fl_oz_us"
@@ -23,7 +23,7 @@ public enum Volume : String, Unit {
     case imperialPint = "pt_imp"
     case usCup = "cup_us"
     case imperialCup = "cup_imp"
-    
+
     var healthKitUnit: HKUnit {
         switch self {
         case .liters:

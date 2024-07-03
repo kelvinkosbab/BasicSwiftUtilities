@@ -12,9 +12,9 @@ import UIKit
 // MARK: - UIViewController
 
 public extension UIViewController {
-    
+
     // MARK: - Child View Controller
-    
+
     /// Adds a view controller as a child and mounts the child view in the provided container view.
     ///
     /// - Parameter childViewController: View controller to add as a child.
@@ -32,7 +32,7 @@ public extension UIViewController {
         childViewController.view.addToContainer(containerView, relativeLayoutType: relativeLayoutType)
         childViewController.didMove(toParent: self)
     }
-    
+
     /// Adds a view controller as a child and mounts the child view into `self.view`.
     ///
     /// - Parameter childViewController: View controller to add as a child.
@@ -48,7 +48,7 @@ public extension UIViewController {
             relativeLayoutType: relativeLayoutType
         )
     }
-    
+
     /// Removes the provided view controller from its partent view controller.
     ///
     /// - Parameter childViewController: View controller to remove.
@@ -57,28 +57,28 @@ public extension UIViewController {
         childViewController.view.removeFromSuperview()
         childViewController.removeFromParent()
     }
-    
+
     // MARK: - Top View Controller
-    
+
     /// Returns the view controller that at the top of the app.
     var topPresentedController: UIViewController {
         var topViewController = self
         while let presentedViewController = topViewController.presentedViewController {
             topViewController = presentedViewController
         }
-        
+
         // Check for UITabBarController
         if let tabBarController = topViewController as? UITabBarController,
             let selectedViewController = tabBarController.viewControllers?[tabBarController.selectedIndex] {
             topViewController = selectedViewController.topPresentedController
         }
-        
+
         // Check for UINavigationBarController
         if let navigationController = topViewController as? UINavigationController,
            let lastViewController = navigationController.viewControllers.last {
             topViewController = lastViewController.topPresentedController
         }
-        
+
         return topViewController
     }
 }

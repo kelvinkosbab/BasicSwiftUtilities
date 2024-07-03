@@ -13,8 +13,8 @@ import HealthKit
 
 /// Deinfes a unit of pressure.
 @available(iOS 14.0, macOS 13.0, watchOS 7.0, *)
-public enum Pressure : String, Unit {
-    
+public enum Pressure: String, Unit {
+
     /// Pascals is the SI unit of pressure.
     case pascals = "Pa"
     case mmHg = "mmHg"
@@ -22,7 +22,7 @@ public enum Pressure : String, Unit {
     case atm = "atm"
     case dBASPL = "dBASPL"
     case inHg = "inHg"
-    
+
     var healthKitUnit: HKUnit {
         switch self {
         case .pascals:

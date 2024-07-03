@@ -12,8 +12,8 @@ import Foundation
 /// specified `subsystem` and `category`.
 ///
 /// This object either wraps `os.Logger` or `os_log` depending on Platform and OS version.
-public struct Logger : Loggable {
-    
+public struct Logger: Loggable {
+
     private let logger: Loggable
     private let subsystem: String
     private let category: String
@@ -60,7 +60,7 @@ public struct Logger : Loggable {
         )
         #endif
     }
-    
+
     /// Creates a custom logger for logging to the provided logger.
     ///
     /// - Note: Internal for unit testing use.
@@ -75,43 +75,43 @@ public struct Logger : Loggable {
         self.category = category
         self.logger = logger
     }
-    
+
     // MARK: - Debug
-    
+
     public func debug(_ message: String) {
         self.logger.debug("[Debug] <\(self.category)> \(message)")
     }
-    
+
     public func debug(_ message: String, censored censoredMessage: String) {
         self.logger.debug("[Debug] <\(self.category)> \(message)", censored: censoredMessage)
     }
-    
+
     // MARK: - Info
-    
+
     public func info(_ message: String) {
         self.logger.info("[Info] <\(self.category)> \(message)")
     }
-    
+
     public func info(_ message: String, censored censoredMessage: String) {
         self.logger.info("[Info] <\(self.category)> \(message)", censored: censoredMessage)
     }
-    
+
     // MARK: - Error
-    
+
     public func error(_ message: String) {
         self.logger.error("[Error] <\(self.category)> \(message)")
     }
-    
+
     public func error(_ message: String, censored censoredMessage: String) {
         self.logger.error("[Error] <\(self.category)> \(message)", censored: censoredMessage)
     }
-    
+
     // MARK: - Fault
-    
+
     public func fault(_ message: String) {
         self.logger.fault("[Fault] <\(self.category)> \(message)")
     }
-    
+
     public func fault(_ message: String, censored censoredMessage: String) {
         self.logger.fault("[Fault] <\(self.category)> \(message)", censored: censoredMessage)
     }

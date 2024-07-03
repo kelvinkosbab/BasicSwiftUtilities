@@ -14,28 +14,28 @@ import HealthKit
 /// An abstract type for all classes that identify a specific type of sample when working with the HealthKit store.
 ///
 /// https://developer.apple.com/documentation/healthkit/hksampletype
-enum CodableHealthBiometricType : Int {
-    
+enum CodableHealthBiometricType: Int {
+
     /// A type that identifies samples that store numerical values.
     ///
     /// See [Apple's hkquantitytypeidentifier documentation.](https://developer.apple.com/documentation/healthkit/hkquantitytypeidentifier)
     case quantity = 0
-    
+
     /// A type that identifies samples that contain a value from a small set of possible values.
     ///
     /// See [Apple's hkcategorytypeidentifier documentation.](https://developer.apple.com/documentation/healthkit/hkcategorytypeidentifier)
     case category = 1
-    
+
     /// A type that identifies samples that group multiple subsamples.
     ///
     /// See [Apple's hkcorrelationtypeidentifier documentation.](https://developer.apple.com/documentation/healthkit/hkcorrelationtypeidentifier)
     case correlation = 2
-    
+
     /// The identifiers for documents.
     ///
     /// See [Apple's hkdocumenttypeidentifier documentation.](https://developer.apple.com/documentation/healthkit/hkdocumenttypeidentifier)
     case document = 3
-    
+
     /// A type that identifies samples that store information about a workout.
     ///
     /// See [Apple's hkworkouttype documentation.](https://developer.apple.com/documentation/healthkit/hkworkouttype)
@@ -43,8 +43,8 @@ enum CodableHealthBiometricType : Int {
 }
 
 /// Helper object to define a wokrout identifier type.
-public enum WorkoutTypeIdentifier : String {
-    
+public enum WorkoutTypeIdentifier: String {
+
     /// This method returns an instance of the HKWorkoutType concrete subclass. HealthKit uses workout types to create
     /// samples that store information about individual workouts. Use workout type instances to create workout objects that
     /// you can save in the HealthKit store. For more information, see `HKWorkoutType`.
@@ -57,17 +57,17 @@ public enum WorkoutTypeIdentifier : String {
 
 @available(macOS 13.0, *)
 struct CodableHealthBiometric {
-    
+
     // MARK: - Properties
-    
+
     let identifier: String
     let biometricType: CodableHealthBiometricType
     let sampleType: HKSampleType
-    
+
     // MARK: - InitError
-    
-    enum InitError : Error, LocalizedError {
-        
+
+    enum InitError: Error, LocalizedError {
+
         /// Error thrown when an identifier does not correspond to a HealthKit type.
         ///
         /// Causes:
@@ -76,7 +76,7 @@ struct CodableHealthBiometric {
         /// - `HKObjectType.correlationType(forIdentifier: identifier) // returns nil`
         /// - `HKObjectType.documentType(forIdentifier: identifier) // returns nil`
         case undefinedHKObjectType(identifier: String)
-        
+
         var errorDescription: String? {
             switch self {
             case .undefinedHKObjectType(identifier: let identifier):
@@ -84,9 +84,9 @@ struct CodableHealthBiometric {
             }
         }
     }
-    
+
     // MARK: - Public Init
-    
+
     /// Initializes a quantity type.
     ///
     /// - Throws if the identifier is not valid in HealthKit.
@@ -98,7 +98,7 @@ struct CodableHealthBiometric {
             biometricType: .quantity
         )
     }
-    
+
     /// Initializes a category type.
     ///
     /// - Throws if the identifier is not valid in HealthKit.
@@ -110,7 +110,7 @@ struct CodableHealthBiometric {
             biometricType: .category
         )
     }
-    
+
     /// Initializes a quantity type.
     ///
     /// - Throws if the identifier is not valid in HealthKit.
@@ -122,7 +122,7 @@ struct CodableHealthBiometric {
             biometricType: .correlation
         )
     }
-    
+
     /// Initializes a document type.
     ///
     /// - Throws if the identifier is not valid in HealthKit.
@@ -134,7 +134,7 @@ struct CodableHealthBiometric {
             biometricType: .document
         )
     }
-    
+
     /// Initializes a workout type.
     ///
     /// - Throws if the identifier is not valid in HealthKit.
@@ -146,9 +146,9 @@ struct CodableHealthBiometric {
             biometricType: .workout
         )
     }
-    
+
     // MARK: - Private Init
-    
+
     private init(
         identifier: String,
         biometricType: CodableHealthBiometricType
@@ -194,17 +194,17 @@ struct CodableHealthBiometric {
             )
         }
     }
-    
+
     private init(
         identifier: String,
         biometricType: CodableHealthBiometricType,
         sampleType: HKSampleType?
     ) throws {
-        
+
         guard let sampleType else {
             throw InitError.undefinedHKObjectType(identifier: identifier)
         }
-        
+
         self.identifier = identifier
         self.biometricType = biometricType
         self.sampleType = sampleType

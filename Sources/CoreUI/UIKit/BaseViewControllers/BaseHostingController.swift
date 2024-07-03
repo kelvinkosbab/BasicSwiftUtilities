@@ -27,10 +27,10 @@ import SwiftUI
 /// }
 /// ```
 @available(iOS 13.0, tvOS 13.0, *)
-public class BaseHostingController<Content : View> : UIViewController, PresentableController {
-    
+public class BaseHostingController<Content: View>: UIViewController, PresentableController {
+
     // MARK: - Static Accessors
-    
+
     /// Creates a view controller which mounts the provided `SwiftUI.View`.
     ///
     /// ```swift
@@ -48,26 +48,26 @@ public class BaseHostingController<Content : View> : UIViewController, Presentab
         viewController.contentView = contentView
         return viewController
     }
-    
+
     // MARK: - PresentableController
-    
+
     public var presentedMode: PresentationMode = .default
     public var presentationManager: UIViewControllerTransitioningDelegate?
     public var currentFlowInitialController: PresentableController?
-    
+
     // MARK: - Properties
-    
+
     private var contentView: Content!
-    
+
     private lazy var hostingController: UIHostingController = {
         return UIHostingController(rootView: self.contentView)
     }()
-    
+
     // MARK: - Lifecycle
-    
+
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.add(
             childViewController: self.hostingController,
             intoContainerView: self.view

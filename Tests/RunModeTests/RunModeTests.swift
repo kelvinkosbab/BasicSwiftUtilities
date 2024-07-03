@@ -9,7 +9,7 @@ import XCTest
 
 // MARK: - Mocks
 
-struct MockUnitTestStatusProvider : UnitTestStatusProvider {
+struct MockUnitTestStatusProvider: UnitTestStatusProvider {
     let isUnitTest: Bool
     let isUIUnitTest: Bool
 }
@@ -17,7 +17,7 @@ struct MockUnitTestStatusProvider : UnitTestStatusProvider {
 // MARK: - RunModeTests
 
 final class RunModeTests: XCTestCase {
-    
+
     /// Should return `RunMode.mainApplication` if not running unit tests
     func testReturnMainApplication() {
         let provider = MockUnitTestStatusProvider(
@@ -30,7 +30,7 @@ final class RunModeTests: XCTestCase {
             .mainApplication
         )
     }
-    
+
     /// Should return `RunMode.unitTests` if not running unit tests
     func testReturnUnitTests() {
         let provider = MockUnitTestStatusProvider(
@@ -43,7 +43,7 @@ final class RunModeTests: XCTestCase {
             .unitTests
         )
     }
-    
+
     /// Should return `RunMode.uiUnitTests` if not running unit tests
     func testReturnUIUnitTests() {
         let provider = MockUnitTestStatusProvider(

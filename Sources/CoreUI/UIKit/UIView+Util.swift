@@ -13,16 +13,16 @@ import UIKit
 
 /// Defines how a view will be added to it's parent view.
 public enum RelativeLayoutType {
-    
+
     /// Child view will layout in reference to its parent view and also the safe area of the device / window.
     case safeArea
-    
+
     /// Child view will layout in reference to only its parent view.
     case view
 }
 
 public extension UIView {
-    
+
     /// Adds a view to a container parent view.
     ///
     /// - Parameter containerView: The parent container view which the view will be added to.
@@ -45,13 +45,13 @@ public extension UIView {
     ) {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.frame = containerView.bounds
-        
+
         if let index {
             containerView.insertSubview(self, at: index)
         } else {
             containerView.addSubview(self)
         }
-        
+
         switch relativeLayoutType {
         case .safeArea:
             let guide = containerView.safeAreaLayoutGuide
@@ -100,12 +100,12 @@ public extension UIView {
             )
             containerView.addConstraints([ top, bottom, leading, trailing ])
         }
-        
+
         containerView.layoutIfNeeded()
     }
-    
+
     // MARK: - Rounding Corners
-    
+
     /// Utility function to round one or more corderns of a `UIView`.
     ///
     /// - Parameter corners: Corner(s) to round of the view.

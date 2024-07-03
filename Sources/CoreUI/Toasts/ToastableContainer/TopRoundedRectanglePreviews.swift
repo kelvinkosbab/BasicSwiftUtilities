@@ -11,27 +11,27 @@ import SwiftUI
 // MARK: - TopRoundedRectanglePreviews
 
 #Preview("Top RoundedRectangle Previews") {
-    
+
     let topRoundedRectangleToastApi = ToastApi(options: ToastOptions(
         position: .top,
         shape: .roundedRectangle,
         style: .pop
     ))
-    
+
     return NavigationView {
         List {
-            
+
             Button("Top: Show Simple Title") {
                 topRoundedRectangleToastApi.show(title: "Simple Title")
             }
-            
+
             Button("Top: Show Title & Description") {
                 topRoundedRectangleToastApi.show(
                     title: "Simple Title",
                     description: "Some Description"
                 )
             }
-            
+
             Button("Top: Show Custom Content") {
                 topRoundedRectangleToastApi.show(
                     content: {
@@ -46,7 +46,7 @@ import SwiftUI
                     }
                 )
             }
-            
+
             Button("Top: Show Custom Content & Leading") {
                 topRoundedRectangleToastApi.show(
                     content: {
@@ -62,7 +62,7 @@ import SwiftUI
                     }
                 )
             }
-            
+
             Button("Top: Show Custom Content & Trailing") {
                 topRoundedRectangleToastApi.show(
                     content: {
@@ -81,7 +81,7 @@ import SwiftUI
                     }
                 )
             }
-            
+
             Button("Top: Show Custom Content & Leading & Trailing") {
                 topRoundedRectangleToastApi.show(
                     content: {

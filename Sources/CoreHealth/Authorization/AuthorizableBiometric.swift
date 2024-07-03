@@ -11,15 +11,15 @@ import HealthKit
 // MARK: - AuthorizableBiometric
 
 @available(iOS 13.0, macOS 13.0, watchOS 9.0, *)
-public enum AuthorizableBiometric : Hashable {
-    
+public enum AuthorizableBiometric: Hashable {
+
     case cardioFitness(CardioFitnessBiometric)
     case energy(EnergyBiometric)
     case length(LengthBiometric)
     case rate(RateBiometric)
     case temperature(TemperatureBiometric)
     case time(TimeBiometric)
-    
+
     public var healthKitIdentifier: HKQuantityTypeIdentifier {
         switch self {
         case .cardioFitness(let biometric):

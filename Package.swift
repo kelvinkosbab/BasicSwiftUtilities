@@ -31,13 +31,13 @@ let package = Package(
         .library(
             name: "RunMode",
             targets: ["RunMode"]
-        ),
+        )
     ],
     dependencies: [],
     targets: [
-        
+
         // MARK: - Core
-        
+
         .target(
             name: "Core",
             dependencies: []
@@ -46,9 +46,9 @@ let package = Package(
             name: "CoreTests",
             dependencies: ["Core"]
         ),
-        
+
         // MARK: - CoreHealth
-        
+
         .target(
             name: "CoreHealth",
             dependencies: ["Core"]
@@ -57,7 +57,7 @@ let package = Package(
             name: "CoreHealthTests",
             dependencies: ["CoreHealth"]
         ),
-        
+
         // MARK: - CoreUI
         .target(
             name: "CoreUI",
@@ -67,9 +67,9 @@ let package = Package(
             name: "CoreUITests",
             dependencies: ["CoreUI"]
         ),
-        
+
         // MARK: - CoreStorage
-        
+
         .target(
             name: "CoreStorage",
             dependencies: ["Core"]
@@ -81,9 +81,9 @@ let package = Package(
                 .process("Resources")
             ]
         ),
-        
+
         // MARK: - RunMode
-        
+
         .target(
             name: "RunMode",
             dependencies: []
@@ -91,6 +91,6 @@ let package = Package(
         .testTarget(
             name: "RunModeTests",
             dependencies: ["RunMode"]
-        ),
+        )
     ]
 )

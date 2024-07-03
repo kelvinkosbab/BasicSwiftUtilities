@@ -13,7 +13,7 @@ import HealthKit
 /// Defines objects that can execute HealthKit queries.
 @available(macOS 13.0, *)
 public protocol QueryExecutor {
-    
+
     /// Begins executing the given query.
     ///
     /// After executing a query, the completion, update, and/or results handlers of that query will be invoked
@@ -32,6 +32,6 @@ public protocol QueryExecutor {
 // MARK: - HKHealthStore
 
 @available(macOS 13.0, *)
-extension HKHealthStore : QueryExecutor {}
+extension HKHealthStore: QueryExecutor {}
 
 #endif

@@ -9,7 +9,7 @@ import Foundation
 // MARK: - File Protection Level Utilities
 
 public extension URL {
-    
+
     /// Changes the data protection level of an existing file.
     ///
     /// Data protection is an iOS feature that you use to secure your app’s files and prevent unauthorized access to them.

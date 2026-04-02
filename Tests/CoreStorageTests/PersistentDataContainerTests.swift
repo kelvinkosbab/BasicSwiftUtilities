@@ -1,12 +1,10 @@
 //
-// Copyright (c) 2023 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+//  PersistentDataContainerTests.swift
 //
-// PROPRIETARY/CONFIDENTIAL
-//
-// Use is subject to license terms.
+//  Copyright © Kozinga. All rights reserved.
 //
 
-import XCTest
+import Testing
 import CoreData
 @testable import CoreStorage
 
@@ -16,7 +14,7 @@ private enum MockError: Error {
     case mock
 }
 
-private class MockCoreDataContainer: CoreDataPersistentContainer {
+private final class MockCoreDataContainer: CoreDataPersistentContainer, @unchecked Sendable {
 
     let containerLoadError: Error?
 
@@ -32,7 +30,7 @@ private class MockCoreDataContainer: CoreDataPersistentContainer {
 
     var persistentStoreDescriptions: [NSPersistentStoreDescription] = []
 
-    func loadPersistentStores(completionHandler block: @escaping (NSPersistentStoreDescription, Error?) -> Void) {
+    func loadPersistentStores(completionHandler block: @escaping @Sendable (NSPersistentStoreDescription, Error?) -> Void) {
         let description = NSPersistentStoreDescription()
         DispatchQueue.main.async {
             block(description, self.containerLoadError)
@@ -55,38 +53,36 @@ private struct MockPersistentDataContainer: PersistentDataContainer {
 
 // MARK: - PersistentDataContainerTests
 
-final class PersistentDataContainerTests: XCTestCase {
+@Suite("PersistentDataContainer")
+struct PersistentDataContainerTests {
 
     let expectedStoreName = "KeyValueDataModel"
 
     // MARK: - Init tests
 
-    func testShouldThrowForInvalidStoreNameInBundle() throws {
+    @Test("Throws for invalid store name in bundle")
+    func shouldThrowForInvalidStoreNameInBundle() throws {
         let mockInvalidStoreName = "This is definitely not a valid store name"
-        do {
+        #expect(throws: (any Error).self) {
             _ = try MockPersistentDataContainer(
                 storeName: mockInvalidStoreName,
                 in: .module
             )
-            XCTFail("This is expected to throw")
-        } catch {
-            // This is expected to throw
         }
     }
 
-    func testShouldThrowForInvalidModelURL() throws {
-        do {
+    @Test("Throws for invalid model URL")
+    func shouldThrowForInvalidModelURL() throws {
+        #expect(throws: (any Error).self) {
             _ = try MockPersistentDataContainer(
                 storeName: self.expectedStoreName,
                 modelUrl: URL(string: "anInvalidUrl.com")!
             )
-            XCTFail("This is expected to throw")
-        } catch {
-            // This is expected to throw
         }
     }
 
-    func testShouldNotThrowForValidInit() throws {
+    @Test("Does not throw for valid init")
+    func shouldNotThrowForValidInit() throws {
         _ = try MockPersistentDataContainer(
             storeName: self.expectedStoreName,
             in: .module
@@ -95,16 +91,16 @@ final class PersistentDataContainerTests: XCTestCase {
 
     // MARK: - Load tests
 
-    func testLoadThrows() async throws {
+    @Test("Load throws when container load fails")
+    func loadThrows() async throws {
         let container = MockPersistentDataContainer(containerLoadError: MockError.mock)
-        do {
+        await #expect(throws: (any Error).self) {
             try await container.load()
-        } catch {
-            // expected to throw
         }
     }
 
-    func testLoadSucceeds() async throws {
+    @Test("Load succeeds with valid container")
+    func loadSucceeds() async throws {
         let container = try MockPersistentDataContainer(
             storeName: self.expectedStoreName,
             in: .module
@@ -114,16 +110,16 @@ final class PersistentDataContainerTests: XCTestCase {
 
     // MARK: - File protection level tests
 
-    func testSetFileProtectionType() throws {
+    #if !os(macOS)
+    @Test("Configure file protection type adds a store description")
+    func setFileProtectionType() throws {
         let coreDataContainer = MockCoreDataContainer(
             containerLoadError: nil,
             persistentStoreDescriptions: []
         )
         let container = MockPersistentDataContainer(container: coreDataContainer)
         container.configure(fileProtectionType: .complete)
-        XCTAssertEqual(
-            coreDataContainer.persistentStoreDescriptions.count,
-            1
-        )
+        #expect(coreDataContainer.persistentStoreDescriptions.count == 1)
     }
+    #endif
 }

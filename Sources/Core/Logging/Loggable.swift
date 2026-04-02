@@ -8,134 +8,84 @@ import Foundation
 
 // MARK: - Loggable
 
-/// Defines a protocol for an object that logs messages.
-public protocol Loggable {
+/// A protocol for objects that emit log messages at various severity levels.
+///
+/// Conforming types can log messages at `debug`, `info`, `error`, and `fault` levels.
+/// Each level supports an optional censored variant where sensitive information is
+/// automatically redacted in production builds.
+///
+/// ```swift
+/// let logger: Loggable = Logger(subsystem: "com.myapp", category: "Auth")
+/// logger.info("User logged in")
+/// logger.info("User logged in", censored: "user@example.com")
+/// ```
+public protocol Loggable: Sendable {
 
     // MARK: - Debug
 
     /// Logs a message at the `debug` level.
     ///
-    /// Examples
-    /// ========
+    /// Use debug-level messages for information useful only during active debugging.
     ///
-    ///     let logger = Log() // `Log` conforms to the `Loggable` protocol.
-    ///     logger.debug("A string")
-    ///     logger.debug("A string with interpolation \(x)")
-    ///
-    /// - Parameter message: A string to log.
+    /// - Parameter message: The message to log.
     func debug(_ message: String)
 
-    /// Logs a message at the `debug` level along with a private message.
+    /// Logs a message at the `debug` level with a censored component.
     ///
-    /// Examples
-    /// ========
+    /// The censored message is visible in development but redacted in production builds.
     ///
-    ///     let logger = Log() // `Log` conforms to the `Loggable` protocol.
-    ///     logger.debug("A string message", private: "A private message")
-    ///
-    ///     When developing prints:
-    ///     "A string messsage: A private message"
-    ///
-    ///     In prod prints:
-    ///     "A string messsage: <private>"
-    ///
-    /// - Parameter message: A string to log.
-    /// - Parameter censored: A string that will be hidden in production builds.
+    /// - Parameter message: The public portion of the message.
+    /// - Parameter censored: The sensitive portion, hidden in production.
     func debug(_ message: String, censored censoredMessage: String)
 
     // MARK: - Info
 
     /// Logs a message at the `info` level.
     ///
-    /// Examples
-    /// ========
+    /// Use info-level messages for general operational information.
     ///
-    ///     let logger = Log() // `Log` conforms to the `Loggable` protocol.
-    ///     logger.info("A string")
-    ///     logger.info("A string with interpolation \(x)")
-    ///
-    /// - Parameter message: A string to log.
+    /// - Parameter message: The message to log.
     func info(_ message: String)
 
-    /// Logs a message at the `info` level along with a private message.
+    /// Logs a message at the `info` level with a censored component.
     ///
-    /// Examples
-    /// ========
+    /// The censored message is visible in development but redacted in production builds.
     ///
-    ///     let logger = Log() // `Log` conforms to the `Loggable` protocol.
-    ///     logger.info("A string message", private: "A private message")
-    ///
-    ///     When developing prints:
-    ///     "A string messsage: A private message"
-    ///
-    ///     In prod prints:
-    ///     "A string messsage: <private>"
-    ///
-    /// - Parameter message: A string to log.
-    /// - Parameter censored: A string that will be hidden in production builds.
+    /// - Parameter message: The public portion of the message.
+    /// - Parameter censored: The sensitive portion, hidden in production.
     func info(_ message: String, censored censoredMessage: String)
 
     // MARK: - Error
 
     /// Logs a message at the `error` level.
     ///
-    /// Examples
-    /// ========
+    /// Use error-level messages for unexpected conditions that may be recoverable.
     ///
-    ///     let logger = Log() // `Log` conforms to the `Loggable` protocol.
-    ///     logger.error("A string")
-    ///     logger.error("A string with interpolation \(x)")
-    ///
-    /// - Parameter message: A string to log.
+    /// - Parameter message: The message to log.
     func error(_ message: String)
 
-    /// Logs a message at the `error` level along with a private message.
+    /// Logs a message at the `error` level with a censored component.
     ///
-    /// Examples
-    /// ========
+    /// The censored message is visible in development but redacted in production builds.
     ///
-    ///     let logger = Log() // `Log` conforms to the `Loggable` protocol.
-    ///     logger.error("A string message", private: "A private message")
-    ///
-    ///     When developing prints:
-    ///     "A string messsage: A private message"
-    ///
-    ///     In prod prints:
-    ///     "A string messsage: <private>"
-    ///
-    /// - Parameter message: A string to log.
-    /// - Parameter censored: A string that will be hidden in production builds.
+    /// - Parameter message: The public portion of the message.
+    /// - Parameter censored: The sensitive portion, hidden in production.
     func error(_ message: String, censored censoredMessage: String)
 
     // MARK: - Fault
 
-    /// Logs a message at the `critical` level.
+    /// Logs a message at the `fault` (critical) level.
     ///
-    /// Examples
-    /// ========
+    /// Use fault-level messages for conditions that indicate a bug in the program.
     ///
-    ///     let logger = Log() // `Log` conforms to the `Loggable` protocol.
-    ///     logger.fault("A string")
-    ///     logger.fault("A string with interpolation \(x)")
-    ///
-    /// - Parameter message: A string to log.
+    /// - Parameter message: The message to log.
     func fault(_ message: String)
 
-    /// Logs a message at the `critical` level along with a private message.
+    /// Logs a message at the `fault` (critical) level with a censored component.
     ///
-    /// Examples
-    /// ========
+    /// The censored message is visible in development but redacted in production builds.
     ///
-    ///     let logger = Log() // `Log` conforms to the `Loggable` protocol.
-    ///     logger.fault("A string message", private: "A private message")
-    ///
-    ///     When developing prints:
-    ///     "A string messsage: A private message"
-    ///
-    ///     In prod prints:
-    ///     "A string messsage: <private>"
-    ///
-    /// - Parameter message: A string to log.
-    /// - Parameter censored: A string that will be hidden in production builds.
+    /// - Parameter message: The public portion of the message.
+    /// - Parameter censored: The sensitive portion, hidden in production.
     func fault(_ message: String, censored censoredMessage: String)
 }

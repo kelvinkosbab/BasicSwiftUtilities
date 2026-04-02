@@ -8,7 +8,7 @@ import CoreData
 
 // MARK: - CoreDataPersistentContainer
 
-public protocol CoreDataPersistentContainer: AnyObject {
+public protocol CoreDataPersistentContainer: AnyObject, Sendable {
 
     /// The main queue’s managed object context.
     ///
@@ -49,7 +49,7 @@ public protocol CoreDataPersistentContainer: AnyObject {
     /// * The store could not be migrated to the current model version.
     /// * The store has already been loaded.
     /// Check the error message to determine what the actual problem was.
-    func loadPersistentStores(completionHandler block: @escaping (NSPersistentStoreDescription, Error?) -> Void)
+    func loadPersistentStores(completionHandler block: @escaping @Sendable (NSPersistentStoreDescription, Error?) -> Void)
 }
 
 // MARK: - NSPersistentContainer & CoreDataPersistentContainer

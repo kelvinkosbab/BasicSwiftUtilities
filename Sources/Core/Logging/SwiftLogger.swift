@@ -7,21 +7,22 @@
 import Foundation
 import os.log
 
-// MARK: - Swift os.Logger
+// MARK: - SwiftLogger
 
-/// An object that adds interpolated strings to the data store of the unified logging system via the
-/// Swift `os.Logger`.
+/// A ``Loggable`` implementation that logs via Apple's `os.Logger`.
+///
+/// Messages use privacy markers: public messages are always visible, while censored
+/// messages are marked as `private` and automatically redacted in production.
 ///
 /// For more info see [Apple's documentation for `os.Logger`](https://developer.apple.com/documentation/os/logger).
-@available(macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0, *)
-public struct SwiftLogger: Loggable {
+public struct SwiftLogger: Loggable, Sendable {
 
     private let logger: os.Logger
 
-    /// Creates a custom logger for logging to a specific subsystem and category.
+    /// Creates a logger for a specific subsystem and category.
     ///
-    /// - Parameter subsystem: Describes the module or app from which the log is being emitted from.
-    /// - Parameter category: Describes a category specifying.
+    /// - Parameter subsystem: Identifies the module or app emitting the log.
+    /// - Parameter category: Describes the area of functionality being logged.
     public init(subsystem: String, category: String) {
         self.logger = os.Logger(subsystem: subsystem, category: category)
     }

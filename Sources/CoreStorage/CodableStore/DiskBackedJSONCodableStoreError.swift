@@ -1,22 +1,29 @@
 //
 //  DiskBackedJSONCodableStoreError.swift
 //
-//
-//  Created by Kelvin Kosbab on 6/8/23.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation
 
 // MARK: - DiskBackedJSONCodableStoreError
 
-/// An enumeration of the erros that may be thrown by the `DiskBackedJSONCodableStore`.
-@available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
-public enum DiskBackedJSONCodableStoreError: Error, CustomStringConvertible {
+/// Errors that may be thrown by ``DiskBackedJSONCodableStore``.
+public enum DiskBackedJSONCodableStoreError: Error, CustomStringConvertible, Sendable {
 
+    /// A file system operation failed.
     case fileManagerError(cause: Error)
+
+    /// Encoding the data to JSON failed.
     case encodingFailure(cause: Error)
+
+    /// Writing data to disk failed.
     case writeFailure(cause: Error)
+
+    /// Reading data from disk failed.
     case readFailure(cause: Error)
+
+    /// Decoding JSON data failed.
     case decodingFailure(cause: Error)
 
     public var description: String {

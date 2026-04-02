@@ -115,7 +115,6 @@ import SwiftUI
         }
     }
     .toastableContainer(toastApi: topRoundedRectangleToastApi)
-    .previewDisplayName("Top RoundedRectangle Toast Tests")
 }
 
 #endif

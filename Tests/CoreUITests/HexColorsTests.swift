@@ -4,58 +4,37 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import XCTest
+import Testing
 @testable import CoreUI
 
 // MARK: - HexColorsTests
 
-final class HexColorsTests: XCTestCase {
+@Suite("HexColor")
+struct HexColorsTests {
 
-    func testHexColorValueAndStringConversion() {
-        for value in 0...0xFFFFFF {
+    @Test("Hex value and string conversion are consistent for 6-digit values")
+    func hexColorValueAndStringConversion() {
+        // HexColor(hex: String) requires exactly 6 hex characters, so we test from 0x100000
+        for value in 0x100000...0xFFFFFF {
             let hexString = String(value, radix: 16).uppercased()
             let intHexColor = HexColor(hex: value)
             let stringHexColor = HexColor(hex: hexString)
-            XCTAssertEqual(
-                intHexColor.hexValue,
-                stringHexColor?.hexValue
-            )
-            XCTAssertEqual(
-                intHexColor.hexString,
-                hexString
-            )
+            #expect(intHexColor.hexValue == stringHexColor?.hexValue)
+            #expect(intHexColor.hexString == hexString)
         }
     }
 
-    func testValidHexStrings() {
-        let hex = "D3004C"
-        let validHexStrings = [
-            hex,
-            "#\(hex)",
-            "##\(hex)",
-            " #\(hex) ",
-            "\t#\(hex)\t",
-            "\n#\(hex)\n",
-            "0x\(hex)"
-        ]
-        for testString in validHexStrings {
-            let color = HexColor(hex: testString)
-            XCTAssertEqual(
-                color?.hexValue,
-                0xD3004C
-            )
-        }
+    @Test("Valid hex strings are parsed correctly",
+          arguments: ["D3004C", "#D3004C", "##D3004C", " #D3004C ", "\t#D3004C\t", "\n#D3004C\n", "0xD3004C"])
+    func validHexStrings(testString: String) {
+        let color = HexColor(hex: testString)
+        #expect(color?.hexValue == 0xD3004C)
     }
 
-    func testInvalidHexStrings() {
-        let validHexStrings = [
-            "1234567", // Too many valid characters
-            "GGGGGG",  // Correct length but invalid hex character
-            "D3004F."  // Too many characters due to invalid character
-        ]
-        for testString in validHexStrings {
-            let color = HexColor(hex: testString)
-            XCTAssert(color == nil)
-        }
+    @Test("Invalid hex strings return nil",
+          arguments: ["1234567", "GGGGGG", "D3004F."])
+    func invalidHexStrings(testString: String) {
+        let color = HexColor(hex: testString)
+        #expect(color == nil)
     }
 }

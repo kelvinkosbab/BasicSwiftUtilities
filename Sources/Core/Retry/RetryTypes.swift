@@ -1,51 +1,56 @@
 //
 //  RetryTypes.swift
-//  
+//
 //  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation
 
-// MARK: - Types
+// MARK: - Constants
 
 internal let MILLISECONDS_IN_SECOND: Double = 1_000
-internal let NANOSECONDS_IN_SECOND: Double = 1_000_000_000
 
 // MARK: - Retry Types
 
-/// Outcome of `retry`. It either succeeds or fails.
-public enum RetryResult {
+/// The outcome of a ``retry(maxAttempts:strategy:retryIf:block:)`` operation.
+public enum RetryResult: Sendable {
 
     /// The retry succeeded.
     ///
-    /// - Parameter attempts: The number of attempts it took to succeed.
+    /// - Parameter attempts: The number of retry attempts before success (0 means first try).
     case success(attempts: UInt)
 
-    /// The retry failed.
+    /// The retry failed after exhausting all attempts.
     ///
-    /// - Parameter error: The error thrown by the retry attempt.
+    /// - Parameter error: The error from the final attempt.
     case failure(error: Error)
 }
 
-public typealias RetryBlock = () throws -> Void
-public typealias RetryReturn = () -> RetryResult
+/// A throwing closure to retry.
+public typealias RetryBlock = @Sendable () throws -> Void
+
+/// A closure that executes the retry logic and returns a ``RetryResult``.
+public typealias RetryReturn = @Sendable () -> RetryResult
 
 // MARK: - AsyncRetry Types
 
-/// Outcome of `asyncRetry`. It either succeeds or fails.
-public enum AsyncRetryResult<T> {
+/// The outcome of an ``asyncRetry(max:strategy:retryIf:block:)`` operation.
+public enum AsyncRetryResult<T: Sendable>: Sendable {
 
     /// The retry succeeded.
     ///
-    /// - Parameter attempts: The number of attempts it took to succeed.
-    /// - Parameter value: The value of the successful operation.
+    /// - Parameter attempts: The number of retry attempts before success (0 means first try).
+    /// - Parameter value: The value produced by the successful operation.
     case success(attempts: UInt, value: T)
 
-    /// The retry failed.
+    /// The retry failed after exhausting all attempts.
     ///
-    /// - Parameter error: The error thrown by the retry attempt.
+    /// - Parameter error: The error from the final attempt.
     case failure(error: Error)
 }
 
-public typealias AsyncRetryBlock<T> = () async throws -> T
-public typealias AsyncRetryReturn<T> = () async -> AsyncRetryResult<T>
+/// An async throwing closure to retry.
+public typealias AsyncRetryBlock<T: Sendable> = @Sendable () async throws -> T
+
+/// A closure that executes the async retry logic and returns an ``AsyncRetryResult``.
+public typealias AsyncRetryReturn<T: Sendable> = @Sendable () async -> AsyncRetryResult<T>

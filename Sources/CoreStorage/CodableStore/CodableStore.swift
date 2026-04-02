@@ -1,6 +1,6 @@
 //
 //  CodableStore.swift
-//  
+//
 //  Copyright © Kozinga. All rights reserved.
 //
 
@@ -8,36 +8,44 @@ import Foundation
 
 // MARK: - CodableStore
 
-/// An entity that can store `Codable` objects by key.
-@available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
-public protocol CodableStore: AnyObject {
+/// A protocol for key-value stores that persist ``Codable`` objects.
+///
+/// Conforming types provide async methods for storing, retrieving, and removing
+/// values identified by string keys.
+///
+/// ```swift
+/// let store: some CodableStore<MyModel> = ...
+/// try await store.set(value: model, forKey: "key")
+/// let retrieved = try await store.getValue(forKey: "key")
+/// ```
+public protocol CodableStore<PersistedType>: Sendable {
 
-    associatedtype PersistedType: Codable
+    associatedtype PersistedType: Codable & Sendable
 
-    /// Asynchronously stores the provided `Codable` in the `CodableStore` with the provided `key`,
-    /// Overwriting the previous value in the store with the same key if applicable.
+    /// Stores a value for the given key, overwriting any existing value.
     ///
-    /// - Parameter value: The `Codable` value to persist.
-    /// - Parameter key: The key for the value to persist.
+    /// Pass `nil` to remove the value for the key.
+    ///
+    /// - Parameter value: The value to persist, or `nil` to remove.
+    /// - Parameter key: The key to associate with the value.
     func set(value: PersistedType?, forKey key: String) async throws
 
-    /// Asynchronously gets the previously-set `value` for the given `key` from the `CodableStore`.
+    /// Retrieves the value for the given key.
     ///
-    /// - Parameter key: The key for the value to retrieve.
-    ///
-    /// - Returns: The value stored in the `CodableStore` with the provided `key`.
+    /// - Parameter key: The key to look up.
+    /// - Returns: The stored value, or `nil` if no value exists for the key.
     func getValue(forKey key: String) async throws -> PersistedType?
 
-    /// Asynchronously gets all the keys from the `CodableStore`.
+    /// Returns all keys currently stored.
     ///
-    /// - Returns: All the keys stored in the `CodableStore`.
+    /// - Returns: An array of all keys in the store.
     func getAllKeys() async throws -> [String]
 
-    /// Asynchronously removes the value of the provided `key` `String` from the `CodableStore`.
+    /// Removes the value for the given key.
     ///
-    /// - Parameter key: The key of the value to remove.
+    /// - Parameter key: The key whose value should be removed.
     func removeValue(forKey key: String) async throws
 
-    /// Asynchronously removes all of the values from the `CodableStore`.
+    /// Removes all values from the store.
     func removeAllValues() async throws
 }

@@ -11,11 +11,12 @@ import Foundation
 // MARK: - ToastOptions
 
 /// Defines toast options.
-public struct ToastOptions {
+public struct ToastOptions: Sendable {
 
     // MARK: - Position
 
-    public enum Position {
+    /// The screen position where the toast is displayed.
+    public enum Position: Sendable {
         case top
         case bottom
     }
@@ -26,7 +27,7 @@ public struct ToastOptions {
     // MARK: - Shape
 
     /// Defines the supported shape for toasts.
-    public enum Shape {
+    public enum Shape: Sendable {
         case capsule
         case roundedRectangle
     }
@@ -37,7 +38,7 @@ public struct ToastOptions {
     // MARK: - Animations
 
     /// Defines how toasts will be presented to the user.
-    public enum AnimationStyle {
+    public enum AnimationStyle: Sendable {
 
         /// Toast will slide in from the edge of the screen.
         case slide

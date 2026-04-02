@@ -6,9 +6,12 @@
 
 import SwiftUI
 
-// MARK: - CoreShadowModifier
+// MARK: - ShadowIfLightColorSchemeModifier
 
-@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
+/// A view modifier that applies a shadow only when the color scheme is light.
+///
+/// Use the ``SwiftUI/View/shadowIfLightColorScheme(color:radius:x:y:)`` modifier
+/// instead of applying this type directly.
 public struct ShadowIfLightColorSchemeModifier: ViewModifier {
 
     @Environment(\.colorScheme) var colorScheme
@@ -33,7 +36,6 @@ public struct ShadowIfLightColorSchemeModifier: ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 12.0, tvOS 13.0, watchOS 6.0, *)
 public extension View {
 
     /// Adds a  shadow for this view only when the environment `colorScheme` is not `dark`.

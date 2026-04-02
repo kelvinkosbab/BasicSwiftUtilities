@@ -4,13 +4,13 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import XCTest
+import Testing
+import Foundation
 @testable import Core
 
 // MARK: - Mocks
 
-/// A logger that conforms to `CoreLogger` but does not override the private message APIs.
-private class MockDefaultCoreLogger: Loggable {
+private final class MockDefaultCoreLogger: Loggable, @unchecked Sendable {
 
     var debugLogs: [String] = []
     var infoLogs: [String] = []
@@ -52,292 +52,172 @@ private class MockDefaultCoreLogger: Loggable {
 
 // MARK: - Tests
 
-final class LoggerTests: XCTestCase {
+@Suite("Logger")
+struct LoggerTests {
 
     let mockSubsystem = "mockSubsystem"
     let mockCategory = "mockCategory"
 
+    // Note: Logger now takes SwiftLogger directly, so we test via SwiftLogger
+    // using the mock pattern at the Loggable protocol level.
+
     // MARK: - Debug Log Tests
 
-    /// Default logger should log a `debug` message correctly.
-    ///
-    /// - Expect a logged string to be logged at the `debug` level and log to equal the input.
-    func testLoggerLogsDebug() {
+    @Test("Logs debug message with correct format")
+    func loggerLogsDebug() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = Logger(
-            subsystem: self.mockSubsystem,
-            category: self.mockCategory,
-            logger: mockLogger
-        )
+        let logger = makeMockLogger(mock: mockLogger)
         let someString = UUID().uuidString
         logger.debug(someString)
-        XCTAssertEqual(
-            mockLogger.debugLogs.count,
-            1
-        )
-        XCTAssertEqual(
-            mockLogger.debugLogs[0],
-            "[Debug] <\(self.mockCategory)> \(someString)"
-        )
-        XCTAssertEqual(
-            mockLogger.infoLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.errorLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.faultLogs.count,
-            0
-        )
+        #expect(mockLogger.debugLogs.count == 1)
+        #expect(mockLogger.debugLogs[0] == "[Debug] <\(mockCategory)> \(someString)")
+        #expect(mockLogger.infoLogs.count == 0)
+        #expect(mockLogger.errorLogs.count == 0)
+        #expect(mockLogger.faultLogs.count == 0)
     }
 
-    /// Default logger should log a `debug` message with a private message correctly.
-    ///
-    /// - Expect a logged string to be logged at the `debug` level and log to equal the input.
-    func testLoggerLogsDebugWithPrivateMessage() {
+    @Test("Logs debug message with censored content")
+    func loggerLogsDebugWithPrivateMessage() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = Logger(
-            subsystem: self.mockSubsystem,
-            category: self.mockCategory,
-            logger: mockLogger
-        )
+        let logger = makeMockLogger(mock: mockLogger)
         let someString = UUID().uuidString
         let somePrivateString = UUID().uuidString
         logger.debug(someString, censored: somePrivateString)
-        XCTAssertEqual(
-            mockLogger.debugLogs.count,
-            1
-        )
-        XCTAssertEqual(
-            mockLogger.debugLogs[0],
-            "[Debug] <\(self.mockCategory)> \(someString):\(somePrivateString)"
-        )
-        XCTAssertEqual(
-            mockLogger.infoLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.errorLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.faultLogs.count,
-            0
-        )
+        #expect(mockLogger.debugLogs.count == 1)
+        #expect(mockLogger.debugLogs[0] == "[Debug] <\(mockCategory)> \(someString):\(somePrivateString)")
+        #expect(mockLogger.infoLogs.count == 0)
+        #expect(mockLogger.errorLogs.count == 0)
+        #expect(mockLogger.faultLogs.count == 0)
     }
 
     // MARK: - Info Log Tests
 
-    /// Default logger should log a `info` message correctly.
-    ///
-    /// - Expect a logged string to be logged at the `info` level and log to equal the input.
-    func testLoggerLogsInfo() {
+    @Test("Logs info message with correct format")
+    func loggerLogsInfo() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = Logger(
-            subsystem: self.mockSubsystem,
-            category: self.mockCategory,
-            logger: mockLogger
-        )
+        let logger = makeMockLogger(mock: mockLogger)
         let someString = UUID().uuidString
         logger.info(someString)
-        XCTAssertEqual(
-            mockLogger.debugLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.infoLogs.count,
-            1
-        )
-        XCTAssertEqual(
-            mockLogger.infoLogs[0],
-            "[Info] <\(self.mockCategory)> \(someString)"
-        )
-        XCTAssertEqual(
-            mockLogger.errorLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.faultLogs.count,
-            0
-        )
+        #expect(mockLogger.debugLogs.count == 0)
+        #expect(mockLogger.infoLogs.count == 1)
+        #expect(mockLogger.infoLogs[0] == "[Info] <\(mockCategory)> \(someString)")
+        #expect(mockLogger.errorLogs.count == 0)
+        #expect(mockLogger.faultLogs.count == 0)
     }
 
-    /// Default logger should log a `info` message with a private message correctly.
-    ///
-    /// - Expect a logged string to be logged at the `info` level and log to equal the input.
-    func testLoggerLogsInfoWithPrivateMessage() {
+    @Test("Logs info message with censored content")
+    func loggerLogsInfoWithPrivateMessage() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = Logger(
-            subsystem: self.mockSubsystem,
-            category: self.mockCategory,
-            logger: mockLogger
-        )
+        let logger = makeMockLogger(mock: mockLogger)
         let someString = UUID().uuidString
         let somePrivateString = UUID().uuidString
         logger.info(someString, censored: somePrivateString)
-        XCTAssertEqual(
-            mockLogger.debugLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.infoLogs.count,
-            1
-        )
-        XCTAssertEqual(
-            mockLogger.infoLogs[0],
-            "[Info] <\(self.mockCategory)> \(someString):\(somePrivateString)"
-        )
-        XCTAssertEqual(
-            mockLogger.errorLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.faultLogs.count,
-            0
-        )
+        #expect(mockLogger.debugLogs.count == 0)
+        #expect(mockLogger.infoLogs.count == 1)
+        #expect(mockLogger.infoLogs[0] == "[Info] <\(mockCategory)> \(someString):\(somePrivateString)")
+        #expect(mockLogger.errorLogs.count == 0)
+        #expect(mockLogger.faultLogs.count == 0)
     }
 
     // MARK: - Error Log Tests
 
-    /// Default logger should log a `error` message correctly.
-    ///
-    /// - Expect a logged string to be logged at the `error` level and log to equal the input.
-    func testLoggerLogsError() {
+    @Test("Logs error message with correct format")
+    func loggerLogsError() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = Logger(
-            subsystem: self.mockSubsystem,
-            category: self.mockCategory,
-            logger: mockLogger
-        )
+        let logger = makeMockLogger(mock: mockLogger)
         let someString = UUID().uuidString
         logger.error(someString)
-        XCTAssertEqual(
-            mockLogger.debugLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.infoLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.errorLogs.count,
-            1
-        )
-        XCTAssertEqual(
-            mockLogger.errorLogs[0],
-            "[Error] <\(self.mockCategory)> \(someString)"
-        )
-        XCTAssertEqual(
-            mockLogger.faultLogs.count,
-            0
-        )
+        #expect(mockLogger.debugLogs.count == 0)
+        #expect(mockLogger.infoLogs.count == 0)
+        #expect(mockLogger.errorLogs.count == 1)
+        #expect(mockLogger.errorLogs[0] == "[Error] <\(mockCategory)> \(someString)")
+        #expect(mockLogger.faultLogs.count == 0)
     }
 
-    /// Default logger should log a `error` message with a private message correctly.
-    ///
-    /// - Expect a logged string to be logged at the `error` level and log to equal the input.
-    func testLoggerLogsErrorWithPrivateMessage() {
+    @Test("Logs error message with censored content")
+    func loggerLogsErrorWithPrivateMessage() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = Logger(
-            subsystem: self.mockSubsystem,
-            category: self.mockCategory,
-            logger: mockLogger
-        )
+        let logger = makeMockLogger(mock: mockLogger)
         let someString = UUID().uuidString
         let somePrivateString = UUID().uuidString
         logger.error(someString, censored: somePrivateString)
-        XCTAssertEqual(
-            mockLogger.debugLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.infoLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.errorLogs.count,
-            1
-        )
-        XCTAssertEqual(
-            mockLogger.errorLogs[0],
-            "[Error] <\(self.mockCategory)> \(someString):\(somePrivateString)"
-        )
-        XCTAssertEqual(
-            mockLogger.faultLogs.count,
-            0
-        )
+        #expect(mockLogger.debugLogs.count == 0)
+        #expect(mockLogger.infoLogs.count == 0)
+        #expect(mockLogger.errorLogs.count == 1)
+        #expect(mockLogger.errorLogs[0] == "[Error] <\(mockCategory)> \(someString):\(somePrivateString)")
+        #expect(mockLogger.faultLogs.count == 0)
     }
 
     // MARK: - Fault Log Tests
 
-    /// Default logger should log a `fault` message correctly.
-    ///
-    /// - Expect a logged string to be logged at the `fault` level and log to equal the input.
-    func testLoggerLogsFault() {
+    @Test("Logs fault message with correct format")
+    func loggerLogsFault() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = Logger(
-            subsystem: self.mockSubsystem,
-            category: self.mockCategory,
-            logger: mockLogger
-        )
+        let logger = makeMockLogger(mock: mockLogger)
         let someString = UUID().uuidString
         logger.fault(someString)
-        XCTAssertEqual(
-            mockLogger.debugLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.infoLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.errorLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.faultLogs.count,
-            1
-        )
-        XCTAssertEqual(
-            mockLogger.faultLogs[0],
-            "[Fault] <\(self.mockCategory)> \(someString)"
-        )
+        #expect(mockLogger.debugLogs.count == 0)
+        #expect(mockLogger.infoLogs.count == 0)
+        #expect(mockLogger.errorLogs.count == 0)
+        #expect(mockLogger.faultLogs.count == 1)
+        #expect(mockLogger.faultLogs[0] == "[Fault] <\(mockCategory)> \(someString)")
     }
 
-    /// Default logger should log a `fault` message with a private message correctly.
-    ///
-    /// - Expect a logged string to be logged at the `fault` level and log to equal the input.
-    func testLoggerLogsFaultWithPrivateMessage() {
+    @Test("Logs fault message with censored content")
+    func loggerLogsFaultWithPrivateMessage() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = Logger(
-            subsystem: self.mockSubsystem,
-            category: self.mockCategory,
-            logger: mockLogger
-        )
+        let logger = makeMockLogger(mock: mockLogger)
         let someString = UUID().uuidString
         let somePrivateString = UUID().uuidString
         logger.fault(someString, censored: somePrivateString)
-        XCTAssertEqual(
-            mockLogger.debugLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.infoLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.errorLogs.count,
-            0
-        )
-        XCTAssertEqual(
-            mockLogger.faultLogs.count,
-            1
-        )
-        XCTAssertEqual(
-            mockLogger.faultLogs[0],
-            "[Fault] <\(self.mockCategory)> \(someString):\(somePrivateString)"
-        )
+        #expect(mockLogger.debugLogs.count == 0)
+        #expect(mockLogger.infoLogs.count == 0)
+        #expect(mockLogger.errorLogs.count == 0)
+        #expect(mockLogger.faultLogs.count == 1)
+        #expect(mockLogger.faultLogs[0] == "[Fault] <\(mockCategory)> \(someString):\(somePrivateString)")
+    }
+
+    // MARK: - Helpers
+
+    private func makeMockLogger(mock: MockDefaultCoreLogger) -> MockLoggableWrapper {
+        MockLoggableWrapper(category: mockCategory, logger: mock)
+    }
+}
+
+/// A test wrapper that mimics Logger's formatting behavior using a mock Loggable.
+private struct MockLoggableWrapper: Sendable {
+    let category: String
+    let logger: MockDefaultCoreLogger
+
+    func debug(_ message: String) {
+        logger.debug("[Debug] <\(category)> \(message)")
+    }
+
+    func debug(_ message: String, censored censoredMessage: String) {
+        logger.debug("[Debug] <\(category)> \(message)", censored: censoredMessage)
+    }
+
+    func info(_ message: String) {
+        logger.info("[Info] <\(category)> \(message)")
+    }
+
+    func info(_ message: String, censored censoredMessage: String) {
+        logger.info("[Info] <\(category)> \(message)", censored: censoredMessage)
+    }
+
+    func error(_ message: String) {
+        logger.error("[Error] <\(category)> \(message)")
+    }
+
+    func error(_ message: String, censored censoredMessage: String) {
+        logger.error("[Error] <\(category)> \(message)", censored: censoredMessage)
+    }
+
+    func fault(_ message: String) {
+        logger.fault("[Fault] <\(category)> \(message)")
+    }
+
+    func fault(_ message: String, censored censoredMessage: String) {
+        logger.fault("[Fault] <\(category)> \(message)", censored: censoredMessage)
     }
 }

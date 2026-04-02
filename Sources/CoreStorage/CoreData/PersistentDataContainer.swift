@@ -32,7 +32,7 @@ import CoreData
 ///     }
 /// }
 /// ```
-public protocol PersistentDataContainer {
+public protocol PersistentDataContainer: Sendable {
 
     /// An instance of `CoreDataPersistentContainer` includes all objects needed to represent a functioning
     /// Core Data stack, and provides convenience methods and properties for common patterns.
@@ -161,7 +161,7 @@ public extension PersistentDataContainer {
     /// * The store could not be migrated to the current model version.
     /// * The store has already been loaded.
     /// Check the error message to determine what the actual problem was.
-    func load(completion: @escaping (_ result: Result) -> Void) {
+    func load(completion: @escaping @Sendable (_ result: Result) -> Void) {
         self.coreDataContainer.loadPersistentStores { _, error in
             if let error = error {
                 completion(.failure(error))
@@ -192,7 +192,6 @@ public extension PersistentDataContainer {
     /// * The store could not be migrated to the current model version.
     /// * The store has already been loaded.
     /// Check the error message to determine what the actual problem was.
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func load() async throws {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
             self.load { result in

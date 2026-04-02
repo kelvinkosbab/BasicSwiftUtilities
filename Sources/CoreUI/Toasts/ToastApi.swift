@@ -10,6 +10,7 @@ import SwiftUI
 
 // MARK: - ToastApi
 
+@MainActor
 public class ToastApi: ObservableObject, ToastStateDelegate {
 
     @Published var currentToastState: ToastState = .none

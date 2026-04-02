@@ -114,7 +114,6 @@ import SwiftUI
         }
     }
     .toastableContainer(toastApi: topCapsuleToastApi)
-    .previewDisplayName("Top Capsule Toast Tests")
 }
 
 #endif

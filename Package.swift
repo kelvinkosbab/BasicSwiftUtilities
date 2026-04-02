@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7.1
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,10 +6,11 @@ import PackageDescription
 let package = Package(
     name: "BasicSwiftUtilities",
     platforms: [
-        .iOS("15"),
-        .macOS("12"),
-        .tvOS("15"),
-        .watchOS("7")
+        .iOS("17"),
+        .macOS("14"),
+        .tvOS("17"),
+        .watchOS("10"),
+        .visionOS("1")
     ],
     products: [
         .library(
@@ -17,12 +18,12 @@ let package = Package(
             targets: ["Core"]
         ),
         .library(
-            name: "CoreHealth",
-            targets: ["CoreHealth"]
-        ),
-        .library(
             name: "CoreUI",
             targets: ["CoreUI"]
+        ),
+        .library(
+            name: "CoreUIKit",
+            targets: ["CoreUIKit"]
         ),
         .library(
             name: "CoreStorage",
@@ -40,45 +41,63 @@ let package = Package(
 
         .target(
             name: "Core",
-            dependencies: []
+            dependencies: [],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
         ),
         .testTarget(
             name: "CoreTests",
-            dependencies: ["Core"]
-        ),
-
-        // MARK: - CoreHealth
-
-        .target(
-            name: "CoreHealth",
-            dependencies: ["Core"]
-        ),
-        .testTarget(
-            name: "CoreHealthTests",
-            dependencies: ["CoreHealth"]
+            dependencies: ["Core"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
         ),
 
         // MARK: - CoreUI
+
         .target(
             name: "CoreUI",
-            dependencies: []
+            dependencies: [],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
         ),
         .testTarget(
             name: "CoreUITests",
-            dependencies: ["CoreUI"]
+            dependencies: ["CoreUI"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        ),
+
+        // MARK: - CoreUIKit
+
+        .target(
+            name: "CoreUIKit",
+            dependencies: ["CoreUI"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
         ),
 
         // MARK: - CoreStorage
 
         .target(
             name: "CoreStorage",
-            dependencies: ["Core"]
+            dependencies: ["Core"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
         ),
         .testTarget(
             name: "CoreStorageTests",
             dependencies: ["CoreStorage"],
             resources: [
                 .process("Resources")
+            ],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
             ]
         ),
 
@@ -86,11 +105,17 @@ let package = Package(
 
         .target(
             name: "RunMode",
-            dependencies: []
+            dependencies: [],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
         ),
         .testTarget(
             name: "RunModeTests",
-            dependencies: ["RunMode"]
+            dependencies: ["RunMode"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
         )
     ]
 )

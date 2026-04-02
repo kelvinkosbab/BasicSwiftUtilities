@@ -8,7 +8,6 @@ import CoreData
 
 // MARK: - ObjectStore & ObserverPredicate
 
-@available(iOS 13.0, *)
 public extension ObjectStore {
 
     // MARK: - Observer of Objects

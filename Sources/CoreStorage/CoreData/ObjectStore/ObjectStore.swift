@@ -8,11 +8,10 @@ import CoreData
 
 // MARK: - ObjectStore
 
-@available(iOS 13.0.0, *)
-public protocol ObjectStore where Object.PersistentObject.Object == Object {
+public protocol ObjectStore: Sendable where Object.PersistentObject.Object == Object {
 
     /// Type of the `struct` object that can is associated with the persisted `NSManagedObject` type.
-    associatedtype Object: AssociatedWithPersistentObject
+    associatedtype Object: AssociatedWithPersistentObject & Sendable
 
     /// Type of the `NSObject.NSManagedObject` that is persisted in the `CoreData` persistent model store.
     typealias PersistedObject = Object.PersistentObject
@@ -21,7 +20,6 @@ public protocol ObjectStore where Object.PersistentObject.Object == Object {
     var container: PersistentDataContainer { get }
 }
 
-@available(iOS 13.0.0, *)
 internal extension ObjectStore {
 
     // MARK: - Save
@@ -64,7 +62,6 @@ internal extension ObjectStore {
 
 // MARK: - Create or Update
 
-@available(iOS 13.0.0, *)
 public extension ObjectStore {
 
     func createOrUpdate(_ object: Object) throws {
@@ -78,7 +75,6 @@ public extension ObjectStore {
         try self.context.save()
     }
 
-    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     func createOrUpdate(_ object: Object) async throws {
         return try await self.context.perform {
             return try self.createOrUpdate(object)
@@ -88,7 +84,6 @@ public extension ObjectStore {
 
 // MARK: - Fetching
 
-@available(iOS 13.0.0, *)
 public extension ObjectStore {
 
     // MARK: - Fetch Request
@@ -119,15 +114,16 @@ public extension ObjectStore {
         return try self.context.fetch(request).structValues
     }
 
-    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     func fetch(
         predicate: NSPredicate?,
         sortDescriptors: [NSSortDescriptor]? = nil
     ) async throws -> [Object.PersistentObject.Object] {
+        nonisolated(unsafe) let unsafePredicate = predicate
+        nonisolated(unsafe) let unsafeSortDescriptors = sortDescriptors
         return try await self.context.perform {
             return try self.fetch(
-                predicate: predicate,
-                sortDescriptors: sortDescriptors
+                predicate: unsafePredicate,
+                sortDescriptors: unsafeSortDescriptors
             )
         }
     }
@@ -141,7 +137,6 @@ public extension ObjectStore {
         return try self.fetch(predicate: predicate).first
     }
 
-    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     func fetchOne(
         id: String
     ) async throws -> Object.PersistentObject.Object? {
@@ -160,7 +155,6 @@ public extension ObjectStore {
         return try self.fetch(predicate: predicate)
     }
 
-    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     func fetchMany(
         in ids: [String]
     ) async throws -> [Object.PersistentObject.Object] {
@@ -179,7 +173,6 @@ public extension ObjectStore {
         )
     }
 
-    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     func fetchMany(
         notIn ids: [String]
     ) async throws -> [Object.PersistentObject.Object] {
@@ -202,7 +195,6 @@ public extension ObjectStore {
         )
     }
 
-    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     func fetchAll(
         sortDescriptors: [NSSortDescriptor]? = nil
     ) async throws -> [Object.PersistentObject.Object] {
@@ -218,7 +210,6 @@ public extension ObjectStore {
 
 // MARK: - Deletion
 
-@available(iOS 13.0.0, *)
 public extension ObjectStore {
 
     // MARK: - Deletion by NSPredicate
@@ -233,13 +224,13 @@ public extension ObjectStore {
         try self.saveChanges()
     }
 
-    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     func delete(
         predicate: NSPredicate?
     ) async throws {
+        nonisolated(unsafe) let unsafePredicate = predicate
         return try await self.context.perform {
-            let request = self.newFetchRequest(predicate: predicate)
-            for object in try context.fetch(request) {
+            let request = self.newFetchRequest(predicate: unsafePredicate)
+            for object in try self.context.fetch(request) {
                 self.context.delete(object)
             }
             try self.saveChanges()
@@ -253,7 +244,6 @@ public extension ObjectStore {
         try self.delete(predicate: predicate)
     }
 
-    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     func deleteOne(id: String) async throws {
         let predicate = NSPredicate(id: id)
         try await self.delete(predicate: predicate)
@@ -266,7 +256,6 @@ public extension ObjectStore {
         try self.delete(predicate: predicate)
     }
 
-    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     func deleteMany(in ids: [String]) async throws {
         let predicate = NSPredicate(ids: ids)
         try await self.delete(predicate: predicate)
@@ -277,7 +266,6 @@ public extension ObjectStore {
         try self.delete(predicate: predicate)
     }
 
-    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     func deleteMany(notIn ids: [String]) async throws {
         let predicate = NSPredicate(notIn: ids)
         try await self.delete(predicate: predicate)
@@ -289,7 +277,6 @@ public extension ObjectStore {
         try self.delete(predicate: nil)
     }
 
-    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     func deleteAll() async throws {
         try await self.delete(predicate: nil)
     }

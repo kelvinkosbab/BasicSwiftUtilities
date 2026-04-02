@@ -1,6 +1,6 @@
 //
 //  AnyCodableStore.swift
-//  
+//
 //  Copyright © Kozinga. All rights reserved.
 //
 
@@ -8,19 +8,29 @@ import Foundation
 
 // MARK: - AnyCodableStore
 
-/// A class that erases the type of a backing `CodableStore` so that it can be used without elaborate
-/// associated type constraints.
-@available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
-public final class AnyCodableStore<T: Codable>: CodableStore {
+/// A type-erased wrapper around a ``CodableStore``.
+///
+/// Use this when you need to store or pass around a ``CodableStore`` without exposing
+/// the concrete type.
+///
+/// ```swift
+/// let concreteStore = DiskBackedJSONCodableStore<MyModel>(label: "store", bundleIdentifier: "com.app")
+/// let erased = concreteStore.eraseToAnyCodableStore()
+/// try await erased.set(value: model, forKey: "key")
+/// ```
+public final class AnyCodableStore<T: Codable & Sendable>: CodableStore, @unchecked Sendable {
 
     public typealias PersistedType = T
 
-    private let setValueDelegate: (T?, String) async throws -> Void
-    private let getValueDelegate: (String) async throws -> T?
-    private let getAllKeysDelegate: () async throws -> [String]
-    private let removeValueDelegate: (String) async throws -> Void
-    private let removeAllValuesDelegate: () async throws -> Void
+    private let setValueDelegate: @Sendable (T?, String) async throws -> Void
+    private let getValueDelegate: @Sendable (String) async throws -> T?
+    private let getAllKeysDelegate: @Sendable () async throws -> [String]
+    private let removeValueDelegate: @Sendable (String) async throws -> Void
+    private let removeAllValuesDelegate: @Sendable () async throws -> Void
 
+    /// Creates a type-erased store wrapping the given concrete store.
+    ///
+    /// - Parameter delegate: The concrete ``CodableStore`` to wrap.
     public init<U: CodableStore>(_ delegate: U) where U.PersistedType == PersistedType {
         self.setValueDelegate = delegate.set
         self.getValueDelegate = delegate.getValue
@@ -52,11 +62,11 @@ public final class AnyCodableStore<T: Codable>: CodableStore {
 
 // MARK: - Type Erasure Helpers
 
-// Extensions for helping with Swift's protocol type erasure.
-@available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+/// Convenience method for erasing the concrete ``CodableStore`` type.
 public extension CodableStore {
 
-    func eraseMyType() -> AnyCodableStore<PersistedType> {
+    /// Wraps this store in an ``AnyCodableStore`` for type erasure.
+    func eraseToAnyCodableStore() -> AnyCodableStore<PersistedType> {
         return AnyCodableStore<PersistedType>(self)
     }
 }

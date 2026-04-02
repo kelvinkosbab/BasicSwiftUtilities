@@ -63,7 +63,7 @@ import Core
 ///     }
 /// }
 /// ```
-public class DataObserver<Delegate>: NSObject, NSFetchedResultsControllerDelegate where Delegate: DataObserverDelegate {
+public class DataObserver<Delegate>: NSObject, NSFetchedResultsControllerDelegate, @unchecked Sendable where Delegate: DataObserverDelegate {
 
     public typealias PersistedObject = Delegate.Object.PersistentObject
     public typealias Object = Delegate.Object

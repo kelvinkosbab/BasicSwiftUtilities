@@ -1,14 +1,13 @@
 //
 //  ConcreteFileSystem.swift
-//  
+//
 //  Copyright © Kozinga. All rights reserved.
 //
 
 import Foundation
 
-/// A simple concrete implementation of the `FileSystem` protocol.
-@available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
-class ConcreteFileSystem: FileSystem {
+/// The production ``FileSystem`` implementation backed by `Foundation` APIs.
+final class ConcreteFileSystem: FileSystem, Sendable {
 
     func read(
         contensOf url: URL,

@@ -19,9 +19,8 @@ import SwiftUI
 /// No impact to dismiss programatically (by calling "presentationMode.wrappedValue.dismiss()")
 @available(macOS, unavailable)
 @available(watchOS, unavailable)
-@available(iOS 13.0, tvOS 13.0, *)
 struct MbModalHackView: UIViewControllerRepresentable {
-    var dismissable: () -> Bool = { false }
+    var dismissable: @Sendable () -> Bool = { false }
 
     func makeUIViewController(context: UIViewControllerRepresentableContext<MbModalHackView>) -> UIViewController {
         MbModalViewController(dismissable: self.dismissable)
@@ -32,12 +31,11 @@ struct MbModalHackView: UIViewControllerRepresentable {
 
 @available(macOS, unavailable)
 @available(watchOS, unavailable)
-@available(iOS 13.0, tvOS 13.0, *)
 extension MbModalHackView {
     private final class MbModalViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
-        let dismissable: () -> Bool
+        let dismissable: @Sendable () -> Bool
 
-        init(dismissable: @escaping () -> Bool) {
+        init(dismissable: @escaping @Sendable () -> Bool) {
             self.dismissable = dismissable
             super.init(nibName: nil, bundle: nil)
         }
@@ -79,11 +77,10 @@ extension UIViewController {
 /// `view.allowAutDismiss(...)`
 @available(macOS, unavailable)
 @available(watchOS, unavailable)
-@available(iOS 13.0, tvOS 13.0, *)
 public extension View {
 
     /// Control if allow to dismiss the sheet by the user actions
-    func allowAutoDismiss(_ dismissable: @escaping () -> Bool) -> some View {
+    func allowAutoDismiss(_ dismissable: @escaping @Sendable () -> Bool) -> some View {
         self
             .background(MbModalHackView(dismissable: dismissable))
     }
@@ -101,7 +98,6 @@ public extension View {
 
 @available(macOS, unavailable)
 @available(watchOS, unavailable)
-@available(iOS 13.0, tvOS 13.0, *)
 struct AllowAutoDismiss_Previews: PreviewProvider {
 
     struct ContentView: View {

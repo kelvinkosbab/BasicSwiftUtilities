@@ -12,7 +12,6 @@ import SwiftUI
 // MARK: - Getting SafeAreaInsets
 
 @available(macOS, unavailable)
-@available(iOS 13.0, tvOS 15.0, watchOS 6.0, *)
 public extension EnvironmentValues {
 
     /// Provides the safe area insets of the application window.
@@ -35,16 +34,17 @@ public extension EnvironmentValues {
 }
 
 @available(macOS, unavailable)
-@available(iOS 13.0, tvOS 15.0, watchOS 6.0, *)
 private struct SafeAreaInsetsKey: EnvironmentKey {
 
-    static var defaultValue: EdgeInsets {
-        (UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.safeAreaInsets ?? .zero).insets
+    @MainActor static var defaultValue: EdgeInsets {
+        let scenes = UIApplication.shared.connectedScenes
+        let windowScene = scenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene
+        let window = windowScene?.windows.first(where: { $0.isKeyWindow })
+        return (window?.safeAreaInsets ?? .zero).insets
     }
 }
 
 @available(macOS, unavailable)
-@available(iOS 13.0, tvOS 15.0, watchOS 6.0, *)
 private extension UIEdgeInsets {
 
     var insets: EdgeInsets {

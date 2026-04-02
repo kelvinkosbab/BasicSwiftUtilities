@@ -44,19 +44,11 @@ private struct ForegroundStyleFontStyleModifier: ViewModifier {
     func body(content: Content) -> some View {
         switch self.foregroundStyle {
         case .primary:
-            if #available(iOS 16.0, macOS 13.0, *) {
-                content
-                    .font(.system(.footnote, weight: .bold))
-            } else {
-                content.font(.footnote.bold())
-            }
+            content
+                .font(.system(.footnote, weight: .bold))
         case .secondary:
-            if #available(iOS 16.0, macOS 13.0, *) {
-                content
-                    .font(.system(.footnote, weight: .light))
-            } else {
-                content.font(.footnote.weight(.light))
-            }
+            content
+                .font(.system(.footnote, weight: .light))
         }
     }
 }

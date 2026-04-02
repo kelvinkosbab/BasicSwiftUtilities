@@ -4,7 +4,7 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import XCTest
+import Testing
 @testable import RunMode
 
 // MARK: - Mocks
@@ -16,44 +16,36 @@ struct MockUnitTestStatusProvider: UnitTestStatusProvider {
 
 // MARK: - RunModeTests
 
-final class RunModeTests: XCTestCase {
+@Suite("RunMode")
+struct RunModeTests {
 
-    /// Should return `RunMode.mainApplication` if not running unit tests
-    func testReturnMainApplication() {
+    @Test("Returns mainApplication when not in tests")
+    func returnMainApplication() {
         let provider = MockUnitTestStatusProvider(
             isUnitTest: false,
             isUIUnitTest: false
         )
         let result = RunMode.getActive(unitTestStatusProvider: provider)
-        XCTAssertEqual(
-            result,
-            .mainApplication
-        )
+        #expect(result == .mainApplication)
     }
 
-    /// Should return `RunMode.unitTests` if not running unit tests
-    func testReturnUnitTests() {
+    @Test("Returns unitTests when running unit tests")
+    func returnUnitTests() {
         let provider = MockUnitTestStatusProvider(
             isUnitTest: true,
             isUIUnitTest: false
         )
         let result = RunMode.getActive(unitTestStatusProvider: provider)
-        XCTAssertEqual(
-            result,
-            .unitTests
-        )
+        #expect(result == .unitTests)
     }
 
-    /// Should return `RunMode.uiUnitTests` if not running unit tests
-    func testReturnUIUnitTests() {
+    @Test("Returns uiUnitTests when running UI tests")
+    func returnUIUnitTests() {
         let provider = MockUnitTestStatusProvider(
             isUnitTest: false,
             isUIUnitTest: true
         )
         let result = RunMode.getActive(unitTestStatusProvider: provider)
-        XCTAssertEqual(
-            result,
-            .uiUnitTests
-        )
+        #expect(result == .uiUnitTests)
     }
 }

@@ -1,12 +1,10 @@
 //
-// Copyright (c) 2023 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+//  ObserverTests.swift
 //
-// PROPRIETARY/CONFIDENTIAL
-//
-// Use is subject to license terms.
+//  Copyright © Kozinga. All rights reserved.
 //
 
-import XCTest
+import Testing
 import SwiftUI
 import CoreData
 @testable import CoreStorage
@@ -59,60 +57,34 @@ private class MockObserver: DataObserverDelegate {
 
 // MARK: - ObserverTests
 
-final class ObserverTests: XCTestCase {
+@Suite("DataObserver", .serialized)
+struct ObserverTests {
 
-    override func setUp() async throws {
+    init() async throws {
         try? await KeyValueDataContainer.shared.load()
-    }
-
-    override func tearDown() async throws {
         let store = MockObjectStore()
-        try await store.deleteAll()
+        try? await store.deleteAll()
     }
 
-    func testIniitailValue() throws {
+    @Test("Observer tracks create, update, and delete")
+    func initialValue() throws {
         let mockIdentifier = "mockIdentifier"
         let store = MockObjectStore()
         let observer = MockObserver(key: mockIdentifier)
-        XCTAssertEqual(
-            observer.value,
-            nil
-        )
+        #expect(observer.value == nil)
 
-        // Test updating the value for the key
         let mockValue = "mockValue"
-        try store.createOrUpdate(KeyValue(
-            identifier: mockIdentifier,
-            value: mockValue
-        ))
-        XCTAssertEqual(
-            observer.value,
-            mockValue
-        )
+        try store.createOrUpdate(KeyValue(identifier: mockIdentifier, value: mockValue))
+        #expect(observer.value == mockValue)
 
-        // Test with another observer
         let anotherObserver = MockObserver(key: mockIdentifier)
-        XCTAssertEqual(
-            anotherObserver.value,
-            mockValue
-        )
+        #expect(anotherObserver.value == mockValue)
 
-        // Test udpating the value
         let anotherMockValue = "anotherMockValue"
-        try store.createOrUpdate(KeyValue(
-            identifier: mockIdentifier,
-            value: anotherMockValue
-        ))
-        XCTAssertEqual(
-            observer.value,
-            anotherMockValue
-        )
+        try store.createOrUpdate(KeyValue(identifier: mockIdentifier, value: anotherMockValue))
+        #expect(observer.value == anotherMockValue)
 
-        // Test delete
         try store.deleteOne(id: mockIdentifier)
-        XCTAssertEqual(
-            observer.value,
-            nil
-        )
+        #expect(observer.value == nil)
     }
 }

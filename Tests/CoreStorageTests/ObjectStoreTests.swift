@@ -1,12 +1,10 @@
 //
-// Copyright (c) 2023 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+//  ObjectStoreTests.swift
 //
-// PROPRIETARY/CONFIDENTIAL
-//
-// Use is subject to license terms.
+//  Copyright © Kozinga. All rights reserved.
 //
 
-import XCTest
+import Testing
 import CoreData
 @testable import CoreStorage
 
@@ -25,201 +23,128 @@ private struct MockObjectStore: ObjectStore {
 
 // MARK: - ObjectStoreTests
 
-final class ObjectStoreTests: XCTestCase {
+@Suite("ObjectStore", .serialized)
+struct ObjectStoreTests {
 
-    override func setUp() async throws {
+    init() async throws {
         try? await KeyValueDataContainer.shared.load()
-    }
-
-    override func tearDown() async throws {
         let store = MockObjectStore()
-        try await store.deleteAll()
+        try? await store.deleteAll()
     }
 
-    func testCreateUpdateDeleteObject() throws {
+    @Test("Create, update, and delete an object")
+    func createUpdateDeleteObject() throws {
         let identifier = "mockIdentifier"
         let object = KeyValue(identifier: identifier, value: "mockValue")
         let store = MockObjectStore()
         try store.createOrUpdate(object)
 
-        // Fetch and verify created object
         var fetched = try store.fetchOne(id: identifier)
-        XCTAssertEqual(
-            fetched,
-            object
-        )
+        #expect(fetched == object)
 
-        // Update, fetch, and verify update object
         let update = KeyValue(identifier: identifier, value: "mockValue2")
         try store.createOrUpdate(update)
         fetched = try store.fetchOne(id: identifier)
-        XCTAssertEqual(
-            fetched,
-            update
-        )
+        #expect(fetched == update)
 
-        // Delete the object
         try store.deleteOne(id: identifier)
     }
 
-    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
-    func testCreateUpdateDeleteObjectAsync() async throws {
+    @Test("Create, update, and delete an object (async)")
+    func createUpdateDeleteObjectAsync() async throws {
         let identifier = "mockIdentifier"
         let object = KeyValue(identifier: identifier, value: "mockValue")
         let store = MockObjectStore()
         try await store.createOrUpdate(object)
 
-        // Fetch and verify created object
         var fetched = try await store.fetchOne(id: identifier)
-        XCTAssertEqual(
-            fetched,
-            object
-        )
+        #expect(fetched == object)
 
-        // Update, fetch, and verify update object
         let update = KeyValue(identifier: identifier, value: "mockValue2")
         try await store.createOrUpdate(update)
         fetched = try await store.fetchOne(id: identifier)
-        XCTAssertEqual(
-            fetched,
-            update
-        )
+        #expect(fetched == update)
 
-        // Delete the object
         try await store.deleteOne(id: identifier)
     }
 
     // MARK: - FetchAll
 
-    func testFetchAll() throws {
+    @Test("Fetch all and fetch many return correct counts")
+    func fetchAll() throws {
         let store = MockObjectStore()
         let array = 0...10
-        let identifiersToCreate: [String] = array.map { identifier in
-            "identifier.\(identifier)"
-        }
+        let identifiersToCreate: [String] = array.map { "identifier.\($0)" }
 
         for identifier in identifiersToCreate {
-            let object = KeyValue(
-                identifier: identifier,
-                value: "value.\(identifier)"
-            )
-            try store.createOrUpdate(object)
+            try store.createOrUpdate(KeyValue(identifier: identifier, value: "value.\(identifier)"))
         }
 
-        // Test fetchAll
         let fetchAllTest = try store.fetchAll()
-        XCTAssertEqual(
-            fetchAllTest.count,
-            array.count
-        )
+        #expect(fetchAllTest.count == array.count)
 
-        // Test fetchMany
         let fetchManyTest = try store.fetchMany(in: identifiersToCreate)
-        XCTAssertEqual(
-            fetchManyTest.count,
-            array.count
-        )
+        #expect(fetchManyTest.count == array.count)
 
-        // Test deleteMany
         try store.deleteMany(in: identifiersToCreate)
     }
 
-    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
-    func testFetchAllAsync() async throws {
+    @Test("Fetch all and fetch many return correct counts (async)")
+    func fetchAllAsync() async throws {
         let store = MockObjectStore()
         let array = 0...10
-        let identifiersToCreate: [String] = array.map { identifier in
-            "identifier.\(identifier)"
-        }
+        let identifiersToCreate: [String] = array.map { "identifier.\($0)" }
 
         for identifier in identifiersToCreate {
-            let object = KeyValue(
-                identifier: identifier,
-                value: "value.\(identifier)"
-            )
-            try await store.createOrUpdate(object)
+            try await store.createOrUpdate(KeyValue(identifier: identifier, value: "value.\(identifier)"))
         }
 
-        // Test fetchAll
         let fetchAllTest = try await store.fetchAll()
-        XCTAssertEqual(
-            fetchAllTest.count,
-            array.count
-        )
+        #expect(fetchAllTest.count == array.count)
 
-        // Test fetchMany
         let fetchManyTest = try await store.fetchMany(in: identifiersToCreate)
-        XCTAssertEqual(
-            fetchManyTest.count,
-            array.count
-        )
+        #expect(fetchManyTest.count == array.count)
 
-        // Test deleteMany
         try await store.deleteMany(in: identifiersToCreate)
     }
 
     // MARK: - NotIn
 
-    func testNotIn() throws {
+    @Test("Fetch many not-in excludes the specified identifier")
+    func notInSync() throws {
         let store = MockObjectStore()
         let array = 0...10
-        let identifiersToCreate: [String] = array.map { identifier in
-            "identifier.\(identifier)"
-        }
+        let identifiersToCreate: [String] = array.map { "identifier.\($0)" }
 
         for identifier in identifiersToCreate {
-            let object = KeyValue(
-                identifier: identifier,
-                value: "value.\(identifier)"
-            )
-            try store.createOrUpdate(object)
+            try store.createOrUpdate(KeyValue(identifier: identifier, value: "value.\(identifier)"))
         }
 
-        guard let identifierToIgnore = identifiersToCreate.first else {
-            XCTFail("We need an ID to ignore to finish this test")
-            return
-        }
+        let identifierToIgnore = identifiersToCreate[0]
 
-        // Tests fetch many not in
-        let notInFirstId = try store.fetchMany(notIn: [ identifierToIgnore ])
-        XCTAssertEqual(
-            notInFirstId.count,
-            array.count - 1
-        )
+        let notInFirstId = try store.fetchMany(notIn: [identifierToIgnore])
+        #expect(notInFirstId.count == array.count - 1)
 
-        // Tests delete many not in
-        try store.deleteMany(notIn: [ identifierToIgnore ])
+        try store.deleteMany(notIn: [identifierToIgnore])
+        try store.deleteOne(id: identifierToIgnore)
     }
 
-    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
-    func testNotIn() async throws {
+    @Test("Fetch many not-in excludes the specified identifier (async)")
+    func notInAsync() async throws {
         let store = MockObjectStore()
         let array = 0...10
-        let identifiersToCreate: [String] = array.map { identifier in
-            "identifier.\(identifier)"
-        }
+        let identifiersToCreate: [String] = array.map { "identifier.\($0)" }
 
         for identifier in identifiersToCreate {
-            let object = KeyValue(
-                identifier: identifier,
-                value: "value.\(identifier)"
-            )
-            try await store.createOrUpdate(object)
+            try await store.createOrUpdate(KeyValue(identifier: identifier, value: "value.\(identifier)"))
         }
 
-        guard let identifierToIgnore = identifiersToCreate.first else {
-            XCTFail("We need an ID to ignore to finish this test")
-            return
-        }
+        let identifierToIgnore = identifiersToCreate[0]
 
-        // Tests fetch many not in
-        let notInFirstId = try await store.fetchMany(notIn: [ identifierToIgnore ])
-        XCTAssertEqual(
-            notInFirstId.count,
-            array.count - 1
-        )
+        let notInFirstId = try await store.fetchMany(notIn: [identifierToIgnore])
+        #expect(notInFirstId.count == array.count - 1)
 
-        // Tests delete many not in
-        try await store.deleteMany(notIn: [ identifierToIgnore ])
+        try await store.deleteMany(notIn: [identifierToIgnore])
+        try await store.deleteOne(id: identifierToIgnore)
     }
 }

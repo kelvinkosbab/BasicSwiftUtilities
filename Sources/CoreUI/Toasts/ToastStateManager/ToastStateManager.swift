@@ -10,12 +10,14 @@ import SwiftUI
 
 // MARK: - ToastStateManager
 
+@MainActor
 protocol ToastStateDelegate: AnyObject {
     func didUpdate(toastState: ToastState)
 }
 
 /// Responsible for managing any incoming `showToast` requests. Incoming toasts will be queued up
 /// until all toasts have been shown to the user.
+@MainActor
 class ToastStateManager {
 
     weak var delegate: ToastStateDelegate?
@@ -57,30 +59,29 @@ class ToastStateManager {
         }
 
         // Prepare the toast for rendering
-        DispatchQueue.main.asyncAfter(deadline: .now() + prepareDuration) { [weak self] in
+        Task { @MainActor [weak self] in
+            try? await Task.sleep(nanoseconds: UInt64(prepareDuration * 1_000_000_000))
 
             // Show the toast
             withAnimation {
                 self?.delegate?.didUpdate(toastState: .show(nextToast))
             }
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + showDelay) { [weak self] in
+            try? await Task.sleep(nanoseconds: UInt64(showDelay * 1_000_000_000))
 
-                withAnimation {
-                    self?.delegate?.didUpdate(toastState: .hiding(nextToast))
-                }
-
-                // Wiat for toast to hide
-                DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) { [weak self] in
-
-                    withAnimation {
-                        self?.delegate?.didUpdate(toastState: .none)
-                    }
-
-                    self?.isProcessingCurrentToast = false
-                    self?.processNextToast()
-                }
+            withAnimation {
+                self?.delegate?.didUpdate(toastState: .hiding(nextToast))
             }
+
+            // Wait for toast to hide
+            try? await Task.sleep(nanoseconds: UInt64(animationDuration * 1_000_000_000))
+
+            withAnimation {
+                self?.delegate?.didUpdate(toastState: .none)
+            }
+
+            self?.isProcessingCurrentToast = false
+            self?.processNextToast()
         }
     }
 }

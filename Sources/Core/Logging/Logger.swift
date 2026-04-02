@@ -8,70 +8,49 @@ import Foundation
 
 // MARK: - Logger
 
-/// An object that adds interpolated strings to the data store of the unified logging system for a
-/// specified `subsystem` and `category`.
+/// An object that adds interpolated strings to the unified logging system for a specified
+/// `subsystem` and `category`.
 ///
-/// This object either wraps `os.Logger` or `os_log` depending on Platform and OS version.
-public struct Logger: Loggable {
+/// `Logger` wraps Apple's `os.Logger` via ``SwiftLogger`` and formats log messages with
+/// the log level and category for easy filtering in Console.app.
+///
+/// ```swift
+/// let logger = Logger(subsystem: "com.myapp", category: "Networking")
+/// logger.info("Request sent")
+/// // Logs: "[Info] <Networking> Request sent"
+/// ```
+public struct Logger: Loggable, Sendable {
 
-    private let logger: Loggable
-    private let subsystem: String
+    private let logger: SwiftLogger
     private let category: String
 
-    /// Creates a custom logger for logging to a specific subsystem and category.
+    /// Creates a logger for a specific subsystem and category.
     ///
-    /// - Parameter subsystem: Describes the module or app from which the log is being emitted from.
-    /// - Parameter category: Describes a category specifying the specific action that is happening.
+    /// - Parameter subsystem: Identifies the module or app emitting the log.
+    /// - Parameter category: Describes the area of functionality being logged.
     public init(
         subsystem: String,
         category: String
     ) {
-        #if !os(macOS)
-        if #available(iOS 14.0, watchOS 7.0, tvOS 14.0, macOS 11, *) {
-            let logger = SwiftLogger(
-                subsystem: subsystem,
-                category: category
-            )
-            self.init(
-                subsystem: subsystem,
-                category: category,
-                logger: logger
-            )
-        } else {
-            let logger = LoggableOSLog(
-                subsystem: subsystem,
-                category: category
-            )
-            self.init(
-                subsystem: subsystem,
-                category: category,
-                logger: logger
-            )
-        }
-        #else
-        let logger = SwiftLogger(
+        self.logger = SwiftLogger(
             subsystem: subsystem,
             category: category
         )
-        self.init(
-            subsystem: subsystem,
-            category: category,
-            logger: logger
-        )
-        #endif
+        self.category = category
     }
 
-    /// Creates a custom logger for logging to the provided logger.
+    /// Creates a logger with a custom ``Loggable`` backend.
     ///
     /// - Note: Internal for unit testing use.
     ///
-    /// - Parameter logger: object which will log the messages.
+    /// - Parameter subsystem: Identifies the module or app emitting the log.
+    /// - Parameter category: Describes the area of functionality being logged.
+    /// - Parameter logger: The backing ``Loggable`` implementation to use.
     internal init(
         subsystem: String,
         category: String,
-        logger: Loggable
+        logger: SwiftLogger
     ) {
-        self.subsystem = subsystem
         self.category = category
         self.logger = logger
     }

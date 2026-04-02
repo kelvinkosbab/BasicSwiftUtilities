@@ -3,6 +3,51 @@
 
 import PackageDescription
 
+// MARK: - Target Helpers
+
+/// Shared Swift settings applied to all targets.
+let sharedSwiftSettings: [SwiftSetting] = [
+    .swiftLanguageMode(.v6)
+]
+
+/// Creates a source target and optionally a test target for a module.
+///
+/// Assumes the directory layout:
+/// ```
+/// {name}/
+///     Sources/
+///     Tests/       (if hasTests is true)
+/// ```
+func makeTargets(
+    name: String,
+    dependencies: [Target.Dependency] = [],
+    hasTests: Bool = true,
+    testResources: [Resource]? = nil
+) -> [Target] {
+    var targets: [Target] = [
+        .target(
+            name: name,
+            dependencies: dependencies,
+            path: "\(name)/Sources",
+            swiftSettings: sharedSwiftSettings
+        )
+    ]
+    if hasTests {
+        targets.append(
+            .testTarget(
+                name: "\(name)Tests",
+                dependencies: [.byName(name: name)],
+                path: "\(name)/Tests",
+                resources: testResources,
+                swiftSettings: sharedSwiftSettings
+            )
+        )
+    }
+    return targets
+}
+
+// MARK: - Package
+
 let package = Package(
     name: "BasicSwiftUtilities",
     platforms: [
@@ -13,118 +58,16 @@ let package = Package(
         .visionOS("1")
     ],
     products: [
-        .library(
-            name: "Core",
-            targets: ["Core"]
-        ),
-        .library(
-            name: "CoreUI",
-            targets: ["CoreUI"]
-        ),
-        .library(
-            name: "CoreUIKit",
-            targets: ["CoreUIKit"]
-        ),
-        .library(
-            name: "CoreStorage",
-            targets: ["CoreStorage"]
-        ),
-        .library(
-            name: "RunMode",
-            targets: ["RunMode"]
-        )
+        .library(name: "Core", targets: ["Core"]),
+        .library(name: "CoreUI", targets: ["CoreUI"]),
+        .library(name: "CoreUIKit", targets: ["CoreUIKit"]),
+        .library(name: "CoreStorage", targets: ["CoreStorage"]),
+        .library(name: "RunMode", targets: ["RunMode"])
     ],
     dependencies: [],
-    targets: [
-
-        // MARK: - Core
-
-        .target(
-            name: "Core",
-            dependencies: [],
-            path: "Core/Sources",
-            swiftSettings: [
-                .swiftLanguageMode(.v6)
-            ]
-        ),
-        .testTarget(
-            name: "CoreTests",
-            dependencies: ["Core"],
-            path: "Core/Tests",
-            swiftSettings: [
-                .swiftLanguageMode(.v6)
-            ]
-        ),
-
-        // MARK: - CoreUI
-
-        .target(
-            name: "CoreUI",
-            dependencies: [],
-            path: "CoreUI/Sources",
-            swiftSettings: [
-                .swiftLanguageMode(.v6)
-            ]
-        ),
-        .testTarget(
-            name: "CoreUITests",
-            dependencies: ["CoreUI"],
-            path: "CoreUI/Tests",
-            swiftSettings: [
-                .swiftLanguageMode(.v6)
-            ]
-        ),
-
-        // MARK: - CoreUIKit
-
-        .target(
-            name: "CoreUIKit",
-            dependencies: ["CoreUI"],
-            path: "CoreUIKit/Sources",
-            swiftSettings: [
-                .swiftLanguageMode(.v6)
-            ]
-        ),
-
-        // MARK: - CoreStorage
-
-        .target(
-            name: "CoreStorage",
-            dependencies: ["Core"],
-            path: "CoreStorage/Sources",
-            swiftSettings: [
-                .swiftLanguageMode(.v6)
-            ]
-        ),
-        .testTarget(
-            name: "CoreStorageTests",
-            dependencies: ["CoreStorage"],
-            path: "CoreStorage/Tests",
-            resources: [
-                .process("Resources")
-            ],
-            swiftSettings: [
-                .swiftLanguageMode(.v6)
-            ]
-        ),
-
-        // MARK: - RunMode
-
-        .target(
-            name: "RunMode",
-            dependencies: [],
-            path: "RunMode/Sources",
-            swiftSettings: [
-                .swiftLanguageMode(.v6)
-            ]
-        ),
-        .testTarget(
-            name: "RunModeTests",
-            dependencies: ["RunMode"],
-            path: "RunMode/Tests",
-            swiftSettings: [
-                .swiftLanguageMode(.v6)
-            ]
-        )
-    ]
+    targets: makeTargets(name: "Core")
+        + makeTargets(name: "CoreUI")
+        + makeTargets(name: "CoreUIKit", dependencies: ["CoreUI"], hasTests: false)
+        + makeTargets(name: "CoreStorage", dependencies: ["Core"], testResources: [.process("Resources")])
+        + makeTargets(name: "RunMode")
 )

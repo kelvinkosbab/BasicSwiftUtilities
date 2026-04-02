@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "Bash(npx --version)",
+      "Bash(gh api:*)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(mkdir -p /Users/kelvinkosbab/Projects/Kozinga/Packages/BasicSwiftUtilities/.claude/skills)",
+      "Bash(cp -r /tmp/swift-concurrency-agent-skill/swift-concurrency-pro /Users/kelvinkosbab/Projects/Kozinga/Packages/BasicSwiftUtilities/.claude/skills/)",
+      "Bash(cp -r /tmp/swiftui-agent-skill/swiftui-pro /Users/kelvinkosbab/Projects/Kozinga/Packages/BasicSwiftUtilities/.claude/skills/)",
+      "Bash(cp -r /tmp/swift-testing-agent-skill/swift-testing-pro /Users/kelvinkosbab/Projects/Kozinga/Packages/BasicSwiftUtilities/.claude/skills/)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(wc -l /Users/kelvinkosbab/Projects/Kozinga/Packages/BasicSwiftUtilities/Sources/**/*.swift)",
+      "Bash(wc -l /Users/kelvinkosbab/Projects/Kozinga/Packages/BasicSwiftUtilities/Tests/**/*.swift)",
+      "Bash(xargs -I {} basename {})",
+      "Bash(grep -r \"import\" /Users/kelvinkosbab/Projects/Kozinga/Packages/BasicSwiftUtilities/Sources/Core/*.swift)",
+      "Bash(swift build:*)",
+      "Bash(swift package:*)",
+      "Bash(swift test:*)",
+      "Bash(git stash:*)",
+      "Bash(git rm:*)",
+      "Bash(git mv:*)",
+      "Bash(find Sources/ Tests/ -name \".DS_Store\" -delete)",
+      "Bash(ls -d */)",
+      "Bash(for d:*)",
+      "Bash(do echo:*)",
+      "Read(//Users/kelvinkosbab/Projects/Kozinga/Packages/BasicSwiftUtilities/**)",
+      "Bash(done)"
+    ]
+  }
+}

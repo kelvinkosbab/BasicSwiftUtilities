@@ -42,6 +42,7 @@ let package = Package(
         .target(
             name: "Core",
             dependencies: [],
+            path: "Core/Sources",
             swiftSettings: [
                 .swiftLanguageMode(.v6)
             ]
@@ -49,6 +50,7 @@ let package = Package(
         .testTarget(
             name: "CoreTests",
             dependencies: ["Core"],
+            path: "Core/Tests",
             swiftSettings: [
                 .swiftLanguageMode(.v6)
             ]
@@ -59,6 +61,7 @@ let package = Package(
         .target(
             name: "CoreUI",
             dependencies: [],
+            path: "CoreUI/Sources",
             swiftSettings: [
                 .swiftLanguageMode(.v6)
             ]
@@ -66,6 +69,7 @@ let package = Package(
         .testTarget(
             name: "CoreUITests",
             dependencies: ["CoreUI"],
+            path: "CoreUI/Tests",
             swiftSettings: [
                 .swiftLanguageMode(.v6)
             ]
@@ -76,6 +80,7 @@ let package = Package(
         .target(
             name: "CoreUIKit",
             dependencies: ["CoreUI"],
+            path: "CoreUIKit/Sources",
             swiftSettings: [
                 .swiftLanguageMode(.v6)
             ]
@@ -86,6 +91,7 @@ let package = Package(
         .target(
             name: "CoreStorage",
             dependencies: ["Core"],
+            path: "CoreStorage/Sources",
             swiftSettings: [
                 .swiftLanguageMode(.v6)
             ]
@@ -93,6 +99,7 @@ let package = Package(
         .testTarget(
             name: "CoreStorageTests",
             dependencies: ["CoreStorage"],
+            path: "CoreStorage/Tests",
             resources: [
                 .process("Resources")
             ],
@@ -106,6 +113,7 @@ let package = Package(
         .target(
             name: "RunMode",
             dependencies: [],
+            path: "RunMode/Sources",
             swiftSettings: [
                 .swiftLanguageMode(.v6)
             ]
@@ -113,6 +121,7 @@ let package = Package(
         .testTarget(
             name: "RunModeTests",
             dependencies: ["RunMode"],
+            path: "RunMode/Tests",
             swiftSettings: [
                 .swiftLanguageMode(.v6)
             ]

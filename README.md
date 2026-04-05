@@ -1,108 +1,127 @@
 # BasicSwiftUtilities
 
-This repository provides basic utilities and APIs for an application running on Apple's platforms'.
-
-This repository also includes some useful resources for developing on Apple's platforms such as
-`class` vs `struct`, Automatic Reference Counting, and more. (see [HelpfulResources.md](./HelpfulResources.md)))
+A Swift 6 package providing foundational utilities for Apple platforms — logging, retry strategies,
+persistent storage, SwiftUI components, and UIKit helpers.
 
 Developed by Kelvin Kosbab
 kelvin.kosbab@kozinga.net
 https://kelvinkosbab.github.io/BasicSwiftUtilities
 
-## Swift packages and frameworks included in this package
+## Modules
 
-This repository contains the following Swift packages (also supports exporting of dynamic
-frameworks via `BasicSwiftUtilitesFramework.xcproject`):
-- ``Core``
-- ``CoreHealth``
-- ``CoreStorage``
-- ``CoreUI``
-- ``RunMode``
-
-For detailed information of these packages / frameworks see below.
-
-Note: This pacakge is designed such that its only dependency is Apple's various fundamental frameworks.
+| Module | Description |
+|--------|-------------|
+| **Core** | Logging, retry strategies, and background task orchestration |
+| **CoreUI** | SwiftUI components, view modifiers, color utilities, and toast system |
+| **CoreUIKit** | UIKit view controllers, presentation helpers, color utilities, and font registration |
+| **CoreStorage** | CoreData helpers and a lightweight disk-backed key-value store |
+| **RunMode** | Detect whether the current process is the main app, unit tests, or UI tests |
 
 **Platform Support:**
-- iOS 15.0
-- macOS 12.0
-- tvOS 15.0
-- watchOS 7.0
+- iOS 17.0
+- macOS 14.0
+- tvOS 17.0
+- watchOS 10.0
 - visionOS 1.0
 
-### Core
+**Swift Version:** 6.0 with strict concurrency
 
-Provides basic utilities for an app running on Apple platforms.
+## Package Structure
 
-For a full breakdown and details see [`Core`'s Documentation](./Sources/Core/Documentation.docc/Documentation.md).
+Each module is organized with colocated sources and tests:
 
-### CoreHealth
+```
+BasicSwiftUtilities/
+    Package.swift
+    Core/
+        Sources/
+        Tests/
+    CoreUI/
+        Sources/
+        Tests/
+    CoreUIKit/
+        Sources/
+    CoreStorage/
+        Sources/
+        Tests/
+    RunMode/
+        Sources/
+        Tests/
+```
 
-Provides utilties for accessing Apple's `HealthKit` APIs. These APIs wrap Apple's APIs to provide
-useful ways to query data safely via units that each health biometric supports.
+## Core
 
-For a full breakdown and details see [`CoreHealth`'s Documentation](./Sources/CoreHealth/Documentation.docc/Documentation.md).
+Provides logging, retry strategies, and background task management.
 
-### CoreStorage
+- **Logging** — `Logger` wraps Apple's `os.Logger` with category-tagged, privacy-aware log
+  messages. See the `Loggable` protocol for the logging interface.
+- **Retry** — `retry()` and `asyncRetry()` support configurable backoff strategies (exponential,
+  linear, constant, custom) with jitter. See `RetryStrategy`.
+- **Background Tasks** — `LongRunningTaskOrchestrator` registers tasks that should continue
+  when the app enters the background.
 
-Provides utilities for persistently storing data. This pacakge includes utilities for Apple's
-`CoreData` as well as a custom `SQLite` implementation, ``CodableStore`` and
-``DiskBackedJSONCodableStore``.
-
-For a full breakdown and details see [`CoreStorage`'s Documentation](./Sources/CoreStorage/Documentation.docc/Documentation.md).
+For details see [Core's Documentation](./Core/Sources/Documentation.docc/Documentation.md).
 
 ### CoreUI
 
-Provides `UIKit` and `SwiftUI` helpers, components, and utilities.
+SwiftUI components, modifiers, and utilities.
 
-- Font utilies and custom font registration
-- SwiftUI components:
-  - Activity indicator
-  - Blurred view modifier
-  - Button styles and view modifiers
-  - Color utiliites
-  - Core spacing and margins
-  - Application toast provider
-- UIKit utilities:
-  - View controller presentation and navigation utilities
-  - Interactive view controller presentation utilities
-  - `UIView` and `UIViewController` utilities
+- **Toast System** — `ToastApi` with configurable position, shape, and animation style
+- **Color Utilities** — Define colors using hex values via `Color.hex(0x5B2071)`
+- **Layout** — `Spacing` constants, `SafeAreaInsets`, `CircleImage`, conditional view transforms
+- **View Modifiers** — Light-mode-only shadows, auto-dismiss control, dynamic type scroll wrapping
 
-For a full breakdown and details see [`CoreUI`'s Documentation](./Sources/CoreUI/Documentation.docc/Documentation.md).
+For details see [CoreUI's Documentation](./CoreUI/Sources/Documentation.docc/Documentation.md).
+
+### CoreUIKit
+
+UIKit utilities, view controllers, and presentation helpers.
+
+- **View Controllers** — `BaseHostingController` for mounting SwiftUI in UIKit,
+  `BaseNavigationController` with built-in styling, `PresentableController` protocol
+- **Interactive Transitions** — Gesture-driven presentation and dismissal
+- **Color Utilities** — `UIColor` hex, RGB, and HSB extensions
+- **Font Registration** — `FontRegistrar` for programmatic custom font loading
+
+For details see [CoreUIKit's Documentation](./CoreUIKit/Sources/Documentation.docc/Documentation.md).
+
+### CoreStorage
+
+Persistent storage utilities using CoreData and a lightweight disk-backed key-value store.
+
+- **CoreData** — `PersistentDataContainer` for store loading, `DataObserver` for change
+  notifications, and `ObjectStore` for type-safe CRUD operations
+- **CodableStore** — `DiskBackedJSONCodableStore` provides a simple key-value API for any
+  `Codable & Sendable` type, backed by JSON files on disk
+
+For details see [CoreStorage's Documentation](./CoreStorage/Sources/Documentation.docc/Documentation.md).
 
 ### RunMode
 
-Determines the active run mode off the current process.
+Detects the active run mode of the current process.
 
-Possibilities include:
- - Main application
- - Unit tests
- - UI unit tests
-
-To determine the current process's ``RunMode``:
 ```swift
 let activeRunMode = RunMode.getActive()
+// .mainApplication, .unitTests, or .uiUnitTests
 ```
 
-For a full breakdown and details see [`RunMode`'s Documentation](./Sources/RunMode/Documentation.docc/Documentation.md).
+For details see [RunMode's Documentation](./RunMode/Sources/Documentation.docc/Documentation.md).
 
-## Features to be added to this package in the future:
-
-### CoreHealth
-
-1. Support for `HKAnchoredObjectQuery` queries with type-safe and unit-safe implementation.
+## Future Improvements
 
 ### CoreUI
 
 1. **[Toasts]** Add flexibility so developers can render any `View` as the toast content without
 enforcing a `String` title.
-
 2. **[Toasts]** Add ability to customize appearance with app-specific font, not just the default
-system fonts. 
-
+system fonts.
 3. **[Toasts]** Apply a minimum capsule size if no content is present.
-
 4. **[Accessibility]** Add utilities for accessibility.
+
+## Helpful Resources
+
+See [HelpfulResources.md](./HelpfulResources.md) for educational notes on Swift concepts like
+`class` vs `struct`, Automatic Reference Counting, and more.
 
 ## License
 

@@ -67,7 +67,7 @@ let package = Package(
     dependencies: [],
     targets: makeTargets(name: "Core")
         + makeTargets(name: "CoreUI")
-        + makeTargets(name: "CoreUIKit", dependencies: ["CoreUI"], hasTests: false)
+        + makeTargets(name: "CoreUIKit", dependencies: ["CoreUI"])
         + makeTargets(name: "CoreStorage", dependencies: ["Core"], testResources: [.process("Resources")])
         + makeTargets(name: "RunMode")
 )

@@ -1,9 +1,7 @@
 //
-// Copyright (c) 2023 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+//  KeyValue.swift
 //
-// PROPRIETARY/CONFIDENTIAL
-//
-// Use is subject to license terms.
+//  Copyright © Kozinga. All rights reserved.
 //
 
 import CoreData
@@ -46,6 +44,33 @@ extension KeyValueManagedObject: PersistentObjectIdentifiable, StructConvertable
     }
 }
 
+// MARK: - KeyValueManagedObjectModel
+
+/// Builds the `NSManagedObjectModel` for `KeyValueManagedObject` programmatically.
+///
+/// SPM cannot compile `.xcdatamodeld` files into `.momd` bundles, so the model
+/// must be constructed in code for tests to work with `swift test`.
+func makeKeyValueManagedObjectModel() -> NSManagedObjectModel {
+    let identifierAttribute = NSAttributeDescription()
+    identifierAttribute.name = "identifier"
+    identifierAttribute.attributeType = .stringAttributeType
+    identifierAttribute.isOptional = true
+
+    let valueAttribute = NSAttributeDescription()
+    valueAttribute.name = "value"
+    valueAttribute.attributeType = .stringAttributeType
+    valueAttribute.isOptional = true
+
+    let entity = NSEntityDescription()
+    entity.name = "KeyValueManagedObject"
+    entity.managedObjectClassName = "KeyValueManagedObject"
+    entity.properties = [identifierAttribute, valueAttribute]
+
+    let model = NSManagedObjectModel()
+    model.entities = [entity]
+    return model
+}
+
 // MARK: - KeyValueDataContainer
 
 struct KeyValueDataContainer: PersistentDataContainer {
@@ -55,11 +80,8 @@ struct KeyValueDataContainer: PersistentDataContainer {
     let coreDataContainer: CoreDataPersistentContainer
 
     private init() {
-        do {
-            try self.init(storeName: "KeyValueDataModel", in: .module)
-        } catch {
-            fatalError("Unable to find 'KeyValueDataModel' CoreData model")
-        }
+        let model = makeKeyValueManagedObjectModel()
+        self.init(storeName: "KeyValueDataModel", managedObjectModel: model)
     }
 
     init(container: CoreDataPersistentContainer) {

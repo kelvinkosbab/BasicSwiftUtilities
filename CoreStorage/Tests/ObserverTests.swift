@@ -67,7 +67,7 @@ struct ObserverTests {
     }
 
     @Test("Observer tracks create, update, and delete")
-    func initialValue() throws {
+    @MainActor func initialValue() throws {
         let mockIdentifier = "mockIdentifier"
         let store = MockObjectStore()
         let observer = MockObserver(key: mockIdentifier)

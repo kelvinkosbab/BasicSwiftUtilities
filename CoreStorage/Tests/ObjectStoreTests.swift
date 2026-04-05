@@ -33,7 +33,7 @@ struct ObjectStoreTests {
     }
 
     @Test("Create, update, and delete an object")
-    func createUpdateDeleteObject() throws {
+    @MainActor func createUpdateDeleteObject() throws {
         let identifier = "mockIdentifier"
         let object = KeyValue(identifier: identifier, value: "mockValue")
         let store = MockObjectStore()
@@ -71,7 +71,7 @@ struct ObjectStoreTests {
     // MARK: - FetchAll
 
     @Test("Fetch all and fetch many return correct counts")
-    func fetchAll() throws {
+    @MainActor func fetchAll() throws {
         let store = MockObjectStore()
         let array = 0...10
         let identifiersToCreate: [String] = array.map { "identifier.\($0)" }
@@ -111,7 +111,7 @@ struct ObjectStoreTests {
     // MARK: - NotIn
 
     @Test("Fetch many not-in excludes the specified identifier")
-    func notInSync() throws {
+    @MainActor func notInSync() throws {
         let store = MockObjectStore()
         let array = 0...10
         let identifiersToCreate: [String] = array.map { "identifier.\($0)" }

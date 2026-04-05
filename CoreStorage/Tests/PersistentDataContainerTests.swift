@@ -81,12 +81,14 @@ struct PersistentDataContainerTests {
         }
     }
 
-    @Test("Does not throw for valid init")
+    @Test("Does not throw for valid init with programmatic model")
     func shouldNotThrowForValidInit() throws {
-        _ = try MockPersistentDataContainer(
+        let model = makeKeyValueManagedObjectModel()
+        let container = MockPersistentDataContainer(
             storeName: self.expectedStoreName,
-            in: .module
+            managedObjectModel: model
         )
+        #expect(container.coreDataContainer.viewContext != nil)
     }
 
     // MARK: - Load tests
@@ -101,10 +103,15 @@ struct PersistentDataContainerTests {
 
     @Test("Load succeeds with valid container")
     func loadSucceeds() async throws {
-        let container = try MockPersistentDataContainer(
+        let model = makeKeyValueManagedObjectModel()
+        let container = MockPersistentDataContainer(
             storeName: self.expectedStoreName,
-            in: .module
+            managedObjectModel: model
         )
+        // Use in-memory store so no disk access is needed
+        let description = NSPersistentStoreDescription()
+        description.type = NSInMemoryStoreType
+        container.coreDataContainer.persistentStoreDescriptions = [description]
         try await container.load()
     }
 

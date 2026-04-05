@@ -34,7 +34,7 @@ public extension EnvironmentValues {
 }
 
 @available(macOS, unavailable)
-private struct SafeAreaInsetsKey: EnvironmentKey {
+private struct SafeAreaInsetsKey: @preconcurrency EnvironmentKey {
 
     @MainActor static var defaultValue: EdgeInsets {
         let scenes = UIApplication.shared.connectedScenes

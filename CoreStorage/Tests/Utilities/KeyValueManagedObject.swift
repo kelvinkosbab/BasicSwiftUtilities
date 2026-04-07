@@ -4,7 +4,7 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import CoreData
+public import CoreData
 
 /// NSManagedObject subclass for the KeyValueDataModel entity.
 @objc(KeyValueManagedObject)

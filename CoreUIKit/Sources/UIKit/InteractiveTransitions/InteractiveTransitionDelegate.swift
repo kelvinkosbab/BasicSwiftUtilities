@@ -9,7 +9,7 @@
 #if !os(watchOS)
 #if !os(visionOS)
 
-import UIKit
+public import UIKit
 
 // MARK: - InteractiveTransitionDelegate
 

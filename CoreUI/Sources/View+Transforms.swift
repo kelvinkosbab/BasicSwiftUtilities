@@ -4,7 +4,7 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import SwiftUI
+public import SwiftUI
 
 public extension View {
 

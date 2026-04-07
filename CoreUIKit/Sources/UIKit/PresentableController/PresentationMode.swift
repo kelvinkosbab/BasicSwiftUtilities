@@ -7,7 +7,7 @@
 #if !os(macOS)
 #if !os(watchOS)
 
-import UIKit
+public import UIKit
 
 // MARRK: - PresentationMode
 

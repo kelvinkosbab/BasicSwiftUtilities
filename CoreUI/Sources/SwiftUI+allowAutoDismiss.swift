@@ -11,7 +11,7 @@
 #if !os(macOS)
 #if !os(watchOS)
 
-import SwiftUI
+public import SwiftUI
 
 /// Control if allow to dismiss the sheet by the user actions
 /// - Drag down on the sheet on iPhone and iPad

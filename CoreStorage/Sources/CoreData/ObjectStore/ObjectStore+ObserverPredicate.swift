@@ -4,7 +4,7 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import CoreData
+public import CoreData
 
 // MARK: - ObjectStore & ObserverPredicate
 
@@ -15,7 +15,7 @@ public extension ObjectStore {
     func newObserver<Delegate>(
         id: String
     ) -> DataObserver<Delegate> where Delegate: DataObserverDelegate,
-                                        Delegate.Object.PersistentObject == PersistedObject {
+                                      Delegate.Object.PersistentObject == PersistedObject {
         let predicate = NSPredicate(id: id)
         return self.newObserver(
             predicate: predicate

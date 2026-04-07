@@ -4,7 +4,7 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import Foundation
+public import Foundation
 
 // MARK: - File Protection Level Utilities
 

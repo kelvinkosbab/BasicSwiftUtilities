@@ -7,7 +7,8 @@ import PackageDescription
 
 /// Shared Swift settings applied to all targets.
 let sharedSwiftSettings: [SwiftSetting] = [
-    .swiftLanguageMode(.v6)
+    .swiftLanguageMode(.v6),
+    .enableUpcomingFeature("InternalImportsByDefault")
 ]
 
 /// Creates a source target and optionally a test target for a module.

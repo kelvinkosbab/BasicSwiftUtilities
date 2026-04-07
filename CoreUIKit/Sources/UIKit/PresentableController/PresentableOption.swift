@@ -6,7 +6,7 @@
 
 #if !os(macOS)
 
-import UIKit
+public import UIKit
 
 // MARK: - PresentableOption
 

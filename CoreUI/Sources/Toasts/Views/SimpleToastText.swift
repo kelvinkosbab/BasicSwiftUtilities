@@ -6,7 +6,7 @@
 
 #if !os(watchOS)
 
-import SwiftUI
+public import SwiftUI
 
 // MARK: - SimpleToastText
 

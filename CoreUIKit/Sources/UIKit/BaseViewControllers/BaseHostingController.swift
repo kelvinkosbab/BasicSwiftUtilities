@@ -8,8 +8,8 @@
 #if !os(tvOS)
 #if !os(watchOS)
 
-import UIKit
-import SwiftUI
+public import UIKit
+public import SwiftUI
 
 // MARK: - BaseHostingController
 

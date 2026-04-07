@@ -4,8 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import CoreData
-import CoreStorage
+public import CoreData
+@testable public import CoreStorage
 
 // MARK: - KeyValue
 

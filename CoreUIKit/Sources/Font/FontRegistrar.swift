@@ -6,7 +6,7 @@
 
 #if !os(macOS)
 
-import UIKit
+public import UIKit
 
 /// Programmatically registers fonts for an application.
 public final class FontRegistrar: Sendable {

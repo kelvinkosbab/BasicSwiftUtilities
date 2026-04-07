@@ -7,9 +7,9 @@
 #if !os(macOS)
 #if !os(watchOS)
 
-import SwiftUI
-import UIKit
-import CoreUI
+public import SwiftUI
+public import UIKit
+public import CoreUI
 
 // MARK: - Preview
 

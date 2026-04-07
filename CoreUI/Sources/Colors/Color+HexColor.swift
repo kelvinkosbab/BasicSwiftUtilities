@@ -5,7 +5,7 @@
 //  Created by Kelvin Kosbab on 6/1/23.
 //
 
-import SwiftUI
+public import SwiftUI
 
 // MARK: - SwiftUI Color
 

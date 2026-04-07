@@ -8,7 +8,7 @@
 #if !os(tvOS)
 #if !os(watchOS)
 
-import UIKit
+public import UIKit
 
 // MARK: - PresentableController
 

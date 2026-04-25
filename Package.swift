@@ -52,11 +52,11 @@ func makeTargets(
 let package = Package(
     name: "BasicSwiftUtilities",
     platforms: [
-        .iOS("17"),
-        .macOS("14"),
-        .tvOS("17"),
-        .watchOS("10"),
-        .visionOS("1")
+        .iOS(.v17),
+        .macOS(.v14),
+        .tvOS(.v17),
+        .watchOS(.v10),
+        .visionOS(.v1)
     ],
     products: [
         .library(name: "Core", targets: ["Core"]),

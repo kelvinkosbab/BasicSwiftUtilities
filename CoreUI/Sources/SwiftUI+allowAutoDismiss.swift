@@ -98,48 +98,41 @@ public extension View {
 
 @available(macOS, unavailable)
 @available(watchOS, unavailable)
-struct AllowAutoDismiss_Previews: PreviewProvider {
+private struct AllowAutoDismissPreviewContent: View {
+    @State private var presenting = false
 
-    struct ContentView: View {
-        @State private var presenting = false
-
-        var body: some View {
-            VStack {
-                Button {
-                    presenting = true
-                } label: {
-                    Text("Present")
-                }
+    var body: some View {
+        VStack {
+            Button("Present") {
+                presenting = true
             }
-            .sheet(isPresented: $presenting) {
-                ModalContent()
-                    .allowAutoDismiss { false }
-                    // or
-                    // .allowAutoDismiss(false)
+        }
+        .sheet(isPresented: $presenting) {
+            AllowAutoDismissPreviewModal()
+                .allowAutoDismiss { false }
+        }
+    }
+}
+
+@available(macOS, unavailable)
+@available(watchOS, unavailable)
+private struct AllowAutoDismissPreviewModal: View {
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        VStack {
+            Text("Hello")
+                .padding()
+
+            Button("Dismiss") {
+                dismiss()
             }
         }
     }
+}
 
-    struct ModalContent: View {
-        @Environment(\.presentationMode) private var presentationMode
-
-        var body: some View {
-            VStack {
-                Text("Hello")
-                    .padding()
-
-                Button {
-                    presentationMode.wrappedValue.dismiss()
-                } label: {
-                    Text("Dismiss")
-                }
-            }
-        }
-    }
-
-    static var previews: some View {
-        ContentView()
-    }
+#Preview {
+    AllowAutoDismissPreviewContent()
 }
 
 #endif

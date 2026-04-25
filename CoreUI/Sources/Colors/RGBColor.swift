@@ -9,7 +9,7 @@ import Foundation
 // MARK: - RGBColor
 
 /// A representation of a color represented by its RGB Value.
-protocol RGBColor {
+public protocol RGBColor: Sendable {
 
     /// The amount of red in the color.
     var red: Double { get }
@@ -17,6 +17,6 @@ protocol RGBColor {
     /// The amount of green in the color.
     var green: Double { get }
 
-    /// The amount of red in the color.
+    /// The amount of blue in the color.
     var blue: Double { get }
 }

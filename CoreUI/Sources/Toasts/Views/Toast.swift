@@ -86,87 +86,84 @@ struct Toast<Content, Leading, Trailing>: View where Content: View, Leading: Vie
 
 // MARK: - Preview
 
-struct Toast_Previews: PreviewProvider {
+private var mockToastContent: some View {
+    Text("Hello there")
+        .font(.footnote)
+        .fixedSize(horizontal: false, vertical: true)
+        .lineLimit(2)
+        .multilineTextAlignment(.center)
+        .foregroundStyle(.primary)
+}
 
-    static var mockContent: some View {
-        Text("Hello there")
-            .font(.footnote)
-            .fixedSize(horizontal: false, vertical: true)
-            .lineLimit(2)
-            .multilineTextAlignment(.center)
-            .foregroundColor(.primary)
+#Preview("Capsule shaped toast") {
+    VStack(spacing: Spacing.base) {
+
+        Toast(shape: .capsule) {
+            mockToastContent
+        } leading: {
+            Image(systemName: "heart.circle.fill")
+                .resizable()
+                .frame(width: 24, height: 24)
+        } trailing: {
+            Image(systemName: "person.3.sequence.fill")
+                .symbolRenderingMode(.palette)
+                .foregroundStyle(.blue, .green, .red)
+        }
+
+        Toast(shape: .capsule) {
+            VStack(spacing: Spacing.tiny) {
+                mockToastContent
+                mockToastContent
+            }
+        } leading: {
+            Image(systemName: "heart.circle.fill")
+                .resizable()
+                .frame(width: 24, height: 24)
+        } trailing: {
+            Image(systemName: "person.3.sequence.fill")
+                .symbolRenderingMode(.palette)
+                .foregroundStyle(
+                    .linearGradient(colors: [.red, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                    .linearGradient(colors: [.green, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                    .linearGradient(colors: [.blue, .clear], startPoint: .top, endPoint: .bottomTrailing)
+                )
+        }
     }
+}
 
-    static var previews: some View {
-        VStack(spacing: Spacing.base) {
+#Preview("RoundedRectangle shaped toast") {
+    VStack(spacing: Spacing.base) {
 
-            Toast(shape: .capsule) {
-                self.mockContent
-            } leading: {
-                Image(systemName: "heart.circle.fill")
-                    .resizable()
-                    .frame(width: 24, height: 24)
-            } trailing: {
-                Image(systemName: "person.3.sequence.fill")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(.blue, .green, .red)
-            }
-
-            Toast(shape: .capsule) {
-                VStack(spacing: Spacing.tiny) {
-                    self.mockContent
-                    self.mockContent
-                }
-            } leading: {
-                Image(systemName: "heart.circle.fill")
-                    .resizable()
-                    .frame(width: 24, height: 24)
-            } trailing: {
-                Image(systemName: "person.3.sequence.fill")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(
-                        .linearGradient(colors: [.red, .clear], startPoint: .top, endPoint: .bottomTrailing),
-                        .linearGradient(colors: [.green, .clear], startPoint: .top, endPoint: .bottomTrailing),
-                        .linearGradient(colors: [.blue, .clear], startPoint: .top, endPoint: .bottomTrailing)
-                    )
-            }
+        Toast(shape: .roundedRectangle) {
+            mockToastContent
+        } leading: {
+            Image(systemName: "heart.circle.fill")
+                .resizable()
+                .frame(width: 24, height: 24)
+        } trailing: {
+            Image(systemName: "person.3.sequence.fill")
+                .symbolRenderingMode(.palette)
+                .foregroundStyle(.blue, .green, .red)
         }
-        .previewDisplayName("Capsule shaped toast")
 
-        VStack(spacing: Spacing.base) {
-
-            Toast(shape: .roundedRectangle) {
-                self.mockContent
-            } leading: {
-                Image(systemName: "heart.circle.fill")
-                    .resizable()
-                    .frame(width: 24, height: 24)
-            } trailing: {
-                Image(systemName: "person.3.sequence.fill")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(.blue, .green, .red)
+        Toast(shape: .roundedRectangle) {
+            VStack(spacing: Spacing.tiny) {
+                mockToastContent
+                mockToastContent
             }
-
-            Toast(shape: .roundedRectangle) {
-                VStack(spacing: Spacing.tiny) {
-                    self.mockContent
-                    self.mockContent
-                }
-            } leading: {
-                Image(systemName: "heart.circle.fill")
-                    .resizable()
-                    .frame(width: 24, height: 24)
-            } trailing: {
-                Image(systemName: "person.3.sequence.fill")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(
-                        .linearGradient(colors: [.red, .clear], startPoint: .top, endPoint: .bottomTrailing),
-                        .linearGradient(colors: [.green, .clear], startPoint: .top, endPoint: .bottomTrailing),
-                        .linearGradient(colors: [.blue, .clear], startPoint: .top, endPoint: .bottomTrailing)
-                    )
-            }
+        } leading: {
+            Image(systemName: "heart.circle.fill")
+                .resizable()
+                .frame(width: 24, height: 24)
+        } trailing: {
+            Image(systemName: "person.3.sequence.fill")
+                .symbolRenderingMode(.palette)
+                .foregroundStyle(
+                    .linearGradient(colors: [.red, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                    .linearGradient(colors: [.green, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                    .linearGradient(colors: [.blue, .clear], startPoint: .top, endPoint: .bottomTrailing)
+                )
         }
-        .previewDisplayName("RoundedRectangle shaped toast")
     }
 }
 

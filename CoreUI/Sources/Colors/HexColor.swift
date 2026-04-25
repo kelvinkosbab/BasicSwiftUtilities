@@ -11,10 +11,10 @@ import Foundation
 /// A representation of a color represented by its hexadecimal value.
 ///
 /// For more information see [Apple's SwiftUI Color documentation.](https://developer.apple.com/documentation/swiftui/color).
-struct HexColor: RGBColor {
+public struct HexColor: RGBColor, Sendable {
 
     /// A representation of a color represented by its hexadecimal value.
-    let hexValue: Int
+    public let hexValue: Int
 
     /// Constructs a `HexColor`.
     ///
@@ -49,24 +49,22 @@ struct HexColor: RGBColor {
     }
 
     /// The amount of red in the color.
-    var red: Double {
+    public var red: Double {
         Double((self.hexValue >> 16) & 0xFF) / 255
     }
 
     /// The amount of green in the color.
-    var green: Double {
+    public var green: Double {
         Double((self.hexValue >> 8) & 0xFF) / 255
     }
 
-    /// The amount of red in the color.
-    var blue: Double {
+    /// The amount of blue in the color.
+    public var blue: Double {
         Double(self.hexValue & 0xFF) / 255
     }
 
     /// Uppercased string representation of hex color.
-    ///
-    /// Marked internal for internal testing.
-    var hexString: String {
+    public var hexString: String {
         let baseString = String(self.hexValue, radix: 16)
 
         if baseString.count == 5 {

@@ -7,7 +7,7 @@
 #if !os(macOS)
 
 public import UIKit
-public import CoreUI
+import CoreUI
 
 // MARK: - UIKit Color
 

@@ -111,110 +111,107 @@ extension Toast {
 
 // MARK: - Preview
 
-struct ToastExtensions_Previews: PreviewProvider {
+private var mockExtensionContent: some View {
+    Text("Hello there")
+        .font(.body)
+        .foregroundStyle(.primary)
+}
 
-    static var mockContent: some View {
-        Text("Hello there")
-            .font(.body)
-            .foregroundColor(.primary)
+#Preview("Capsule Extensions") {
+    VStack(spacing: Spacing.base) {
+
+        Toast(shape: .capsule) {
+            mockExtensionContent
+        }
+
+        Toast(shape: .capsule) {
+            HStack {
+                Circle()
+                    .foregroundStyle(.cyan)
+                    .padding()
+                Rectangle()
+                    .foregroundStyle(.green)
+                    .padding()
+            }
+        }
+
+        Toast(shape: .capsule) {
+            mockExtensionContent
+        } leading: {
+            Image(systemName: "heart.circle.fill")
+                .resizable()
+                .frame(width: 24, height: 24)
+                .foregroundStyle(.blue)
+        }
+
+        Toast(shape: .capsule) {
+            mockExtensionContent
+        } trailing: {
+            Image(systemName: "person.3.sequence.fill")
+                .symbolRenderingMode(.palette)
+                .foregroundStyle(
+                    .linearGradient(colors: [.red, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                    .linearGradient(colors: [.green, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                    .linearGradient(colors: [.blue, .clear], startPoint: .top, endPoint: .bottomTrailing)
+                )
+        }
+
+        Toast(shape: .capsule, title: "Simple title only")
+
+        Toast(
+            shape: .capsule,
+            title: "Simple title",
+            description: "And a description"
+        )
     }
+}
 
-    static var previews: some View {
-        VStack(spacing: Spacing.base) {
+#Preview("RoundedRectangle Extensions") {
+    VStack(spacing: Spacing.base) {
 
-            Toast(shape: .capsule) {
-                self.mockContent
-            }
-
-            Toast(shape: .capsule) {
-                HStack {
-                    Circle()
-                        .foregroundColor(.cyan)
-                        .padding()
-                    Rectangle()
-                        .foregroundColor(.green)
-                        .padding()
-                }
-            }
-
-            Toast(shape: .capsule) {
-                self.mockContent
-            } leading: {
-                Image(systemName: "heart.circle.fill")
-                    .resizable()
-                    .frame(width: 24, height: 24)
-                    .foregroundColor(.blue)
-            }
-
-            Toast(shape: .capsule) {
-                self.mockContent
-            } trailing: {
-                Image(systemName: "person.3.sequence.fill")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(
-                        .linearGradient(colors: [.red, .clear], startPoint: .top, endPoint: .bottomTrailing),
-                        .linearGradient(colors: [.green, .clear], startPoint: .top, endPoint: .bottomTrailing),
-                        .linearGradient(colors: [.blue, .clear], startPoint: .top, endPoint: .bottomTrailing)
-                    )
-            }
-
-            Toast(shape: .capsule, title: "Simple title only")
-
-            Toast(
-                shape: .capsule,
-                title: "Simple title",
-                description: "And a description"
-            )
+        Toast(shape: .roundedRectangle) {
+            mockExtensionContent
         }
-        .previewDisplayName("Capsule Extensions")
 
-        VStack(spacing: Spacing.base) {
-
-            Toast(shape: .roundedRectangle) {
-                self.mockContent
+        Toast(shape: .roundedRectangle) {
+            HStack {
+                Circle()
+                    .foregroundStyle(.cyan)
+                    .padding()
+                Rectangle()
+                    .foregroundStyle(.green)
+                    .padding()
             }
-
-            Toast(shape: .roundedRectangle) {
-                HStack {
-                    Circle()
-                        .foregroundColor(.cyan)
-                        .padding()
-                    Rectangle()
-                        .foregroundColor(.green)
-                        .padding()
-                }
-            }
-
-            Toast(shape: .roundedRectangle) {
-                self.mockContent
-            } leading: {
-                Image(systemName: "heart.circle.fill")
-                    .resizable()
-                    .frame(width: 24, height: 24)
-                    .foregroundColor(.blue)
-            }
-
-            Toast(shape: .roundedRectangle) {
-                self.mockContent
-            } trailing: {
-                Image(systemName: "person.3.sequence.fill")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(
-                        .linearGradient(colors: [.red, .clear], startPoint: .top, endPoint: .bottomTrailing),
-                        .linearGradient(colors: [.green, .clear], startPoint: .top, endPoint: .bottomTrailing),
-                        .linearGradient(colors: [.blue, .clear], startPoint: .top, endPoint: .bottomTrailing)
-                    )
-            }
-
-            Toast(shape: .roundedRectangle, title: "Simple title only")
-
-            Toast(
-                shape: .roundedRectangle,
-                title: "Simple title",
-                description: "And a description"
-            )
         }
-        .previewDisplayName("RoundedRectangle Extensions")
+
+        Toast(shape: .roundedRectangle) {
+            mockExtensionContent
+        } leading: {
+            Image(systemName: "heart.circle.fill")
+                .resizable()
+                .frame(width: 24, height: 24)
+                .foregroundStyle(.blue)
+        }
+
+        Toast(shape: .roundedRectangle) {
+            mockExtensionContent
+        } trailing: {
+            Image(systemName: "person.3.sequence.fill")
+                .symbolRenderingMode(.palette)
+                .foregroundStyle(
+                    .linearGradient(colors: [.red, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                    .linearGradient(colors: [.green, .clear], startPoint: .top, endPoint: .bottomTrailing),
+                    .linearGradient(colors: [.blue, .clear], startPoint: .top, endPoint: .bottomTrailing)
+                )
+        }
+
+        Toast(shape: .roundedRectangle, title: "Simple title only")
+
+        Toast(
+            shape: .roundedRectangle,
+            title: "Simple title",
+            description: "And a description"
+        )
     }
 }
 

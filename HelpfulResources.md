@@ -83,81 +83,73 @@ concurrent, and real-time garbage collectors address these problems, with varyin
 
 ## Common communication and data transmission patterns
 
-1. Delegation
-2. Notifications
-3. Key value observing
+Modern Swift offers several patterns for communication between components. Choose based on the
+relationship and lifecycle of the participants.
+
+1. **`@Observable` + SwiftUI environment** — preferred for view-to-state communication
+2. **`AsyncStream` / `AsyncSequence`** — preferred for streaming events between components
+3. **async/await** — preferred for one-shot request/response between components
+4. **Delegation** — still useful for tightly-coupled 1:1 relationships, especially with system APIs
+5. **`NotificationCenter`** — useful for system-wide events with many anonymous observers
+
+### `@Observable` + SwiftUI environment
+
+The default choice for sharing state between SwiftUI views. An `@Observable` class publishes its
+properties automatically; views observe via `@State`, `@Bindable`, or `@Environment`.
+
+**Pros:**
+- Compile-time-safe, no string-based key paths.
+- Integrates naturally with SwiftUI view updates.
+- No manual subscribe/unsubscribe — observation is tied to view lifetime.
+
+**Cons:**
+- SwiftUI-specific; less natural for non-UI code.
+- Requires `@MainActor` isolation for most use cases.
+
+### `AsyncStream` / `AsyncSequence`
+
+The modern replacement for delegate callbacks and `NotificationCenter` when you have a stream of
+events. Producers `yield` values; consumers `for await` over them.
+
+**Pros:**
+- Type-safe and compile-time-checked.
+- Backpressure and cancellation handled automatically.
+- Composes well with structured concurrency.
+
+**Cons:**
+- One consumer per stream by default (use `AsyncChannel` from swift-async-algorithms for fan-out).
+- Slightly more boilerplate than `@Observable` for simple state.
 
 ### Delegation
 
-The basic idea of delegation, is that a controller defines a protocol (a set of method definitions)
-that describe what a delegate object must do in order to be allowed to respond to a controller’s
-events. The protocol is a contract where the delegator says “If you want to be my delegate, then
-you must implement these methods”.
+A controller defines a protocol that describes what a delegate object must do in order to respond
+to events. Still the right pattern for tightly-coupled 1:1 relationships, and the only option when
+integrating with system APIs that require it (e.g., `URLSessionDelegate`, `UIScrollViewDelegate`).
 
 **Pros:**
-- All events to be heard are clearly defined in the delegate protocol.
-- Errors are not repelled as it should be by a delegate.
-- Protocol defined within the scope of the controller only.
-- Very traceable, and easy to identify flow of control within an application.
-- No third party object required to maintain / monitor the communication process.
+- All events clearly defined in the protocol.
+- Compile-time-safe.
+- No third-party object required.
 
 **Cons:**
-- Many lines of code required to define: 1. the protocol definition, 2. the delegate property in
-the controller, and 3. the implementation of the delegate method definitions within the delegate itself.
-- Need to be careful to correctly set delegates to `nil` on object deallocation, failure to do so
-can cause memory crashes by calling methods on deallocated objects.
-- Although possible, it can be difficult and the pattern does not really lend itself to have
-multiple delegates of the same protocol in a controller (telling multiple objects about the same event)
+- Doesn't naturally support multiple observers.
+- Needs `@preconcurrency` for legacy ObjC protocols under Swift 6 strict concurrency.
+- Verbose compared to async/await for one-shot operations.
 
-### Notifications
+### `NotificationCenter`
 
-In iOS applications there is a concept of a “Notification Center”. The main feature of this
-pattern is that the sender and recipients (there can be many) do not talk directly, like with
-delegate pattern. Instead, they both talk to `NotificationCenter` - the sender calls method
-`postNotification` on the `NotificationCenter` to send a notification, while recipients opt-in
-for receiving the notifications by calling `addObserver` on `NotificationCenter`. They can
-later opt-out with `removeObserver`. Important note though is that NotificationCenter does
-not store notifications for future subscribers - only present subscribers receive the
-notifications.
+A broadcast pattern where senders post notifications and any number of observers can subscribe.
+Best for system-wide events with no specific receiver in mind (e.g., keyboard appearance,
+app lifecycle events).
 
 **Pros:**
-- Easy to implement, with not many lines of code.
-- Can easily have multiple objects reacting to the same notification being posted.
-- Controller can pass in a context (dictionary) object with custom information (`userInfo`)
-related to the notification being posted.
+- Easy fan-out to many observers.
+- Decouples senders from receivers entirely.
 
 **Cons:**
-- No compile time to checks to ensure that notifications are correctly handled by observers.
-- Battery leackage or it uses more memory.
-- Required to un-register with the notification center if your previously registered object
-is deallocated.
-- Third party object required to manage the link between controllers and observer objects.
-- Notification Names, and UserInfo dictionary keys need to be known by both the observers
-and the controllers. If these are not defined in a common place, they can very easily
-become out of sync.
-
-### Observation
-
-`KVO` is a traditional [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) built-in
-any `NSObject` out of the box. With `KVO` observers can be notified of any changes of a `@property`
-values. It leverages Objective-C runtime for automated notifications dispatch, and because of that
-for Swift class, you would need to opt into Objective-C dynamism by inheriting `NSObject` and marking
-the `var` you’re going to observe with modifier dynamic. The observers should also be `NSObject`
-descendants because this is enforced by the `KVO` API.
-
-**Pros:**
-- Can provide an easy way to sync information between two objects. For example, a model and a view.
-- Allows us to respond to state changes inside objects that we did not create, and don’t have
-access to alter the implementations of (SKD objects).
-- Can provide us with the new value and previous value of the property we are observing.
-- Can use key paths to observe properties, thus nested objects can be observed.
-
-**Cons:**
-- The properties we wish to observe, must be defined using strings. Thus no compile time
-warnings or checking occurs.
-- Re-factoring of properties can leave our observation code no longer working.
-- Complex “IF” statements required if an object is observing multiple values.
-- Need to remove the observer when it is deallocated.
+- No compile-time type checking on `userInfo` keys (mitigated by typed notifications in iOS 16+).
+- Easy to leak observers if you forget to remove them in non-block-based APIs.
+- Hard to trace flow of control.
 
 # Useful Learning Resources
 

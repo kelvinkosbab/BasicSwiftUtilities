@@ -32,8 +32,9 @@ private final class MockCoreDataContainer: CoreDataPersistentContainer, @uncheck
 
     func loadPersistentStores(completionHandler block: @escaping @Sendable (NSPersistentStoreDescription, Error?) -> Void) {
         let description = NSPersistentStoreDescription()
-        DispatchQueue.main.async {
-            block(description, self.containerLoadError)
+        let error = self.containerLoadError
+        Task { @MainActor in
+            block(description, error)
         }
     }
 }
@@ -88,7 +89,7 @@ struct PersistentDataContainerTests {
             storeName: self.expectedStoreName,
             managedObjectModel: model
         )
-        #expect(container.coreDataContainer.viewContext != nil)
+        #expect(container.coreDataContainer.viewContext.concurrencyType == .mainQueueConcurrencyType)
     }
 
     // MARK: - Load tests
@@ -118,15 +119,21 @@ struct PersistentDataContainerTests {
     // MARK: - File protection level tests
 
     #if !os(macOS)
-    @Test("Configure file protection type adds a store description")
+    @Test("Configure file protection type sets option on existing store descriptions")
     func setFileProtectionType() throws {
+        let existingDescription = NSPersistentStoreDescription()
         let coreDataContainer = MockCoreDataContainer(
             containerLoadError: nil,
-            persistentStoreDescriptions: []
+            persistentStoreDescriptions: [existingDescription]
         )
         let container = MockPersistentDataContainer(container: coreDataContainer)
         container.configure(fileProtectionType: .complete)
+
+        // Expect no duplicate description was appended.
         #expect(coreDataContainer.persistentStoreDescriptions.count == 1)
+        // Expect the protection option was set on the existing description.
+        let value = existingDescription.options[NSPersistentStoreFileProtectionKey] as? FileProtectionType
+        #expect(value == .complete)
     }
     #endif
 }

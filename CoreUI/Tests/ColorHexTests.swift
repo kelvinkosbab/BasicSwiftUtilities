@@ -13,23 +13,27 @@ import SwiftUI
 @Suite("Color.hex")
 struct ColorHexTests {
 
-    @Test("Color.hex creates a color from hex integer")
-    func colorFromHexInt() {
-        // Just verify it doesn't crash and returns a Color
-        let color = Color.hex(0xFF0000)
-        #expect(type(of: color) == Color.self)
+    @Test("Color.hex returns the same Color value for equivalent inputs")
+    func colorFromHexIntIsDeterministic() {
+        // Color is opaque, so we can't introspect components directly. But we can
+        // verify that two calls with the same arguments produce equal Colors.
+        let a = Color.hex(0xFF0000)
+        let b = Color.hex(0xFF0000)
+        #expect(a == b)
     }
 
-    @Test("Color.hex with zero opacity is transparent")
-    func colorWithZeroOpacity() {
-        let color = Color.hex(0x00FF00, opacity: 0)
-        #expect(type(of: color) == Color.self)
+    @Test("Color.hex differs when the opacity differs")
+    func colorOpacityChangesValue() {
+        let opaque = Color.hex(0x0000FF, opacity: 1)
+        let transparent = Color.hex(0x0000FF, opacity: 0)
+        #expect(opaque != transparent)
     }
 
-    @Test("Color.hex with full opacity")
-    func colorWithFullOpacity() {
-        let color = Color.hex(0x0000FF, opacity: 1)
-        #expect(type(of: color) == Color.self)
+    @Test("Color.hex differs when the hex differs")
+    func colorHexChangesValue() {
+        let red = Color.hex(0xFF0000)
+        let green = Color.hex(0x00FF00)
+        #expect(red != green)
     }
 
     @Test("HexColor RGB components for known values")

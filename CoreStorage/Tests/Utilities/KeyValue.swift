@@ -75,13 +75,11 @@ func makeKeyValueManagedObjectModel() -> NSManagedObjectModel {
 
 struct KeyValueDataContainer: PersistentDataContainer {
 
-    static let shared = KeyValueDataContainer()
-
     let coreDataContainer: CoreDataPersistentContainer
 
-    private init() {
-        // Tests use an in-memory store so each process gets isolated state and
-        // there's no on-disk file to clean up between runs.
+    /// Creates a fresh container backed by an in-memory store. Each call returns a new
+    /// container so tests can run in parallel without sharing state.
+    init() {
         let model = makeKeyValueManagedObjectModel()
         let container = NSPersistentContainer(
             name: "KeyValueDataModel",

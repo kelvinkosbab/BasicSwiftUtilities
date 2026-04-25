@@ -15,21 +15,18 @@ struct RetryTests {
 
     // MARK: - Synchronous Retry
 
-    @Test("Succeeds on first attempt with zero retry attempts")
-    func succeedsOnFirstAttempt() {
+    @Test("Succeeds on first attempt and reports zero retry attempts")
+    func succeedsOnFirstAttempt() throws {
         let operation = retry(maxAttempts: 3, strategy: .constant(base: 0, jitterRange: 0)) {
             // succeeds immediately
         }
         let result = operation()
-        if case .success(let attempts) = result {
-            #expect(attempts == 0)
-        } else {
-            Issue.record("Expected success")
-        }
+        let attempts = try #require(result.successAttempts)
+        #expect(attempts == 0)
     }
 
-    @Test("Retries and eventually succeeds")
-    func retriesAndSucceeds() {
+    @Test("Retries transient failures and succeeds on the third attempt")
+    func retriesAndSucceeds() throws {
         let counter = LockedCounter()
         let operation = retry(maxAttempts: 3, strategy: .constant(base: 0, jitterRange: 0)) {
             let count = counter.increment()
@@ -38,27 +35,20 @@ struct RetryTests {
             }
         }
         let result = operation()
-        if case .success(let attempts) = result {
-            #expect(attempts == 2)
-        } else {
-            Issue.record("Expected success after retries")
-        }
+        let attempts = try #require(result.successAttempts)
+        #expect(attempts == 2)
     }
 
-    @Test("Returns failure after exhausting all attempts")
+    @Test("Returns failure after exhausting all attempts on permanent error")
     func failsAfterMaxAttempts() {
         let operation = retry(maxAttempts: 3, strategy: .constant(base: 0, jitterRange: 0)) {
             throw TestError.permanent
         }
         let result = operation()
-        if case .failure = result {
-            // expected
-        } else {
-            Issue.record("Expected failure")
-        }
+        #expect(result.isFailure)
     }
 
-    @Test("Short-circuits when retryIf returns false")
+    @Test("Short-circuits without further retries when retryIf returns false")
     func retryIfShortCircuits() {
         let counter = LockedCounter()
         let operation = retry(
@@ -76,31 +66,24 @@ struct RetryTests {
         }
         let result = operation()
         #expect(counter.value == 1)
-        if case .failure = result {
-            // expected
-        } else {
-            Issue.record("Expected failure")
-        }
+        #expect(result.isFailure)
     }
 
     // MARK: - Async Retry
 
-    @Test("Async retry succeeds on first attempt")
-    func asyncSucceedsOnFirstAttempt() async {
+    @Test("Async retry succeeds on first attempt and returns the value")
+    func asyncSucceedsOnFirstAttempt() async throws {
         let operation = asyncRetry(max: 3, strategy: .constant(base: 0, jitterRange: 0)) {
             return 42
         }
         let result = await operation()
-        if case .success(let attempts, let value) = result {
-            #expect(attempts == 0)
-            #expect(value == 42)
-        } else {
-            Issue.record("Expected success")
-        }
+        let success = try #require(result.success)
+        #expect(success.attempts == 0)
+        #expect(success.value == 42)
     }
 
-    @Test("Async retry retries and eventually succeeds")
-    func asyncRetriesAndSucceeds() async {
+    @Test("Async retry retries transient failures and succeeds on the third attempt")
+    func asyncRetriesAndSucceeds() async throws {
         let counter = Counter()
         let operation = asyncRetry(max: 3, strategy: .constant(base: 0, jitterRange: 0)) {
             let count = await counter.increment()
@@ -110,31 +93,23 @@ struct RetryTests {
             return "done"
         }
         let result = await operation()
-        if case .success(let attempts, let value) = result {
-            #expect(attempts == 2)
-            #expect(value == "done")
-        } else {
-            Issue.record("Expected success")
-        }
+        let success = try #require(result.success)
+        #expect(success.attempts == 2)
+        #expect(success.value == "done")
     }
 
-    @Test("Async retry fails after max attempts")
+    @Test("Async retry returns failure after exhausting all attempts")
     func asyncFailsAfterMaxAttempts() async {
-        let operation = asyncRetry(max: 2, strategy: .constant(base: 0, jitterRange: 0)) {
+        let operation = asyncRetry(max: 2, strategy: .constant(base: 0, jitterRange: 0)) { () async throws -> Int in
             throw TestError.permanent
-            return 0
         }
         let result = await operation()
-        if case .failure = result {
-            // expected
-        } else {
-            Issue.record("Expected failure")
-        }
+        #expect(result.isFailure)
     }
 
     // MARK: - RetryStrategy
 
-    @Test("Exponential strategy calculates correct delays")
+    @Test("Exponential strategy doubles the delay each attempt up to the limit")
     func exponentialStrategy() {
         let strategy = RetryStrategy.exponential(base: 100, exponent: 2, limit: 1000, jitterRange: 0)
         let delay1 = strategy.calculateDelay(attempts: 1)
@@ -147,14 +122,14 @@ struct RetryTests {
         #expect(delay4 == 800) // 100 * 2^3
     }
 
-    @Test("Exponential strategy respects limit")
+    @Test("Exponential strategy caps the delay at the configured limit")
     func exponentialStrategyLimit() {
         let strategy = RetryStrategy.exponential(base: 100, exponent: 2, limit: 500, jitterRange: 0)
         let delay = strategy.calculateDelay(attempts: 4)
         #expect(delay == 500) // min(500, 800) = 500
     }
 
-    @Test("Linear strategy calculates correct delays")
+    @Test("Linear strategy adds the increment for each subsequent attempt")
     func linearStrategy() {
         let strategy = RetryStrategy.linear(base: 100, increment: 50, limit: 1000, jitterRange: 0)
         let delay1 = strategy.calculateDelay(attempts: 1)
@@ -165,7 +140,7 @@ struct RetryTests {
         #expect(delay3 == 200) // 100 + 50*2
     }
 
-    @Test("Constant strategy returns same delay")
+    @Test("Constant strategy returns the same delay for every attempt")
     func constantStrategy() {
         let strategy = RetryStrategy.constant(base: 200, jitterRange: 0)
         let delay1 = strategy.calculateDelay(attempts: 1)
@@ -174,7 +149,7 @@ struct RetryTests {
         #expect(delay2 == 200)
     }
 
-    @Test("Custom strategy uses provided closure")
+    @Test("Custom strategy delegates delay calculation to the provided closure")
     func customStrategy() {
         let strategy = RetryStrategy.custom { attempts in
             return Double(attempts * 100)
@@ -186,6 +161,36 @@ struct RetryTests {
     }
 }
 
+// MARK: - Result Helpers
+
+extension RetryResult {
+    /// Returns `true` if the result is a `.failure` case.
+    fileprivate var isFailure: Bool {
+        if case .failure = self { true } else { false }
+    }
+
+    /// Returns the number of retry attempts when the result is `.success`, otherwise `nil`.
+    fileprivate var successAttempts: UInt? {
+        if case .success(let attempts) = self { attempts } else { nil }
+    }
+}
+
+extension AsyncRetryResult {
+    /// Returns `true` if the result is a `.failure` case.
+    fileprivate var isFailure: Bool {
+        if case .failure = self { true } else { false }
+    }
+
+    /// Returns the success payload (attempts + value) when the result is `.success`, otherwise `nil`.
+    fileprivate var success: (attempts: UInt, value: T)? {
+        if case .success(let attempts, let value) = self {
+            (attempts: attempts, value: value)
+        } else {
+            nil
+        }
+    }
+}
+
 // MARK: - Helpers
 
 private enum TestError: Error, Equatable {
@@ -194,6 +199,10 @@ private enum TestError: Error, Equatable {
 }
 
 /// Thread-safe counter for synchronous retry tests.
+///
+/// `Mutex` would be the modern Swift 6 choice but it requires macOS 15+. The package
+/// targets macOS 14, so we fall back to `NSLock`. The lock is internal-only and never
+/// shared, so `@unchecked Sendable` is safe.
 private final class LockedCounter: @unchecked Sendable {
     private let lock = NSLock()
     private var count = 0

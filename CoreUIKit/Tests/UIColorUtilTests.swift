@@ -17,7 +17,7 @@ struct UIColorUtilTests {
 
     // MARK: - HSB Components
 
-    @Test("HSB components for a known color")
+    @Test("HSB components are non-negative and alpha is opaque for UIColor.red")
     func hsbComponents() {
         let color = UIColor.red
         #expect(color.hsbHue >= 0)

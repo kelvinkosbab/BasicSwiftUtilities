@@ -22,7 +22,7 @@ struct SpacingTests {
         #expect(Spacing.xxl == 40)
     }
 
-    @Test("Spacing constants are in ascending order")
+    @Test("Spacing constants are in strictly ascending order from tiny to xxl")
     func spacingOrder() {
         let values = [
             Spacing.tiny,
@@ -32,8 +32,8 @@ struct SpacingTests {
             Spacing.xl,
             Spacing.xxl
         ]
-        for i in 0..<(values.count - 1) {
-            #expect(values[i] < values[i + 1])
+        for (smaller, larger) in zip(values, values.dropFirst()) {
+            #expect(smaller < larger)
         }
     }
 }

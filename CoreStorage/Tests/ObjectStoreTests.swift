@@ -16,23 +16,26 @@ private struct MockObjectStore: ObjectStore {
 
     let container: PersistentDataContainer
 
+    /// Creates a `MockObjectStore` backed by a fresh in-memory container so each test
+    /// instance is fully isolated from every other test.
+    ///
+    /// `NSInMemoryStoreType` loads synchronously, so we can safely build the container
+    /// without awaiting.
     init() {
-        self.container = KeyValueDataContainer.shared
+        let freshContainer = KeyValueDataContainer()
+        freshContainer.coreDataContainer.loadPersistentStores { _, _ in
+            // In-memory store loads synchronously; nothing to do here.
+        }
+        self.container = freshContainer
     }
 }
 
 // MARK: - ObjectStoreTests
 
-@Suite("ObjectStore", .serialized)
+@Suite("ObjectStore")
 struct ObjectStoreTests {
 
-    init() async throws {
-        try? await KeyValueDataContainer.shared.load()
-        let store = MockObjectStore()
-        try? await store.deleteAll()
-    }
-
-    @Test("Create, update, and delete an object")
+    @Test("Create, update, and delete an object via sync API")
     @MainActor func createUpdateDeleteObject() throws {
         let identifier = "mockIdentifier"
         let object = KeyValue(identifier: identifier, value: "mockValue")
@@ -50,7 +53,7 @@ struct ObjectStoreTests {
         try store.deleteOne(id: identifier)
     }
 
-    @Test("Create, update, and delete an object (async)")
+    @Test("Create, update, and delete an object via async API")
     func createUpdateDeleteObjectAsync() async throws {
         let identifier = "mockIdentifier"
         let object = KeyValue(identifier: identifier, value: "mockValue")
@@ -70,7 +73,7 @@ struct ObjectStoreTests {
 
     // MARK: - FetchAll
 
-    @Test("Fetch all and fetch many return correct counts")
+    @Test("fetchAll and fetchMany return all created objects via sync API")
     @MainActor func fetchAll() throws {
         let store = MockObjectStore()
         let array = 0...10
@@ -89,7 +92,7 @@ struct ObjectStoreTests {
         try store.deleteMany(in: identifiersToCreate)
     }
 
-    @Test("Fetch all and fetch many return correct counts (async)")
+    @Test("fetchAll and fetchMany return all created objects via async API")
     func fetchAllAsync() async throws {
         let store = MockObjectStore()
         let array = 0...10
@@ -110,7 +113,7 @@ struct ObjectStoreTests {
 
     // MARK: - NotIn
 
-    @Test("Fetch many not-in excludes the specified identifier")
+    @Test("fetchMany(notIn:) excludes the specified identifier via sync API")
     @MainActor func notInSync() throws {
         let store = MockObjectStore()
         let array = 0...10
@@ -129,7 +132,7 @@ struct ObjectStoreTests {
         try store.deleteOne(id: identifierToIgnore)
     }
 
-    @Test("Fetch many not-in excludes the specified identifier (async)")
+    @Test("fetchMany(notIn:) excludes the specified identifier via async API")
     func notInAsync() async throws {
         let store = MockObjectStore()
         let array = 0...10

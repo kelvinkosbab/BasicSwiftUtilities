@@ -17,8 +17,14 @@ private struct MockObjectStore: ObjectStore {
 
     let container: PersistentDataContainer
 
+    /// Creates a `MockObjectStore` backed by a fresh in-memory container so each test
+    /// instance is fully isolated from every other test.
     init() {
-        self.container = KeyValueDataContainer.shared
+        let freshContainer = KeyValueDataContainer()
+        freshContainer.coreDataContainer.loadPersistentStores { _, _ in
+            // In-memory store loads synchronously; nothing to do here.
+        }
+        self.container = freshContainer
     }
 }
 
@@ -32,7 +38,7 @@ private class MockObserver: DataObserverDelegate {
 
     public init(
         key: String,
-        dataStore: MockObjectStore = MockObjectStore()
+        dataStore: MockObjectStore
     ) throws {
         self.key = key
         self.observer = try dataStore.newObserver(id: key)
@@ -57,27 +63,21 @@ private class MockObserver: DataObserverDelegate {
 
 // MARK: - ObserverTests
 
-@Suite("DataObserver", .serialized)
+@Suite("DataObserver")
 struct ObserverTests {
 
-    init() async throws {
-        try? await KeyValueDataContainer.shared.load()
-        let store = MockObjectStore()
-        try? await store.deleteAll()
-    }
-
-    @Test("Observer tracks create, update, and delete")
+    @Test("Observer tracks create, update, and delete events for the watched identifier")
     @MainActor func initialValue() throws {
         let mockIdentifier = "mockIdentifier"
         let store = MockObjectStore()
-        let observer = try MockObserver(key: mockIdentifier)
+        let observer = try MockObserver(key: mockIdentifier, dataStore: store)
         #expect(observer.value == nil)
 
         let mockValue = "mockValue"
         try store.createOrUpdate(KeyValue(identifier: mockIdentifier, value: mockValue))
         #expect(observer.value == mockValue)
 
-        let anotherObserver = try MockObserver(key: mockIdentifier)
+        let anotherObserver = try MockObserver(key: mockIdentifier, dataStore: store)
         #expect(anotherObserver.value == mockValue)
 
         let anotherMockValue = "anotherMockValue"

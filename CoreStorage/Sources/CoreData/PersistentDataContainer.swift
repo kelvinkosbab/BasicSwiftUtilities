@@ -135,6 +135,9 @@ public extension PersistentDataContainer {
             name: storeName,
             managedObjectModel: managedObjectModel
         )
+        // Background-context saves propagate to viewContext automatically so SwiftUI
+        // and NSFetchedResultsController-based views refresh without manual merging.
+        persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
         self.init(container: persistentContainer)
     }
 
@@ -207,7 +210,11 @@ public extension PersistentDataContainer {
 
     // MARK: - Configuring File Protection Type
 
-    /// Configures the data container's `FileProtectionType`.
+    /// Configures the data container's `FileProtectionType` for all persistent stores.
+    ///
+    /// - Important: Must be called *before* ``load()`` (or ``load(completion:)``). Persistent
+    ///   store descriptions are read by CoreData only at load time; changes made afterward
+    ///   have no effect on the loaded stores.
     ///
     /// Options:
     /// - `complete`: The file is stored in an encrypted format on disk and cannot be read from or written to
@@ -227,11 +234,11 @@ public extension PersistentDataContainer {
     func configure(
         fileProtectionType: FileProtectionType
     ) {
-        let description = NSPersistentStoreDescription()
-        description.setOption(
-            fileProtectionType as NSObject,
-            forKey: NSPersistentStoreFileProtectionKey
-        )
-        self.coreDataContainer.persistentStoreDescriptions.append(description)
+        for description in self.coreDataContainer.persistentStoreDescriptions {
+            description.setOption(
+                fileProtectionType as NSObject,
+                forKey: NSPersistentStoreFileProtectionKey
+            )
+        }
     }
 }

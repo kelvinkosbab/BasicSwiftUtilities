@@ -208,6 +208,9 @@ public extension ObjectStore {
         predicate: NSPredicate?,
         sortDescriptors: [NSSortDescriptor]? = nil
     ) async throws -> [Object.PersistentObject.Object] {
+        // NSPredicate and NSSortDescriptor are read-only after construction. The compiler
+        // can't prove sendability for the existential `Foundation` types, so we use
+        // nonisolated(unsafe) to pass them across the actor boundary into context.perform.
         nonisolated(unsafe) let unsafePredicate = predicate
         nonisolated(unsafe) let unsafeSortDescriptors = sortDescriptors
         return try await self.context.perform {
@@ -320,8 +323,6 @@ public extension ObjectStore {
     func fetchAll(
         sortDescriptors: [NSSortDescriptor]? = nil
     ) throws -> [Object.PersistentObject.Object] {
-        let request = self.newFetchRequest(sortDescriptors: sortDescriptors)
-        request.returnsObjectsAsFaults = false
         return try self.fetch(
             predicate: nil,
             sortDescriptors: sortDescriptors
@@ -336,8 +337,6 @@ public extension ObjectStore {
     func fetchAll(
         sortDescriptors: [NSSortDescriptor]? = nil
     ) async throws -> [Object.PersistentObject.Object] {
-        let request = self.newFetchRequest(sortDescriptors: sortDescriptors)
-        request.returnsObjectsAsFaults = false
         return try await self.fetch(
             predicate: nil,
             sortDescriptors: sortDescriptors
@@ -377,6 +376,9 @@ public extension ObjectStore {
     func delete(
         predicate: NSPredicate?
     ) async throws {
+        // NSPredicate is read-only after construction. The compiler can't prove
+        // sendability for the existential `Foundation` type, so we use
+        // nonisolated(unsafe) to pass it across the actor boundary into context.perform.
         nonisolated(unsafe) let unsafePredicate = predicate
         return try await self.context.perform {
             let request = self.newFetchRequest(predicate: unsafePredicate)

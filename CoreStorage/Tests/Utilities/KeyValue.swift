@@ -80,8 +80,18 @@ struct KeyValueDataContainer: PersistentDataContainer {
     let coreDataContainer: CoreDataPersistentContainer
 
     private init() {
+        // Tests use an in-memory store so each process gets isolated state and
+        // there's no on-disk file to clean up between runs.
         let model = makeKeyValueManagedObjectModel()
-        self.init(storeName: "KeyValueDataModel", managedObjectModel: model)
+        let container = NSPersistentContainer(
+            name: "KeyValueDataModel",
+            managedObjectModel: model
+        )
+        let description = NSPersistentStoreDescription()
+        description.type = NSInMemoryStoreType
+        container.persistentStoreDescriptions = [description]
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        self.coreDataContainer = container
     }
 
     init(container: CoreDataPersistentContainer) {

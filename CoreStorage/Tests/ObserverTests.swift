@@ -33,9 +33,9 @@ private class MockObserver: DataObserverDelegate {
     public init(
         key: String,
         dataStore: MockObjectStore = MockObjectStore()
-    ) {
+    ) throws {
         self.key = key
-        self.observer = dataStore.newObserver(id: key)
+        self.observer = try dataStore.newObserver(id: key)
         self.observer.delegate = self
         self.value = self.observer.objects.first?.value
     }
@@ -70,14 +70,14 @@ struct ObserverTests {
     @MainActor func initialValue() throws {
         let mockIdentifier = "mockIdentifier"
         let store = MockObjectStore()
-        let observer = MockObserver(key: mockIdentifier)
+        let observer = try MockObserver(key: mockIdentifier)
         #expect(observer.value == nil)
 
         let mockValue = "mockValue"
         try store.createOrUpdate(KeyValue(identifier: mockIdentifier, value: mockValue))
         #expect(observer.value == mockValue)
 
-        let anotherObserver = MockObserver(key: mockIdentifier)
+        let anotherObserver = try MockObserver(key: mockIdentifier)
         #expect(anotherObserver.value == mockValue)
 
         let anotherMockValue = "anotherMockValue"

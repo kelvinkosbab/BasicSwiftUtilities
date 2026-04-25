@@ -50,8 +50,13 @@ public func asyncRetry<T: Sendable>(
 
             if attempts < max {
                 let delay = strategy.calculateDelay(attempts: attempts)
-                let nanoseconds = UInt64(delay / MILLISECONDS_IN_SECOND * 1_000_000_000)
-                try? await Task.sleep(nanoseconds: nanoseconds)
+                let seconds = delay / MILLISECONDS_IN_SECOND
+                do {
+                    try await Task.sleep(for: .seconds(seconds))
+                } catch {
+                    // Cancellation surfaces as the error from the last attempt.
+                    return .failure(error: error)
+                }
             }
         }
     }

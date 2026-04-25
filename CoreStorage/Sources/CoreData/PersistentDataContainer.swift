@@ -84,7 +84,7 @@ public extension PersistentDataContainer {
         guard let modelUrl = bundle.url(forResource: storeName, withExtension: "momd") else {
             throw PersistentDataContainerError.failedToLocateModel(
                 name: storeName,
-                bundle: bundle
+                bundleIdentifier: bundle.bundleIdentifier
             )
         }
 
@@ -161,12 +161,13 @@ public extension PersistentDataContainer {
     /// * The store could not be migrated to the current model version.
     /// * The store has already been loaded.
     /// Check the error message to determine what the actual problem was.
-    func load(completion: @escaping @Sendable (_ result: Result) -> Void) {
+    @available(*, deprecated, message: "Use the async throws variant instead.")
+    func load(completion: @escaping @Sendable (_ result: Swift.Result<Void, Error>) -> Void) {
         self.coreDataContainer.loadPersistentStores { _, error in
             if let error = error {
                 completion(.failure(error))
             } else {
-                completion(.success)
+                completion(.success(()))
             }
         }
     }
@@ -194,12 +195,11 @@ public extension PersistentDataContainer {
     /// Check the error message to determine what the actual problem was.
     func load() async throws {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            self.load { result in
-                switch result {
-                case .success:
-                    continuation.resume()
-                case .failure(let error):
+            self.coreDataContainer.loadPersistentStores { _, error in
+                if let error = error {
                     continuation.resume(throwing: error)
+                } else {
+                    continuation.resume()
                 }
             }
         }

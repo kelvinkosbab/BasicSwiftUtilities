@@ -60,24 +60,31 @@ class ToastStateManager {
 
         // Prepare the toast for rendering
         Task { @MainActor [weak self] in
-            try? await Task.sleep(nanoseconds: UInt64(prepareDuration * 1_000_000_000))
+            do {
+                try await Task.sleep(for: .seconds(prepareDuration))
 
-            // Show the toast
-            withAnimation {
-                self?.delegate?.didUpdate(toastState: .show(nextToast))
-            }
+                // Show the toast
+                withAnimation {
+                    self?.delegate?.didUpdate(toastState: .show(nextToast))
+                }
 
-            try? await Task.sleep(nanoseconds: UInt64(showDelay * 1_000_000_000))
+                try await Task.sleep(for: .seconds(showDelay))
 
-            withAnimation {
-                self?.delegate?.didUpdate(toastState: .hiding(nextToast))
-            }
+                withAnimation {
+                    self?.delegate?.didUpdate(toastState: .hiding(nextToast))
+                }
 
-            // Wait for toast to hide
-            try? await Task.sleep(nanoseconds: UInt64(animationDuration * 1_000_000_000))
+                // Wait for toast to hide
+                try await Task.sleep(for: .seconds(animationDuration))
 
-            withAnimation {
-                self?.delegate?.didUpdate(toastState: .none)
+                withAnimation {
+                    self?.delegate?.didUpdate(toastState: .none)
+                }
+            } catch {
+                // Task was cancelled — abort the toast lifecycle and clear any visible state.
+                withAnimation {
+                    self?.delegate?.didUpdate(toastState: .none)
+                }
             }
 
             self?.isProcessingCurrentToast = false

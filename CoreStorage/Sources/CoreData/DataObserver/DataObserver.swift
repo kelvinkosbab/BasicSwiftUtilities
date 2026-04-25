@@ -86,9 +86,10 @@ public class DataObserver<Delegate>: NSObject, NSFetchedResultsControllerDelegat
     /// changes are forwarded to the ``delegate``.
     ///
     /// - Parameter predicate: A fully-configured `NSFetchedResultsController` whose results will be observed.
+    /// - Throws: An `NSError` from CoreData if the initial `performFetch` fails.
     public init(
         predicate: NSFetchedResultsController<PersistedObject>
-    ) {
+    ) throws {
         self.predicate = predicate
         self.logger = Logger(
             subsystem: "DataObserver",
@@ -97,11 +98,7 @@ public class DataObserver<Delegate>: NSObject, NSFetchedResultsControllerDelegat
 
         super.init()
 
-        do {
-            try self.predicate.performFetch()
-        } catch {
-            self.logger.error("Failed to performFetch: \(error.localizedDescription)")
-        }
+        try self.predicate.performFetch()
 
         self.predicate.delegate = self
 

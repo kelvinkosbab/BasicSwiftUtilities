@@ -69,7 +69,7 @@ struct PersistentDataContainerErrorTests {
     func failedToLocateModel() {
         let error = PersistentDataContainerError.failedToLocateModel(
             name: "TestModel",
-            bundle: .main
+            bundleIdentifier: Bundle.main.bundleIdentifier
         )
         let description = error.errorDescription ?? ""
         #expect(description.contains("TestModel"))
@@ -88,7 +88,7 @@ struct PersistentDataContainerErrorTests {
     func conformsToLocalizedError() {
         let error: LocalizedError = PersistentDataContainerError.failedToLocateModel(
             name: "Test",
-            bundle: .main
+            bundleIdentifier: Bundle.main.bundleIdentifier
         )
         #expect(error.errorDescription != nil)
     }

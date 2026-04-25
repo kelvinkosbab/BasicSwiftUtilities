@@ -19,6 +19,11 @@ import Foundation
 /// logger.info("User logged in")
 /// logger.info("User logged in", censored: "user@example.com")
 /// ```
+///
+/// - Important: Strings passed to the plain (non-censored) methods are emitted with
+///   `.public` privacy by the default ``SwiftLogger`` implementation. They will appear
+///   in production logs in plaintext. Use the `censored:` variants for any sensitive
+///   data — usernames, email addresses, tokens, or other PII.
 public protocol Loggable: Sendable {
 
     // MARK: - Debug

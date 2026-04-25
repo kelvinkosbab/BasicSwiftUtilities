@@ -8,12 +8,14 @@ Defines a ``Loggable`` protocol and wraps Apple's native `os.Logger` via ``Swift
 These wrappers provide objects and methods for emitting logs that censor sensitive and personal
 information in production environments while remaining visible in development.
 
-``Logger`` formats messages with the log level and category for easy filtering in Console.app:
+``Logger`` is a convenience wrapper around ``SwiftLogger``. The level and category are
+recorded as `os.Logger` metadata, so Console.app and the `log` CLI can filter by them
+natively:
 
 ```swift
 let logger = Logger(subsystem: "com.myapp", category: "Networking")
 logger.info("Request sent")
-// Logs: "[Info] <Networking> Request sent"
+// Console shows: "Info  Networking  Request sent"
 ```
 
 ## Retry Utilities

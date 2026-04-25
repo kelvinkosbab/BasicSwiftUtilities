@@ -11,18 +11,18 @@ import Foundation
 /// An object that adds interpolated strings to the unified logging system for a specified
 /// `subsystem` and `category`.
 ///
-/// `Logger` wraps Apple's `os.Logger` via ``SwiftLogger`` and formats log messages with
-/// the log level and category for easy filtering in Console.app.
+/// `Logger` is a thin convenience wrapper around ``SwiftLogger``. The level and category
+/// are recorded as log metadata by the underlying `os.Logger`, so Console.app and the
+/// `log` CLI can filter by them natively — no manual prefixing required.
 ///
 /// ```swift
 /// let logger = Logger(subsystem: "com.myapp", category: "Networking")
 /// logger.info("Request sent")
-/// // Logs: "[Info] <Networking> Request sent"
+/// // Console shows: "Info  Networking  Request sent"
 /// ```
 public struct Logger: Loggable, Sendable {
 
     private let logger: SwiftLogger
-    private let category: String
 
     /// Creates a logger for a specific subsystem and category.
     ///
@@ -36,62 +36,60 @@ public struct Logger: Loggable, Sendable {
             subsystem: subsystem,
             category: category
         )
-        self.category = category
     }
 
-    /// Creates a logger with a custom ``Loggable`` backend.
+    /// Creates a logger with a custom ``SwiftLogger`` backend.
     ///
     /// - Note: Internal for unit testing use.
     ///
     /// - Parameter subsystem: Identifies the module or app emitting the log.
     /// - Parameter category: Describes the area of functionality being logged.
-    /// - Parameter logger: The backing ``Loggable`` implementation to use.
+    /// - Parameter logger: The backing ``SwiftLogger`` to use.
     internal init(
         subsystem: String,
         category: String,
         logger: SwiftLogger
     ) {
-        self.category = category
         self.logger = logger
     }
 
     // MARK: - Debug
 
     public func debug(_ message: String) {
-        self.logger.debug("[Debug] <\(self.category)> \(message)")
+        self.logger.debug(message)
     }
 
     public func debug(_ message: String, censored censoredMessage: String) {
-        self.logger.debug("[Debug] <\(self.category)> \(message)", censored: censoredMessage)
+        self.logger.debug(message, censored: censoredMessage)
     }
 
     // MARK: - Info
 
     public func info(_ message: String) {
-        self.logger.info("[Info] <\(self.category)> \(message)")
+        self.logger.info(message)
     }
 
     public func info(_ message: String, censored censoredMessage: String) {
-        self.logger.info("[Info] <\(self.category)> \(message)", censored: censoredMessage)
+        self.logger.info(message, censored: censoredMessage)
     }
 
     // MARK: - Error
 
     public func error(_ message: String) {
-        self.logger.error("[Error] <\(self.category)> \(message)")
+        self.logger.error(message)
     }
 
     public func error(_ message: String, censored censoredMessage: String) {
-        self.logger.error("[Error] <\(self.category)> \(message)", censored: censoredMessage)
+        self.logger.error(message, censored: censoredMessage)
     }
 
     // MARK: - Fault
 
     public func fault(_ message: String) {
-        self.logger.fault("[Fault] <\(self.category)> \(message)")
+        self.logger.fault(message)
     }
 
     public func fault(_ message: String, censored censoredMessage: String) {
-        self.logger.fault("[Fault] <\(self.category)> \(message)", censored: censoredMessage)
+        self.logger.fault(message, censored: censoredMessage)
     }
 }

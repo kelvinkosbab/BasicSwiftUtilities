@@ -58,19 +58,19 @@ struct LoggerTests {
     let mockSubsystem = "mockSubsystem"
     let mockCategory = "mockCategory"
 
-    // Note: Logger now takes SwiftLogger directly, so we test via SwiftLogger
-    // using the mock pattern at the Loggable protocol level.
+    // The Logger struct delegates directly to its backing Loggable.
+    // We verify the pass-through behavior using a mock Loggable.
 
     // MARK: - Debug Log Tests
 
-    @Test("Logs debug message with correct format")
+    @Test("Logs debug message verbatim")
     func loggerLogsDebug() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = makeMockLogger(mock: mockLogger)
+        let wrapper = MockLoggableWrapper(logger: mockLogger)
         let someString = UUID().uuidString
-        logger.debug(someString)
+        wrapper.debug(someString)
         #expect(mockLogger.debugLogs.count == 1)
-        #expect(mockLogger.debugLogs[0] == "[Debug] <\(mockCategory)> \(someString)")
+        #expect(mockLogger.debugLogs[0] == someString)
         #expect(mockLogger.infoLogs.count == 0)
         #expect(mockLogger.errorLogs.count == 0)
         #expect(mockLogger.faultLogs.count == 0)
@@ -79,12 +79,12 @@ struct LoggerTests {
     @Test("Logs debug message with censored content")
     func loggerLogsDebugWithPrivateMessage() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = makeMockLogger(mock: mockLogger)
+        let wrapper = MockLoggableWrapper(logger: mockLogger)
         let someString = UUID().uuidString
         let somePrivateString = UUID().uuidString
-        logger.debug(someString, censored: somePrivateString)
+        wrapper.debug(someString, censored: somePrivateString)
         #expect(mockLogger.debugLogs.count == 1)
-        #expect(mockLogger.debugLogs[0] == "[Debug] <\(mockCategory)> \(someString):\(somePrivateString)")
+        #expect(mockLogger.debugLogs[0] == "\(someString):\(somePrivateString)")
         #expect(mockLogger.infoLogs.count == 0)
         #expect(mockLogger.errorLogs.count == 0)
         #expect(mockLogger.faultLogs.count == 0)
@@ -92,15 +92,15 @@ struct LoggerTests {
 
     // MARK: - Info Log Tests
 
-    @Test("Logs info message with correct format")
+    @Test("Logs info message verbatim")
     func loggerLogsInfo() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = makeMockLogger(mock: mockLogger)
+        let wrapper = MockLoggableWrapper(logger: mockLogger)
         let someString = UUID().uuidString
-        logger.info(someString)
+        wrapper.info(someString)
         #expect(mockLogger.debugLogs.count == 0)
         #expect(mockLogger.infoLogs.count == 1)
-        #expect(mockLogger.infoLogs[0] == "[Info] <\(mockCategory)> \(someString)")
+        #expect(mockLogger.infoLogs[0] == someString)
         #expect(mockLogger.errorLogs.count == 0)
         #expect(mockLogger.faultLogs.count == 0)
     }
@@ -108,116 +108,109 @@ struct LoggerTests {
     @Test("Logs info message with censored content")
     func loggerLogsInfoWithPrivateMessage() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = makeMockLogger(mock: mockLogger)
+        let wrapper = MockLoggableWrapper(logger: mockLogger)
         let someString = UUID().uuidString
         let somePrivateString = UUID().uuidString
-        logger.info(someString, censored: somePrivateString)
+        wrapper.info(someString, censored: somePrivateString)
         #expect(mockLogger.debugLogs.count == 0)
         #expect(mockLogger.infoLogs.count == 1)
-        #expect(mockLogger.infoLogs[0] == "[Info] <\(mockCategory)> \(someString):\(somePrivateString)")
+        #expect(mockLogger.infoLogs[0] == "\(someString):\(somePrivateString)")
         #expect(mockLogger.errorLogs.count == 0)
         #expect(mockLogger.faultLogs.count == 0)
     }
 
     // MARK: - Error Log Tests
 
-    @Test("Logs error message with correct format")
+    @Test("Logs error message verbatim")
     func loggerLogsError() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = makeMockLogger(mock: mockLogger)
+        let wrapper = MockLoggableWrapper(logger: mockLogger)
         let someString = UUID().uuidString
-        logger.error(someString)
+        wrapper.error(someString)
         #expect(mockLogger.debugLogs.count == 0)
         #expect(mockLogger.infoLogs.count == 0)
         #expect(mockLogger.errorLogs.count == 1)
-        #expect(mockLogger.errorLogs[0] == "[Error] <\(mockCategory)> \(someString)")
+        #expect(mockLogger.errorLogs[0] == someString)
         #expect(mockLogger.faultLogs.count == 0)
     }
 
     @Test("Logs error message with censored content")
     func loggerLogsErrorWithPrivateMessage() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = makeMockLogger(mock: mockLogger)
+        let wrapper = MockLoggableWrapper(logger: mockLogger)
         let someString = UUID().uuidString
         let somePrivateString = UUID().uuidString
-        logger.error(someString, censored: somePrivateString)
+        wrapper.error(someString, censored: somePrivateString)
         #expect(mockLogger.debugLogs.count == 0)
         #expect(mockLogger.infoLogs.count == 0)
         #expect(mockLogger.errorLogs.count == 1)
-        #expect(mockLogger.errorLogs[0] == "[Error] <\(mockCategory)> \(someString):\(somePrivateString)")
+        #expect(mockLogger.errorLogs[0] == "\(someString):\(somePrivateString)")
         #expect(mockLogger.faultLogs.count == 0)
     }
 
     // MARK: - Fault Log Tests
 
-    @Test("Logs fault message with correct format")
+    @Test("Logs fault message verbatim")
     func loggerLogsFault() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = makeMockLogger(mock: mockLogger)
+        let wrapper = MockLoggableWrapper(logger: mockLogger)
         let someString = UUID().uuidString
-        logger.fault(someString)
+        wrapper.fault(someString)
         #expect(mockLogger.debugLogs.count == 0)
         #expect(mockLogger.infoLogs.count == 0)
         #expect(mockLogger.errorLogs.count == 0)
         #expect(mockLogger.faultLogs.count == 1)
-        #expect(mockLogger.faultLogs[0] == "[Fault] <\(mockCategory)> \(someString)")
+        #expect(mockLogger.faultLogs[0] == someString)
     }
 
     @Test("Logs fault message with censored content")
     func loggerLogsFaultWithPrivateMessage() {
         let mockLogger = MockDefaultCoreLogger()
-        let logger = makeMockLogger(mock: mockLogger)
+        let wrapper = MockLoggableWrapper(logger: mockLogger)
         let someString = UUID().uuidString
         let somePrivateString = UUID().uuidString
-        logger.fault(someString, censored: somePrivateString)
+        wrapper.fault(someString, censored: somePrivateString)
         #expect(mockLogger.debugLogs.count == 0)
         #expect(mockLogger.infoLogs.count == 0)
         #expect(mockLogger.errorLogs.count == 0)
         #expect(mockLogger.faultLogs.count == 1)
-        #expect(mockLogger.faultLogs[0] == "[Fault] <\(mockCategory)> \(someString):\(somePrivateString)")
-    }
-
-    // MARK: - Helpers
-
-    private func makeMockLogger(mock: MockDefaultCoreLogger) -> MockLoggableWrapper {
-        MockLoggableWrapper(category: mockCategory, logger: mock)
+        #expect(mockLogger.faultLogs[0] == "\(someString):\(somePrivateString)")
     }
 }
 
-/// A test wrapper that mimics Logger's formatting behavior using a mock Loggable.
+/// A test wrapper that mirrors `Logger`'s pass-through behavior using a mock `Loggable`.
 private struct MockLoggableWrapper: Sendable {
-    let category: String
     let logger: MockDefaultCoreLogger
 
     func debug(_ message: String) {
-        logger.debug("[Debug] <\(category)> \(message)")
+        logger.debug(message)
     }
 
     func debug(_ message: String, censored censoredMessage: String) {
-        logger.debug("[Debug] <\(category)> \(message)", censored: censoredMessage)
+        logger.debug(message, censored: censoredMessage)
     }
 
     func info(_ message: String) {
-        logger.info("[Info] <\(category)> \(message)")
+        logger.info(message)
     }
 
     func info(_ message: String, censored censoredMessage: String) {
-        logger.info("[Info] <\(category)> \(message)", censored: censoredMessage)
+        logger.info(message, censored: censoredMessage)
     }
 
     func error(_ message: String) {
-        logger.error("[Error] <\(category)> \(message)")
+        logger.error(message)
     }
 
     func error(_ message: String, censored censoredMessage: String) {
-        logger.error("[Error] <\(category)> \(message)", censored: censoredMessage)
+        logger.error(message, censored: censoredMessage)
     }
 
     func fault(_ message: String) {
-        logger.fault("[Fault] <\(category)> \(message)")
+        logger.fault(message)
     }
 
     func fault(_ message: String, censored censoredMessage: String) {
-        logger.fault("[Fault] <\(category)> \(message)", censored: censoredMessage)
+        logger.fault(message, censored: censoredMessage)
     }
 }

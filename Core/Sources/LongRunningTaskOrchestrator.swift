@@ -39,8 +39,8 @@ public actor LongRunningTaskOrchestrator {
     // MARK: - Properties
 
     private let logger: Loggable = Logger(
-        subsystem: "LongRunningTaskOrchestrator",
-        category: "RegisterTask"
+        subsystem: "com.kozinga.BasicSwiftUtilities.Core",
+        category: "LongRunningTaskOrchestrator"
     )
 
     // MARK: - Result

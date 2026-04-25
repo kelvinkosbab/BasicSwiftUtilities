@@ -92,8 +92,8 @@ public class DataObserver<Delegate>: NSObject, NSFetchedResultsControllerDelegat
     ) throws {
         self.predicate = predicate
         self.logger = Logger(
-            subsystem: "DataObserver",
-            category: String(describing: PersistedObject.self)
+            subsystem: "com.kozinga.BasicSwiftUtilities.CoreStorage",
+            category: "DataObserver.\(String(describing: PersistedObject.self))"
         )
 
         super.init()
@@ -151,7 +151,7 @@ public class DataObserver<Delegate>: NSObject, NSFetchedResultsControllerDelegat
             self.logger.error("Unsupported operation 'move'")
 
         @unknown default:
-            self.logger.error("Unsupported operation 'unknown' for DataObserver")
+            self.logger.fault("Unsupported operation 'unknown' for DataObserver")
             fatalError("Unsupported operation 'unknown' for DataObserver")
         }
     }

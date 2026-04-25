@@ -73,19 +73,32 @@ extension UIViewController {
     }
 }
 
-/// make the call the SwiftUI style:
-/// `view.allowAutDismiss(...)`
+/// Use these modifiers in SwiftUI to control sheet auto-dismiss behavior:
+/// `view.allowAutoDismiss(...)`
 @available(macOS, unavailable)
 @available(watchOS, unavailable)
 public extension View {
 
-    /// Control if allow to dismiss the sheet by the user actions
+    /// Controls whether the user can dismiss a sheet via gestures (drag-down on iPhone/iPad,
+    /// tap-outside on iPad).
+    ///
+    /// Programmatic dismissal via `dismiss()` or `presentationMode.dismiss()` is unaffected.
+    ///
+    /// - Parameter dismissable: A closure returning `true` to allow user dismissal,
+    ///   `false` to prevent it. Re-evaluated on each gesture attempt.
+    /// - Returns: A view that controls user-driven sheet dismissal.
     func allowAutoDismiss(_ dismissable: @escaping @Sendable () -> Bool) -> some View {
         self
             .background(MbModalHackView(dismissable: dismissable))
     }
 
-    /// Control if allow to dismiss the sheet by the user actions
+    /// Controls whether the user can dismiss a sheet via gestures (drag-down on iPhone/iPad,
+    /// tap-outside on iPad).
+    ///
+    /// Programmatic dismissal via `dismiss()` or `presentationMode.dismiss()` is unaffected.
+    ///
+    /// - Parameter dismissable: `true` to allow user dismissal, `false` to prevent it.
+    /// - Returns: A view that controls user-driven sheet dismissal.
     func allowAutoDismiss(_ dismissable: Bool) -> some View {
         self
             .background(MbModalHackView(dismissable: { dismissable }))

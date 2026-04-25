@@ -28,24 +28,33 @@ public protocol CodableStore<PersistedType>: Sendable {
     ///
     /// - Parameter value: The value to persist, or `nil` to remove.
     /// - Parameter key: The key to associate with the value.
+    /// - Throws: An error if the underlying storage operation fails (e.g., disk write or
+    ///   encoding failure for ``DiskBackedJSONCodableStore``).
     func set(value: PersistedType?, forKey key: String) async throws
 
     /// Retrieves the value for the given key.
     ///
     /// - Parameter key: The key to look up.
     /// - Returns: The stored value, or `nil` if no value exists for the key.
+    /// - Throws: An error if the underlying storage operation fails (e.g., disk read or
+    ///   decoding failure for ``DiskBackedJSONCodableStore``).
     func getValue(forKey key: String) async throws -> PersistedType?
 
     /// Returns all keys currently stored.
     ///
     /// - Returns: An array of all keys in the store.
+    /// - Throws: An error if the underlying storage operation fails.
     func getAllKeys() async throws -> [String]
 
     /// Removes the value for the given key.
     ///
     /// - Parameter key: The key whose value should be removed.
+    /// - Throws: An error if the underlying storage operation fails.
     func removeValue(forKey key: String) async throws
 
     /// Removes all values from the store.
+    ///
+    /// - Throws: An error if the underlying storage operation fails (e.g., file deletion
+    ///   failure for ``DiskBackedJSONCodableStore``).
     func removeAllValues() async throws
 }

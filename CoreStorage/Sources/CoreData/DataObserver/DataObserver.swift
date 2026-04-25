@@ -65,15 +65,27 @@ import Core
 /// ```
 public class DataObserver<Delegate>: NSObject, NSFetchedResultsControllerDelegate, @unchecked Sendable where Delegate: DataObserverDelegate {
 
+    /// The persistent object type observed (an `NSManagedObject` subclass).
     public typealias PersistedObject = Delegate.Object.PersistentObject
+
+    /// The Swift struct type associated with the persisted object.
     public typealias Object = Delegate.Object
 
+    /// The delegate that receives change notifications. Held weakly.
     public weak var delegate: Delegate?
     private let predicate: NSFetchedResultsController<PersistedObject>
     private let logger: Loggable
 
+    /// All currently observed struct values, kept in sync with the underlying CoreData state.
     public private(set) var objects: Set<Object> = Set()
 
+    /// Creates a `DataObserver` that monitors the results of the given fetched results controller.
+    ///
+    /// The observer performs an initial fetch on creation and then listens for subsequent
+    /// inserts, updates, and deletes via `NSFetchedResultsControllerDelegate`. Detected
+    /// changes are forwarded to the ``delegate``.
+    ///
+    /// - Parameter predicate: A fully-configured `NSFetchedResultsController` whose results will be observed.
     public init(
         predicate: NSFetchedResultsController<PersistedObject>
     ) {

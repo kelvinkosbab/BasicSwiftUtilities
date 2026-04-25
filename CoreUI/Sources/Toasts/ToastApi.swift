@@ -10,6 +10,23 @@ public import SwiftUI
 
 // MARK: - ToastApi
 
+/// The entry point for showing toasts in a SwiftUI app.
+///
+/// Create a `ToastApi` instance, attach it to your root view via
+/// ``SwiftUICore/View/toastableContainer(toastApi:)``, then call ``show(title:)``
+/// or related methods to display toasts. Multiple incoming toasts are queued
+/// and shown sequentially.
+///
+/// ```swift
+/// let toastApi = ToastApi(options: ToastOptions(position: .top))
+///
+/// // In your app's root view:
+/// ContentView()
+///     .toastableContainer(toastApi: toastApi)
+///
+/// // Anywhere in your view hierarchy:
+/// toastApi.show(title: "Saved!")
+/// ```
 @MainActor
 public class ToastApi: ObservableObject, ToastStateDelegate {
 

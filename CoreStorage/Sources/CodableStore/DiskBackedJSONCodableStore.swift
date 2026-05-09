@@ -22,6 +22,23 @@ import Core
 /// try await store.set(value: model, forKey: "key")
 /// let value = try await store.getValue(forKey: "key")
 /// ```
+///
+/// ## Topics
+///
+/// ### Creating a Store
+///
+/// - ``init(label:bundleIdentifier:)``
+///
+/// ### Reading and Writing
+///
+/// - ``set(value:forKey:)``
+/// - ``getValue(forKey:)``
+/// - ``getAllKeys()``
+///
+/// ### Removing Values
+///
+/// - ``removeValue(forKey:)``
+/// - ``removeAllValues()``
 public actor DiskBackedJSONCodableStore<T: Codable & Sendable>: CodableStore {
 
     public typealias PersistedType = T
@@ -127,13 +144,13 @@ public actor DiskBackedJSONCodableStore<T: Codable & Sendable>: CodableStore {
         do {
             data = try self.jsonEncoder.encode(cachedDictionary)
         } catch {
-            throw DiskBackedJSONCodableStoreError.writeFailure(cause: error)
+            throw DiskBackedJSONCodableStoreError.writeFailure(cause: String(describing: error))
         }
 
         do {
             try self.fileSystem.write(data: data, to: backingFileURL, options: .atomic)
         } catch {
-            throw DiskBackedJSONCodableStoreError.writeFailure(cause: error)
+            throw DiskBackedJSONCodableStoreError.writeFailure(cause: String(describing: error))
         }
 
         self.cachedDictionary = .initialized(value: cachedDictionary)
@@ -151,7 +168,7 @@ public actor DiskBackedJSONCodableStore<T: Codable & Sendable>: CodableStore {
             do {
                 data = try self.fileSystem.read(contensOf: backingFileURL, options: [])
             } catch {
-                throw DiskBackedJSONCodableStoreError.readFailure(cause: error)
+                throw DiskBackedJSONCodableStoreError.readFailure(cause: String(describing: error))
             }
         } else {
             data = Data()
@@ -164,7 +181,7 @@ public actor DiskBackedJSONCodableStore<T: Codable & Sendable>: CodableStore {
             do {
                 dictionary = try self.jsonDecoder.decode([String: T].self, from: data)
             } catch {
-                throw DiskBackedJSONCodableStoreError.decodingFailure(cause: error)
+                throw DiskBackedJSONCodableStoreError.decodingFailure(cause: String(describing: error))
             }
         }
 
@@ -186,7 +203,7 @@ public actor DiskBackedJSONCodableStore<T: Codable & Sendable>: CodableStore {
                 create: true
             )
         } catch {
-            throw DiskBackedJSONCodableStoreError.fileManagerError(cause: error)
+            throw DiskBackedJSONCodableStoreError.fileManagerError(cause: String(describing: error))
         }
 
         let appBundleSupportDirectoryURL = applicationSupportDirectoryURL.appending(path: self.bundleIdentifier)
@@ -198,7 +215,7 @@ public actor DiskBackedJSONCodableStore<T: Codable & Sendable>: CodableStore {
                 attributes: nil
             )
         } catch {
-            throw DiskBackedJSONCodableStoreError.fileManagerError(cause: error)
+            throw DiskBackedJSONCodableStoreError.fileManagerError(cause: String(describing: error))
         }
 
         let backingFileURL = appBundleSupportDirectoryURL.appending(path: self.backingFileName)

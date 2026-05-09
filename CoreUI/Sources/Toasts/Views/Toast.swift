@@ -75,12 +75,21 @@ struct Toast<Content, Leading, Trailing>: View where Content: View, Leading: Vie
             vertical: true
         )
         .toastBackground(shape: self.shape)
+        // Combine the leading + content + trailing into a single VoiceOver element
+        // so the toast is announced as one unit instead of three separate hops.
+        .accessibilityElement(children: .combine)
+        // Mark as static text so VoiceOver treats the toast as an announcement
+        // rather than an interactive element.
+        .accessibilityAddTraits(.isStaticText)
     }
 
+    /// A clear placeholder used to balance the leading/trailing layout. Decorative —
+    /// hidden from VoiceOver so it doesn't show up in the rotor.
     private var renderClearRectangle: some View {
         Rectangle()
             .fill(.clear)
             .frame(width: Spacing.large, height: Spacing.large)
+            .accessibilityHidden(true)
     }
 }
 

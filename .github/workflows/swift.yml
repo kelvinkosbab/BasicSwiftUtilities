@@ -27,8 +27,35 @@ jobs:
     - name: Build
       run: swift build
 
-    - name: Run tests
-      run: swift test
+    - name: Run tests with code coverage
+      run: swift test --enable-code-coverage
+
+    - name: Generate coverage report
+      run: |
+        BIN_PATH="$(swift build --show-bin-path)"
+        XCTEST_PATH="$(find ${BIN_PATH} -name '*.xctest')"
+        PROFDATA="${BIN_PATH}/codecov/default.profdata"
+
+        # Sum coverage across all binaries inside the .xctest bundle
+        BINARIES=()
+        for bin in "${XCTEST_PATH}"/Contents/MacOS/*; do
+          BINARIES+=("-object" "${bin}")
+        done
+
+        xcrun llvm-cov report \
+          "${BINARIES[@]}" \
+          -instr-profile "${PROFDATA}" \
+          -ignore-filename-regex='Tests|.build' \
+          | tee coverage-report.txt
+
+        # Parse total line coverage and enforce a minimum gate
+        TOTAL=$(tail -1 coverage-report.txt | awk '{print $(NF-3)}' | tr -d '%')
+        echo "Total line coverage: ${TOTAL}%"
+        MIN_COVERAGE=70
+        awk -v t="$TOTAL" -v m="$MIN_COVERAGE" 'BEGIN { exit (t+0 >= m+0 ? 0 : 1) }' || {
+          echo "::error::Line coverage ${TOTAL}% is below the ${MIN_COVERAGE}% threshold."
+          exit 1
+        }
 
   build-ios:
     name: Build & Test (iOS Simulator)

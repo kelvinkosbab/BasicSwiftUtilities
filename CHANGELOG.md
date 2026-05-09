@@ -6,23 +6,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-04-24
+
 ### Added
 - **CoreUIKit** module — UIKit utilities split out from CoreUI for cleaner SwiftUI/UIKit separation
 - **CoreUIKit** test coverage for `UIColor` utilities and `PresentationMode`
 - Test coverage for retry logic (`RetryStrategy`, sync and async retry)
 - Test coverage for `DiskBackedJSONCodableStore` (set/get, remove, type erasure)
-- Documentation comments on all public-facing declarations
+- Documentation comments on all public-facing declarations, with `## Topics` sections on key types
 - `CONTRIBUTING.md` with development guidelines
 - `makeTargets` helper in `Package.swift` to reduce target definition boilerplate
+- `InternalImportsByDefault` Swift 6 upcoming feature flag
+- Bundled Claude Code skills and rules under `.claude/`
+- `CircleImage(decorative:)` initializer parameter for VoiceOver hiding
+- Toast accessibility — combined-children element + decorative-element hiding
 
 ### Changed
 - **Swift 6.0** with strict concurrency (`swiftLanguageMode(.v6)`) across all targets
 - **Platform minimums** raised to iOS 17, macOS 14, tvOS 17, watchOS 10, visionOS 1
 - **Package layout** reorganized to colocate sources and tests per module (`{Module}/Sources/`, `{Module}/Tests/`)
 - `DiskBackedJSONCodableStore` converted from class with `DispatchQueue` to `actor`
-- `LongRunningTaskOrchestrator` converted from struct with `DispatchQueue` to `actor`
+- `LongRunningTaskOrchestrator` converted to actor; replaced remaining `DispatchWorkItem` / `DispatchQueue.main.asyncAfter` with structured `Task` + `Task.sleep(for:)`
 - `CodableStore` protocol changed from `AnyObject` to `Sendable`
-- `ToastStateManager` now uses `Task.sleep` instead of `DispatchQueue.main.asyncAfter`
+- `ToastStateManager` now uses `Task.sleep(for:)` instead of `DispatchQueue.main.asyncAfter`, and propagates cancellation correctly
+- `ToastApi` migrated from `ObservableObject` / `@Published` to `@Observable`
+- `HexColor` and `RGBColor` promoted to `public` (and `Sendable`) so consumers can use them across modules
+- `DiskBackedJSONCodableStoreError` cause is now a `String` description (eliminates `@unchecked Sendable`)
+- `PersistentDataContainerError.failedToLocateModel` now takes `bundleIdentifier: String?` instead of `Bundle` (sendability)
+- `DataObserver.init` is now throwing — propagates initial-fetch failures
+- `ObjectStore.newObserver(...)` variants are now throwing
+- `FontRegistrar.Error` renamed to `FontRegistrationError` and conforms to `LocalizedError, Sendable`
 - All tests migrated from XCTest to Swift Testing framework
 - GitHub Actions workflow updated to `actions/checkout@v4`
 - `eraseMyType()` renamed to `eraseToAnyCodableStore()` for clarity
@@ -31,3 +44,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **CoreHealth** module (moved to a separate package)
 - `Concurrency.swift` — Void continuation helpers (unnecessary with modern Swift)
 - `LoggableOSLog.swift` — Legacy `os_log` wrapper (replaced by `os.Logger` with iOS 17+ minimum)
+- Custom `CoreStorage.Result` type (use `Swift.Result<Void, Error>` instead)
+
+### Fixed
+- `DiskBackedJSONCodableStoreError` description strings had unbalanced parentheses
+- `PersistentDataContainer.configure(fileProtectionType:)` previously appended a duplicate description (which was ignored after store load) — now mutates existing descriptions, must be called before `load()`
+- Cancellation in `asyncRetry` and `ToastStateManager` no longer silently swallowed by `try?`

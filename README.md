@@ -1,11 +1,14 @@
 # BasicSwiftUtilities
 
+[![CI](https://github.com/kelvinkosbab/BasicSwiftUtilities/actions/workflows/swift.yml/badge.svg)](https://github.com/kelvinkosbab/BasicSwiftUtilities/actions/workflows/swift.yml)
+[![Swift 6.0](https://img.shields.io/badge/swift-6.0-orange.svg)](https://swift.org)
+[![Platforms](https://img.shields.io/badge/platforms-iOS%2017%20%7C%20macOS%2014%20%7C%20tvOS%2017%20%7C%20watchOS%2010%20%7C%20visionOS%201-lightgrey.svg)](#platform-support)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 A Swift 6 package providing foundational utilities for Apple platforms — logging, retry strategies,
 persistent storage, SwiftUI components, and UIKit helpers.
 
-Developed by Kelvin Kosbab
-kelvin.kosbab@kozinga.net
-https://kelvinkosbab.github.io/BasicSwiftUtilities
+Developed by Kelvin Kosbab — kelvin.kosbab@kozinga.net
 
 ## Modules
 

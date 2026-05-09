@@ -78,7 +78,10 @@
       "Bash(xcrun simctl *)",
       "Read(//Users/kelvinkosbab/Projects/Kozinga/**)",
       "Read(//Users/kelvinkosbab/Projects/**)",
-      "Bash(/Users/kelvinkosbab/Projects/Kozinga/AppBootstrapAI/install.sh /Users/kelvinkosbab/Projects/Kozinga/Packages/BasicSwiftUtilities --platform apple --apple-language swift)"
+      "Bash(/Users/kelvinkosbab/Projects/Kozinga/AppBootstrapAI/install.sh /Users/kelvinkosbab/Projects/Kozinga/Packages/BasicSwiftUtilities --platform apple --apple-language swift)",
+      "Bash(curl -sI https://kelvinkosbab.github.io/CoreSwiftUtilities/)",
+      "Bash(curl -sI https://kelvinkosbab.github.io/BasicSwiftUtilities/)",
+      "Bash(grep -n \"An \\\\`NSError\\\\` from CoreData\" CoreStorage/Sources/CoreData/ObjectStore/ObjectStore.swift)"
     ]
   }
 }

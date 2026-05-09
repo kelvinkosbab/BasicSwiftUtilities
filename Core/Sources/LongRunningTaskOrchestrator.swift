@@ -88,7 +88,13 @@ public actor LongRunningTaskOrchestrator {
             }
         }
 
-        let timeoutTask = DispatchWorkItem { @MainActor in
+        let timeoutTask = Task { @MainActor in
+            do {
+                try await Task.sleep(for: .seconds(timeout))
+            } catch {
+                // Cancelled before the timeout fired — the task completed or the OS expired it first.
+                return
+            }
             logger.info("\(taskName): Task never responded and has timed out after \(Int(info.systemUptime - start))s. Releasing task.")
             endTask(result: .timeout)
         }
@@ -109,11 +115,6 @@ public actor LongRunningTaskOrchestrator {
         if backgroundTaskId == .invalid {
             logger.info("\(taskName): Task execution denied")
         }
-
-        DispatchQueue.main.asyncAfter(
-            deadline: .now() + timeout,
-            execute: timeoutTask
-        )
 
         return done
     }

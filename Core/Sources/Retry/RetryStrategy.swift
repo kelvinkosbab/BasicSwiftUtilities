@@ -20,6 +20,18 @@ import Foundation
 ///     jitterRange: 50
 /// )
 /// ```
+///
+/// ## Topics
+///
+/// ### Built-in Strategies
+///
+/// - ``exponential(base:exponent:limit:jitterRange:)``
+/// - ``linear(base:increment:limit:jitterRange:)``
+/// - ``constant(base:jitterRange:)``
+///
+/// ### Custom Strategies
+///
+/// - ``custom(strategy:)``
 public enum RetryStrategy: Sendable {
 
     /// Exponential backoff: delay = min(limit, base * exponent^(attempts-1)) + jitter.

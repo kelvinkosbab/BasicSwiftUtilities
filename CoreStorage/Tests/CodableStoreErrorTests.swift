@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Helpers
 
-private let mockCause = NSError(domain: "Test", code: 42, userInfo: nil)
+private let mockCause = "mock cause"
 
 struct ErrorCase: Sendable {
     let error: DiskBackedJSONCodableStoreError

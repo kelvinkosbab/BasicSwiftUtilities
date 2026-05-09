@@ -18,7 +18,7 @@ import Foundation
 /// let erased = concreteStore.eraseToAnyCodableStore()
 /// try await erased.set(value: model, forKey: "key")
 /// ```
-public final class AnyCodableStore<T: Codable & Sendable>: CodableStore, @unchecked Sendable {
+public final class AnyCodableStore<T: Codable & Sendable>: CodableStore, Sendable {
 
     public typealias PersistedType = T
 

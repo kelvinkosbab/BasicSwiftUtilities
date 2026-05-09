@@ -30,7 +30,7 @@ import SwiftUI
 ///
 /// struct AnotherView: View {
 ///
-///     @EnvironmentObject var toastApi: ToastApi
+///     @Environment(ToastApi.self) private var toastApi
 ///
 ///     var body: some View {
 ///         Button("Bottom: Show Simple Title") {
@@ -43,7 +43,7 @@ struct ToastableContainer<Content>: View where Content: View {
 
     var content: () -> Content
 
-    @ObservedObject private var toastApi: ToastApi
+    private let toastApi: ToastApi
 
     public init(
         toastApi: ToastApi,
@@ -99,7 +99,7 @@ struct ToastableContainer<Content>: View where Content: View {
                 ))
             }
         }
-        .environmentObject(self.toastApi)
+        .environment(self.toastApi)
         #if !os(macOS)
         .ignoresSafeArea()
         #endif
@@ -128,7 +128,7 @@ private struct AnimatedToastModifier: ViewModifier {
     private let safeAreaInsets = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
     #endif
 
-    @ObservedObject var toastApi: ToastApi
+    let toastApi: ToastApi
     let toastSize: CGSize
 
     func body(content: Content) -> some View {

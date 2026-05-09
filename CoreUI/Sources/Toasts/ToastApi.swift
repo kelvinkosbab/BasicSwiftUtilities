@@ -27,13 +27,32 @@ public import SwiftUI
 /// // Anywhere in your view hierarchy:
 /// toastApi.show(title: "Saved!")
 /// ```
+///
+/// ## Topics
+///
+/// ### Creating a Toast API
+///
+/// - ``init(options:)``
+///
+/// ### Showing Simple Toasts
+///
+/// - ``show(title:)``
+/// - ``show(title:description:)``
+///
+/// ### Showing Custom-Content Toasts
+///
+/// - ``show(content:)``
+/// - ``show(content:leading:)``
+/// - ``show(content:trailing:)``
+/// - ``show(content:leading:trailing:)``
 @MainActor
-public class ToastApi: ObservableObject, ToastStateDelegate {
+@Observable
+public final class ToastApi: ToastStateDelegate {
 
-    @Published var currentToastState: ToastState = .none
+    var currentToastState: ToastState = .none
 
     let options: ToastOptions
-    private let toastStateManager: ToastStateManager
+    @ObservationIgnored private let toastStateManager: ToastStateManager
 
     /// Constructs ``ToastApi``.
     ///

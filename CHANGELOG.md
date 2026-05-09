@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-05-09
+
+### Fixed
+- `ToastBackgroundModifier`: build failure on Xcode <26 (which lacks the
+  iOS 26 SDK). The Liquid Glass branch is now gated by `#if compiler(>=6.2)`
+  so the package compiles on older toolchains and gracefully falls back to
+  the translucent-material background.
+
 ## [1.0.0] - 2026-04-24
 
 ### Added

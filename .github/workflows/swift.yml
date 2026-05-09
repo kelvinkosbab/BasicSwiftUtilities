@@ -36,11 +36,18 @@ jobs:
         XCTEST_PATH="$(find ${BIN_PATH} -name '*.xctest')"
         PROFDATA="${BIN_PATH}/codecov/default.profdata"
 
-        # Sum coverage across all binaries inside the .xctest bundle
+        # Collect Mach-O test binaries; skip .dSYM directories that share the dir.
         BINARIES=()
         for bin in "${XCTEST_PATH}"/Contents/MacOS/*; do
-          BINARIES+=("-object" "${bin}")
+          if [ -f "${bin}" ]; then
+            BINARIES+=("-object" "${bin}")
+          fi
         done
+
+        if [ ${#BINARIES[@]} -eq 0 ]; then
+          echo "::error::No test binaries found at ${XCTEST_PATH}/Contents/MacOS"
+          exit 1
+        fi
 
         xcrun llvm-cov report \
           "${BINARIES[@]}" \
@@ -48,8 +55,13 @@ jobs:
           -ignore-filename-regex='Tests|.build' \
           | tee coverage-report.txt
 
-        # Parse total line coverage and enforce a minimum gate
-        TOTAL=$(tail -1 coverage-report.txt | awk '{print $(NF-3)}' | tr -d '%')
+        # The TOTAL row is the last line; line-coverage % is column 10.
+        TOTAL=$(awk '/^TOTAL/ {print $10}' coverage-report.txt | tr -d '%')
+        if [ -z "${TOTAL}" ]; then
+          echo "::error::Could not parse total coverage from llvm-cov output"
+          exit 1
+        fi
+
         echo "Total line coverage: ${TOTAL}%"
         MIN_COVERAGE=70
         awk -v t="$TOTAL" -v m="$MIN_COVERAGE" 'BEGIN { exit (t+0 >= m+0 ? 0 : 1) }' || {

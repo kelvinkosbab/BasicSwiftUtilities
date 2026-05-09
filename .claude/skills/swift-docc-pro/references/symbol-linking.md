@@ -8,7 +8,7 @@
 **Always prefer double backticks for type references** so DocC creates navigation:
 
 ```swift
-/// See ``RetryStrategy`` for available strategies.
+/// See ``BackoffStrategy`` for available strategies.
 ```
 
 ## Linking to members
@@ -48,7 +48,7 @@ Reference symbols in other modules with the module prefix:
 
 ```swift
 /// Conforms to ``Foundation/Codable``.
-/// Uses ``Core/Loggable`` for logging.
+/// Uses ``os.Logger`` for logging.
 ```
 
 ## Linking to top-level symbols
@@ -56,13 +56,13 @@ Reference symbols in other modules with the module prefix:
 For a top-level type or function, the bare name works:
 
 ```swift
-/// See ``asyncRetry(max:strategy:_:)``.
+/// See ``retry(max:strategy:_:)``.
 ```
 
 For a top-level function with no overloads, you can omit the parameter labels:
 
 ```swift
-/// See ``asyncRetry(_:)``.
+/// See ``retry(_:)``.
 ```
 
 ## When linking fails silently

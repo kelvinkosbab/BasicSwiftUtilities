@@ -43,7 +43,7 @@ Skip files with no issues. End with a prioritized summary of the most impactful 
 
 Example output:
 
-### Core/Sources/Retry/AsyncRetry.swift
+### Sources/Retry/Retry.swift
 
 **Line 23: Missing `- Throws:` documentation for throwing function.**
 
@@ -52,7 +52,7 @@ Example output:
 /// Retries an async operation with the configured strategy.
 /// - Parameter operation: The async work to retry.
 /// - Returns: The successful result of the operation.
-public func asyncRetry<T>(
+public func retry<T>(
     _ operation: () async throws -> T
 ) async throws -> T
 
@@ -61,7 +61,7 @@ public func asyncRetry<T>(
 /// - Parameter operation: The async work to retry.
 /// - Returns: The successful result of the operation.
 /// - Throws: The last error thrown by `operation` if all retry attempts are exhausted.
-public func asyncRetry<T>(
+public func retry<T>(
     _ operation: () async throws -> T
 ) async throws -> T
 ```
@@ -70,15 +70,15 @@ public func asyncRetry<T>(
 
 ```swift
 // Before
-/// See `RetryStrategy` for available strategies.
+/// See `BackoffStrategy` for available strategies.
 
 // After
-/// See ``RetryStrategy`` for available strategies.
+/// See ``BackoffStrategy`` for available strategies.
 ```
 
 ### Summary
 
-1. **Completeness (high):** 4 throwing public functions in `Core/Sources/Retry/` are missing `- Throws:` documentation.
+1. **Completeness (high):** 4 throwing public functions in `Sources/Retry/` are missing `- Throws:` documentation.
 2. **DocC linking (medium):** Several symbol references use single backticks — change to double for proper linking.
 
 End of example.

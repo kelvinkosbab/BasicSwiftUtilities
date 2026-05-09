@@ -44,20 +44,20 @@ Skip files with no issues. End with a prioritized summary of the most impactful 
 
 Example output:
 
-### CoreStorage/Tests/ObjectStoreTests.swift
+### CoreStorage/Tests/EntityStoreTests.swift
 
 **Line 23: Sync `viewContext` test missing `@MainActor` — will fail under Swift 6 strict concurrency.**
 
 ```swift
 // Before
 @Test func createUpdateDeleteObject() throws {
-    let store = ObjectStore(...)
+    let store = EntityStore(...)
     try store.create(...)
 }
 
 // After
 @MainActor @Test func createUpdateDeleteObject() throws {
-    let store = ObjectStore(...)
+    let store = EntityStore(...)
     try store.create(...)
 }
 ```

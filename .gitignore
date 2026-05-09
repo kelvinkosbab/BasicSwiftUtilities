@@ -1,6 +1,21 @@
+# Apple / Xcode / SPM
 .DS_Store
+*xcuserdata*
+xcuserdata/
+DerivedData/
+build/
 .build/
 .swiftpm/
-DerivedData/
 *.xcodeproj
-xcuserdata/
+*.ipa
+*.dSYM.zip
+Package.resolved
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/test_output
+
+# Claude Code local settings
+.claude/settings.local.json
+.claude/plans/

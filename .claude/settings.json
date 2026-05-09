@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xcodebuild:*)",
+      "Bash(swift:*)",
+      "Bash(swiftlint:*)",
+      "Bash(xcode-select:*)",
+      "Bash(./gradlew:*)",
+      "Bash(gradle:*)",
+      "Bash(ktlint:*)",
+      "Bash(adb:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git push:*)",
+      "Bash(git rm:*)",
+      "Bash(gh:*)",
+      "Bash(pbcopy)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:developer.apple.com)",
+      "WebFetch(domain:developer.android.com)"
+    ]
+  }
+}

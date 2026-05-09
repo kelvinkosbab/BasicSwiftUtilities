@@ -1,6 +1,6 @@
 ---
 name: swift-logging-pro
-description: Reviews Swift logging code using os.Logger and Loggable patterns for correct privacy markers, subsystem/category conventions, and appropriate log levels. Use when writing or reviewing logging code.
+description: Reviews Swift logging code using os.Logger for correct privacy markers, subsystem/category conventions, and appropriate log levels. Use when writing or reviewing logging code.
 license: MIT
 metadata:
   author: Kelvin Kosbab

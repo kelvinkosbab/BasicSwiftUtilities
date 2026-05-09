@@ -75,7 +75,10 @@
       "Bash(mkdir -p /Users/kelvinkosbab/Projects/Kozinga/Packages/BasicSwiftUtilities/.claude/skills/coredata-swift6-pro/references)",
       "Bash(xcodebuild -list)",
       "Bash(xcodebuild build *)",
-      "Bash(xcrun simctl *)"
+      "Bash(xcrun simctl *)",
+      "Read(//Users/kelvinkosbab/Projects/Kozinga/**)",
+      "Read(//Users/kelvinkosbab/Projects/**)",
+      "Bash(/Users/kelvinkosbab/Projects/Kozinga/AppBootstrapAI/install.sh /Users/kelvinkosbab/Projects/Kozinga/Packages/BasicSwiftUtilities --platform apple --apple-language swift)"
     ]
   }
 }

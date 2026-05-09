@@ -43,19 +43,19 @@ Skip files with no issues. End with a prioritized summary of the most impactful 
 
 Example output:
 
-### CoreStorage/Sources/CodableStore/DiskBackedJSONCodableStoreError.swift
+### Sources/Storage/FileStoreError.swift
 
 **Line 12: Public error type should conform to `LocalizedError` for user-facing strings.**
 
 ```swift
 // Before
-public enum DiskBackedJSONCodableStoreError: Error {
+public enum FileStoreError: Error {
     case readFailed
     case writeFailed
 }
 
 // After
-public enum DiskBackedJSONCodableStoreError: LocalizedError {
+public enum FileStoreError: LocalizedError {
     case readFailed
     case writeFailed
 
@@ -75,7 +75,7 @@ public enum DiskBackedJSONCodableStoreError: LocalizedError {
 public func read() throws -> Data
 
 // After
-public func read() throws(DiskBackedJSONCodableStoreError) -> Data
+public func read() throws(FileStoreError) -> Data
 ```
 
 ### Summary

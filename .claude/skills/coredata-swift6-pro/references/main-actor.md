@@ -12,7 +12,7 @@ For types that hold or use a `viewContext`:
 
 ```swift
 @MainActor
-public final class ObjectStore {
+public final class EntityStore {
     private let context: NSManagedObjectContext  // viewContext
 
     public init(context: NSManagedObjectContext) {
@@ -62,7 +62,7 @@ Sync tests that touch `viewContext` will fail under Swift 6 unless marked `@Main
 // ❌ Will fail — runs off-main
 @Test
 func createObject() throws {
-    let store = ObjectStore(context: viewContext)
+    let store = EntityStore(context: viewContext)
     try store.create(...)
 }
 
@@ -70,7 +70,7 @@ func createObject() throws {
 @MainActor
 @Test
 func createObject() throws {
-    let store = ObjectStore(context: viewContext)
+    let store = EntityStore(context: viewContext)
     try store.create(...)
 }
 ```
@@ -79,8 +79,8 @@ Apply `@MainActor` to the entire suite if all tests need it:
 
 ```swift
 @MainActor
-@Suite("ObjectStore")
-struct ObjectStoreTests {
+@Suite("EntityStore")
+struct EntityStoreTests {
     @Test func create() throws { ... }
     @Test func update() throws { ... }
 }

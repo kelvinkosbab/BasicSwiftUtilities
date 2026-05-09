@@ -26,9 +26,9 @@ The first line is the summary (shown in code completion). Subsequent paragraphs 
 ///   - operation: The async work to retry.
 /// - Returns: The successful result of the operation.
 /// - Throws: The last error thrown by `operation` if all retry attempts are exhausted.
-public func asyncRetry<T>(
+public func retry<T>(
     max: Int,
-    strategy: RetryStrategy,
+    strategy: BackoffStrategy,
     _ operation: () async throws -> T
 ) async throws -> T
 ```

@@ -49,33 +49,9 @@ final class NetworkClient {
 }
 ```
 
-## Logger via a `Loggable` protocol
+## Logger abstraction in library code (optional)
 
-For library code, abstract the logger so consumers can plug in their own:
-
-```swift
-public protocol Loggable: Sendable {
-    func log(_ message: String, level: LogLevel)
-}
-
-public struct SwiftLogger: Loggable {
-    private let logger: os.Logger
-
-    public init(subsystem: String, category: String) {
-        self.logger = Logger(subsystem: subsystem, category: category)
-    }
-
-    public func log(_ message: String, level: LogLevel) {
-        switch level {
-        case .debug: logger.debug("\(message, privacy: .public)")
-        case .info:  logger.info("\(message, privacy: .public)")
-        case .error: logger.error("\(message, privacy: .public)")
-        }
-    }
-}
-```
-
-This lets test code substitute a mock logger.
+If you're writing a reusable library or framework, you may want to wrap `os.Logger` behind a small protocol so consumers can inject their own logger (or a mock) for tests. The exact shape is up to you — typically a `Sendable` protocol with `log(_:level:)` plus a default implementation backed by `os.Logger`. Keep the abstraction thin; for application code, use `os.Logger` directly.
 
 ## Reading logs
 

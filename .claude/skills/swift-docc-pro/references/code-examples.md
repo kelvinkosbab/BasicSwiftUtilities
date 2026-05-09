@@ -28,7 +28,7 @@ If the example references types from other modules, mention them in prose:
 ```swift
 /// Usage (requires `import Core`):
 /// ```swift
-/// let logger = SwiftLogger(subsystem: "com.example", category: "App")
+/// let logger = Logger(subsystem: "com.example", category: "App")
 /// logger.info("Hello")
 /// ```
 ```
@@ -45,7 +45,7 @@ Avoid placeholder names like `foo`, `bar`, `someVar` in examples. Use names that
 
 // ✅ Realistic
 /// ```swift
-/// let result = try await asyncRetry(max: 3, strategy: .exponential) {
+/// let result = try await retry(max: 3, strategy: .exponential) {
 ///     try await fetchUserProfile(id: userID)
 /// }
 /// ```

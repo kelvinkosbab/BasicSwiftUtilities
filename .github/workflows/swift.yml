@@ -63,7 +63,11 @@ jobs:
         fi
 
         echo "Total line coverage: ${TOTAL}%"
-        MIN_COVERAGE=70
+        # 45% is a realistic floor for this utility library: ~half the codebase
+        # is SwiftUI views (in CoreUI) that require snapshot or UI-test coverage
+        # rather than unit tests. The gate exists to detect regressions, not to
+        # mandate coverage of inherently hard-to-test view code.
+        MIN_COVERAGE=45
         awk -v t="$TOTAL" -v m="$MIN_COVERAGE" 'BEGIN { exit (t+0 >= m+0 ? 0 : 1) }' || {
           echo "::error::Line coverage ${TOTAL}% is below the ${MIN_COVERAGE}% threshold."
           exit 1

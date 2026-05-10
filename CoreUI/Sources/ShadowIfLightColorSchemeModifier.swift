@@ -69,3 +69,34 @@ public extension View {
         ))
     }
 }
+
+// MARK: - Previews
+
+/// A sample card that demonstrates `shadowIfLightColorScheme` against the
+/// surrounding background.
+private struct ShadowDemoCard: View {
+    var body: some View {
+        Text("Hello, world!")
+            .font(.headline)
+            .padding(Spacing.base)
+            .frame(width: 220, height: 80)
+            .background(.background, in: RoundedRectangle(cornerRadius: 12))
+            .shadowIfLightColorScheme(radius: 6, y: 3)
+    }
+}
+
+#Preview("Shadow on light scheme") {
+    ZStack {
+        Color.gray.opacity(0.1).ignoresSafeArea()
+        ShadowDemoCard()
+    }
+    .preferredColorScheme(.light)
+}
+
+#Preview("No shadow on dark scheme") {
+    ZStack {
+        Color.gray.opacity(0.1).ignoresSafeArea()
+        ShadowDemoCard()
+    }
+    .preferredColorScheme(.dark)
+}

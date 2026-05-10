@@ -52,3 +52,64 @@ public struct CircleImage: View {
             .accessibilityHidden(self.isDecorative)
     }
 }
+
+// MARK: - Previews
+
+#Preview("CircleImage — system symbols") {
+    HStack(spacing: Spacing.base) {
+        CircleImage(systemName: "person.fill")
+            .frame(width: 48, height: 48)
+            .foregroundStyle(.blue)
+
+        CircleImage(systemName: "heart.fill")
+            .frame(width: 48, height: 48)
+            .foregroundStyle(.red)
+
+        CircleImage(systemName: "star.fill")
+            .frame(width: 48, height: 48)
+            .foregroundStyle(.yellow)
+
+        CircleImage(systemName: "checkmark")
+            .frame(width: 48, height: 48)
+            .foregroundStyle(.green)
+    }
+    .padding()
+}
+
+#Preview("CircleImage — sizes") {
+    HStack(alignment: .center, spacing: Spacing.base) {
+        CircleImage(systemName: "person.fill")
+            .frame(width: 24, height: 24)
+            .foregroundStyle(.indigo)
+
+        CircleImage(systemName: "person.fill")
+            .frame(width: 48, height: 48)
+            .foregroundStyle(.indigo)
+
+        CircleImage(systemName: "person.fill")
+            .frame(width: 96, height: 96)
+            .foregroundStyle(.indigo)
+    }
+    .padding()
+}
+
+#Preview("CircleImage — decorative variant") {
+    VStack(alignment: .leading, spacing: Spacing.base) {
+        Label {
+            Text("Default — VoiceOver reads this image")
+        } icon: {
+            CircleImage(systemName: "info.circle.fill")
+                .frame(width: 24, height: 24)
+                .foregroundStyle(.blue)
+        }
+
+        Label {
+            Text("Decorative — VoiceOver skips this image")
+        } icon: {
+            CircleImage(systemName: "info.circle.fill", decorative: true)
+                .frame(width: 24, height: 24)
+                .foregroundStyle(.blue)
+        }
+    }
+    .padding()
+}

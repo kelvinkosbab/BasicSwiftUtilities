@@ -82,7 +82,9 @@
       "Bash(curl -sI https://kelvinkosbab.github.io/CoreSwiftUtilities/)",
       "Bash(curl -sI https://kelvinkosbab.github.io/BasicSwiftUtilities/)",
       "Bash(grep -n \"An \\\\`NSError\\\\` from CoreData\" CoreStorage/Sources/CoreData/ObjectStore/ObjectStore.swift)",
-      "Bash(git tag *)"
+      "Bash(git tag *)",
+      "Bash(awk -v v=1.0.1 ' *)",
+      "Bash(awk -v v=1.0.0 ' *)"
     ]
   }
 }

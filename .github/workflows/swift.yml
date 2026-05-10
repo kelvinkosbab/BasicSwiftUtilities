@@ -98,3 +98,31 @@ jobs:
           -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
           -skipPackagePluginValidation \
           | tail -40
+
+  build-other-platforms:
+    name: Build (${{ matrix.platform }})
+    runs-on: macos-15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: tvOS
+            destination: 'generic/platform=tvOS Simulator'
+          - platform: watchOS
+            destination: 'generic/platform=watchOS Simulator'
+          - platform: visionOS
+            destination: 'generic/platform=visionOS Simulator'
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Select Xcode
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+
+    - name: Build for ${{ matrix.platform }}
+      run: |
+        xcodebuild build \
+          -scheme BasicSwiftUtilities \
+          -destination '${{ matrix.destination }}' \
+          -skipPackagePluginValidation \
+          | tail -20

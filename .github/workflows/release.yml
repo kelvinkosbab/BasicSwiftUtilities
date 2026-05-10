@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  push:
+    tags:
+      # SemVer tags only — e.g. 1.0.0, 1.0.1, 2.3.4
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        # Fetch enough history so we can compute "what changed since previous tag"
+        # in case future logic wants it.
+        fetch-depth: 0
+
+    - name: Extract release notes from CHANGELOG
+      id: notes
+      run: |
+        VERSION="${GITHUB_REF#refs/tags/}"
+        echo "Extracting release notes for version: $VERSION"
+
+        # Pull the section between "## [VERSION]" and the next "## [" header.
+        # Strip the date suffix on the header line so the release body starts
+        # with the change groups (### Added / ### Fixed / etc.).
+        awk -v v="$VERSION" '
+          BEGIN { capture = 0 }
+          /^## \[/ {
+            if (capture) { exit }
+            if ($0 ~ "^## \\[" v "\\]") { capture = 1; next }
+          }
+          capture { print }
+        ' CHANGELOG.md > release-notes.md
+
+        if [ ! -s release-notes.md ]; then
+          echo "::warning::No CHANGELOG entry found for $VERSION; falling back to default notes."
+          echo "Release $VERSION." > release-notes.md
+        fi
+
+        echo "--- Release notes ---"
+        cat release-notes.md
+        echo "---------------------"
+
+    - name: Create GitHub Release
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        VERSION="${GITHUB_REF#refs/tags/}"
+        gh release create "$VERSION" \
+          --title "$VERSION" \
+          --notes-file release-notes.md

@@ -11,33 +11,59 @@ let sharedSwiftSettings: [SwiftSetting] = [
     .enableUpcomingFeature("InternalImportsByDefault")
 ]
 
-/// Creates a source target and optionally a test target for a module.
+/// Creates a source target and (optionally) a paired test target for a module.
 ///
-/// Assumes the directory layout:
+/// Directory layout this assumes:
 /// ```
 /// {name}/
 ///     Sources/
-///     Tests/       (if hasTests is true)
+///         Resources/   (only if hasResources is true)
+///     Tests/           (only if hasTests is true)
 /// ```
+///
+/// - Parameters:
+///   - name: Module name. Used as both the target name and the on-disk folder.
+///   - dependencies: Other targets / package products this module imports.
+///     Use `"OtherModule"` for sibling targets in this package,
+///     `.product(name: "X", package: "Y")` for external package products.
+///   - hasTests: Whether to create a paired test target. Defaults to `true` —
+///     missing tests is a problem to fix, not a configuration to support.
+///     Set to `false` only for purely declarative resource-only targets.
+///   - hasResources: When `true`, the source target picks up
+///     `{name}/Sources/Resources/` via `.process("Resources")`. Use for
+///     `.xcassets`, `.xcstrings`, `.json` data files, etc.
+///   - testDependencies: Additional dependencies the test target needs
+///     beyond the module-under-test (e.g., test fixtures from sibling
+///     modules). The module-under-test is always included automatically.
+///   - testResources: Resources for the test target (test fixtures, sample
+///     payloads). Less common than source resources.
+///   - plugins: Build-tool plugins attached to the source target (e.g.,
+///     `SwiftLintBuildToolPlugin`). Test targets don't inherit these by
+///     default — pass them explicitly here only if you want lint on source.
 func makeTargets(
     name: String,
     dependencies: [Target.Dependency] = [],
     hasTests: Bool = true,
-    testResources: [Resource]? = nil
+    hasResources: Bool = false,
+    testDependencies: [Target.Dependency] = [],
+    testResources: [Resource]? = nil,
+    plugins: [Target.PluginUsage]? = nil
 ) -> [Target] {
     var targets: [Target] = [
         .target(
             name: name,
             dependencies: dependencies,
             path: "\(name)/Sources",
-            swiftSettings: sharedSwiftSettings
+            resources: hasResources ? [.process("Resources")] : nil,
+            swiftSettings: sharedSwiftSettings,
+            plugins: plugins
         )
     ]
     if hasTests {
         targets.append(
             .testTarget(
                 name: "\(name)Tests",
-                dependencies: [.byName(name: name)],
+                dependencies: [.byName(name: name)] + testDependencies,
                 path: "\(name)/Tests",
                 resources: testResources,
                 swiftSettings: sharedSwiftSettings

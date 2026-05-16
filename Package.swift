@@ -89,6 +89,7 @@ let package = Package(
         .library(name: "CoreUI", targets: ["CoreUI"]),
         .library(name: "CoreUIKit", targets: ["CoreUIKit"]),
         .library(name: "CoreStorage", targets: ["CoreStorage"]),
+        .library(name: "LocalNetworkMonitor", targets: ["LocalNetworkMonitor"]),
         .library(name: "RunMode", targets: ["RunMode"])
     ],
     dependencies: [],
@@ -96,5 +97,6 @@ let package = Package(
         + makeTargets(name: "CoreUI")
         + makeTargets(name: "CoreUIKit", dependencies: ["CoreUI"])
         + makeTargets(name: "CoreStorage", dependencies: ["Core"], testResources: [.process("Resources")])
+        + makeTargets(name: "LocalNetworkMonitor", dependencies: ["Core"])
         + makeTargets(name: "RunMode")
 )

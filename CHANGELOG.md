@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+- **LocalNetworkMonitor** module — Wi-Fi / wired Ethernet reachability
+  monitor backed by `Network.framework`'s `NWPathMonitor`. Wraps the
+  framework callback in an `AsyncStream` so consumers stay in pure
+  Swift Concurrency. Ships with a `LocalNetworkMonitorProtocol`,
+  the `LocalNetworkMonitor` production type, and a
+  `MockLocalNetworkMonitor` for tests and previews.
+
 ## [1.0.1] - 2026-05-09
 
 ### Fixed

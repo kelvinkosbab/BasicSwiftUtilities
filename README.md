@@ -18,6 +18,7 @@ Developed by Kelvin Kosbab — kelvin.kosbab@kozinga.net
 | **CoreUI** | SwiftUI components, view modifiers, color utilities, and toast system |
 | **CoreUIKit** | UIKit view controllers, presentation helpers, color utilities, and font registration |
 | **CoreStorage** | CoreData helpers and a lightweight disk-backed key-value store |
+| **LocalNetworkMonitor** | Wi-Fi / Ethernet reachability monitor for mDNS-based discovery flows |
 | **RunMode** | Detect whether the current process is the main app, unit tests, or UI tests |
 
 **Platform Support:**

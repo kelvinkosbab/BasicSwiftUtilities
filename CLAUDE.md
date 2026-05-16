@@ -42,6 +42,7 @@ xcodebuild test \
 | **CoreUI** | SwiftUI components and utilities | `Spacing`, `CircleImage`, `ToastApi`, `HexColor`, `Color.hex()` |
 | **CoreUIKit** | UIKit helpers and view controller utilities | `BaseHostingController`, `PresentableController`, `FontRegistrar`, `UIColor.hex()` |
 | **CoreStorage** | CoreData and file-backed persistence | `PersistentDataContainer`, `ObjectStore`, `DataObserver`, `DiskBackedJSONCodableStore` |
+| **LocalNetworkMonitor** | Wi-Fi / Ethernet reachability for mDNS flows | `LocalNetworkMonitorProtocol`, `LocalNetworkMonitor`, `MockLocalNetworkMonitor` |
 | **RunMode** | Runtime mode detection | `RunMode` |
 
 ### Dependency Graph
@@ -49,6 +50,7 @@ xcodebuild test \
 ```
 CoreUIKit → CoreUI
 CoreStorage → Core
+LocalNetworkMonitor → Core
 Core, CoreUI, RunMode → (no internal dependencies)
 ```
 

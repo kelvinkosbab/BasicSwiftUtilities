@@ -27,6 +27,31 @@
 /// monitor.isOnLocalNetwork = true
 /// #expect(viewModel.showsNoNetworkBanner == false)
 /// ```
+///
+/// ## Topics
+///
+/// ### Creating a Mock
+///
+/// - ``init(initialIsOnLocalNetwork:)``
+///
+/// ### Subscribing to Updates
+///
+/// - ``delegate``
+///
+/// ### Driving State From Tests
+///
+/// - ``isOnLocalNetwork``
+/// - ``reset()``
+///
+/// ### Verifying Lifecycle Calls
+///
+/// - ``startCallCount``
+/// - ``stopCallCount``
+///
+/// ### Lifecycle
+///
+/// - ``start()``
+/// - ``stop()``
 @MainActor
 public final class MockLocalNetworkMonitor: LocalNetworkMonitorProtocol {
 

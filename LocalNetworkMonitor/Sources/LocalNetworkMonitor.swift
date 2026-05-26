@@ -38,6 +38,25 @@ import Core
 /// and calling `@MainActor` methods directly. No manual `Task {
 /// @MainActor in … }` hops, no dedicated queue we have to name or
 /// maintain.
+///
+/// ## Topics
+///
+/// ### Creating a Monitor
+///
+/// - ``init()``
+///
+/// ### Subscribing to Updates
+///
+/// - ``delegate``
+///
+/// ### Reading Current State
+///
+/// - ``isOnLocalNetwork``
+///
+/// ### Lifecycle
+///
+/// - ``start()``
+/// - ``stop()``
 @MainActor
 public final class LocalNetworkMonitor: LocalNetworkMonitorProtocol {
 

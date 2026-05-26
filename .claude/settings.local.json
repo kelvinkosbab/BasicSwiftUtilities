@@ -88,7 +88,8 @@
       "Bash(ls /Users/kelvinkosbab/Projects/Kozinga/ | grep -i appboot 2>&1; find /Users/kelvinkosbab -type d -name \"AppBootstrapAI\" -not -path \"*/.git/*\" -not -path \"*/node_modules/*\" -not -path \"*/.build/*\" 2>/dev/null | head -5)",
       "Bash(cp /Users/kelvinkosbab/Projects/Kozinga/AppBootstrapAI/.claude/rules/apple-localization-best-practices.md .claude/rules/)",
       "Bash(cp /Users/kelvinkosbab/Projects/Kozinga/AppBootstrapAI/.claude/rules/apple-objc-best-practices.md .claude/rules/)",
-      "Bash(cp /Users/kelvinkosbab/Projects/Kozinga/AppBootstrapAI/.claude/rules/apple-spm-package-conventions.md .claude/rules/)"
+      "Bash(cp /Users/kelvinkosbab/Projects/Kozinga/AppBootstrapAI/.claude/rules/apple-spm-package-conventions.md .claude/rules/)",
+      "Bash(cp /Users/kelvinkosbab/Projects/Kozinga/AppBootstrapAI/.claude/rules/apple-objc-accessibility-best-practices.md .claude/rules/ && ls .claude/rules/ | grep apple-objc)"
     ]
   }
 }

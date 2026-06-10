@@ -62,7 +62,16 @@ Tests that pass intermittently are worse than no tests — they teach the team t
 - **Keep XCTest for**:
   - **UI tests** (XCUITest) — Swift Testing does not support UI tests.
   - **Performance tests** (`measure { }`) — XCTest is the only option.
-- **Don't mix in the same target.** They can coexist in a project, but a single test target should be one or the other for clarity.
+- **Don't mix in the same target.** They can coexist in a project, but a single test target should be one or the other for clarity. **Xcode 27 / Swift 6.4** surfaces a runtime warning when an assertion from one framework fires inside a test written for the other (the XCTest ↔ Swift Testing interop check) — treat that warning as a signal you've crossed the streams, not noise to silence.
+
+## Hunting Flaky Tests
+
+A test that passes intermittently is a determinism bug (see above) — find it by *forcing* repetition, not by re-running by hand:
+
+- **`swift test --repeat-until fail`** (Xcode 27 / Swift 6.4+) reruns until a failure surfaces — the fastest way to reproduce a flake. Pair with `--maximum-repetitions <n>` to bound it for CI.
+- **`swift test --repeat-until pass`** is the opposite escape hatch — *don't* ship it as a way to paper over a flaky test; use it only to confirm a fix actually stuck, then remove it.
+- `swift test` now prints a summary of which targets failed, so a multi-target run points you at the culprit without scrolling.
+- A reproduced flake almost always traces back to one of the determinism rules: a real clock/UUID/`Date()`, shared `UserDefaults.standard`, order-dependence exposed by parallel execution, or live network. Fix the source; repetition flags are the diagnostic, not the cure.
 
 ## UI Testing (XCUITest)
 

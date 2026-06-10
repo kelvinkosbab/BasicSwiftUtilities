@@ -204,6 +204,7 @@ swiftSettings: [
 - **Mixing `enableExperimentalFeature` and `enableUpcomingFeature` for the same feature** — a feature lives in one bucket at a time. Mixing means one branch is dead code; the dead branch is the one you'll forget to remove.
 - **Setting `swiftSettings` on each target individually when they're meant to be uniform** — drift creeps in. Define `sharedSwiftSettings` once, reference it from every target (see [`templates/Package.template.swift`](../../templates/Package.template.swift)).
 - **`OTHER_SWIFT_FLAGS` from Xcode project settings leaking into SPM expectations** — Xcode and SPM have different flag surfaces. Don't copy-paste Xcode build settings into `unsafeFlags`; check what SPM's `SwiftSetting` API exposes first.
+- **`-ld_classic` in `linkerSettings` / `unsafeFlags`** — Xcode 27 (Swift 6.4) **removed the `ld64` classic linker; `-ld_classic` is no longer accepted** and fails the link. If a package carried it as a workaround for an old linker bug, drop it — the modern linker is the only option now.
 - **Enabling concurrency strictness only in tests** — tests built against `.v5` source code while the source target is `.v6` will surface false positives in test failures. Keep language mode uniform across source and test targets in the same module.
 
 ## Dependencies

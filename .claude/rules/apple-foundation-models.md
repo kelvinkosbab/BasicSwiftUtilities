@@ -5,7 +5,9 @@ globs: "**/*.swift"
 
 # Apple Foundation Models
 
-Rules for code that `import FoundationModels` (iOS 26+ / macOS 26+). Foundation Models runs on-device via Apple Intelligence — it can be unavailable, slow to warm up, and it streams. Treat it like a network call with a local cache, not a synchronous function.
+Rules for code that `import FoundationModels` (iOS 26+ / macOS 26+). Foundation Models started as on-device-only via Apple Intelligence; as of the 2026 SDKs (Xcode 27) it's a single Swift API spanning **on-device, Private Cloud Compute, and external/custom model providers**, with image input. It can be unavailable, slow to warm up, and it streams. Treat it like a network call with a local cache, not a synchronous function.
+
+> **Beta surface.** The pluggable-model and image-input APIs below are **Beta** in the 2026 SDKs. Symbol names are from Apple's current Foundation Models DocC; **verify against the iOS 27 SDK** before hardcoding — beta symbols shift between seeds. The lifecycle / streaming / error-handling patterns (which predate 2026) are stable.
 
 ## Session Ownership
 
@@ -21,6 +23,30 @@ Rules for code that `import FoundationModels` (iOS 26+ / macOS 26+). Foundation 
 - **Surface availability via `@Observable`**, not via polling. Make a single `AppleIntelligenceSupport` utility (or equivalent) that exposes `isAvailable: Bool` and `unavailabilityReason: String?` for the UI to bind to.
 - **Never call `LanguageModelSession(...)` without checking availability first** — initialization can throw or silently produce a session that immediately fails.
 
+## Choosing a Model: On-Device / Private Cloud Compute / External (Xcode 27, Beta)
+
+Foundation Models is no longer on-device-only. A `LanguageModelSession` can run against any model conforming to the `LanguageModel` protocol:
+
+- **`SystemLanguageModel`** — the on-device Apple model (the default; gate via `.availability` as above). Lowest latency, no network, free.
+- **`PrivateCloudComputeLanguageModel`** — Apple's larger server models over Private Cloud Compute: more capable, needs network, keeps Apple's privacy guarantees. App Store Small Business Program members under the download threshold get it at no cloud-API cost; budget for it otherwise. Treat it as a network call — handle offline / latency / failure.
+- **External providers (Claude, Gemini, self-hosted)** — bridge them by implementing the `LanguageModelExecutor` protocol (handling a `LanguageModelExecutorGenerationRequest`, streaming deltas back through a `LanguageModelExecutorGenerationChannel`, and advertising `LanguageModelCapabilities`). The rest of your code keeps talking to `LanguageModelSession` and stays provider-agnostic.
+
+Guidance:
+
+- **Pick per use-case, not globally.** On-device for cheap / private / offline turns; PCC or an external model for harder reasoning. Type the holder's dependency as `any LanguageModel` so you can switch without touching call sites.
+- **Availability gating applies per model.** On-device → `SystemLanguageModel.default.availability`; PCC / external → reachability plus your own credential / quota checks. Expose a single `isAvailable` for the *currently selected* model.
+- **Don't leak provider choice into the View.** Model selection lives in the `@MainActor @Observable` session holder; the View just sends prompts.
+- **An external or PCC model means data leaves the device.** Get user consent and don't send more context than the task needs — same posture as any network upload.
+- **Profile with the Foundation Models Instrument** (new in Xcode 27) — it traces instructions, prompts, responses, token usage, and inference latency. Use it to catch context-window bloat and slow turns before users do, and to compare on-device vs. PCC cost.
+
+## Multimodal Input (Images, Beta)
+
+The 2026 betas add image input. Build a `Prompt` with an `Attachment` whose content is an `ImageAttachmentContent` (conforming to `AttachmentContent`); images already in the conversation surface as `ImageReference` in the `Transcript`.
+
+- **Gate on capability, not OS version.** Not every model accepts images — check the model's `LanguageModelCapabilities` before attaching and fall back to text-only when it can't.
+- **Downsize before attaching.** Full-resolution photos blow the context budget and slow inference; resize / compress to what the task actually needs.
+- **Treat attached images as data that leaves the device** for PCC / external models (see consent note above).
+
 ## Streaming Responses
 
 - **Append a placeholder message *before* starting the stream**, then mutate it in place as tokens arrive. Users see the assistant "typing" immediately instead of a frozen UI.
@@ -31,7 +57,7 @@ Rules for code that `import FoundationModels` (iOS 26+ / macOS 26+). Foundation 
 
 ## Error Handling
 
-- **Catch broadly and surface `error.localizedDescription`** for display. Foundation Models' error enum is young and shifting across OS releases; pattern-matching specific cases (`unavailable`, `exceededContextWindowSize`) will break on the next SDK.
+- **Catch broadly and surface `error.localizedDescription`** for display. Foundation Models' error enum (`LanguageModelError`) is young and still **Beta** in the 2026 SDKs; pattern-matching specific cases (`unavailable`, `exceededContextWindowSize`) will break between seeds and across OS releases. Xcode 27 keeping it Beta is exactly why this rule exists.
 - **Localize user-facing error strings yourself** when you add context ("Couldn't reach on-device model: \(reason)"). The raw `localizedDescription` is not always user-friendly.
 - **Log the full error** (type + description) via your `Loggable` implementation for diagnostics, even when you show a simplified message to the user.
 
@@ -44,6 +70,7 @@ Rules for code that `import FoundationModels` (iOS 26+ / macOS 26+). Foundation 
   - **Simulator** — streams lorem ipsum (or canned content) word-by-word on a timer, so the simulator (which lacks Apple Intelligence) can demo the real streaming UI.
 - **Inject via `@Environment`**, with `nil` defaults and lazy local fallback in the view: `@State private var localSession = Self.makeSession()`.
 - **`makeSession()` branches on `#available(iOS 26, *)` + simulator check** and picks real / mock / simulator. This is the one place `#if canImport(FoundationModels)` lives.
+- **The native `LanguageModel` / `LanguageModelExecutor` protocols are themselves injection seams.** For new code you can type the holder's dependency as `any LanguageModel` and inject a conforming mock directly, rather than hand-rolling a wrapper protocol. Keep a bespoke wrapper only when you also need to abstract the *simulator* path or non-FM concerns. The `#if canImport` / `@available` discipline is unchanged.
 
 ## SwiftUI Integration
 

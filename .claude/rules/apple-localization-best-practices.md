@@ -121,6 +121,15 @@ A translator opening `Localizable.xcstrings` sees only the key and the source st
 
 - **Key naming carries context too** — `settings.save_button` says where it appears; `save` alone doesn't.
 - **Avoid abbreviations in keys**: `nav.title.home` over `nv.t.h`. Translators don't have your project map.
+- **Mark strings that must not be translated.** A comment containing *"do not translate"* tags the entry **Don't Translate** in the String Catalog editor (and emits `translate="no"` in exported XLIFF), so brand names, code identifiers, and format tokens aren't "localized" into breakage. Use it instead of leaving such strings un-commented and hoping.
+
+## Xcode 27 String Catalog Tooling
+
+Xcode 27 (Swift 6.4) tightens the String Catalog workflow — lean on it, but keep the type-safe facade as the source of truth:
+
+- **`NSLocalizedString` is now extracted from header files too**, not just `.m`/`.swift`. Mixed-language targets that declared user-facing strings in `.h` now surface them in the catalog — audit those entries for missing `comment:` context after the first export.
+- **"Generate Translations"** (button + context menu in the String Catalog editor) produces machine translations for empty entries. Treat output as a *draft* for a human translator, not a ship-ready string — and machine-translated entries are flagged `state-qualifier="leveraged-mt"` in XLIFF so reviewers can find them.
+- **Agent-assisted translation**: Xcode 27's coding assistant can read/plan/edit String Catalog translations (and there's an MCP tool for it). Same rule — review before shipping; never let an agent invent strings for keys the facade doesn't define.
 
 ## Pseudo-Localization for Testing
 

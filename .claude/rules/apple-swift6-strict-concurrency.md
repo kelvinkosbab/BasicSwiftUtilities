@@ -1,11 +1,13 @@
 ---
-description: Enforce Swift 6.2 strict concurrency rules when writing or reviewing Swift code
+description: Enforce Swift 6.4 strict concurrency rules when writing or reviewing Swift code
 globs: "**/*.swift"
 ---
 
-# Swift 6.2 Strict Concurrency
+# Swift 6.4 Strict Concurrency
 
 This project uses `SWIFT_STRICT_CONCURRENCY = complete` and `.swiftLanguageMode(.v6)`. All `Sendable` violations are compile errors, not warnings.
+
+> **Toolchain vs. language mode.** "Swift 6.4" is the current toolchain (ships with Xcode 27); the **language mode is `.v6`** — unchanged since Swift 6.0, so the rules below are stable across the 6.x line. Bump the toolchain freely; keep the mode pinned at `.v6`. The actor-isolation refinements introduced in Swift 6.2 (default-actor isolation, `@concurrent`, `Task.immediate`, isolated conformances, caller-actor `async` behavior) remain the baseline under 6.4.
 
 ## Core Rules
 

@@ -27,7 +27,7 @@ public final class FontRegistrar: Sendable {
             hasher.combine(self.bundle)
         }
 
-        static func ==(lhs: RegisteredFont, rhs: RegisteredFont) -> Bool {
+        static func == (lhs: RegisteredFont, rhs: RegisteredFont) -> Bool {
             return lhs.fontName == rhs.fontName &&
                 lhs.fileType == rhs.fileType &&
                 lhs.bundle == rhs.bundle

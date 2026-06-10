@@ -4,9 +4,9 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import Testing
-import SwiftUI
 @testable import CoreUI
+import SwiftUI
+import Testing
 
 // MARK: - ColorHexTests
 

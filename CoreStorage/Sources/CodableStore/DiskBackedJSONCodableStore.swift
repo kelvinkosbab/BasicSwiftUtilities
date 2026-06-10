@@ -4,8 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import Foundation
 import Core
+import Foundation
 
 // MARK: - DiskBackedJSONCodableStore
 

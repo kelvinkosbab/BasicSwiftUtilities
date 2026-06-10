@@ -92,7 +92,12 @@
       "Bash(cp /Users/kelvinkosbab/Projects/Kozinga/AppBootstrapAI/.claude/rules/apple-objc-accessibility-best-practices.md .claude/rules/ && ls .claude/rules/ | grep apple-objc)",
       "Bash(cp /Users/kelvinkosbab/Projects/Kozinga/AppBootstrapAI/.claude/rules/apple-foundation-models.md .claude/rules/)",
       "Bash(cp /Users/kelvinkosbab/Projects/Kozinga/AppBootstrapAI/.claude/rules/apple-swift6-strict-concurrency.md .claude/rules/)",
-      "Bash(cp /Users/kelvinkosbab/Projects/Kozinga/AppBootstrapAI/.claude/rules/apple-testing-strategy.md .claude/rules/)"
+      "Bash(cp /Users/kelvinkosbab/Projects/Kozinga/AppBootstrapAI/.claude/rules/apple-testing-strategy.md .claude/rules/)",
+      "Bash(tee /tmp/build.log)",
+      "Bash(grep -E \"warning:|error:\" /tmp/build.log | head -40 && echo \"\" && echo \"=== Total warnings/errors ===\" && grep -cE \"warning:|error:\" /tmp/build.log)",
+      "Read(//tmp/**)",
+      "Bash(grep -oE \"\\\\\\([a-z_]+\\\\\\)$\" /tmp/lint2.txt)",
+      "Bash(tee /tmp/lint3.txt)"
     ]
   }
 }

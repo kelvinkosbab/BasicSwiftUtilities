@@ -17,7 +17,7 @@ public import SwiftUI
 /// }
 /// .padding(Spacing.small)
 /// ```
-public struct Spacing {
+public enum Spacing {
     /// Extra-small spacing: 4pt.
     public static let tiny: CGFloat = 4
     /// Small spacing: 8pt.

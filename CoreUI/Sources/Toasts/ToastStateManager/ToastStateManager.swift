@@ -40,7 +40,7 @@ class ToastStateManager {
             return
         }
 
-        guard self.toasts.count > 0 else {
+        guard !self.toasts.isEmpty else {
             self.isProcessingCurrentToast = false
             self.delegate?.didUpdate(toastState: .none)
             return

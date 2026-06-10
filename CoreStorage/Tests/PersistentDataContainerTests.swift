@@ -4,9 +4,9 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import Testing
 import CoreData
 @testable import CoreStorage
+import Testing
 
 // MARK: - Mocks
 

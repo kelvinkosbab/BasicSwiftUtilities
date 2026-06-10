@@ -6,9 +6,9 @@
 
 #if !os(watchOS)
 
-import Testing
-import SwiftUI
 @testable import CoreUI
+import SwiftUI
+import Testing
 
 // MARK: - ToastOptionsTests
 

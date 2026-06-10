@@ -13,6 +13,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   Swift Concurrency. Ships with a `LocalNetworkMonitorProtocol`,
   the `LocalNetworkMonitor` production type, and a
   `MockLocalNetworkMonitor` for tests and previews.
+- **SwiftLint** via `SwiftLintPlugins` as a build-tool plugin on every
+  source target. Conservative starter config in `.swiftlint.yml` with
+  high-value opt-in rules (`empty_count`, `first_where`, `explicit_init`,
+  `sorted_imports`, `redundant_type_annotation`, etc.). Per the
+  apple-linting-strategy rule.
+
+### Changed
+- `Spacing` is now a caseless `enum` (was an empty `struct`) to prevent
+  accidental instantiation.
+- `MILLISECONDS_IN_SECOND` constant renamed to `millisecondsInSecond` to
+  match Swift naming conventions (was SCREAMING_SNAKE_CASE).
 
 ## [1.0.1] - 2026-05-09
 

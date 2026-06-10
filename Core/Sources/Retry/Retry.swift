@@ -60,7 +60,7 @@ public func retry(
                 let timer = DispatchWorkItem(block: group.leave)
                 let delay = strategy.calculateDelay(attempts: attempts)
                 group.enter()
-                queue.asyncAfter(deadline: .now() + delay / MILLISECONDS_IN_SECOND, execute: timer)
+                queue.asyncAfter(deadline: .now() + delay / millisecondsInSecond, execute: timer)
                 group.wait()
             }
         }

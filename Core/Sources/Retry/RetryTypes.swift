@@ -8,7 +8,7 @@ import Foundation
 
 // MARK: - Constants
 
-internal let MILLISECONDS_IN_SECOND: Double = 1_000
+internal let millisecondsInSecond: Double = 1_000
 
 // MARK: - Retry Types
 

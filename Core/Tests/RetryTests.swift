@@ -4,9 +4,9 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import Testing
-import Foundation
 @testable import Core
+import Foundation
+import Testing
 
 // MARK: - RetryTests
 
@@ -59,11 +59,12 @@ struct RetryTests {
                     return testError == .transient
                 }
                 return false
+            },
+            block: {
+                counter.increment()
+                throw TestError.permanent
             }
-        ) {
-            counter.increment()
-            throw TestError.permanent
-        }
+        )
         let result = operation()
         #expect(counter.value == 1)
         #expect(result.isFailure)

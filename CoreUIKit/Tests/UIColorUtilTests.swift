@@ -6,9 +6,9 @@
 
 #if !os(macOS)
 
+@testable import CoreUIKit
 import Testing
 import UIKit
-@testable import CoreUIKit
 
 // MARK: - UIColor Util Tests
 

@@ -4,9 +4,9 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import Testing
-import Foundation
 @testable import CoreStorage
+import Foundation
+import Testing
 
 // MARK: - Test Model
 

@@ -4,8 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import Testing
 @testable import RunMode
+import Testing
 
 // MARK: - Mocks
 

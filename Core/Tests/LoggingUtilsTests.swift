@@ -4,9 +4,9 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import Testing
-import Foundation
 @testable import Core
+import Foundation
+import Testing
 
 // MARK: - Mocks
 
@@ -71,9 +71,9 @@ struct LoggerTests {
         wrapper.debug(someString)
         #expect(mockLogger.debugLogs.count == 1)
         #expect(mockLogger.debugLogs[0] == someString)
-        #expect(mockLogger.infoLogs.count == 0)
-        #expect(mockLogger.errorLogs.count == 0)
-        #expect(mockLogger.faultLogs.count == 0)
+        #expect(mockLogger.infoLogs.isEmpty)
+        #expect(mockLogger.errorLogs.isEmpty)
+        #expect(mockLogger.faultLogs.isEmpty)
     }
 
     @Test("Logs debug message with censored content")
@@ -85,9 +85,9 @@ struct LoggerTests {
         wrapper.debug(someString, censored: somePrivateString)
         #expect(mockLogger.debugLogs.count == 1)
         #expect(mockLogger.debugLogs[0] == "\(someString):\(somePrivateString)")
-        #expect(mockLogger.infoLogs.count == 0)
-        #expect(mockLogger.errorLogs.count == 0)
-        #expect(mockLogger.faultLogs.count == 0)
+        #expect(mockLogger.infoLogs.isEmpty)
+        #expect(mockLogger.errorLogs.isEmpty)
+        #expect(mockLogger.faultLogs.isEmpty)
     }
 
     // MARK: - Info Log Tests
@@ -98,11 +98,11 @@ struct LoggerTests {
         let wrapper = MockLoggableWrapper(logger: mockLogger)
         let someString = UUID().uuidString
         wrapper.info(someString)
-        #expect(mockLogger.debugLogs.count == 0)
+        #expect(mockLogger.debugLogs.isEmpty)
         #expect(mockLogger.infoLogs.count == 1)
         #expect(mockLogger.infoLogs[0] == someString)
-        #expect(mockLogger.errorLogs.count == 0)
-        #expect(mockLogger.faultLogs.count == 0)
+        #expect(mockLogger.errorLogs.isEmpty)
+        #expect(mockLogger.faultLogs.isEmpty)
     }
 
     @Test("Logs info message with censored content")
@@ -112,11 +112,11 @@ struct LoggerTests {
         let someString = UUID().uuidString
         let somePrivateString = UUID().uuidString
         wrapper.info(someString, censored: somePrivateString)
-        #expect(mockLogger.debugLogs.count == 0)
+        #expect(mockLogger.debugLogs.isEmpty)
         #expect(mockLogger.infoLogs.count == 1)
         #expect(mockLogger.infoLogs[0] == "\(someString):\(somePrivateString)")
-        #expect(mockLogger.errorLogs.count == 0)
-        #expect(mockLogger.faultLogs.count == 0)
+        #expect(mockLogger.errorLogs.isEmpty)
+        #expect(mockLogger.faultLogs.isEmpty)
     }
 
     // MARK: - Error Log Tests
@@ -127,11 +127,11 @@ struct LoggerTests {
         let wrapper = MockLoggableWrapper(logger: mockLogger)
         let someString = UUID().uuidString
         wrapper.error(someString)
-        #expect(mockLogger.debugLogs.count == 0)
-        #expect(mockLogger.infoLogs.count == 0)
+        #expect(mockLogger.debugLogs.isEmpty)
+        #expect(mockLogger.infoLogs.isEmpty)
         #expect(mockLogger.errorLogs.count == 1)
         #expect(mockLogger.errorLogs[0] == someString)
-        #expect(mockLogger.faultLogs.count == 0)
+        #expect(mockLogger.faultLogs.isEmpty)
     }
 
     @Test("Logs error message with censored content")
@@ -141,11 +141,11 @@ struct LoggerTests {
         let someString = UUID().uuidString
         let somePrivateString = UUID().uuidString
         wrapper.error(someString, censored: somePrivateString)
-        #expect(mockLogger.debugLogs.count == 0)
-        #expect(mockLogger.infoLogs.count == 0)
+        #expect(mockLogger.debugLogs.isEmpty)
+        #expect(mockLogger.infoLogs.isEmpty)
         #expect(mockLogger.errorLogs.count == 1)
         #expect(mockLogger.errorLogs[0] == "\(someString):\(somePrivateString)")
-        #expect(mockLogger.faultLogs.count == 0)
+        #expect(mockLogger.faultLogs.isEmpty)
     }
 
     // MARK: - Fault Log Tests
@@ -156,9 +156,9 @@ struct LoggerTests {
         let wrapper = MockLoggableWrapper(logger: mockLogger)
         let someString = UUID().uuidString
         wrapper.fault(someString)
-        #expect(mockLogger.debugLogs.count == 0)
-        #expect(mockLogger.infoLogs.count == 0)
-        #expect(mockLogger.errorLogs.count == 0)
+        #expect(mockLogger.debugLogs.isEmpty)
+        #expect(mockLogger.infoLogs.isEmpty)
+        #expect(mockLogger.errorLogs.isEmpty)
         #expect(mockLogger.faultLogs.count == 1)
         #expect(mockLogger.faultLogs[0] == someString)
     }
@@ -170,9 +170,9 @@ struct LoggerTests {
         let someString = UUID().uuidString
         let somePrivateString = UUID().uuidString
         wrapper.fault(someString, censored: somePrivateString)
-        #expect(mockLogger.debugLogs.count == 0)
-        #expect(mockLogger.infoLogs.count == 0)
-        #expect(mockLogger.errorLogs.count == 0)
+        #expect(mockLogger.debugLogs.isEmpty)
+        #expect(mockLogger.infoLogs.isEmpty)
+        #expect(mockLogger.errorLogs.isEmpty)
         #expect(mockLogger.faultLogs.count == 1)
         #expect(mockLogger.faultLogs[0] == "\(someString):\(somePrivateString)")
     }

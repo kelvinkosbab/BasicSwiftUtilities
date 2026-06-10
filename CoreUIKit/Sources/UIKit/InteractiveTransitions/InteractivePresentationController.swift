@@ -34,12 +34,14 @@ public extension InteractivePresentationController {
         var interactiveViews: [UIView] = []
 
         // Presenting view controller
-        if let presentationInteractable = self.presentingViewController.topPresentedController as? PresentationInteractable, presentationInteractable.presentationInteractiveViews.count > 0 {
+        if let presentationInteractable = self.presentingViewController.topPresentedController as? PresentationInteractable,
+           !presentationInteractable.presentationInteractiveViews.isEmpty {
             interactiveViews += presentationInteractable.presentationInteractiveViews
         }
 
         // Presenting controller
-        if let presentationInteractable = self as? PresentationInteractable, presentationInteractable.presentationInteractiveViews.count > 0 {
+        if let presentationInteractable = self as? PresentationInteractable,
+           !presentationInteractable.presentationInteractiveViews.isEmpty {
             interactiveViews += presentationInteractable.presentationInteractiveViews
         }
 
@@ -51,12 +53,14 @@ public extension InteractivePresentationController {
         var interactiveViews: [UIView] = []
 
         // Presented view controller
-        if let dismissInteractable = self.presentedViewController.topPresentedController as? DismissInteractable, dismissInteractable.dismissInteractiveViews.count > 0 {
+        if let dismissInteractable = self.presentedViewController.topPresentedController as? DismissInteractable,
+           !dismissInteractable.dismissInteractiveViews.isEmpty {
             interactiveViews += dismissInteractable.dismissInteractiveViews
         }
 
         // Presenting controller
-        if let dismissInteractable = self as? DismissInteractable, dismissInteractable.dismissInteractiveViews.count > 0 {
+        if let dismissInteractable = self as? DismissInteractable,
+           !dismissInteractable.dismissInteractiveViews.isEmpty {
             interactiveViews += dismissInteractable.dismissInteractiveViews
         }
 

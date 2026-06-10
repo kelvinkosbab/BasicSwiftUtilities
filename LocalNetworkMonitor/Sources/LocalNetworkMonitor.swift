@@ -4,9 +4,9 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
+import Core
 import Foundation
 import Network
-import Core
 
 // MARK: - LocalNetworkMonitor
 

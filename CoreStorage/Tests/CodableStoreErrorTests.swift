@@ -4,9 +4,9 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import Testing
-import Foundation
 @testable import CoreStorage
+import Foundation
+import Testing
 
 // MARK: - Helpers
 
@@ -22,7 +22,7 @@ let allErrorCases: [ErrorCase] = [
     ErrorCase(error: .encodingFailure(cause: mockCause), expectedSubstring: "EncodingFailure"),
     ErrorCase(error: .writeFailure(cause: mockCause), expectedSubstring: "WriteFailure"),
     ErrorCase(error: .readFailure(cause: mockCause), expectedSubstring: "ReadFailure"),
-    ErrorCase(error: .decodingFailure(cause: mockCause), expectedSubstring: "DecodingFailure"),
+    ErrorCase(error: .decodingFailure(cause: mockCause), expectedSubstring: "DecodingFailure")
 ]
 
 // MARK: - DiskBackedJSONCodableStoreError Tests

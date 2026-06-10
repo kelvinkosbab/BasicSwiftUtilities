@@ -4,10 +4,10 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-import Testing
-import SwiftUI
 import CoreData
 @testable import CoreStorage
+import SwiftUI
+import Testing
 
 // MARK: - Mocks
 

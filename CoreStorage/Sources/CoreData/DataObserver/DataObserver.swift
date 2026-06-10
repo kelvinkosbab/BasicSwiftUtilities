@@ -4,8 +4,8 @@
 //  Copyright © Kozinga. All rights reserved.
 //
 
-public import CoreData
 import Core
+public import CoreData
 
 // MARK: - DataObserver
 
@@ -63,12 +63,14 @@ import Core
 ///     }
 /// }
 /// ```
-// `@unchecked Sendable` is required here because `DataObserver` must subclass `NSObject` to
-// conform to `NSFetchedResultsControllerDelegate` (an Objective-C protocol that predates Swift
-// concurrency). The class is otherwise safe: the only mutable state is `objects` and `delegate`,
-// both of which are written exclusively by `controller(_:didChange:...)` which CoreData calls
-// on the context's queue.
-public class DataObserver<Delegate>: NSObject, NSFetchedResultsControllerDelegate, @unchecked Sendable where Delegate: DataObserverDelegate {
+///
+/// - Note: `@unchecked Sendable` is required because `DataObserver` must subclass `NSObject` to
+///   conform to `NSFetchedResultsControllerDelegate` (an Objective-C protocol that predates Swift
+///   concurrency). The class is otherwise safe: the only mutable state is ``objects`` and
+///   ``delegate``, both written exclusively by `controller(_:didChange:...)` which CoreData calls
+///   on the context's queue.
+public class DataObserver<Delegate>: NSObject, NSFetchedResultsControllerDelegate, @unchecked Sendable
+where Delegate: DataObserverDelegate {
 
     /// The persistent object type observed (an `NSManagedObject` subclass).
     public typealias PersistedObject = Delegate.Object.PersistentObject

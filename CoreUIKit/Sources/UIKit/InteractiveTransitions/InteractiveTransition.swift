@@ -111,7 +111,11 @@ public class InteractiveTransition: UIPercentDrivenInteractiveTransition {
             self.cancel()
         case .ended:
             self.hasStarted = false
-            self.shouldFinish ? self.finish() : self.cancel()
+            if self.shouldFinish {
+                self.finish()
+            } else {
+                self.cancel()
+            }
         default: break
         }
     }

@@ -5,8 +5,8 @@
 //
 
 import Foundation
-import Testing
 @testable import LocalNetworkMonitor
+import Testing
 
 // MARK: - LocalNetworkMonitor
 

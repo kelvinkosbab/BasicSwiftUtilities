@@ -92,11 +92,25 @@ let package = Package(
         .library(name: "LocalNetworkMonitor", targets: ["LocalNetworkMonitor"]),
         .library(name: "RunMode", targets: ["RunMode"])
     ],
-    dependencies: [],
-    targets: makeTargets(name: "Core")
-        + makeTargets(name: "CoreUI")
-        + makeTargets(name: "CoreUIKit", dependencies: ["CoreUI"])
-        + makeTargets(name: "CoreStorage", dependencies: ["Core"], testResources: [.process("Resources")])
-        + makeTargets(name: "LocalNetworkMonitor", dependencies: ["Core"])
-        + makeTargets(name: "RunMode")
+    dependencies: [
+        // SwiftLint as a build-tool plugin — lints every module on `swift build`.
+        // Pinned with `from:` so consumers of *this* package don't get surprised
+        // by SwiftLint rule-set bumps mid-release. The plugin runs locally and
+        // in CI; CI is the authoritative gate (see .github/workflows/swift.yml).
+        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.63.2")
+    ],
+    targets: makeTargets(name: "Core", plugins: swiftLintPlugins)
+        + makeTargets(name: "CoreUI", plugins: swiftLintPlugins)
+        + makeTargets(name: "CoreUIKit", dependencies: ["CoreUI"], plugins: swiftLintPlugins)
+        + makeTargets(name: "CoreStorage", dependencies: ["Core"], testResources: [.process("Resources")], plugins: swiftLintPlugins)
+        + makeTargets(name: "LocalNetworkMonitor", dependencies: ["Core"], plugins: swiftLintPlugins)
+        + makeTargets(name: "RunMode", plugins: swiftLintPlugins)
 )
+
+// MARK: - Plugin Helpers
+
+/// Build-tool plugins applied to every source target. SwiftLint is the only
+/// entry today; future plugins (codegen, etc.) can be added here.
+let swiftLintPlugins: [Target.PluginUsage] = [
+    .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
+]

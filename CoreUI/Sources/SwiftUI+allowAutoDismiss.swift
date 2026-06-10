@@ -56,7 +56,10 @@ extension MbModalHackView {
 
         // set delegate to the presentation of the root parent
         private func setup() {
-            guard let rootPresentationViewController = self.rootParent.presentationController, rootPresentationViewController.delegate == nil else { return }
+            guard let rootPresentationViewController = self.rootParent.presentationController,
+                  rootPresentationViewController.delegate == nil else {
+                return
+            }
             rootPresentationViewController.delegate = self
         }
     }

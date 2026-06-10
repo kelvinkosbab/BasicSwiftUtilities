@@ -39,6 +39,7 @@ jobs:
           --no-progress
           --max-retries 2
           --accept 200..=299,403
+          --exclude '^file://'
           --exclude-path .build
           --exclude-path .swiftpm
           './**/*.md'

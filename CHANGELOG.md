@@ -24,6 +24,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   accidental instantiation.
 - `MILLISECONDS_IN_SECOND` constant renamed to `millisecondsInSecond` to
   match Swift naming conventions (was SCREAMING_SNAKE_CASE).
+- **Core** module now ships a `PrivacyInfo.xcprivacy` declaring the
+  module's use of `ProcessInfo.systemUptime` (via
+  `LongRunningTaskOrchestrator`). Consuming apps no longer need to add
+  `NSPrivacyAccessedAPICategorySystemBootTime` with reason `35F9.1` to
+  their own manifest — Xcode's privacy report aggregates Core's
+  declaration automatically. Prevents `ITMS-91053` upload rejections.
 
 ## [1.0.1] - 2026-05-09
 

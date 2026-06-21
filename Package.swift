@@ -99,7 +99,7 @@ let package = Package(
         // in CI; CI is the authoritative gate (see .github/workflows/swift.yml).
         .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.63.2")
     ],
-    targets: makeTargets(name: "Core", plugins: swiftLintPlugins)
+    targets: makeTargets(name: "Core", hasResources: true, plugins: swiftLintPlugins)
         + makeTargets(name: "CoreUI", plugins: swiftLintPlugins)
         + makeTargets(name: "CoreUIKit", dependencies: ["CoreUI"], plugins: swiftLintPlugins)
         + makeTargets(name: "CoreStorage", dependencies: ["Core"], testResources: [.process("Resources")], plugins: swiftLintPlugins)

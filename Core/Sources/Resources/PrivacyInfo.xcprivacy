@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!--
+        Privacy manifest for the Core module of BasicSwiftUtilities.
+
+        Apps that ship `LongRunningTaskOrchestrator` (or otherwise link
+        against Core) must declare their use of `ProcessInfo.systemUptime`
+        in their privacy manifest. This file declares it on Core's behalf
+        so Apple's privacy-report tooling aggregates it automatically into
+        the consuming app's report — consumers don't need to re-declare it.
+
+        Reason code 35F9.1 covers measuring elapsed time between in-app
+        events / driving timers, which is exactly what
+        LongRunningTaskOrchestrator does (start vs end / timeout).
+
+        See Apple's docs:
+          https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_use_of_required_reason_api
+    -->
+    <key>NSPrivacyAccessedAPITypes</key>
+    <array>
+        <dict>
+            <key>NSPrivacyAccessedAPIType</key>
+            <string>NSPrivacyAccessedAPICategorySystemBootTime</string>
+            <key>NSPrivacyAccessedAPITypeReasons</key>
+            <array>
+                <string>35F9.1</string>
+            </array>
+        </dict>
+    </array>
+    <key>NSPrivacyTracking</key>
+    <false/>
+    <key>NSPrivacyTrackingDomains</key>
+    <array/>
+    <key>NSPrivacyCollectedDataTypes</key>
+    <array/>
+</dict>
+</plist>

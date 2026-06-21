@@ -157,6 +157,17 @@ find build/MyApp.xcarchive -name "*.dSYM" -print | while read -r dsym; do
 done
 ```
 
+## Privacy Manifests (`PrivacyInfo.xcprivacy`) — a Hard Upload Gate
+
+Since spring 2024, App Store uploads are validated against privacy manifests. This is the gate **AI-generated code trips most often**: an agent casually adds `UserDefaults`, a file-timestamp check, or `Date` boot-time math, and the next upload bounces with an `ITMS-91053` email because the API was never declared.
+
+- **`NSPrivacyAccessedAPITypes` — declare every "required reason" API you use**, with an allowed reason code. The five categories: `UserDefaults` (`NSPrivacyAccessedAPICategoryUserDefaults` — reason `CA92.1` for app-own data), file timestamps, system boot time, disk space, and active keyboards. `grep` for the APIs before release; don't wait for Apple's email.
+- **`NSPrivacyCollectedDataTypes`** — what data the app collects, whether it's linked to identity, and whether it's used for tracking. Must agree with your App Store privacy "nutrition label" answers.
+- **`NSPrivacyTracking` + `NSPrivacyTrackingDomains`** — if you track, say so and list the domains; iOS blocks those domains until ATT consent.
+- **Third-party SDKs on Apple's "commonly used SDKs" list must ship their *own* privacy manifest and signature.** An outdated Firebase/Facebook/analytics pod without a manifest fails *your* upload (`ITMS-91061`). Keeping deps current is part of release hygiene.
+- **Audit with Xcode's privacy report** — archive → Generate Privacy Report — which aggregates your manifest + every SDK's. Review it on each release branch, and re-check whenever a new dependency (especially an analytics or AI SDK) lands.
+- **Cloud AI calls are data collection.** Sending user content to a model API typically counts as collected data — update the manifest and the privacy label when you adopt one (see `apple-foundation-models.md`).
+
 ## Build Reproducibility
 
 For TestFlight builds you'll have to debug later, make the build reproducible:

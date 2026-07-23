@@ -1,5 +1,5 @@
 ---
-description: Enforce UIKit/AppKit accessibility best practices in Objective-C — labels, traits, Dynamic Type, Reduce Motion, VoiceOver announcements, and modal focus
+description: Enforce UIKit/AppKit accessibility best practices in Objective-C — labels, traits, Dynamic Type, Reduce Motion, VoiceOver announcements, modal focus, and Bluetooth assistive tech (keyboards, switches, braille)
 globs: "**/*.{h,m,mm}"
 ---
 
@@ -201,6 +201,26 @@ For compound rows where swipe-to-delete / long-press / drag are part of the gest
 
 VoiceOver users hear *"actions available"* and rotor-cycle through them. Without this, the swipe/long-press actions are invisible.
 
+## Bluetooth Assistive Tech (Keyboard, Switch, Braille)
+
+VoiceOver users pair Bluetooth keyboards, switches, and braille displays. UIKit support is mostly about the focus system and the element tree you already maintain:
+
+- **Full Keyboard Access.** Standard `UIControl`s participate automatically. Custom actionable views (a `UIView` with a tap recognizer) must override `canBecomeFocused` to return `YES` and act on focus-driven activation — or be rebuilt on `UIControl`/`UIButton`. Never hide the system focus ring. Register `UIKeyCommand`s for primary screen actions, and don't set `wantsPriorityOverSystemBehavior` on arrow/Tab keys — that steals navigation from keyboard users.
+- **Switch Control.** Scanning order follows the accessibility element order (`accessibilityElements` when you set it). Keep it logical and don't leave actionable views reachable-but-inert: custom gesture-only views must return `YES` from `accessibilityRespondsToUserInteraction` and expose their gestures via `accessibilityCustomActions` (same mirror rule as the VoiceOver rotor).
+- **Braille displays.** Driven by VoiceOver over Bluetooth — `accessibilityLabel` *is* the braille output. Front-load the meaningful words (displays show 14–40 cells), keep labels short, and keep emoji/decoration out of them; both render as literal braille noise.
+
+## Announcement Priority
+
+When an announcement must survive (errors) or may be dropped (progress ticks), post an attributed string with `UIAccessibilitySpeechAttributeAnnouncementPriority` instead of the bare-string form:
+
+```objc
+NSAttributedString *msg =
+    [[NSAttributedString alloc] initWithString:NSLocalizedString(@"a11y.upload_failed", nil)
+                                    attributes:@{ UIAccessibilitySpeechAttributeAnnouncementPriority:
+                                                      UIAccessibilityPriorityHigh }];
+UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, msg);
+```
+
 ## VoiceOver Detection
 
 Sometimes you want to behave differently when VoiceOver is on (e.g., disable a hover-style affordance):
@@ -226,6 +246,9 @@ if (UIAccessibilityIsVoiceOverRunning()) {
 - **`UIAccessibilityPostNotification` called too often** — every announcement interrupts the user. Use only for transient state the user *needs* to know about.
 - **Custom overlay without `accessibilityViewIsModal = YES`** — VoiceOver focus escapes the modal.
 - **Long-press / swipe gestures with no `accessibilityCustomActions`** — invisible to VoiceOver users.
+- **Custom tappable views that never join the focus system** — invisible to Full Keyboard Access and Switch Control even when VoiceOver reads them fine. Override `canBecomeFocused` or use a real `UIControl`.
+- **Verbose or emoji-laden labels** — braille displays render them literally; front-load meaning, keep labels short.
+- **App Store Accessibility Nutrition Label claims that outrun reality** — declaring VoiceOver support means all common tasks work under VoiceOver; re-audit per release (see the SwiftUI rule for details).
 
 ## Patterns to Follow
 

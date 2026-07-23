@@ -1,11 +1,11 @@
 ---
-description: Enforce SwiftUI accessibility best practices for VoiceOver, Dynamic Type, and Reduce Motion
+description: Enforce SwiftUI accessibility best practices for VoiceOver, Dynamic Type, Reduce Motion, and Bluetooth assistive tech (keyboards, switches, braille displays, hearing devices)
 globs: "**/*.swift"
 ---
 
 # Accessibility Best Practices
 
-All views must be fully accessible. VoiceOver, Dynamic Type, and Reduce Motion support are required, not optional.
+All views must be fully accessible. VoiceOver, Dynamic Type, and Reduce Motion support are required, not optional — and so is working with the Bluetooth assistive hardware VoiceOver users pair: external keyboards (Full Keyboard Access), switches (Switch Control), and refreshable braille displays.
 
 ## VoiceOver Labels & Hints
 
@@ -51,6 +51,35 @@ All views must be fully accessible. VoiceOver, Dynamic Type, and Reduce Motion s
 ## Disabled State Hints
 
 - Buttons with `.disabled` conditions should provide `.accessibilityHint` explaining why the button is disabled (e.g., "Complete all required fields to enable this button").
+
+## Bluetooth Assistive Tech (Keyboard, Switch, Braille)
+
+VoiceOver users routinely pair Bluetooth hardware. Supporting it is mostly *not* extra API — it's making sure the accessibility tree you already built holds up under three more input methods:
+
+- **Full Keyboard Access (Bluetooth keyboards).** Every interactive element must be reachable and activatable by keyboard alone. Standard controls come free; custom tap-target views (`.onTapGesture` on a plain view) do not — give them `.focusable()` plus an accessibility role, or better, make them real `Button`s. Never suppress the system focus indicator. Test: Settings ▸ Accessibility ▸ Keyboards ▸ Full Keyboard Access, then Tab through every screen.
+- **Switch Control (Bluetooth switches).** Scanning follows the accessibility element order — keep it logical (leading → trailing, top → bottom) and don't strand focusable elements inside hidden/offscreen containers. Gesture-only affordances (swipe actions, long-press, drag) must be mirrored as `.accessibilityActions` — the same rule that serves the VoiceOver rotor serves switch users.
+- **Braille displays.** Driven by VoiceOver over Bluetooth; there is no separate braille API — your labels *are* the braille output. Front-load labels with the meaningful words (a display shows 14–40 cells), keep them short, and never put emoji or decorative punctuation in `.accessibilityLabel` — it renders as literal braille noise.
+
+## Focus Management
+
+- When a sheet, alert, or popover dismisses, focus must return to the element that presented it. SwiftUI usually handles this; verify it after custom presentation/dismissal animations.
+- Use `@AccessibilityFocusState` to move VoiceOver focus deliberately after state changes (e.g., onto the first error in a failed form submit) — and use it sparingly; unrequested focus jumps disorient users.
+
+## Announcements
+
+- Use the modern API: `AccessibilityNotification.Announcement("Saved").post()` (iOS 17+) instead of `UIAccessibility.post(notification: .announcement, ...)` in SwiftUI code.
+- Set priority via `AttributedString` with `accessibilitySpeechAnnouncementPriority` when an announcement must not be interrupted (errors) or may be dropped (progress ticks).
+- Announce sparingly — every announcement interrupts speech and braille output. State that's visible in a label/value doesn't also need an announcement.
+
+## Audio & Hearing
+
+- **Never convey information through sound alone.** Pair every audio cue with a visual change and, where it matters, a haptic (`.sensoryFeedback`). Bluetooth hearing devices and muted phones both make audio an unreliable channel.
+- Media playback must support captions/subtitles. `AVPlayer` honors the system Closed Captions + SDH setting automatically; custom players must check `UIAccessibility.isClosedCaptioningEnabled` rather than inventing a parallel toggle.
+
+## Accessibility Nutrition Labels (App Store)
+
+- App Store product pages now show which accessibility features an app supports (VoiceOver, Voice Control, Larger Text, Sufficient Contrast, Reduced Motion, captions). **Declare only what's true**: claiming VoiceOver support means *all common tasks* complete with VoiceOver on — Apple defines the criteria per feature.
+- Re-audit the label claims on every release that touches UI; a stale claim is worse than no claim. Treat the label as the release-checklist output of the rules in this file, not marketing copy.
 
 ## Streaming AI Text (Foundation Models / chat UIs)
 

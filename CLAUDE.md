@@ -104,7 +104,7 @@ Core, CoreUI, RunMode → (no internal dependencies)
 | **CI** (`swift.yml`) | Push + PR to main | Build + test on macOS and iOS Simulator |
 | **Nightly** (`nightly.yml`) | Weekly Sunday + manual | Same as CI, for detecting upstream breakage |
 
-All workflows use `macos-15` runner with Xcode 16.3 and concurrency groups.
+All workflows use `macos-15` runner with Xcode 16.4 and concurrency groups.
 
 ## Important Gotchas
 

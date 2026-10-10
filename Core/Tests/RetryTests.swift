@@ -48,6 +48,18 @@ struct RetryTests {
         #expect(result.isFailure)
     }
 
+    @Test("Zero max attempts runs the block once instead of looping forever", .timeLimit(.minutes(1)))
+    func zeroMaxAttemptsRunsOnce() {
+        let counter = LockedCounter()
+        let operation = retry(maxAttempts: 0, strategy: .constant(base: 0, jitterRange: 0)) {
+            counter.increment()
+            throw TestError.permanent
+        }
+        let result = operation()
+        #expect(counter.value == 1)
+        #expect(result.isFailure)
+    }
+
     @Test("Short-circuits without further retries when retryIf returns false")
     func retryIfShortCircuits() {
         let counter = LockedCounter()
@@ -105,6 +117,18 @@ struct RetryTests {
             throw TestError.permanent
         }
         let result = await operation()
+        #expect(result.isFailure)
+    }
+
+    @Test("Async retry with zero max attempts runs the block once instead of looping forever", .timeLimit(.minutes(1)))
+    func asyncZeroMaxAttemptsRunsOnce() async {
+        let counter = Counter()
+        let operation = asyncRetry(max: 0, strategy: .constant(base: 0, jitterRange: 0)) { () async throws -> Int in
+            _ = await counter.increment()
+            throw TestError.permanent
+        }
+        let result = await operation()
+        #expect(await counter.count == 1)
         #expect(result.isFailure)
     }
 

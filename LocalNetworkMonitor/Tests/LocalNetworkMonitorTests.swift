@@ -6,6 +6,7 @@
 
 import Foundation
 @testable import LocalNetworkMonitor
+import Network
 import Testing
 
 // MARK: - LocalNetworkMonitor
@@ -58,6 +59,40 @@ struct LocalNetworkMonitorTests {
         monitor.stop()
         monitor.start()
         monitor.stop()
+    }
+
+    @Test("Each `start()` after `stop()` uses a fresh `NWPathMonitor`")
+    func restartBuildsFreshPathMonitor() {
+        // `NWPathMonitor` can't be restarted once cancelled, so reusing
+        // the stopped instance would silently deliver no more updates.
+        let factory = PathMonitorFactorySpy()
+        let monitor = LocalNetworkMonitor(makePathMonitor: { factory.make() })
+
+        monitor.start()
+        monitor.start()  // idempotent — must not build a second monitor
+        #expect(factory.created.count == 1)
+
+        monitor.stop()
+        monitor.start()
+        #expect(factory.created.count == 2)
+        #expect(factory.created[0] !== factory.created[1])
+
+        monitor.stop()
+    }
+}
+
+// MARK: - PathMonitorFactorySpy
+
+/// Records every `NWPathMonitor` the monitor under test asks for.
+@MainActor
+private final class PathMonitorFactorySpy {
+
+    private(set) var created: [NWPathMonitor] = []
+
+    func make() -> NWPathMonitor {
+        let pathMonitor = NWPathMonitor()
+        created.append(pathMonitor)
+        return pathMonitor
     }
 }
 

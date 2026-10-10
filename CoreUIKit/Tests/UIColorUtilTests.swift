@@ -153,9 +153,11 @@ struct UIColorHexExtensionTests {
 
 // MARK: - PresentationMode Tests
 
+// Swift Testing rejects `@available(..., unavailable)` on suites, so the
+// platform exclusion is a compile-time guard instead.
+#if !os(watchOS)
+
 @Suite("PresentationMode Tests")
-@available(macOS, unavailable)
-@available(watchOS, unavailable)
 struct PresentationModeTests {
 
     @Test("default presentation mode is formSheet")
@@ -187,5 +189,7 @@ struct PresentationModeTests {
         #expect(!mode.isShow)
     }
 }
+
+#endif
 
 #endif

@@ -177,51 +177,12 @@ public final class ToastApi: ToastStateDelegate {
         let toast = Toast(
             shape: self.options.shape,
             title: title,
-            description: description
+            description: description,
+            leading: leading,
+            trailing: trailing
         )
         self.toastStateManager.show(toast: AnyView(toast))
     }
-
-//    /// Shows a toast.
-//    ///
-//    /// - Parameter title: Primary title message.
-//    /// - Parameter description: Optional description. This content will be displayed directly below the title.
-//    /// - Parameter leading: Content to be displayed on the leading edge of the toast.
-//    /// - Parameter trailing: Content to be displayed on the trailing edge of the toast.
-//    public func show(
-//        title: String,
-//        description: ToastSimpleContent? = nil,
-//        leading: ToastImageContent = .none,
-//        trailing: ToastImageContent = .none
-//    ) {
-//        self.show(
-//            title: .string(title),
-//            description: description,
-//            leading: leading,
-//            trailing: trailing
-//        )
-//    }
-//    
-//    /// Shows a toast.
-//    ///
-//    /// - Parameter title: Primary title content.
-//    /// - Parameter description: Optional description. This content will be displayed directly below the title.
-//    /// - Parameter leading: Content to be displayed on the leading edge of the toast.
-//    /// - Parameter trailing: Content to be displayed on the trailing edge of the toast.
-//    public func show(
-//        title: ToastSimpleContent,
-//        description: ToastSimpleContent? = nil,
-//        leading: ToastImageContent = .none,
-//        trailing: ToastImageContent = .none
-//    ) {
-//        let content = ToastContent(
-//            title: title,
-//            description: description,
-//            leading: leading,
-//            trailing: trailing
-//        )
-//        self.toastStateManager.show(content)
-//    }
 }
 
 #endif

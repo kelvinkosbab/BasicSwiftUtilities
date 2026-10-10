@@ -9,12 +9,12 @@
 
 public import UIKit
 
-// MARRK: - PresentationMode
+// MARK: - PresentationMode
 
 /// Defines modes in which view controllers can be presented. `default` is `.formSheet`
 @available(macOS, unavailable)
 @available(watchOS, unavailable)
-public enum PresentationMode {
+public enum PresentationMode: Sendable {
 
     /// Default presentation mode. See ``PresentationMode.formSheet``
     public static let `default`: PresentationMode = .formSheet

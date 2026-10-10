@@ -13,6 +13,7 @@ public import UIKit
 
 // MARK: - InteractiveTransition
 
+@MainActor
 public class InteractiveTransition: UIPercentDrivenInteractiveTransition {
 
     // MARK: - Properties
@@ -172,18 +173,18 @@ extension InteractiveTransition: UIGestureRecognizerDelegate {
 
 extension InteractiveTransition {
 
-    public enum Axis {
+    public enum Axis: Sendable {
         case x
         case y
         case xy
     }
 
-    public enum Direction {
+    public enum Direction: Sendable {
         case negative
         case positive
     }
 
-    public enum Option {
+    public enum Option: Sendable {
         case percent(CGFloat)
         case velocity(CGFloat)
         case contentSize(CGSize)
@@ -193,11 +194,12 @@ extension InteractiveTransition {
         static let defaultVelocityThreshold: CGFloat = 850
     }
 
-    public enum GestureType {
+    public enum GestureType: Sendable {
 
         case pan
         case screenEdgePan
 
+        @MainActor
         public func createGestureRecognizer(target: Any?, action: Selector?, axis: InteractiveTransition.Axis, direction: InteractiveTransition.Direction) -> UIPanGestureRecognizer {
             switch self {
             case .pan:

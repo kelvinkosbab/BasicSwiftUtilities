@@ -31,6 +31,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   their own manifest — Xcode's privacy report aggregates Core's
   declaration automatically. Prevents `ITMS-91053` upload rejections.
 
+### Fixed
+- `retry` / `asyncRetry` no longer loop forever when `max` is `0`; values
+  below 1 are treated as a single attempt.
+- `LocalNetworkMonitor` delivers updates again after `stop()` → `start()`.
+  It now builds a fresh `NWPathMonitor` per start, since a cancelled one
+  can't be restarted.
+- `ToastApi.show(title:description:leading:trailing:)` now renders the
+  leading and trailing content instead of silently dropping it.
+- CI: iOS, tvOS, watchOS and visionOS `xcodebuild` steps now fail the job
+  on build or test failures (they were piped through `tail` without
+  `pipefail`). Added a strict SwiftLint job pinned to 0.63.2.
+
 ## [1.0.1] - 2026-05-09
 
 ### Fixed

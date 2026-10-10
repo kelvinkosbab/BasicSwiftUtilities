@@ -70,7 +70,12 @@ public final class LocalNetworkMonitor: LocalNetworkMonitorProtocol {
     /// network" UI while the framework is initializing.
     public private(set) var isOnLocalNetwork: Bool = true
 
-    private let pathMonitor = NWPathMonitor()
+    /// The active path monitor. `NWPathMonitor` is single-use — once
+    /// cancelled it can't be restarted — so ``start()`` builds a fresh
+    /// one each time instead of reusing a cancelled instance.
+    private var pathMonitor: NWPathMonitor?
+
+    private let makePathMonitor: @MainActor () -> NWPathMonitor
 
     /// The structured consumer task. Owns the `AsyncStream`'s lifetime
     /// — cancelling this task ends the `for await` loop, which finishes
@@ -87,20 +92,35 @@ public final class LocalNetworkMonitor: LocalNetworkMonitorProtocol {
 
     // MARK: - Initialization
 
-    public init() {}
+    public init() {
+        self.init(makePathMonitor: { NWPathMonitor() })
+    }
+
+    /// Creates a monitor with a custom `NWPathMonitor` factory.
+    ///
+    /// - Note: Internal for unit testing use.
+    ///
+    /// - Parameter makePathMonitor: Called once per ``start()`` to build
+    ///   the path monitor for that run.
+    internal init(makePathMonitor: @escaping @MainActor () -> NWPathMonitor) {
+        self.makePathMonitor = makePathMonitor
+    }
 
     deinit {
         // Best-effort cleanup if a caller forgot to stop us. `Task.cancel`
         // and `NWPathMonitor.cancel()` are both documented safe to call
         // from any context.
         monitorTask?.cancel()
-        pathMonitor.cancel()
+        pathMonitor?.cancel()
     }
 
     // MARK: - Lifecycle
 
     public func start() {
         guard monitorTask == nil else { return }
+
+        let pathMonitor = makePathMonitor()
+        self.pathMonitor = pathMonitor
 
         // Build the bridge: the path monitor's callback yields into
         // `continuation`; the structured task below iterates `stream`

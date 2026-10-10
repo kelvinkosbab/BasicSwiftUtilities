@@ -10,7 +10,28 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Run every step under `bash -eo pipefail` (GitHub's default shell omits
+# pipefail), so piping xcodebuild through `tail` can't mask a failure.
+defaults:
+  run:
+    shell: bash
+
 jobs:
+  lint:
+    name: SwiftLint (strict)
+    runs-on: ubuntu-latest
+    # Pinned to the same SwiftLint version as the SwiftLintPlugins
+    # dependency in Package.swift. The official image ships SourceKit, so
+    # rules that need it (e.g. literal_expression_end_indentation) run too.
+    container:
+      image: ghcr.io/realm/swiftlint:0.63.2
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Lint
+      run: swiftlint lint --strict --reporter github-actions-logging
+
   build-macos:
     name: Build & Test (macOS)
     runs-on: macos-15

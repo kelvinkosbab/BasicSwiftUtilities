@@ -107,6 +107,39 @@ extension Toast {
         self.leading = nil
         self.trailing = nil
     }
+
+    /// Creates a toast view with a simple title, description, and custom leading and trailing content.
+    ///
+    /// - Parameter shape: Defines the shape of the toast.
+    /// - Parameter title: Primary text of the toast.
+    /// - Parameter description: Secondary text of the toast.
+    /// - Parameter leading: Defines content that is rendered on the leading side of the toast.
+    /// - Parameter trailing: Defines content that is rendered on the trailing side of the toast.
+    init(
+        shape: ToastOptions.Shape,
+        title: String,
+        description: String,
+        @ViewBuilder leading: @escaping () -> Leading,
+        @ViewBuilder trailing: @escaping () -> Trailing
+    ) where Content == VStack<TupleView<(SimpleToastText, SimpleToastText)>> {
+        self.init(
+            shape: shape,
+            content: {
+                VStack(spacing: Spacing.small) {
+                    SimpleToastText(
+                        text: title,
+                        foregroundStyle: .primary
+                    )
+                    SimpleToastText(
+                        text: description,
+                        foregroundStyle: .secondary
+                    )
+                }
+            },
+            leading: leading,
+            trailing: trailing
+        )
+    }
 }
 
 // MARK: - Preview

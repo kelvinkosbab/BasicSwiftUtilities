@@ -82,7 +82,8 @@ public actor LongRunningTaskOrchestrator {
             if backgroundTaskId == .invalid {
                 logger.info("\(taskName): Stopping duplicate task")
             } else {
-                logger.info("\(taskName): Task has completed with \(String(describing: result)). Task duration = \(Int(info.systemUptime - start))s.")
+                let duration = Int(info.systemUptime - start)
+                logger.info("\(taskName): Task has completed with \(String(describing: result)). Task duration = \(duration)s.")
                 UIApplication.shared.endBackgroundTask(backgroundTaskId)
                 backgroundTaskId = .invalid
             }

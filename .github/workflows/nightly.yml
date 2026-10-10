@@ -10,6 +10,12 @@ concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: true
 
+# Run every step under `bash -eo pipefail` (GitHub's default shell omits
+# pipefail), so piping xcodebuild through `tail` can't mask a failure.
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build-macos:
     name: Build & Test (macOS)

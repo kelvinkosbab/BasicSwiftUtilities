@@ -21,7 +21,8 @@ import Foundation
 /// let result = await operation()
 /// ```
 ///
-/// - Parameter max: Maximum number of attempts.
+/// - Parameter max: Maximum number of attempts. Values below 1 are treated as 1, so
+///   `block` always runs at least once.
 /// - Parameter strategy: The ``RetryStrategy`` controlling delay between attempts.
 /// - Parameter retryIf: A predicate that determines whether a given error is eligible for retry.
 ///   Defaults to retrying all errors.
@@ -34,6 +35,9 @@ public func asyncRetry<T: Sendable>(
     block: @escaping AsyncRetryBlock<T>
 ) -> AsyncRetryReturn<T> {
 
+    // `max: 0` would otherwise never satisfy the exhaustion check and loop forever.
+    let maxAttempts = Swift.max(max, 1)
+
     return {
         var attempts: UInt = 0
         while true {
@@ -41,14 +45,14 @@ public func asyncRetry<T: Sendable>(
                 let result = try await block()
                 return .success(attempts: attempts, value: result)
             } catch {
-                if !shouldRetry(error) || attempts + 1 == max {
+                if !shouldRetry(error) || attempts + 1 >= maxAttempts {
                     return .failure(error: error)
                 }
             }
 
             attempts += 1
 
-            if attempts < max {
+            if attempts < maxAttempts {
                 let delay = strategy.calculateDelay(attempts: attempts)
                 let seconds = delay / millisecondsInSecond
                 do {

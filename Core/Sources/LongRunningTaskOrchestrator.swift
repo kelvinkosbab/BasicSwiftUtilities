@@ -7,7 +7,7 @@
 #if !os(macOS)
 #if !os(watchOS)
 
-public import UIKit
+import UIKit
 
 // MARK: - Types
 
@@ -70,55 +70,64 @@ public actor LongRunningTaskOrchestrator {
         taskName: String,
         timeout: Double = 60
     ) -> DoneWorking {
-        let info = ProcessInfo()
-        let start = info.systemUptime
+        let start = ProcessInfo.processInfo.systemUptime
         let logger = self.logger
-        var backgroundTaskId = UIBackgroundTaskIdentifier.invalid
+        let state = BackgroundTaskState()
 
         logger.info("\(taskName): Registering task")
 
-        @MainActor
-        func endTask(result: Result) {
-            if backgroundTaskId == .invalid {
+        let endTask: @MainActor @Sendable (Result) -> Void = { result in
+            if state.backgroundTaskId == .invalid {
                 logger.info("\(taskName): Stopping duplicate task")
             } else {
-                let duration = Int(info.systemUptime - start)
+                let duration = Int(ProcessInfo.processInfo.systemUptime - start)
                 logger.info("\(taskName): Task has completed with \(String(describing: result)). Task duration = \(duration)s.")
-                UIApplication.shared.endBackgroundTask(backgroundTaskId)
-                backgroundTaskId = .invalid
+                UIApplication.shared.endBackgroundTask(state.backgroundTaskId)
+                state.backgroundTaskId = .invalid
             }
         }
 
-        let timeoutTask = Task { @MainActor in
+        state.timeoutTask = Task { @MainActor in
             do {
                 try await Task.sleep(for: .seconds(timeout))
             } catch {
                 // Cancelled before the timeout fired — the task completed or the OS expired it first.
                 return
             }
-            logger.info("\(taskName): Task never responded and has timed out after \(Int(info.systemUptime - start))s. Releasing task.")
-            endTask(result: .timeout)
+            let duration = Int(ProcessInfo.processInfo.systemUptime - start)
+            logger.info("\(taskName): Task never responded and has timed out after \(duration)s. Releasing task.")
+            endTask(.timeout)
         }
 
-        @MainActor
-        func done() {
-            logger.info("\(taskName): Caller signaled task has completed. Releasing task.")
-            endTask(result: .completed)
-            timeoutTask.cancel()
-        }
-
-        backgroundTaskId = UIApplication.shared.beginBackgroundTask(withName: "LongRunningTaskOrchestrator.\(taskName)") {
+        state.backgroundTaskId = UIApplication.shared.beginBackgroundTask(
+            withName: "LongRunningTaskOrchestrator.\(taskName)"
+        ) {
             logger.info("\(taskName): OS is expiring the task. Releasing task.")
-            endTask(result: .expiredByOS)
-            timeoutTask.cancel()
+            endTask(.expiredByOS)
+            state.timeoutTask?.cancel()
         }
 
-        if backgroundTaskId == .invalid {
+        if state.backgroundTaskId == .invalid {
             logger.info("\(taskName): Task execution denied")
         }
 
-        return done
+        return {
+            logger.info("\(taskName): Caller signaled task has completed. Releasing task.")
+            endTask(.completed)
+            state.timeoutTask?.cancel()
+        }
     }
+}
+
+// MARK: - BackgroundTaskState
+
+/// Mutable state shared by the closures of a single ``LongRunningTaskOrchestrator/register(taskName:timeout:)``
+/// call. Main-actor isolation makes it `Sendable`, so the `@Sendable` completion, timeout, and
+/// expiration closures can all share it without data races.
+@MainActor
+private final class BackgroundTaskState {
+    var backgroundTaskId: UIBackgroundTaskIdentifier = .invalid
+    var timeoutTask: Task<Void, Never>?
 }
 
 #endif

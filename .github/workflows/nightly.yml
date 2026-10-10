@@ -49,7 +49,7 @@ jobs:
     - name: Build for iOS
       run: |
         xcodebuild build-for-testing \
-          -scheme BasicSwiftUtilities \
+          -scheme BasicSwiftUtilities-Package \
           -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
           -skipPackagePluginValidation \
           | tail -20
@@ -57,7 +57,7 @@ jobs:
     - name: Test on iOS Simulator
       run: |
         xcodebuild test \
-          -scheme BasicSwiftUtilities \
+          -scheme BasicSwiftUtilities-Package \
           -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
           -skipPackagePluginValidation \
           | tail -40

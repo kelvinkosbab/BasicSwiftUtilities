@@ -92,7 +92,7 @@ public final class LocalNetworkMonitor: LocalNetworkMonitorProtocol {
 
     // MARK: - Initialization
 
-    public init() {
+    public convenience init() {
         self.init(makePathMonitor: { NWPathMonitor() })
     }
 

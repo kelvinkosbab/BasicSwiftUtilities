@@ -15,13 +15,13 @@ swift test
 
 # Build for iOS Simulator
 xcodebuild build-for-testing \
-  -scheme BasicSwiftUtilities \
+  -scheme BasicSwiftUtilities-Package \
   -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
   -skipPackagePluginValidation
 
 # Test on iOS Simulator
 xcodebuild test \
-  -scheme BasicSwiftUtilities \
+  -scheme BasicSwiftUtilities-Package \
   -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
   -skipPackagePluginValidation
 ```

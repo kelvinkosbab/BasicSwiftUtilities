@@ -16,6 +16,7 @@ public import UIKit
 /// to a `UIViewController` type.
 @available(macOS, unavailable)
 @available(watchOS, unavailable)
+@MainActor
 public protocol PresentableController: AnyObject {
 
     /// How the current controller was initially presented.

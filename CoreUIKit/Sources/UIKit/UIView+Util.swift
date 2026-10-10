@@ -12,7 +12,7 @@ public import UIKit
 // MARK: - UIView
 
 /// Defines how a view will be added to it's parent view.
-public enum RelativeLayoutType {
+public enum RelativeLayoutType: Sendable {
 
     /// Child view will layout in reference to its parent view and also the safe area of the device / window.
     case safeArea

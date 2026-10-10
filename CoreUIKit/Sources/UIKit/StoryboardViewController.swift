@@ -12,6 +12,7 @@ public import UIKit
 // MARK: - StoryboardViewController
 
 /// Defines mechanisms for creating a new view controller from a `Storyboard`.
+@MainActor
 public protocol StoryboardViewController {
 
     /// Create a new view controller from a storybaord with the same name as the `UIViewController`.

@@ -46,11 +46,32 @@ jobs:
     - name: Select Xcode
       run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
 
+    - name: Pick iOS Simulator
+      # Resolve a concrete simulator instead of hard-coding name/OS: runner
+      # images vary in which runtimes and devices they ship.
+      run: |
+        UDID=$(xcrun simctl list devices available --json | python3 -c '
+        import json, sys
+        runtimes = json.load(sys.stdin)["devices"]
+        # Newest iOS 18.x runtime first; Xcode 16.4 cannot run iOS 26 simulators.
+        def version(runtime):
+            return tuple(int(part) for part in runtime.split(".iOS-")[1].split("-"))
+        ios = [r for r in runtimes if ".iOS-18-" in r]
+        for runtime in sorted(ios, key=version, reverse=True):
+            for device in runtimes[runtime]:
+                if device["name"].startswith("iPhone"):
+                    print(device["udid"])
+                    sys.exit(0)
+        sys.exit("No available iPhone simulator found")
+        ')
+        echo "Using simulator $UDID"
+        echo "IOS_SIM_UDID=$UDID" >> "$GITHUB_ENV"
+
     - name: Build for iOS
       run: |
         xcodebuild build-for-testing \
           -scheme BasicSwiftUtilities-Package \
-          -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.5' \
+          -destination "platform=iOS Simulator,id=$IOS_SIM_UDID" \
           -skipPackagePluginValidation \
           -quiet
 
@@ -58,6 +79,6 @@ jobs:
       run: |
         xcodebuild test \
           -scheme BasicSwiftUtilities-Package \
-          -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.5' \
+          -destination "platform=iOS Simulator,id=$IOS_SIM_UDID" \
           -skipPackagePluginValidation \
           -quiet

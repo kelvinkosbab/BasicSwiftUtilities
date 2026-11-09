@@ -1,88 +1,45 @@
 ---
-description: Structure Apple apps as a thin Xcode app shell over a fat local Swift package with many small modules — the architecture, why it wins, and how to migrate an existing .xcodeproj-only app incrementally
+description: Structure Apple apps as a thin Xcode app shell over a fat local Swift package with many small modules — the architecture, why it wins, what must stay in the app target, and how to migrate an existing .xcodeproj-only app incrementally
 globs: "Package.swift,**/Package.swift,**/*App.swift"
+paths:
+  - "Package.swift"
+  - "**/Package.swift"
+  - "**/*App.swift"
+must:
+  - "Keep the app target thin: `@main`, Info.plist, entitlements, assets, privacy manifest; code lives in a local Swift package."
+  - "One directory per module and a `makeTargets()` manifest, with an `AppCore` umbrella the app links."
+  - "The module graph flows one way; features never depend on each other's implementation."
+  - "Every module is tested under `swift test`."
 ---
 
 # Apple Modular Architecture (local SPM package)
 
-The target shape: a **thin Xcode app target** that holds almost no code, sitting on top of a **local Swift package** where the real app lives — split into many small modules. The `.xcodeproj` owns the bundle, entitlements, Info.plist, and app icon; everything else is a package module the app links.
+A thin Xcode app target over a local Swift package of small modules, as KozBon does. This is the checklist; the full rule with the layout, manifest, migration steps, and the reasons is in [`architecture-conventions.md`](../skills/swift-modularization-pro/references/architecture-conventions.md). `swift-modularization-pro` plans, migrates, and audits; `scripts/scaffold-spm-package.sh` creates the skeleton.
 
-This rule covers the *architecture decision* and *migration*. For authoring the manifest itself (tool-version, products, resources, settings), see [`apple-spm-package-conventions.md`](./apple-spm-package-conventions.md). To scaffold the package, use the bundle's [`scripts/scaffold-spm-package.sh`](../../scripts/scaffold-spm-package.sh). For a deep manifest/API review, invoke the `swift-package-pro` skill.
+## Layout
 
-> **Reference layout.** This is how KozBon (`KozBonPackages/`) and BasicSwiftUtilities are organized — a single local package at the repo root, one directory per module, a `makeTargets()` helper in `Package.swift`, and an `AppCore` umbrella the app target links.
+- **One local package** (`<App>Packages/`), one directory per module with `Sources/` and `Tests/`, manifest built with `makeTargets()` (see [`apple-spm-package-conventions.md`](./apple-spm-package-conventions.md)).
+- **An `AppCore` umbrella** that the app target links, and ideally nothing else, so a new feature never touches the `.xcodeproj`.
+- **Start small** (`Core` + `AppCore`) and let real dependencies pull modules apart; one giant module gets none of the payoff.
 
-## Why a local package, not "all code in the .xcodeproj"
+## What stays in the app target
 
-- **Build speed.** SPM compiles modules independently and in parallel, and caches per module. Touching a leaf module recompiles that module, not the world. A monolithic app target recompiles far more on every change.
-- **Enforced boundaries.** A module can only use what it explicitly declares as a dependency. Layering violations become *compile errors* instead of conventions nobody enforces — the dependency graph is the architecture, written down.
-- **Testability without the app host.** `swift test` runs module tests headless, fast, no simulator boot. Logic stranded in the app target can only be tested through a UI host.
-- **Faster SwiftUI iteration.** Previews and incremental builds operate on a small module, not the whole app.
-- **Reuse across targets.** Widgets, App Intents extensions, a watch app, a share extension, and the main app all link the same modules. Code in the app target is reachable by none of them.
-- **Mechanical sympathy with AI agents.** A small, well-named module with a declared dependency surface is a tractable unit for an agent to read, change, and test — the boundary keeps a change from rippling repo-wide.
+- `@main` returning `AppCoreScene()`, Info.plist, entitlements, app icon and launch assets, `PrivacyInfo.xcprivacy`, and `InfoPlist.xcstrings`.
+- **The `AppShortcutsProvider`** and the catalogs App Intents metadata and Siri phrases resolve against. In a package it builds, but phrases are never extracted or localized.
+- Extensions (widgets, share, watch) are their own thin targets linking package products.
+- New code defaults to a module; logic left in the app target "for now" can't be tested headless or reused.
 
-## The target layout
+## Dependencies
 
-```
-MyApp/
-├── MyApp.xcodeproj            # thin: @main App, entitlements, Info.plist, app-icon asset catalog
-├── MyApp/                     # the app target's handful of files
-│   └── MyAppApp.swift         # @main — wires the root view from AppCore, nothing else
-└── MyAppPackages/             # the local Swift package — the actual app
-    ├── Package.swift          # makeTargets() helper; one block per module
-    ├── Core/                  # foundation: no app-domain deps
-    │   ├── Sources/
-    │   └── Tests/
-    ├── Models/
-    │   ├── Sources/
-    │   └── Tests/
-    ├── Feature.../            # one module per feature
-    └── AppCore/               # umbrella: depends on every feature module; the app links this
-        ├── Sources/
-        └── Tests/
-```
+- **The graph flows one way, with no cycles.** Features never depend on each other; shared pieces move down a layer.
+- **Low-level modules take what they need directly**, not transitively through a higher module.
+- **Interfaces for interchangeable backends:** consumers depend on the interface or the umbrella, never on a concrete backend. Backend resources ship in the backend module.
+- **`@_exported import` sparingly**, with a comment saying why; never as a substitute for a declared dependency.
+- **Public API is the module's contract**; everything else stays internal.
 
-- **One directory per module**, each with `Sources/` and `Tests/` (and `Sources/Resources/` when it ships assets/strings). This is exactly what `makeTargets()` and `scaffold-spm-package.sh` assume.
-- **The app target links the umbrella product** (`AppCore`) and ideally nothing else — so adding a feature never touches the `.xcodeproj`.
+## Resources and tests
 
-## Dependency direction (the part that pays off)
-
-Keep the graph a DAG that flows one way. A workable layering:
-
-1. **Core / foundation** — logging, utilities, dispatch. Zero app-domain dependencies.
-2. **Domain** — `Models`, `Storage`, `Localization`. Depend on Core only.
-3. **Feature modules** — one per feature area. Depend on domain + Core. **Features do not depend on each other.**
-4. **UI / design system** — shared components feature modules use.
-5. **`AppCore` umbrella** — depends on all feature modules; hosts the root composition (routing, app-level wiring). The app target links this.
-
-Rules of the road:
-
-- **No cycles.** SPM rejects them, but design so the question never comes up.
-- **Cross-feature needs go *down*, not sideways.** If feature A needs something from feature B, the shared piece moves down into a module both depend on — not a feature→feature edge.
-- **A low-level module takes the dependency it needs directly**, rather than reaching it transitively through a higher-level module (see KozBon's `LocalNetworkMonitor` taking `Core` directly instead of via `BonjourCore`).
-- **Only export what consumers need.** Each module's `products`/public API is its contract; internal types stay internal. With `InternalImportsByDefault` (see SPM conventions), imports are `internal` unless re-exported with `public import`.
-
-## Migrating an existing .xcodeproj-only app
-
-Do it incrementally — never a big-bang move. Each step keeps the app building.
-
-1. **Scaffold the package.** Run `scripts/scaffold-spm-package.sh <repo> --name <App>Packages --modules Core,AppCore` to create `<App>Packages/` with the `makeTargets()` manifest and module skeletons. Add it to the Xcode project (File ▸ Add Package Dependencies ▸ Add Local), and link the `AppCore` product to the app target.
-2. **Move a leaf first.** Pick code with the fewest dependencies — usually foundation utilities → `Core`. Move the files into `Core/Sources/`, make the needed symbols `public`, fix imports. Build.
-3. **Work up the layers.** Models, storage, then feature areas one at a time. After each move, the app still builds and tests pass — that's the invariant that makes this safe.
-4. **Thin the app target.** As features land in modules, the app target shrinks toward just `@main` + the root view pulled from `AppCore`.
-5. **Stop when the app target is thin.** It doesn't have to reach zero files — but new feature code should default to a module, not the app target.
-
-Don't try to perfect the module graph up front. Start with `Core` + `AppCore`, split modules out as boundaries become obvious.
-
-## Resource & Core Data caveats
-
-- **`Bundle.module`, never `Bundle.main`**, for resources inside a module (string catalogs, asset catalogs, JSON). `Bundle.main` is the *app's* bundle, not the module's — it works in a quick test and breaks in production.
-- **`.xcdatamodeld` can't be compiled by the SwiftPM CLI.** A module shipping a Core Data model builds under `xcodebuild` but not plain `swift build`. KozBon's `BonjourStorage` guards Core Data tests on a model-availability check and skips them under `swift test`, asserting under `xcodebuild test`. Plan for the split test path, or build the `NSManagedObjectModel` programmatically (see the `coredata-swift6-pro` skill).
-
-## Common Pitfalls
-
-- **Leaving logic in the app target "for now."** It compounds: app-target code can't be unit-tested headless, can't be reused by extensions, and recompiles on every app change. New code defaults to a module.
-- **Feature-to-feature dependencies.** The fast shortcut that turns the graph into a ball of mud. Push the shared piece down a layer.
-- **One giant module.** A single `App` module with everything in it gets you the package overhead without the build-parallelism or boundary-enforcement payoff. Split by feature.
-- **Hand-writing `.target`/`.testTarget` pairs.** Use `makeTargets()` — uniform settings, no copy-paste drift. See `apple-spm-package-conventions.md`.
-- **`Bundle.main` for module resources** — the silent production break.
-- **Over-designing the graph before code exists.** Start with `Core` + `AppCore`; let real dependencies pull modules apart.
+- **`Bundle.module`, never `Bundle.main`**, for module resources. App Intents strings stay in the app target for that reason.
+- **The SwiftPM CLI can't compile `.xcdatamodeld`**; guard Core Data tests so `swift test` skips them.
+- **Every module has a test target**, and `swift test --package-path <App>Packages` runs them all. UI tests stay in the Xcode project. CI runs `swift build` + `swift test` on package changes.
+- **Keep a module table in `CLAUDE.md`**, updated with each new module.

@@ -12,6 +12,7 @@ Review Swift Package Manager libraries for sound public API design, clean module
 Review process:
 
 1. Validate `Package.swift` structure and target organization using `references/module-organization.md`.
+1. Check manifest mechanics (tools version, platforms, Swift settings, dependency pins, `Package.resolved`, plugins) using `references/manifest-conventions.md`.
 1. Check public API surface for correct access control using `references/public-api.md`.
 1. Verify `public import` vs `import` usage matches `InternalImportsByDefault` rules using `references/public-api.md`.
 1. Check resource handling for `.process` vs `.copy` correctness using `references/resources.md`.
@@ -78,6 +79,7 @@ End of example.
 ## References
 
 - `references/module-organization.md` — Target structure, per-module directory layout, helper functions, dependency graphs.
+- `references/manifest-conventions.md` — Full `Package.swift` conventions: tools version, platforms, products, `makeTargets()`, Swift settings and upcoming features, dependencies, `Package.resolved`, path overrides, test targets, build plugins.
 - `references/public-api.md` — Access control, `public import` vs `import`, `InternalImportsByDefault`, API stability.
 - `references/resources.md` — Bundle resources, `.process` vs `.copy`, `Bundle.module`, SPM limitations (.xcdatamodeld).
 - `references/versioning.md` — Semantic versioning, `@available`, `@_spi`, deprecation, breaking change checklist.

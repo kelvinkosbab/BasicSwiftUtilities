@@ -12,6 +12,7 @@ Write and review Swift Testing code for correctness, modern API usage, and adher
 Review process:
 
 1. Ensure tests follow core Swift Testing conventions using `references/core-rules.md`.
+1. For what to test, determinism, mocking, UI tests, and coverage, use `references/test-strategy.md`.
 1. Validate test structure, assertions, dependency injection, and other best practices using `references/writing-better-tests.md`.
 1. Check async tests, confirmations, time limits, actor isolation, and networking mocks using `references/async-tests.md`.
 1. Ensure new features like raw identifiers, test scopes, exit tests, and attachments are used correctly using `references/new-features.md`.
@@ -95,3 +96,4 @@ End of example.
 - `references/async-tests.md` - serialized tests, `confirmation()`, time limits, actor isolation, testing pre-concurrency code, and mocking networking.
 - `references/new-features.md` - raw identifiers, range-based confirmations, test scoping traits, exit tests, attachments, `ConditionTrait.evaluate()`, and the updated `#expect(throws:)` return value.
 - `references/migrating-from-xctest.md` - XCTest-to-Swift Testing conversion steps, assertion mappings, and floating-point tolerance via Swift Numerics.
+- `references/test-strategy.md` - test pyramid, what (not) to test, naming, determinism, mocking, framework choice, flaky tests, UI tests, and coverage gates.

@@ -1,6 +1,13 @@
 ---
 description: Logging strategy for Apple platforms — os.Logger / OSLog over print/NSLog, subsystem/category conventions, privacy markers, log-level discipline, signposts, what never to log
 globs: "**/*.swift"
+paths:
+  - "**/*.swift"
+must:
+  - "Log with `Logger`, never `print` or `NSLog`, in shipping code."
+  - "Use the bundle ID as subsystem and one category per area, held in a `static let`."
+  - "Mark values `.public` only when non-sensitive; never log secrets, tokens, or PII."
+  - "Match the level to severity; reserve `.error` and `.fault` for real problems."
 ---
 
 # Apple Logging Strategy

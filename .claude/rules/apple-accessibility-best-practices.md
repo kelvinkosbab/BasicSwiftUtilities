@@ -1,6 +1,13 @@
 ---
 description: Enforce SwiftUI accessibility best practices for VoiceOver, Dynamic Type, Reduce Motion, and Bluetooth assistive tech (keyboards, switches, braille displays, hearing devices)
 globs: "**/*.swift"
+paths:
+  - "**/*.swift"
+must:
+  - "Every interactive element has an `accessibilityLabel`; decorative images are `accessibilityHidden(true)`."
+  - "Use semantic fonts (`.font(.headline)`), never `.font(.system(size:))`, so Dynamic Type works."
+  - "Check `accessibilityReduceMotion` before animating; mirror context-menu actions in `accessibilityActions`."
+  - "Localize every accessibility string."
 ---
 
 # Accessibility Best Practices
@@ -43,6 +50,7 @@ All views must be fully accessible. VoiceOver, Dynamic Type, and Reduce Motion s
 - Always check `@Environment(\.accessibilityReduceMotion)` before animating.
 - Use `withAnimation(reduceMotion ? nil : .default)` instead of bare `withAnimation`.
 - This applies to show/hide transitions, state changes, and any animated UI updates.
+- Prefer a crossfade over no animation for show/hide, and stop loops entirely. Motion tokens and per-pattern alternatives are in [`apple-motion-design.md`](./apple-motion-design.md).
 
 ## Pickers with Hidden Labels
 
@@ -75,6 +83,14 @@ VoiceOver users routinely pair Bluetooth hardware. Supporting it is mostly *not*
 
 - **Never convey information through sound alone.** Pair every audio cue with a visual change and, where it matters, a haptic (`.sensoryFeedback`). Bluetooth hearing devices and muted phones both make audio an unreliable channel.
 - Media playback must support captions/subtitles. `AVPlayer` honors the system Closed Captions + SDH setting automatically; custom players must check `UIAccessibility.isClosedCaptioningEnabled` rather than inventing a parallel toggle.
+
+## Color & Contrast
+
+- Text contrast must meet WCAG AA: **4.5:1** for body text, **3:1** for large text (≥ 18pt regular or ≥ 14pt bold). Audit with Xcode's Accessibility Inspector color-contrast calculator — and audit **both** light and dark mode; failures hide in the theme you don't develop in.
+- **Never rely on color alone to convey state** (error = red, success = green). Pair color with an icon, text, or shape change — and honor `@Environment(\.accessibilityDifferentiateWithoutColor)` for affordances that are color-only by design.
+- Honor **Increase Contrast**: `@Environment(\.colorSchemeContrast) == .increased` → strengthen borders, replace hairlines, drop low-opacity text.
+- Prefer **system semantic colors** (`Color.primary`, `.secondary`, `UIColor.label` family) — they adapt to dark mode and Increase Contrast automatically; hardcoded hex values do neither.
+- Photos and media that must not invert under Smart Invert get `.accessibilityIgnoresInvertColors()`.
 
 ## Accessibility Nutrition Labels (App Store)
 

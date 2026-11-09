@@ -1,6 +1,13 @@
 ---
 description: Documentation strategy for Apple — what to document (and what not), DocC discipline, deprecation, samples, articles. Complements swift-docc-pro (mechanics review).
 globs: "**/*.swift"
+paths:
+  - "**/*.swift"
+must:
+  - "Document every `public`/`open` symbol: summary line plus `- Parameter`, `- Returns`, `- Throws` where they apply."
+  - "Link symbols with double backticks; single backticks don't link."
+  - "Deprecate with `message:` and `renamed:` where applicable."
+  - "Don't document generated code or restate the signature."
 ---
 
 # Apple Documentation Strategy

@@ -1,6 +1,13 @@
 ---
 description: SwiftLint + formatter (swift-format / SwiftFormat) strategy for Apple projects — config structure, opt-in and analyzer rules, suppression hygiene, where it runs, incremental adoption, version pinning
 globs: "**/{*.swift,.swiftlint.yml,.swiftlint.yaml,.swift-format,.swiftformat}"
+paths:
+  - "**/{*.swift,.swiftlint.yml,.swiftlint.yaml,.swift-format,.swiftformat}"
+must:
+  - "Use one formatter (SwiftFormat or swift-format) and turn off SwiftLint's overlapping formatting rules."
+  - "Enable `force_unwrapping` and other high-value opt-in rules; run `--strict` in CI with a pinned version."
+  - "Suppress with `swiftlint:disable:next <rule>` and a reason; never blanket-disable."
+  - "When a rule fires, fix the code first; tune or suppress only with a stated reason."
 ---
 
 # Apple Linting Strategy
